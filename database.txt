@@ -1,0 +1,27 @@
+MC10001 AnonCard   0.00 9.20
+MC10002 AnonCard   0.00 19.50
+MC10003 BasicCard Natasha Romanov blackwidow@avengers.team 4670.00 70.05
+MC10004 BasicCard Steve Rogers captain_a@avengers.team 1500.00 22.50
+MC10005 PremiumCard Tony Stark ironman@avengers.team 7680.00 230.40
+MC10006 BasicCard Bruce Banner hulk@avengers.team 1790.00 26.85
+MC10007 PremiumCard Nick Fury nick@shield.com 1160.00 34.80
+MC10008 AnonCard   0.00 21.60
+MC10009 AnonCard   0.00 0.00
+MC10010 BasicCard Hank Pym ants@avengers.team 0.00 0.00
+MC10011 BasicCard Peter Parker spidey@avengers.team 0.00 0.00
+MC10012 PremiumCard Danny Rand danny@randcorp.com 5780.00 23.40
+MC10013 PremiumCard Professor Charles Xavier x@xmen.com 1240958.00 64.80
+MC10014 BasicCard Matthew Murdock thedevil@hellskitchen.com 666.00 0.00
+MC10015 BasicCard Thor Odinson thor@asgard.com 9000.00 0.00
+MC10016 BasicCard Clint Barton better_than_arrow@marvel.com 500.00 0.00
+MC10017 AnonCard   0.00 34.70
+MC10018 PremiumCard Oliver Queen the_best_arrow_user@dc.comics 3520.00 60.60
+MC10019 BasicCard Loki the-baddest-dude@asgard.com 0.00 0.00
+MC10020 AnonCard   0.00 0.00
+MC10021 AnonCard   0.00 0.00
+MC10022 PremiumCard Pepper Potts ceo@starkindustries.com 1987234.00 0.00
+MC10023 AnonCard   0.00 0.00
+MC10024 AnonCard   0.00 0.00
+MC10025 PremiumCard King T'Challa tokenman@wakanda.africa 105023.00 0.00
+MC10026 AnonCard   0.00 0.00
+MC10027 BasicCard Logan wolverine@xmen.com 0.00 0.00
