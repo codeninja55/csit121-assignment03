@@ -6,10 +6,8 @@ import cn55.model.CardModel.AdvancedCard;
 import cn55.model.CardModel.Card;
 
 import javax.swing.*;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.nio.file.FileSystem;
-import java.nio.file.FileSystems;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
@@ -17,12 +15,15 @@ import java.util.*;
 /* SINGLETON DESIGN PATTERN */
 
 @SuppressWarnings("ConstantConditions")
-public class Database implements Subject {
+public class DataStoreModel implements Subject {
 
-    private static Database db;
-    private static Formatter output;
+    private static final char DEFAULT_SEPARATOR = ',';
+    private static final char NEW_LINE_SEPARATOR = '\n';
 
-    private final ArrayList<Observer> observers;
+    private static DataStoreModel db;
+    private static FileWriter output;
+
+    private final ArrayList<cn55.model.Observer> observers;
     private final ArrayList<Card> cards;
     private HashMap<String, Integer> cardMap;
     private final ArrayList<Purchase> purchases;
@@ -38,7 +39,7 @@ public class Database implements Subject {
 
     /*============================== CONSTRUCTORS  ==============================*/
     // Private modifier prevents any other class from instantiating
-    private Database() {
+    private DataStoreModel() {
         this.observers = new ArrayList<>();
         this.cards = new ArrayList<>();
         this.cardMap = new HashMap<>();
@@ -50,8 +51,8 @@ public class Database implements Subject {
 
     // Provide global point of access
     // Double check locking mechanism but only with the initial call
-    public static synchronized Database getDBInstance() {
-        if (db == null) db = new Database();
+    public static synchronized DataStoreModel getDataStoreInstance() {
+        if (db == null) db = new DataStoreModel();
         return db;
     }
 
@@ -78,7 +79,7 @@ public class Database implements Subject {
         return categoryIDCounter++;
     }
 
-    private static void addReceiptID(int receiptID) { Database.receiptSet.add(receiptID); }
+    private static void addReceiptID(int receiptID) { DataStoreModel.receiptSet.add(receiptID); }
 
     /*============================== MUTATORS  ==============================*/
     void mapCards() {
@@ -110,10 +111,10 @@ public class Database implements Subject {
     static void updateCategoriesTotalMap(HashMap<Integer, Category> categories) {
         for (HashMap.Entry<Integer, Category> item : categories.entrySet()) {
             if (!categoriesTotalMap.containsKey(item.getKey())) {
-                Database.categoriesTotalMap.put(item.getKey(), item.getValue().getAmount());
+                DataStoreModel.categoriesTotalMap.put(item.getKey(), item.getValue().getAmount());
             } else {
-                Double newTotal = Database.categoriesTotalMap.get(item.getKey()) + item.getValue().getAmount();
-                Database.categoriesTotalMap.put(item.getKey(), newTotal);
+                Double newTotal = DataStoreModel.categoriesTotalMap.get(item.getKey()) + item.getValue().getAmount();
+                DataStoreModel.categoriesTotalMap.put(item.getKey(), newTotal);
             }
         }
     }
@@ -195,27 +196,27 @@ public class Database implements Subject {
     /*============================== OBSERVER DESIGN PATTERN ==============================*/
     /* Implement Subject interface making this object instance a Subject */
     @Override
-    public void register(Observer obj) {
+    public void register(cn55.model.Observer obj) {
         observers.add(obj);
     }
 
     @Override
-    public void unregister(Observer obj) {
+    public void unregister(cn55.model.Observer obj) {
         observers.remove(obj);
     }
 
     @Override
     public void notifyObservers() {
-        observers.forEach(Observer::update);
+        observers.forEach(cn55.model.Observer::update);
     }
 
     @Override
-    public ArrayList<Card> getCardsUpdate(Observer who) {
+    public ArrayList<Card> getCardsUpdate(cn55.model.Observer who) {
         return cards;
     }
 
     @Override
-    public ArrayList<Purchase> getPurchaseUpdate(Observer who) {
+    public ArrayList<Purchase> getPurchaseUpdate(cn55.model.Observer who) {
         return purchases;
     }
 
@@ -224,42 +225,107 @@ public class Database implements Subject {
         return categories;
     }
 
-    /*============================== SEQUENTIAL FILE STREAM ==============================*/
+    /*============================== SEQUENTIAL CSV FILE WRITER ==============================*/
     public void writeCards() {
-        openFile();
+        String cardsHeader = "id,cardType,name,email,balance,points";
+        Path cardsStoragePath = Paths.get("cardsStorage.csv");
+        openFile(cardsStoragePath);
 
-        cards.forEach(card -> {
-            try {
-                String name = (card instanceof AdvancedCard) ? ((AdvancedCard) card).getName() : "";
-                String email = (card instanceof AdvancedCard) ? ((AdvancedCard) card).getEmail() : "";
-                double balance = (card instanceof AdvancedCard) ? ((AdvancedCard) card).getBalance() : 0;
+        try{
+            output.append(cardsHeader);
+            output.append(NEW_LINE_SEPARATOR);
 
-                output.format("%s %s %s %s %.2f %.2f%n", card.getID(), card.getCardType(),
-                        name, email, balance, card.getPoints());
-            } catch (FormatterClosedException e) {
-                /* TODO - TESTING */
-                System.err.println("FormattedClosedException");
-                e.printStackTrace();
+            for (Card card : cards) {
+                output.append(card.getID()).append(DEFAULT_SEPARATOR);
+                output.append(card.getCardType()).append(DEFAULT_SEPARATOR);
+                output.append((card instanceof AdvancedCard) ? ((AdvancedCard) card).getName() : "").append(DEFAULT_SEPARATOR);
+                output.append((card instanceof AdvancedCard) ? ((AdvancedCard) card).getEmail() : "").append(DEFAULT_SEPARATOR);
+                output.append((card instanceof AdvancedCard) ? Double.toString(((AdvancedCard) card).getBalance()) : "").append(DEFAULT_SEPARATOR);
+                output.append(Double.toString(card.getPoints()));
+                output.append(NEW_LINE_SEPARATOR);
             }
-        });
-
+        } catch (IOException e) {
+            // TODO - TESTING
+            System.err.println("IOException: " + e.getMessage());
+        }
         closeFile();
     }
 
-    private void openFile() {
+    public void writePurchases() {
+        String purchaseHeaders = "purchaseTime,receiptID,cardType,cardID,categories[]";
+        Path purchaseStoragePath = Paths.get("purchaseStorage.csv");
+        openFile(purchaseStoragePath);
+
+        try{
+            output.append(purchaseHeaders);
+            output.append(NEW_LINE_SEPARATOR);
+
+            for (Purchase p : purchases) {
+                int lastLine = 1;
+                output.append(p.getPurchaseTime().toString()).append(DEFAULT_SEPARATOR);
+                output.append(Integer.toString(p.getReceiptID())).append(DEFAULT_SEPARATOR);
+                output.append(p.getCardType()).append(DEFAULT_SEPARATOR);
+                output.append(p.getCardID()).append(DEFAULT_SEPARATOR);
+                output.append("{");
+                for (Category c : p.getCategories().values()) {
+                    output.append("[").append(Integer.toString(c.getId())).append(DEFAULT_SEPARATOR);
+                    output.append(c.getName()).append(DEFAULT_SEPARATOR);
+                    output.append(c.getDescription()).append(DEFAULT_SEPARATOR);
+                    output.append(Double.toString(c.getAmount())).append("]");
+
+                    if (lastLine != p.getCategories().size()) {
+                        output.append(DEFAULT_SEPARATOR);
+                        lastLine++;
+                    }
+                }
+                output.append("}");
+                output.append(NEW_LINE_SEPARATOR);
+            }
+        } catch (IOException e) {
+            // TODO - TESTING
+            System.err.println("IOException: " + e.getMessage());
+        }
+        closeFile();
+    }
+
+    public void writeCategories() {
+        String categoriesHeader = "id,name,description,amount";
+        Path categoriesStoragePath = Paths.get("categoriesStorage.csv");
+        openFile(categoriesStoragePath);
+
+        try{
+            output.append(categoriesHeader);
+            output.append(NEW_LINE_SEPARATOR);
+
+            for (Category c : categories) {
+                output.append(Integer.toString(c.getId())).append(DEFAULT_SEPARATOR);
+                output.append(c.getName()).append(DEFAULT_SEPARATOR);
+                output.append(c.getDescription()).append(DEFAULT_SEPARATOR);
+                output.append(Double.toString(c.getAmount()));
+                output.append(NEW_LINE_SEPARATOR);
+            }
+        } catch (IOException e) {
+            // TODO - TESTING
+            System.err.println("IOException: " + e.getMessage());
+        }
+        closeFile();
+    }
+
+    private void openFile(Path path) {
         try {
-//            Path path = Paths.get("database2.txt");
-            Path path = FileSystems.getDefault().getPath("/src/cn55/database3.txt");
-            System.out.println(path);
-            System.out.println(path.getParent());
-            File file = new File(path.toUri());
-            output = new Formatter(file);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            output = new FileWriter(path.toString());
+        } catch (IOException e) {
+            // TODO - TESTING
+            System.err.println("IOException: " + e.getMessage());
         }
     }
 
     private void closeFile() {
-        output.close();
+        try {
+            output.flush();
+            output.close();
+        } catch (IOException e) {
+            System.err.println("IOException: " + e.getMessage());
+        }
     }
 }

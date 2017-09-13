@@ -1,35 +1,16 @@
 package cn55.controller;
 
-import cn55.controller.Validator.*;
 import cn55.model.CardModel.*;
 import cn55.model.*;
-import cn55.view.CardView.CardForm;
-import cn55.view.CardView.CardViewPane;
-import cn55.view.CategoriesView.CategoriesForm;
-import cn55.view.CategoriesView.CategoriesViewPane;
-import cn55.view.CustomComponents.FormFormattedTextField;
-import cn55.view.CustomComponents.ResultsPane;
-import cn55.view.CustomComponents.Style;
-import cn55.view.DeleteForm.DeleteCardForm;
-import cn55.view.DeleteForm.DeleteCategoryForm;
-import cn55.view.MainFrame;
-import cn55.view.PurchaseView.PurchaseEvent;
-import cn55.view.PurchaseView.PurchaseForm;
-import cn55.view.PurchaseView.PurchaseViewPane;
-import cn55.view.SearchForm.SearchForm;
+import cn55.model.DataStoreModel;
 
-import javax.swing.*;
-import javax.swing.event.ChangeEvent;
 import java.awt.*;
-import java.awt.event.ItemEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.*;
 
 public class Program {
 
     private final Shop shop;
-    private final Database db;
+    private final DataStoreModel db;
     /*private final MainFrame mainFrame;
     private final JTabbedPane tabPane;
     private final CardViewPane cardViewPane;
@@ -38,11 +19,15 @@ public class Program {
 
     public Program() {
         shop = new Shop();
-        /* Singleton Design Pattern - Only one instance of Database available */
-        db = Database.getDBInstance();
+        /* Singleton Design Pattern - Only one instance of PersistentData available */
+        db = DataStoreModel.getDataStoreInstance();
         createTestCode(shop);
         //createTooManyCategories();
         db.writeCards();
+        db.writePurchases();
+        db.writeCategories();
+
+        
 
         /*this.mainFrame = new MainFrame();
         this.tabPane = mainFrame.getTabPane();
@@ -119,7 +104,7 @@ public class Program {
     /* TODO - REMOVE TEST CODE */
     private void testMakePurchases(int numOfPurchases, String id) {
         for (int i = 0; i < numOfPurchases; i++)
-            shop.makePurchase(id, Database.generateReceiptID(), generateRandomCategoriesMap());
+            shop.makePurchase(id, DataStoreModel.generateReceiptID(), generateRandomCategoriesMap());
     }
 
     /* TODO - REMOVE TEST CODE */
@@ -190,14 +175,14 @@ public class Program {
         db.addCards(new BasicCard("Thor Odinson", "thor@asgard.com",9000));
 
         testMakePurchases(2,"MC10005");
-        shop.makePurchase("Cash", Database.generateReceiptID(),
+        shop.makePurchase("Cash", DataStoreModel.generateReceiptID(),
                 generateRandomCategoriesMap());
 
         testMakePurchases(2,"MC10016");
         testMakePurchases(2,"MC10005");
         testMakePurchases(2,"MC10019");
 
-        shop.makePurchase("Cash", Database.generateReceiptID(),
+        shop.makePurchase("Cash", DataStoreModel.generateReceiptID(),
                 generateRandomCategoriesMap());
 
         db.addCards(new BasicCard("Clint Barton", "better_than_arrow@marvel.com", 500));
@@ -524,7 +509,7 @@ public class Program {
             purchaseViewPane.add(form, BorderLayout.WEST);
 
             form.getPurchaseTypeCombo().setSelectedIndex(0);
-            form.setGeneratedReceiptID(Database.generateReceiptID());
+            form.setGeneratedReceiptID(PersistentData.generateReceiptID());
             form.setCardModel(db.getCardModel());
             form.setCategoriesList(db.getCategories());
             form.createBasePurchaseForm();
