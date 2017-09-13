@@ -224,12 +224,12 @@ public class Program {
             db.addCategory(new Category(String.format("%s%d","Testing", i)));
     }
 
-    /*============================== REGISTER AND HANDLE EVENTS ==============================*/
+    /*============================== REGISTER AND HANDLE EVENTS ==============================*//*
     private void setupViewListeners() {
-        /* TAB PANE LISTENER */
+        *//* TAB PANE LISTENER *//*
         // This method removes forms from the selected pane if the user selects another pane
         tabPane.addChangeListener((ChangeEvent e) -> {
-            /* DESELECTED LISTENERS */
+            *//* DESELECTED LISTENERS *//*
             if (tabPane.getSelectedComponent() != purchaseViewPane) {
                 purchaseViewPane.getResultsPane().setVisible(false);
                 removePurchaseForms();
@@ -241,8 +241,8 @@ public class Program {
             }
         });
 
-        /*============================== CARD VIEW HANDLERS ==============================*/
-        /* TOOLBAR | CREATE CARD BUTTON */
+        *//*============================== CARD VIEW HANDLERS ==============================*//*
+        *//* TOOLBAR | CREATE CARD BUTTON *//*
         cardViewPane.setCreateCardListener(() -> {
             removeCardForms();
             cardViewPane.setCardForm(new CardForm());
@@ -251,14 +251,14 @@ public class Program {
             form.setVisible(true);
             form.createBaseCreateCardForm();
 
-            /* Setup a text pane to put all the necessary data into */
+            *//* Setup a text pane to put all the necessary data into *//*
             ResultsPane resultsPane = cardViewPane.getResultsPane();
             resultsPane.setVisible(false);
             resultsPane.setResultsTextPane();
             ResultsPane.ResultsTextPane resultsTextPane = resultsPane.getResultsTextPane();
             setCardViewMouseListeners();
 
-            /* ADD A CANCEL BUTTON LISTENER AFTER CREATING FORM */
+            *//* ADD A CANCEL BUTTON LISTENER AFTER CREATING FORM *//*
             form.setCancelListener(() -> {
                 cardViewPane.getCardForm().setVisible(false);
                 cardViewPane.getResultsPane().setVisible(false);
@@ -266,7 +266,7 @@ public class Program {
                 removeResultsPane(resultsPane);
             });
 
-            /* ADD A CREATE BUTTON LISTENER AFTER CREATING FORM */
+            *//* ADD A CREATE BUTTON LISTENER AFTER CREATING FORM *//*
             form.setCardListener(e -> {
                 String type = (String)e.getCardTypeCombo().getSelectedItem();
                 HashMap<String, String> newCard = new HashMap<>();
@@ -297,7 +297,7 @@ public class Program {
             });
         });
 
-        /* TOOLBAR | DELETE CARD BUTTON */
+        *//* TOOLBAR | DELETE CARD BUTTON *//*
         cardViewPane.setDeleteCardListener(() -> {
             removeCardForms();
             cardViewPane.setDeleteForm(new DeleteCardForm());
@@ -305,14 +305,14 @@ public class Program {
             cardViewPane.add(form, BorderLayout.WEST);
             form.setVisible(true);
 
-            /* Setup a text pane to put all the necessary data into */
+            *//* Setup a text pane to put all the necessary data into *//*
             ResultsPane resultsPane = cardViewPane.getResultsPane();
             resultsPane.setVisible(false);
             resultsPane.setResultsTextPane();
             ResultsPane.ResultsTextPane resultsTextPane = resultsPane.getResultsTextPane();
             setCardViewMouseListeners();
 
-            /* REGISTER A CANCEL BUTTON LISTENER AFTER CREATING FORM */
+            *//* REGISTER A CANCEL BUTTON LISTENER AFTER CREATING FORM *//*
             form.setCancelListener(() -> {
                 cardViewPane.getDeleteForm().setVisible(false);
                 cardViewPane.getResultsPane().setVisible(false);
@@ -320,11 +320,11 @@ public class Program {
                 removeResultsPane(resultsPane);
             });
 
-            /* REGISTER A DELETE BUTTON LISTENER AFTER CREATING FORM */
+            *//* REGISTER A DELETE BUTTON LISTENER AFTER CREATING FORM *//*
             form.setDeleteListener(e -> {
                 String cardID = e.getIdTextField().getText().toUpperCase();
 
-                /* SETUP VALIDATOR FOR CARD ID */
+                *//* SETUP VALIDATOR FOR CARD ID *//*
                 FormValidData input = new FormValidData();
                 input.setCardID(cardID);
                 FormRule rule = new CardIDRule();
@@ -382,23 +382,23 @@ public class Program {
             });
         });
 
-        /* TOOLBAR | SEARCH BUTTON */
+        *//* TOOLBAR | SEARCH BUTTON *//*
         cardViewPane.setSearchCardListener(() -> {
             removeCardForms();
             cardViewPane.setSearchForm(new SearchForm());
             cardViewPane.add(cardViewPane.getSearchForm(), BorderLayout.WEST);
             cardViewPane.getSearchForm().setVisible(true);
 
-            /* ADD A CANCEL BUTTON LISTENER AFTER CREATING FORM */
+            *//* ADD A CANCEL BUTTON LISTENER AFTER CREATING FORM *//*
             cardViewPane.getSearchForm().setCancelListener(() -> {
                 cardViewPane.getSearchForm().setVisible(false);
                 cardViewPane.getResultsPane().setVisible(false);
                 removeCardForms();
             });
 
-            /* ADD A CANCEL BUTTON LISTENER AFTER CREATING FORM */
+            *//* ADD A CANCEL BUTTON LISTENER AFTER CREATING FORM *//*
             cardViewPane.getSearchForm().setSearchListener(e -> {
-                /* Setup a text pane to put all the necessary data into */
+                *//* Setup a text pane to put all the necessary data into *//*
                 ResultsPane resultsPane = cardViewPane.getResultsPane();
                 resultsPane.setResultsTextPane();
                 ResultsPane.ResultsTextPane resultsTextPane = resultsPane.getResultsTextPane();
@@ -406,7 +406,7 @@ public class Program {
 
                 String cardID = e.getSearchIDTextField().getText().toUpperCase();
 
-                /* SETUP VALIDATOR FOR CARD ID */
+                *//* SETUP VALIDATOR FOR CARD ID *//*
                 FormValidData input = new FormValidData();
                 input.setCardID(cardID);
                 FormRule cardIDRule = new CardIDRule();
@@ -456,7 +456,7 @@ public class Program {
             });
         });
 
-        /* TOOLBAR | VIEW BUTTON */
+        *//* TOOLBAR | VIEW BUTTON *//*
         cardViewPane.setViewCardListener(() -> {
             if (cardViewPane.getCardTablePane().getSelectedRow() >= 0) {
                 removeCardForms();
@@ -488,7 +488,7 @@ public class Program {
             }
         });
 
-        /* TOOLBAR | SORT COMBOBOX */
+        *//* TOOLBAR | SORT COMBOBOX *//*
         cardViewPane.getSortedCombo().addItemListener((e) -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
                 if (e.getItem().equals("Sort..") || e.getItem().equals(SortCardType.CreatedOrder.getName()))
@@ -515,8 +515,8 @@ public class Program {
             }
         });
 
-        /*============================== PURCHASE VIEW HANDLERS ==============================*/
-        /* TOOLBAR | CREATE BUTTON */
+        *//*============================== PURCHASE VIEW HANDLERS ==============================*//*
+        *//* TOOLBAR | CREATE BUTTON *//*
         purchaseViewPane.setCreatePurchaseListener(() -> {
             removePurchaseForms();
             purchaseViewPane.setCreatePurchaseForm(new PurchaseForm());
@@ -530,19 +530,19 @@ public class Program {
             form.createBasePurchaseForm();
             form.setVisible(true);
 
-            /* SET UP A RESULTS PANE TO SHOW END RESULT */
+            *//* SET UP A RESULTS PANE TO SHOW END RESULT *//*
             ResultsPane resultsPane = purchaseViewPane.getResultsPane();
             resultsPane.setResultsTextPane();
             ResultsPane.ResultsTextPane resultsTextPane = resultsPane.getResultsTextPane();
             setPurchaseViewPaneMouseListeners();
 
-            /* FORM CANCEL BUTTON */
+            *//* FORM CANCEL BUTTON *//*
             form.setCancelPurchaseListener(() -> {
                 form.setVisible(false);
                 removePurchaseForms();
             });
 
-            /* FORM CREATE BUTTON */
+            *//* FORM CREATE BUTTON *//*
             form.setCreatePurchaseListener(event -> {
                 JComboBox<String> type = event.getPurchaseTypeCombo();
 
@@ -600,7 +600,7 @@ public class Program {
             });
         });
 
-        /* TOOLBAR | SUMMARY BUTTON */
+        *//* TOOLBAR | SUMMARY BUTTON *//*
         purchaseViewPane.setSummaryListener(() -> {
             ResultsPane resultsPane = purchaseViewPane.getResultsPane();
             resultsPane.setResultsTextPane();
@@ -630,7 +630,7 @@ public class Program {
             purchaseViewPane.repaint();
         });
 
-        /* TOOLBAR | VIEW  BUTTON */
+        *//* TOOLBAR | VIEW  BUTTON *//*
         purchaseViewPane.setViewPurchaseListener(() -> {
             if (purchaseViewPane.getPurchaseTablePane().getSelectedRow() > 0) {
                 int selectedRow = purchaseViewPane.getPurchaseTablePane().getSelectedRow();
@@ -652,19 +652,19 @@ public class Program {
             }
         });
 
-        /* TOOLBAR | SORT COMBOBOX */
+        *//* TOOLBAR | SORT COMBOBOX *//*
         purchaseViewPane.getSortPurchaseCombo().addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
                 ArrayList<Purchase> tempPurchases = new ArrayList<>();
                 if (e.getItem().equals(SortPurchaseType.All.getName())) {
                     purchaseViewPane.update();
                 } else if (e.getItem().equals(SortPurchaseType.Card.getName())) {
-                    /* NEGATIVE CASH VALIDATION */
+                    *//* NEGATIVE CASH VALIDATION *//*
                     for (Purchase item : db.getPurchases())
                         if (item.getCardID() != null) tempPurchases.add(item);
                     purchaseViewPane.sortPurchaseTableMode(tempPurchases);
                 } else if (e.getItem().equals(SortPurchaseType.Cash.getName())) {
-                    /* POSITIVE CASH Validation */
+                    *//* POSITIVE CASH Validation *//*
                     for (Purchase item : db.getPurchases())
                         if (item.getCardID() == null) tempPurchases.add(item);
                     purchaseViewPane.sortPurchaseTableMode(tempPurchases);
@@ -672,8 +672,8 @@ public class Program {
             }
         });
 
-        /*=========================== CATEGORIES VIEW HANDLERS ===========================*/
-        /* TOOLBAR | CREATE CATEGORY BUTTON */
+        *//*=========================== CATEGORIES VIEW HANDLERS ===========================*//*
+        *//* TOOLBAR | CREATE CATEGORY BUTTON *//*
         categoriesViewPane.setCreateCategoryListener(() -> {
             removeCategoryForms();
             categoriesViewPane.setCreateCategoryForm(new CategoriesForm());
@@ -681,13 +681,13 @@ public class Program {
             categoriesViewPane.add(form, BorderLayout.WEST);
             form.setVisible(true);
 
-            /* ADD A CANCEL BUTTON LISTENER AFTER CREATING FORM */
+            *//* ADD A CANCEL BUTTON LISTENER AFTER CREATING FORM *//*
             form.setCancelListener(() -> {
                 form.setVisible(false);
                 removeCategoryForms();
             });
 
-            /* ADD A CREATE BUTTON LISTENER AFTER CREATING FORM */
+            *//* ADD A CREATE BUTTON LISTENER AFTER CREATING FORM *//*
             form.setCreateCategoryListener(e -> {
                 shop.makeCategory(new Category(e.getCategoryNameTextField().getText(),
                         e.getCategoryDescTextField().getText()));
@@ -697,7 +697,7 @@ public class Program {
             });
         });
 
-        /* TOOLBAR | DELETE CATEGORY BUTTON */
+        *//* TOOLBAR | DELETE CATEGORY BUTTON *//*
         categoriesViewPane.setDeleteCategoryListener(() -> {
             removeCategoryForms();
             categoriesViewPane.setDeleteCategoryForm(new DeleteCategoryForm());
@@ -706,17 +706,17 @@ public class Program {
             categoriesViewPane.add(form, BorderLayout.WEST);
             form.setVisible(true);
 
-            /* ADD A CANCEL BUTTON LISTENER AFTER CREATING FORM */
+            *//* ADD A CANCEL BUTTON LISTENER AFTER CREATING FORM *//*
             form.setCancelListener(() -> {
                 form.setVisible(false);
                 removeCategoryForms();
             });
 
-            /* ADD A DELETE BUTTON LISTENER AFTER CREATING FORM */
+            *//* ADD A DELETE BUTTON LISTENER AFTER CREATING FORM *//*
             form.setDeleteListener(e -> {
                 String categoryIDStr = e.getIdTextField().getText();
 
-                /* SETUP VALIDATOR FOR CATEGORY ID */
+                *//* SETUP VALIDATOR FOR CATEGORY ID *//*
                 FormValidData input = new FormValidData();
                 input.setCategoryID(categoryIDStr);
                 FormRule validIDRule = new CategoryIDRule();
@@ -786,7 +786,7 @@ public class Program {
 
     }
 
-    /*============================== MUTATORS  ==============================*/
+    *//*============================== MUTATORS  ==============================*//*
     // Takes some arguments to create and display a ResultsPane to the right for results output
     private void showResultsPane(String text, ResultsPane resultsPane,
                                    ResultsPane.ResultsTextPane resultsTextPane) {
@@ -798,7 +798,7 @@ public class Program {
         resultsPane.getResultsTextPane().setCaretPosition(0);
     }
 
-    /*==================== REMOVING FORMS METHODS ====================*/
+    *//*==================== REMOVING FORMS METHODS ====================*//*
     // These methods all remove forms from their respective panes when they're not needed anymore
     private void removeCardForms() {
         for (Component comp : cardViewPane.getComponents()) {
@@ -835,12 +835,12 @@ public class Program {
             resultsPane.remove(resultsPane.getScrollPane());
         }
     }
-    /*===============================================================*/
+    *//*===============================================================*//*
 
-    /*=============== SETTING MOUSE LISTENERS METHODS ===============*/
+    *//*=============== SETTING MOUSE LISTENERS METHODS ===============*//*
     // These methods add a mouse listener to the JTable whenever a ResultsPane is added to the right
     private void setCardViewMouseListeners() {
-        /* SET UP A MOUSE LISTENER TO CLOSE PANEL WHEN CLICKING ON TABLE OR OUTER PANEL*/
+        *//* SET UP A MOUSE LISTENER TO CLOSE PANEL WHEN CLICKING ON TABLE OR OUTER PANEL*//*
         // Only add a new MouseListener if there are less than 3 in the MouseListener[]
         // Unknown reasons why there are already 2 other ones in a JTable
         if (cardViewPane.getCardTablePane().getMouseListeners().length < 3) {
@@ -856,7 +856,7 @@ public class Program {
     }
 
     private void setPurchaseViewPaneMouseListeners() {
-        /* SET UP A MOUSE LISTENER TO CLOSE PANEL WHEN CLICKING ON TABLE OR OUTER PANEL*/
+        *//* SET UP A MOUSE LISTENER TO CLOSE PANEL WHEN CLICKING ON TABLE OR OUTER PANEL*//*
         // Only add a new MouseListener if there are less than 3 in the MouseListener[]
         // Unknown reasons why there are already 2 other ones in a JTable
         if (purchaseViewPane.getPurchaseTablePane().getMouseListeners().length < 3) {
@@ -870,13 +870,13 @@ public class Program {
             });
         }
     }
-    /*===============================================================*/
+    *//*===============================================================*//*
 
-    /*=============== ADDITIONAL CREATING PURCHASES METHODS ===============*/
+    *//*=============== ADDITIONAL CREATING PURCHASES METHODS ===============*//*
     // Validates each category field of the form
     private boolean validateCatValueFields(HashMap<JLabel[], FormFormattedTextField> rawCategories) {
         boolean proceed = true;
-        /* SETUP VALIDATOR FOR CATEGORY AMOUNT */
+        *//* SETUP VALIDATOR FOR CATEGORY AMOUNT *//*
         FormValidData input = new FormValidData();
         FormRule catAmountRule = new CategoryAmountRule();
 
@@ -935,7 +935,7 @@ public class Program {
             } else if (type.getSelectedItem().equals(PurchaseType.NewCardPurchase.getName())) {
                 String newCardID = event.getCardIDTextField().getText();
 
-                /* SETUP VALIDATOR FOR CARD ID */
+                *//* SETUP VALIDATOR FOR CARD ID *//*
                 FormValidData input = new FormValidData();
                 FormRule cardIDRule = new CardIDRule();
                 input.setCardID(newCardID);
@@ -954,6 +954,6 @@ public class Program {
         }
         return null;
     }
-    /*====================================================================*/
+    *//*====================================================================*/
 
 }

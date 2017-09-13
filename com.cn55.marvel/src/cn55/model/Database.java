@@ -8,6 +8,8 @@ import cn55.model.CardModel.Card;
 import javax.swing.*;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
@@ -244,17 +246,20 @@ public class Database implements Subject {
         closeFile();
     }
 
-    public void openFile() {
+    private void openFile() {
         try {
-            Path path = Paths.get("database.txt");
-            File file = new File("database.txt");
-            output = new Formatter("database.txt");
+//            Path path = Paths.get("database2.txt");
+            Path path = FileSystems.getDefault().getPath("/src/cn55/database3.txt");
+            System.out.println(path);
+            System.out.println(path.getParent());
+            File file = new File(path.toUri());
+            output = new Formatter(file);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
     }
 
-    public void closeFile() {
+    private void closeFile() {
         output.close();
     }
 }
