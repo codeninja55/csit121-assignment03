@@ -27,7 +27,7 @@ public class Program {
         db.writePurchases();
         db.writeCategories();
 
-        
+
 
         /*this.mainFrame = new MainFrame();
         this.tabPane = mainFrame.getTabPane();

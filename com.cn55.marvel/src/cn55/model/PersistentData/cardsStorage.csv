@@ -1,22 +1,22 @@
 id,cardType,name,email,balance,points
-MC10001,AnonCard,,,,7.8
-MC10002,AnonCard,,,,12.1
-MC10003,BasicCard,Natasha Romanov,blackwidow@avengers.team,5720.0,85.80000000000001
-MC10004,BasicCard,Steve Rogers,captain_a@avengers.team,1900.0,28.5
-MC10005,PremiumCard,Tony Stark,ironman@avengers.team,8540.0,256.20000000000005
-MC10006,BasicCard,Bruce Banner,hulk@avengers.team,2190.0,32.85
-MC10007,PremiumCard,Nick Fury,nick@shield.com,2870.0,86.1
-MC10008,AnonCard,,,,14.600000000000001
+MC10001,AnonCard,,,,9.200000000000001
+MC10002,AnonCard,,,,12.299999999999999
+MC10003,BasicCard,Natasha Romanov,blackwidow@avengers.team,5620.0,84.3
+MC10004,BasicCard,Steve Rogers,captain_a@avengers.team,1720.0,25.799999999999997
+MC10005,PremiumCard,Tony Stark,ironman@avengers.team,7410.0,222.29999999999998
+MC10006,BasicCard,Bruce Banner,hulk@avengers.team,1160.0,17.4
+MC10007,PremiumCard,Nick Fury,nick@shield.com,2030.0,60.9
+MC10008,AnonCard,,,,23.5
 MC10009,AnonCard,,,,0.0
 MC10010,BasicCard,Hank Pym,ants@avengers.team,0.0,0.0
 MC10011,BasicCard,Peter Parker,spidey@avengers.team,0.0,0.0
-MC10012,PremiumCard,Danny Rand,danny@randcorp.com,7730.0,81.89999999999999
-MC10013,PremiumCard,Professor Charles Xavier,x@xmen.com,1239488.0,20.7
+MC10012,PremiumCard,Danny Rand,danny@randcorp.com,6690.0,50.7
+MC10013,PremiumCard,Professor Charles Xavier,x@xmen.com,1240128.0,39.9
 MC10014,BasicCard,Matthew Murdock,thedevil@hellskitchen.com,666.0,0.0
 MC10015,BasicCard,Thor Odinson,thor@asgard.com,9000.0,0.0
 MC10016,BasicCard,Clint Barton,better_than_arrow@marvel.com,500.0,0.0
-MC10017,AnonCard,,,,35.4
-MC10018,PremiumCard,Oliver Queen,the_best_arrow_user@dc.comics,3550.0,61.5
+MC10017,AnonCard,,,,26.000000000000004
+MC10018,PremiumCard,Oliver Queen,the_best_arrow_user@dc.comics,5460.0,118.8
 MC10019,BasicCard,Loki,the-baddest-dude@asgard.com,0.0,0.0
 MC10020,AnonCard,,,,0.0
 MC10021,AnonCard,,,,0.0

@@ -6,6 +6,7 @@ import cn55.model.CardModel.AdvancedCard;
 import cn55.model.CardModel.Card;
 
 import javax.swing.*;
+import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -21,7 +22,7 @@ public class DataStoreModel implements Subject {
     private static final char NEW_LINE_SEPARATOR = '\n';
 
     private static DataStoreModel db;
-    private static FileWriter output;
+    private static BufferedWriter output;
 
     private final ArrayList<cn55.model.Observer> observers;
     private final ArrayList<Card> cards;
@@ -228,7 +229,7 @@ public class DataStoreModel implements Subject {
     /*============================== SEQUENTIAL CSV FILE WRITER ==============================*/
     public void writeCards() {
         String cardsHeader = "id,cardType,name,email,balance,points";
-        Path cardsStoragePath = Paths.get("cardsStorage.csv");
+        Path cardsStoragePath = Paths.get("com.cn55.marvel/src/cn55/model/PersistentData/cardsStorage.csv");
         openFile(cardsStoragePath);
 
         try{
@@ -253,7 +254,7 @@ public class DataStoreModel implements Subject {
 
     public void writePurchases() {
         String purchaseHeaders = "purchaseTime,receiptID,cardType,cardID,categories[]";
-        Path purchaseStoragePath = Paths.get("purchaseStorage.csv");
+        Path purchaseStoragePath = Paths.get("com.cn55.marvel/src/cn55/model/PersistentData/purchaseStorage.csv");
         openFile(purchaseStoragePath);
 
         try{
@@ -290,7 +291,7 @@ public class DataStoreModel implements Subject {
 
     public void writeCategories() {
         String categoriesHeader = "id,name,description,amount";
-        Path categoriesStoragePath = Paths.get("categoriesStorage.csv");
+        Path categoriesStoragePath = Paths.get("com.cn55.marvel/src/cn55/model/PersistentData/categoriesStorage.csv");
         openFile(categoriesStoragePath);
 
         try{
@@ -313,7 +314,7 @@ public class DataStoreModel implements Subject {
 
     private void openFile(Path path) {
         try {
-            output = new FileWriter(path.toString());
+            output = new BufferedWriter(new FileWriter(path.toString()));
         } catch (IOException e) {
             // TODO - TESTING
             System.err.println("IOException: " + e.getMessage());
