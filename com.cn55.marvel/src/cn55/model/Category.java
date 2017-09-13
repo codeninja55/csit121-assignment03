@@ -9,14 +9,14 @@ public class Category implements Comparable<Category> {
 
     /*============================== CONSTRUCTORS  ==============================*/
     public Category(String name) {
-        this.id = Database.generateCategoryID();
+        this.id = DataStoreModel.generateCategoryID();
         this.name = name;
         this.description = "";
         this.amount = 0;
     }
 
     public Category(String name, String description) {
-        this.id = Database.generateCategoryID();
+        this.id = DataStoreModel.generateCategoryID();
         this.name = name;
         this.description = description;
         this.amount = 0D;

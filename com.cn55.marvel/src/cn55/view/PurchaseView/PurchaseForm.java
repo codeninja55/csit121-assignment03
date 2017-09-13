@@ -1,6 +1,7 @@
 package cn55.view.PurchaseView;
 
 import cn55.model.*;
+import cn55.model.DataStoreModel;
 import cn55.view.ButtonListener;
 import cn55.view.CustomComponents.*;
 
@@ -305,7 +306,7 @@ public class PurchaseForm extends JPanel {
         receiptIDTextField.setVisible(true);
 
         cardIDLabel.setVisible(true);
-        cardIDTextField.setText(Database.getNextCardID());
+        cardIDTextField.setText(DataStoreModel.getNextCardID());
         cardIDTextField.setVisible(true);
 
         cardTypeLabel.setVisible(true);

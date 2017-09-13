@@ -9,19 +9,18 @@ import cn55.model.CardModel.Card;
 import cn55.model.CardModel.PremiumCard;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
 
 @SuppressWarnings("ConstantConditions")
 public class Shop {
 
-    private final Database db;
+    private final DataStoreModel db;
 
     /*============================== CONSTRUCTORS  ==============================*/
     public Shop() {
-        this.db = Database.getDBInstance();
+        this.db = DataStoreModel.getDataStoreInstance();
         generateDefaultCategories();
-        Database.mapCategoriesTotalMap(db.getCategories());
+        DataStoreModel.mapCategoriesTotalMap(db.getCategories());
     }
 
     /*============================== MUTATORS  ==============================*/
@@ -50,7 +49,7 @@ public class Shop {
 
         if (cardID.equals(CardType.Cash.getName())) {
             db.addPurchase(new Purchase(categories, receiptID));
-            Database.updateCategoriesTotalMap(categories);
+            DataStoreModel.updateCategoriesTotalMap(categories);
         } else {
             if (cardExistsRule.existsValidating(validData) >= 0) {
                 Card card = db.getCards().get(db.getCardMap().get(cardID));
@@ -62,7 +61,7 @@ public class Shop {
                     card.calcBalance(newPurchase.getCategoriesTotal());
 
                 db.addPurchase(newPurchase);
-                Database.updateCategoriesTotalMap(categories);
+                DataStoreModel.updateCategoriesTotalMap(categories);
             }
         }
     }
@@ -105,9 +104,9 @@ public class Shop {
             p.getCategories().remove(categoryID);
         });
 
-        Double newValue = Database.getCategoriesTotalMap().get(100) + Database.getCategoriesTotalMap().get(categoryID);
-        Database.getCategoriesTotalMap().replace(100, newValue);
-        Database.getCategoriesTotalMap().remove(categoryID);
+        Double newValue = DataStoreModel.getCategoriesTotalMap().get(100) + DataStoreModel.getCategoriesTotalMap().get(categoryID);
+        DataStoreModel.getCategoriesTotalMap().replace(100, newValue);
+        DataStoreModel.getCategoriesTotalMap().remove(categoryID);
 
         db.removeCategory(db.getCategoriesMap().get(categoryID));
     }

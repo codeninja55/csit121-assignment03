@@ -66,8 +66,8 @@ public class Purchase {
         StringBuilder secondOutput = new StringBuilder();
         String firstOutput = String.format("%n%-20s %s%n%-20s %s%n%-20s %s%n%-20s %-20tc",
                 "Receipt ID", this.receiptID,
-                "Card ID:",this.cardID,
                 "Card Type:",this.cardType,
+                "Card ID:",this.cardID,
                 "Purchase Time:",this.purchaseTime);
 
         categories.forEach((k, v) -> secondOutput.append(String.format("%n%-20s $%.2f", (v.getName() + ":"), v.getAmount())));

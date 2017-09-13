@@ -1,7 +1,7 @@
 package cn55.view.CardView;
 
 import cn55.model.CardType;
-import cn55.model.Database;
+import cn55.model.DataStoreModel;
 import cn55.view.ButtonListener;
 import cn55.view.CustomComponents.*;
 
@@ -137,7 +137,7 @@ public class CardForm extends JPanel {
         for (Component item : baseCreateCardForm.getComponents())
             if (item instanceof FormTextField) ((FormTextField) item).setText("");
 
-        cardIDTextField.setText(Database.getNextCardID());
+        cardIDTextField.setText(DataStoreModel.getNextCardID());
 
     }
 

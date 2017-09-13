@@ -1,5 +1,6 @@
 package cn55.view.CategoriesView;
 import cn55.model.*;
+import cn55.model.DataStoreModel;
 import cn55.view.CustomComponents.Style;
 import cn55.view.CustomComponents.Toolbar;
 import cn55.view.CustomComponents.ToolbarButton;
@@ -180,7 +181,7 @@ public class CategoriesViewPane extends JPanel implements Observer {
                 case 2:
                     return category.getDescription();
                 case 3:
-                    return Database.getCategoriesTotalMap().get(category.getId());
+                    return DataStoreModel.getCategoriesTotalMap().get(category.getId());
             }
             return null;
         }
