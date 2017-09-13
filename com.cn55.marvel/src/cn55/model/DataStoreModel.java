@@ -243,7 +243,7 @@ public class DataStoreModel implements Subject {
                 output.append((card instanceof AdvancedCard) ? ((AdvancedCard) card).getEmail() : "").append(DEFAULT_SEPARATOR);
                 output.append((card instanceof AdvancedCard) ? Double.toString(((AdvancedCard) card).getBalance()) : "").append(DEFAULT_SEPARATOR);
                 output.append(Double.toString(card.getPoints()));
-                output.append(NEW_LINE_SEPARATOR);
+                output.newLine();
             }
         } catch (IOException e) {
             // TODO - TESTING
@@ -280,7 +280,7 @@ public class DataStoreModel implements Subject {
                     }
                 }
                 output.append("}");
-                output.append(NEW_LINE_SEPARATOR);
+                output.newLine();
             }
         } catch (IOException e) {
             // TODO - TESTING
@@ -297,13 +297,12 @@ public class DataStoreModel implements Subject {
         try{
             output.append(categoriesHeader);
             output.append(NEW_LINE_SEPARATOR);
-
             for (Category c : categories) {
                 output.append(Integer.toString(c.getId())).append(DEFAULT_SEPARATOR);
                 output.append(c.getName()).append(DEFAULT_SEPARATOR);
                 output.append(c.getDescription()).append(DEFAULT_SEPARATOR);
                 output.append(Double.toString(c.getAmount()));
-                output.append(NEW_LINE_SEPARATOR);
+                output.newLine();
             }
         } catch (IOException e) {
             // TODO - TESTING
