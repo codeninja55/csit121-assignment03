@@ -4,6 +4,11 @@ import cn55.controller.Program;
 import cn55.view.CustomComponents.Style;
 
 import javax.swing.*;
+import java.awt.*;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /*
  * @author Dinh Che
@@ -13,6 +18,32 @@ import javax.swing.*;
 
 class Assignment2 {
     public static void main(String[] args) {
+
+        // Custom font creation
+        try {
+            Path fontPath = Paths.get("com.cn55.marvel/src/cn55/font/ProductSansRegular.ttf");
+            Path fontBoldPath = Paths.get("com.cn55.marvel/src/cn55/font/ProductSansBold.ttf");
+            //Returned font is of pt size 1
+            Font productSansFont = Font.createFont(Font.TRUETYPE_FONT, new File(fontPath.toString()));
+            productSansFont.deriveFont(24f);
+            Font productSansBoldFont = Font.createFont(Font.BOLD, new File(fontBoldPath.toString()));
+            productSansBoldFont.deriveFont(24f);
+
+            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            ge.registerFont(productSansFont);
+            ge.registerFont(productSansBoldFont);
+
+        } catch (IOException|FontFormatException e) {
+            // Handle exception
+        }
+
+        // Loop through and get all the fonts available in the system
+        /*GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        Font[] fonts = ge.getAllFonts();
+        for (Font font : fonts) {
+            System.out.println(font.getName());
+        }*/
+
         // Change some of the Default Look and Feel
         UIManager.put("Panel.background", Style.blueGrey200());
         UIManager.put("Viewport.background", Style.blueGrey200());
@@ -50,7 +81,7 @@ class Assignment2 {
 
         UIManager.put("Table.selectionBackground", Style.red300());
         UIManager.put("Table.font", Style.tableDataFont());
-        UIManager.put("TableHeader.font", Style.buttonFont());
+        UIManager.put("TableHeader.font", Style.toolbarButtonFont());
         UIManager.put("TableHeader.background", Style.red500());
         UIManager.put("TableHeader.foreground", Style.grey50());
 
