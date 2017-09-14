@@ -1,11 +1,5 @@
 package cn55.model.CardModel;
 
-/*
- * @author Dinh Che
- * Student Number: 5721970
- * Email: dbac496@uowmail.edu.au
- */
-
 import cn55.model.Shop;
 
 @SuppressWarnings("ALL")
