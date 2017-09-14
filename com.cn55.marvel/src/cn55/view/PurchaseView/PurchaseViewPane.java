@@ -179,17 +179,16 @@ public class PurchaseViewPane extends JPanel implements Observer {
             if (e.getSource() == createPurchaseBtn) {
                 if (createPurchaseListener != null)
                     createPurchaseListener.toolbarButtonEventOccurred();
+            } else if (e.getSource() == viewPurchaseBtn) {
+                if (viewPurchaseListener != null)
+                    viewPurchaseListener.toolbarButtonEventOccurred();
             } else if (e.getSource() == deletePurchaseBtn) {
                 /* TEST CODE */
                 System.err.println("Purchase View Delete Purchase Not Impl Yet");
                 System.out.println("Delete Purchase Button Pressed");
-            } else if (e.getSource() == viewPurchaseBtn) {
-                if (viewPurchaseListener != null)
-                    viewPurchaseListener.toolbarButtonEventOccurred();
-            } else if (e.getSource() == summaryBtn) {
+            } else if (e.getSource() == summaryBtn)
                 if (summaryListener != null)
                     summaryListener.toolbarButtonEventOccurred();
-            }
         }
 
         public void mouseEntered(MouseEvent e) {
