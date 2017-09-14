@@ -245,7 +245,7 @@ public class PurchaseForm extends JPanel {
         gc.anchor = GridBagConstraints.CENTER;
         gc.insets = new Insets(20,0,20,0);
         purchaseErrorLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        purchaseErrorLabel.setFont(new Font("Monospaced", Font.BOLD, 32));
+        purchaseErrorLabel.setFont(new Font("Product Sans", Font.BOLD, 32));
         purchaseErrorLabel.setBorder(Style.formBorder(""));
         baseCreatePurchaseForm.add(purchaseErrorLabel, gc);
 
@@ -306,7 +306,7 @@ public class PurchaseForm extends JPanel {
         receiptIDTextField.setVisible(true);
 
         cardIDLabel.setVisible(true);
-        cardIDTextField.setText(DataStoreModel.getNextCardID());
+        cardIDTextField.setText(Shop.getNextCardID());
         cardIDTextField.setVisible(true);
 
         cardTypeLabel.setVisible(true);

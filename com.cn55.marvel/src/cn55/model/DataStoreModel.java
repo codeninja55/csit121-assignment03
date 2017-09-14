@@ -5,18 +5,12 @@ package cn55.model;
 import cn55.model.CardModel.Card;
 
 import javax.swing.*;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
 
 /* SINGLETON DESIGN PATTERN */
 
 @SuppressWarnings("ConstantConditions")
 public class DataStoreModel implements Subject {
-
-    private static DataStoreModel db;
 
     private final ArrayList<cn55.model.Observer> observers;
     private final ArrayList<Card> cards;
@@ -25,16 +19,11 @@ public class DataStoreModel implements Subject {
     private HashMap<Integer, Integer> purchaseMap;
     private final ArrayList<Category> categories;
     private HashMap<Integer, Integer> categoriesMap;
-
-    private static int cardIDCounter = 10000;
-    private static int categoryIDCounter = 100;
-
     private static final HashMap<Integer, Double> categoriesTotalMap = new HashMap<>();
-    private static final Set<Integer> receiptSet = new HashSet<>();
 
     /*============================== CONSTRUCTORS  ==============================*/
     // Private modifier prevents any other class from instantiating
-    private DataStoreModel() {
+    DataStoreModel() {
         this.observers = new ArrayList<>();
         this.cards = new ArrayList<>();
         this.cardMap = new HashMap<>();
@@ -43,38 +32,6 @@ public class DataStoreModel implements Subject {
         this.categories = new ArrayList<>();
         this.categoriesMap = new HashMap<>();
     }
-
-    // Provide global point of access
-    // Double check locking mechanism but only with the initial call
-    public static synchronized DataStoreModel getDataStoreInstance() {
-        if (db == null) db = new DataStoreModel();
-        return db;
-    }
-
-    /*============================== STATIC METHODS ==============================*/
-    public static int generateReceiptID() {
-        Random randomObj = new Random();
-
-        int receiptID;
-        receiptID = randomObj.ints(10000000,99999999).findFirst().getAsInt();
-
-        if (receiptSet.contains(receiptID)) {
-            return generateReceiptID();
-        } else {
-            addReceiptID(receiptID);
-            return receiptID;
-        }
-    }
-
-    public static String generateCardID() {
-        return "MC" + (++cardIDCounter);
-    }
-
-    static int generateCategoryID() {
-        return categoryIDCounter++;
-    }
-
-    private static void addReceiptID(int receiptID) { DataStoreModel.receiptSet.add(receiptID); }
 
     /*============================== MUTATORS  ==============================*/
     void mapCards() {
@@ -146,14 +103,6 @@ public class DataStoreModel implements Subject {
     }
 
     /*============================== ACCESSORS  ==============================*/
-    public static String getNextCardID() {
-        return "MC" + (cardIDCounter + 1);
-    }
-
-    public static int getNextCategoryID() {
-        return categoryIDCounter;
-    }
-
     public ArrayList<Card> getCards() {
         return cards;
     }

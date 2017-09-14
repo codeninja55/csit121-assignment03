@@ -8,20 +8,55 @@ import cn55.model.CardModel.BasicCard;
 import cn55.model.CardModel.Card;
 import cn55.model.CardModel.PremiumCard;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 
 @SuppressWarnings("ConstantConditions")
 public class Shop {
 
+    private static Shop shop;
     private final DataStoreModel db;
+    private static int cardIDCounter = 10000;
+    private static int categoryIDCounter = 100;
+    private static final Set<Integer> receiptSet = new HashSet<>();
 
     /*============================== CONSTRUCTORS  ==============================*/
     public Shop() {
-        this.db = DataStoreModel.getDataStoreInstance();
+        this.db = new DataStoreModel();
         generateDefaultCategories();
         DataStoreModel.mapCategoriesTotalMap(db.getCategories());
     }
+
+    // Provide global point of access
+    // Double check locking mechanism but only with the initial call
+    public static synchronized Shop getShopInstance() {
+        if (shop == null) shop = new Shop();
+            return shop;
+    }
+
+    /*============================== STATIC METHODS ==============================*/
+    public static int generateReceiptID() {
+        Random randomObj = new Random();
+
+        int receiptID;
+        receiptID = randomObj.ints(10000000,99999999).findFirst().getAsInt();
+
+        if (receiptSet.contains(receiptID)) {
+            return generateReceiptID();
+        } else {
+            addReceiptID(receiptID);
+            return receiptID;
+        }
+    }
+
+    public static String generateCardID() {
+        return "MC" + (++cardIDCounter);
+    }
+
+    static int generateCategoryID() {
+        return categoryIDCounter++;
+    }
+
+    private static void addReceiptID(int receiptID) { receiptSet.add(receiptID); }
 
     /*============================== MUTATORS  ==============================*/
     private void generateDefaultCategories() {
@@ -109,5 +144,18 @@ public class Shop {
         DataStoreModel.getCategoriesTotalMap().remove(categoryID);
 
         db.removeCategory(db.getCategoriesMap().get(categoryID));
+    }
+
+    /*============================== ACCESSORS ==============================*/
+    public static String getNextCardID() {
+        return "MC" + (cardIDCounter + 1);
+    }
+
+    public static int getNextCategoryID() {
+        return categoryIDCounter;
+    }
+
+    public DataStoreModel getDataStore() {
+        return db;
     }
 }

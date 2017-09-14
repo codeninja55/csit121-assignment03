@@ -1,6 +1,7 @@
 package cn55.view.CategoriesView;
 
 import cn55.model.DataStoreModel;
+import cn55.model.Shop;
 import cn55.view.ButtonListener;
 import cn55.view.CustomComponents.*;
 
@@ -115,7 +116,7 @@ public class CategoriesForm extends JPanel {
                 c.setVisible(true);
         }
 
-        categoryIDTextField.setText(Integer.toString(DataStoreModel.getNextCategoryID()));
+        categoryIDTextField.setText(Integer.toString(Shop.getNextCategoryID()));
 
         /* BUTTON REGISTRATION AND CALLBACKS */
         FormListener handler = new FormListener();

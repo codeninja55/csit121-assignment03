@@ -3,6 +3,7 @@ package cn55.model.DataStoreConnectors;
 import cn55.model.Category;
 import cn55.model.DataStoreModel;
 import cn55.model.Purchase;
+import cn55.model.Shop;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -25,7 +26,7 @@ public class PurchasesWriteOutConcreteImpl implements WriteCSV {
             output.append(purchaseHeaders);
             output.newLine();
 
-            for (Purchase p : DataStoreModel.getDataStoreInstance().getPurchases()) {
+            for (Purchase p : Shop.getShopInstance().getDataStore().getPurchases()) {
                 int lastLine = 1;
                 output.append(p.getPurchaseTime().toString()).append(DEFAULT_SEPARATOR);
                 output.append(Integer.toString(p.getReceiptID())).append(DEFAULT_SEPARATOR);

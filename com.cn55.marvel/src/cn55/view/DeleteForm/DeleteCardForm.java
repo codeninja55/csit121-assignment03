@@ -78,7 +78,7 @@ public class DeleteCardForm extends JPanel {
         gc.anchor = GridBagConstraints.CENTER;
         gc.insets = new Insets(20,0,20,0);
         deleteErrorLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        deleteErrorLabel.setFont(new Font("Monospaced", Font.BOLD, 32));
+        deleteErrorLabel.setFont(new Font("Product Sans", Font.BOLD, 32));
         deleteErrorLabel.setBorder(Style.formBorder(""));
         deleteForm.add(deleteErrorLabel, gc);
 

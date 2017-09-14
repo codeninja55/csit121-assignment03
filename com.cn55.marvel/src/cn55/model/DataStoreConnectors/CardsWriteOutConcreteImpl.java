@@ -3,6 +3,7 @@ package cn55.model.DataStoreConnectors;
 import cn55.model.CardModel.AdvancedCard;
 import cn55.model.CardModel.Card;
 import cn55.model.DataStoreModel;
+import cn55.model.Shop;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -17,15 +18,11 @@ public class CardsWriteOutConcreteImpl implements WriteCSV {
 
     @Override
     public void writeOut() {
-        String cardsHeader = "id,cardType,name,email,balance,points";
         Path cardsStoragePath = Paths.get("com.cn55.marvel/src/cn55/model/PersistentData/cardsStorage.csv");
         openFile(cardsStoragePath);
 
         try{
-            output.append(cardsHeader);
-            output.newLine();
-
-            for (Card card : DataStoreModel.getDataStoreInstance().getCards()) {
+            for (Card card : Shop.getShopInstance().getDataStore().getCards()) {
                 output.append(card.getID()).append(DEFAULT_SEPARATOR);
                 output.append(card.getCardType()).append(DEFAULT_SEPARATOR);
                 output.append((card instanceof AdvancedCard) ? ((AdvancedCard) card).getName() : "").append(DEFAULT_SEPARATOR);

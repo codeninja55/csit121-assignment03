@@ -1,6 +1,7 @@
 package cn55.controller.Validator;
 
 import cn55.model.DataStoreModel;
+import cn55.model.Shop;
 
 public class CategoryExistsRule implements ExistsRule {
     public int existsValidating(FormValidData validData) {
@@ -12,7 +13,7 @@ public class CategoryExistsRule implements ExistsRule {
 
         if (validIDRule.validate(input)) {
             categoryID = Integer.parseInt(categoryIDStr);
-            return DataStoreModel.getDataStoreInstance().getCategoriesMap().getOrDefault(categoryID, -1);
+            return Shop.getShopInstance().getDataStore().getCategoriesMap().getOrDefault(categoryID, -1);
         } else {
             return -1;
         }

@@ -39,20 +39,20 @@ public class MainFrame extends JFrame {
         welcomePane.setLayout(new GridBagLayout());
         URL marvelURL = getClass().getResource("/cn55/img/Marvel-Logo-3-25pc.png");
         ImageIcon marvelImage = new ImageIcon(marvelURL);
-        JLabel welcomeLabel = new JLabel("WELCOME");
+        JLabel welcomeLabel = new JLabel("WELCOME TO");
         JLabel imageLabel = new JLabel("", marvelImage, SwingConstants.CENTER);
         JLabel rewardsCardLabel = new JLabel("REWARDS CARDS", SwingConstants.CENTER);
-        welcomeLabel.setFont(new Font("Verdana", Font.BOLD,80));
+        welcomeLabel.setFont(new Font("Product Sans", Font.BOLD,80));
         welcomeLabel.setForeground(Style.red500());
-        rewardsCardLabel.setFont(new Font("Verdana", Font.BOLD,72));
+        rewardsCardLabel.setFont(new Font("Product Sans", Font.BOLD,72));
         rewardsCardLabel.setForeground(Style.red500());
 
         GridBagConstraints gc = new GridBagConstraints();
         gc.fill = GridBagConstraints.NONE;
         gc.gridx = 0; gc.gridy = 0;
-        gc.weightx = 1; gc.weighty = 0.5;
+        gc.weightx = 1; gc.weighty = 0.1;
         gc.anchor = GridBagConstraints.PAGE_END;
-        gc.insets = new Insets(200,0,80,0);
+        gc.insets = new Insets(300,0,0,0);
 
         welcomePane.add(welcomeLabel, gc);
 
@@ -61,7 +61,7 @@ public class MainFrame extends JFrame {
 
         gc.gridy++;  gc.weighty = 2;
         gc.anchor = GridBagConstraints.PAGE_START;
-        gc.insets = new Insets(20,0,0,0);
+        gc.insets = new Insets(40,0,0,0);
         welcomePane.add(rewardsCardLabel, gc);
 
         this.cardViewPane = new CardViewPane();

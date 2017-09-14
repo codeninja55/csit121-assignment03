@@ -9,17 +9,18 @@ import java.text.DecimalFormat;
 
 @SuppressWarnings({"WeakerAccess", "unused"})
 public class Style {
-    public static Font buttonFont() { return new Font("Verdana", Font.BOLD, 24); }
-    public static Font toolbarButtonFont() { return new Font("Verdana", Font.BOLD, 26); }
-    public static Font labelFont() { return new Font("Verdana", Font.BOLD, 22); }
-    public static Font comboboxFont() { return new Font("Verdana", Font.PLAIN, 20); }
-    public static Font titledBorderFont() { return new Font("Verdana", Font.BOLD, 26); }
-    public static Font textFieldFont() { return new Font("Monospaced", Font.PLAIN, 20); }
-    public static Font textAreaFont() { return new Font("Monospaced", Font.PLAIN, 20); }
-    public static Font tabPaneFont() { return  new Font("Verdana", Font.BOLD, 34); }
-    public static Font tableDataFont() { return new Font("Monospaced", Font.PLAIN, 26); }
-    public static Font textPaneFont() { return new Font("Monospaced", Font.BOLD,24); }
-    public static Font errorFont() { return new Font("Monospaced", Font.BOLD, 25); }
+
+    public static Font tabPaneFont() { return  new Font("Product Sans", Font.BOLD, 42); }
+    public static Font toolbarButtonFont() { return new Font("Product Sans", Font.BOLD, 28); }
+    public static Font buttonFont() { return new Font("Product Sans", Font.BOLD, 24); }
+    public static Font labelFont() { return new Font("Product Sans", Font.BOLD, 24); }
+    public static Font comboboxFont() { return new Font("Product Sans", Font.PLAIN, 22); }
+    public static Font titledBorderFont() { return new Font("Product Sans", Font.BOLD, 28); }
+    public static Font textFieldFont() { return new Font("Product Sans", Font.PLAIN, 20); }
+    public static Font textAreaFont() { return new Font("Product Sans", Font.PLAIN, 20); }
+    public static Font tableDataFont() { return new Font("Product Sans", Font.PLAIN, 26); }
+    public static Font textPaneFont() { return new Font("Product Sans", Font.BOLD,24); }
+    public static Font errorFont() { return new Font("Product Sans", Font.BOLD, 25); }
 
     public static Color red100() { return new Color(255,205,210); }
     public static Color red300() { return new Color(229,115,115); }
@@ -48,7 +49,7 @@ public class Style {
                 title,
                 TitledBorder.LEFT,
                 TitledBorder.ABOVE_TOP,
-                new Font("Verdana", Font.BOLD, 24),
+                new Font("Product Sans", Font.BOLD, 24),
                 Style.red500());
         Border inInnerBorder = BorderFactory.createEmptyBorder(25, 25, 25, 25);
         Border innerBorder = BorderFactory.createCompoundBorder(outInnerBorder, inInnerBorder);
@@ -74,7 +75,7 @@ public class Style {
                 "RESULTS",
                 TitledBorder.CENTER,
                 TitledBorder.ABOVE_TOP,
-                new Font("Verdana",Font.BOLD,26),
+                new Font("Product Sans",Font.BOLD,26),
                 Style.grey50());
         Border inInnerBorder = BorderFactory.createEmptyBorder(15,15,15,15);
         Border innerBorder = BorderFactory.createCompoundBorder(outInnerBorder, inInnerBorder);

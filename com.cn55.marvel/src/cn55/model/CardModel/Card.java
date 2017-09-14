@@ -6,7 +6,7 @@ package cn55.model.CardModel;
  * Email: dbac496@uowmail.edu.au
  */
 
-import cn55.model.DataStoreModel;
+import cn55.model.Shop;
 
 @SuppressWarnings("ALL")
 public abstract class Card implements Comparable<Card> {
@@ -18,7 +18,7 @@ public abstract class Card implements Comparable<Card> {
     /*============================== CONSTRUCTORS  ==============================*/
     // Default constructor
     Card() {
-        this.id = DataStoreModel.generateCardID();
+        this.id = Shop.generateCardID();
         this.points = 0;
         this.cardType = null;
     }

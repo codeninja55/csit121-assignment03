@@ -17,6 +17,12 @@ public class AnonCard extends Card {
         super.cardType = CardType.AnonCard.getName();
     }
 
+    public AnonCard(String id, String cardType, Double points) {
+        super.id = id;
+        super.cardType = cardType;
+        super.points = points;
+    }
+
     /*============================== MUTATORS  ==============================*/
     public void calcPoints(double totalAmount) {
         this.points += POINTS_RATE * totalAmount;

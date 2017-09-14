@@ -2,6 +2,7 @@ package cn55.model.DataStoreConnectors;
 
 import cn55.model.Category;
 import cn55.model.DataStoreModel;
+import cn55.model.Shop;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -23,7 +24,7 @@ public class CategoriesWriteOutConcreteImpl implements WriteCSV {
         try{
             output.append(categoriesHeader);
             output.newLine();
-            for (Category c : DataStoreModel.getDataStoreInstance().getCategories()) {
+            for (Category c : Shop.getShopInstance().getDataStore().getCategories()) {
                 output.append(Integer.toString(c.getId())).append(DEFAULT_SEPARATOR);
                 output.append(c.getName()).append(DEFAULT_SEPARATOR);
                 output.append(c.getDescription()).append(DEFAULT_SEPARATOR);

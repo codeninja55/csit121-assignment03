@@ -1,5 +1,9 @@
 package cn55.model.DataStoreConnectors;
 
+import cn55.model.CardModel.AnonCard;
+import cn55.model.CardModel.Card;
+import cn55.model.Shop;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -15,14 +19,25 @@ public class CardsReadConcreteImpl implements ReadCSV {
     public void read() {
 
         Path cardsStoragePath = Paths.get("com.cn55.marvel/src/cn55/model/PersistentData/cardsStorage.csv");
+        String line;
         openFile(cardsStoragePath);
 
         try {
+            while((line = input.readLine()) != null) {
+                String[] readLine = line.split(DEFAULT_SEPARATOR);
 
-            while(("" = input.readLine()) != null) {
-                String[] line = "".split(DEFAULT_SEPARATOR);
+                System.out.println(readLine[0]); // ID
+                System.out.println(readLine[1]); // cardType
+                System.out.println(readLine[2]); // name
+                System.out.println(readLine[3]); // email
+                System.out.println(readLine[4]); // balance
+                System.out.println(readLine[5]); // points
 
+                Card importCard = new AnonCard(readLine[0], readLine[1], Double.parseDouble(readLine[0]));
 
+                /*for (String s : readLine) {
+                    System.out.println(s);
+                }*/
             }
         } catch (IOException e) {
             System.err.println("IOException: " + e.getMessage());
