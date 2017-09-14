@@ -2,6 +2,10 @@ package cn55.controller;
 
 import cn55.model.CardModel.*;
 import cn55.model.*;
+import cn55.model.DataStoreConnectors.CardsWriteOutConcreteImpl;
+import cn55.model.DataStoreConnectors.CategoriesWriteOutConcreteImpl;
+import cn55.model.DataStoreConnectors.PurchasesWriteOutConcreteImpl;
+import cn55.model.DataStoreConnectors.WriteCSV;
 import cn55.model.DataStoreModel;
 
 import java.awt.*;
@@ -23,11 +27,12 @@ public class Program {
         db = DataStoreModel.getDataStoreInstance();
         createTestCode(shop);
         //createTooManyCategories();
-        db.writeCards();
-        db.writePurchases();
-        db.writeCategories();
-
-
+        WriteCSV writeCards = new CardsWriteOutConcreteImpl();
+        writeCards.writeOut();
+        WriteCSV writePurchases = new PurchasesWriteOutConcreteImpl();
+        writePurchases.writeOut();
+        WriteCSV writeCategories = new CategoriesWriteOutConcreteImpl();
+        writeCategories.writeOut();
 
         /*this.mainFrame = new MainFrame();
         this.tabPane = mainFrame.getTabPane();

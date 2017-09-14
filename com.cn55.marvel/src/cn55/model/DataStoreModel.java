@@ -2,12 +2,10 @@ package cn55.model;
 
 /* THIS CLASS IS A TEMP DATABASE OBJECT */
 
-import cn55.model.CardModel.AdvancedCard;
 import cn55.model.CardModel.Card;
 
 import javax.swing.*;
 import java.io.BufferedWriter;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -18,11 +16,7 @@ import java.util.*;
 @SuppressWarnings("ConstantConditions")
 public class DataStoreModel implements Subject {
 
-    private static final char DEFAULT_SEPARATOR = ',';
-    private static final char NEW_LINE_SEPARATOR = '\n';
-
     private static DataStoreModel db;
-    private static BufferedWriter output;
 
     private final ArrayList<cn55.model.Observer> observers;
     private final ArrayList<Card> cards;
@@ -226,106 +220,4 @@ public class DataStoreModel implements Subject {
         return categories;
     }
 
-    /*============================== SEQUENTIAL CSV FILE WRITER ==============================*/
-    public void writeCards() {
-        String cardsHeader = "id,cardType,name,email,balance,points";
-        Path cardsStoragePath = Paths.get("com.cn55.marvel/src/cn55/model/PersistentData/cardsStorage.csv");
-        openFile(cardsStoragePath);
-
-        try{
-            output.append(cardsHeader);
-            output.append(NEW_LINE_SEPARATOR);
-
-            for (Card card : cards) {
-                output.append(card.getID()).append(DEFAULT_SEPARATOR);
-                output.append(card.getCardType()).append(DEFAULT_SEPARATOR);
-                output.append((card instanceof AdvancedCard) ? ((AdvancedCard) card).getName() : "").append(DEFAULT_SEPARATOR);
-                output.append((card instanceof AdvancedCard) ? ((AdvancedCard) card).getEmail() : "").append(DEFAULT_SEPARATOR);
-                output.append((card instanceof AdvancedCard) ? Double.toString(((AdvancedCard) card).getBalance()) : "").append(DEFAULT_SEPARATOR);
-                output.append(Double.toString(card.getPoints()));
-                output.newLine();
-            }
-        } catch (IOException e) {
-            // TODO - TESTING
-            System.err.println("IOException: " + e.getMessage());
-        }
-        closeFile();
-    }
-
-    public void writePurchases() {
-        String purchaseHeaders = "purchaseTime,receiptID,cardType,cardID,categories[]";
-        Path purchaseStoragePath = Paths.get("com.cn55.marvel/src/cn55/model/PersistentData/purchaseStorage.csv");
-        openFile(purchaseStoragePath);
-
-        try{
-            output.append(purchaseHeaders);
-            output.append(NEW_LINE_SEPARATOR);
-
-            for (Purchase p : purchases) {
-                int lastLine = 1;
-                output.append(p.getPurchaseTime().toString()).append(DEFAULT_SEPARATOR);
-                output.append(Integer.toString(p.getReceiptID())).append(DEFAULT_SEPARATOR);
-                output.append(p.getCardType()).append(DEFAULT_SEPARATOR);
-                output.append(p.getCardID()).append(DEFAULT_SEPARATOR);
-                output.append("{");
-                for (Category c : p.getCategories().values()) {
-                    output.append("[").append(Integer.toString(c.getId())).append(DEFAULT_SEPARATOR);
-                    output.append(c.getName()).append(DEFAULT_SEPARATOR);
-                    output.append(c.getDescription()).append(DEFAULT_SEPARATOR);
-                    output.append(Double.toString(c.getAmount())).append("]");
-
-                    if (lastLine != p.getCategories().size()) {
-                        output.append(DEFAULT_SEPARATOR);
-                        lastLine++;
-                    }
-                }
-                output.append("}");
-                output.newLine();
-            }
-        } catch (IOException e) {
-            // TODO - TESTING
-            System.err.println("IOException: " + e.getMessage());
-        }
-        closeFile();
-    }
-
-    public void writeCategories() {
-        String categoriesHeader = "id,name,description,amount";
-        Path categoriesStoragePath = Paths.get("com.cn55.marvel/src/cn55/model/PersistentData/categoriesStorage.csv");
-        openFile(categoriesStoragePath);
-
-        try{
-            output.append(categoriesHeader);
-            output.append(NEW_LINE_SEPARATOR);
-            for (Category c : categories) {
-                output.append(Integer.toString(c.getId())).append(DEFAULT_SEPARATOR);
-                output.append(c.getName()).append(DEFAULT_SEPARATOR);
-                output.append(c.getDescription()).append(DEFAULT_SEPARATOR);
-                output.append(Double.toString(c.getAmount()));
-                output.newLine();
-            }
-        } catch (IOException e) {
-            // TODO - TESTING
-            System.err.println("IOException: " + e.getMessage());
-        }
-        closeFile();
-    }
-
-    private void openFile(Path path) {
-        try {
-            output = new BufferedWriter(new FileWriter(path.toString()));
-        } catch (IOException e) {
-            // TODO - TESTING
-            System.err.println("IOException: " + e.getMessage());
-        }
-    }
-
-    private void closeFile() {
-        try {
-            output.flush();
-            output.close();
-        } catch (IOException e) {
-            System.err.println("IOException: " + e.getMessage());
-        }
-    }
 }
