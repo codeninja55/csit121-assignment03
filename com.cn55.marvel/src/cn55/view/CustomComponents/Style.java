@@ -11,16 +11,16 @@ import java.text.DecimalFormat;
 public class Style {
 
     public static Font tabPaneFont() { return  new Font("Product Sans", Font.BOLD, 42); }
-    public static Font toolbarButtonFont() { return new Font("Product Sans", Font.BOLD, 28); }
-    public static Font buttonFont() { return new Font("Product Sans", Font.BOLD, 24); }
-    public static Font labelFont() { return new Font("Product Sans", Font.BOLD, 24); }
-    public static Font comboboxFont() { return new Font("Product Sans", Font.PLAIN, 22); }
-    public static Font titledBorderFont() { return new Font("Product Sans", Font.BOLD, 28); }
-    public static Font textFieldFont() { return new Font("Product Sans", Font.PLAIN, 20); }
-    public static Font textAreaFont() { return new Font("Product Sans", Font.PLAIN, 20); }
-    public static Font tableDataFont() { return new Font("Product Sans", Font.PLAIN, 26); }
-    public static Font textPaneFont() { return new Font("Product Sans", Font.BOLD,24); }
-    public static Font errorFont() { return new Font("Product Sans", Font.BOLD, 25); }
+    public static Font toolbarButtonFont() { return new Font("Product Sans", Font.BOLD, 30); }
+    public static Font buttonFont() { return new Font("Product Sans", Font.BOLD, 28); }
+    public static Font labelFont() { return new Font("Product Sans", Font.BOLD, 26); }
+    public static Font comboboxFont() { return new Font("Product Sans", Font.PLAIN, 26); }
+    public static Font titledBorderFont() { return new Font("Product Sans", Font.BOLD, 30); }
+    public static Font textFieldFont() { return new Font("Product Sans", Font.PLAIN, 22); }
+    public static Font textAreaFont() { return new Font("Product Sans", Font.PLAIN, 26); }
+    public static Font tableDataFont() { return new Font("Product Sans", Font.PLAIN, 28); }
+    public static Font textPaneFont() { return new Font("Product Sans", Font.BOLD,28); }
+    public static Font errorFont() { return new Font("Product Sans", Font.BOLD, 26); }
 
     public static Color red100() { return new Color(255,205,210); }
     public static Color red300() { return new Color(229,115,115); }
