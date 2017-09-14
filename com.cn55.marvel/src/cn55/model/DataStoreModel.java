@@ -1,13 +1,11 @@
 package cn55.model;
 
-/* THIS CLASS IS A TEMP DATABASE OBJECT */
+/* THIS CLASS IS A LOCAL STORE DATA OBJECT */
 
 import cn55.model.CardModel.Card;
 
 import javax.swing.*;
 import java.util.*;
-
-/* SINGLETON DESIGN PATTERN */
 
 @SuppressWarnings("ConstantConditions")
 public class DataStoreModel implements Subject {

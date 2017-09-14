@@ -10,6 +10,8 @@ import cn55.model.CardModel.PremiumCard;
 
 import java.util.*;
 
+/* SINGLETON DESIGN PATTERN */
+
 @SuppressWarnings("ConstantConditions")
 public class Shop {
 
@@ -20,7 +22,7 @@ public class Shop {
     private static final Set<Integer> receiptSet = new HashSet<>();
 
     /*============================== CONSTRUCTORS  ==============================*/
-    public Shop() {
+    private Shop() {
         this.db = new DataStoreModel();
         generateDefaultCategories();
         DataStoreModel.mapCategoriesTotalMap(db.getCategories());

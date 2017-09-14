@@ -1,7 +1,6 @@
 package cn55.model.DataStoreConnectors;
 
 import cn55.model.Category;
-import cn55.model.DataStoreModel;
 import cn55.model.Purchase;
 import cn55.model.Shop;
 
@@ -11,7 +10,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class PurchasesWriteOutConcreteImpl implements WriteCSV {
+public class PurchasesWriteOut implements WriteCSV {
 
     private static final char DEFAULT_SEPARATOR = ',';
     private BufferedWriter output;

@@ -39,25 +39,16 @@ public class Program {
     private final CategoriesViewPane categoriesViewPane;
 
     public Program() {
-        shop = new Shop();
-        /* Singleton Design Pattern - Only one instance of PersistentData available */
+        /* Singleton Design Pattern - Only one instance of Shop available */
+        shop = Shop.getShopInstance();
         db = shop.getDataStore();
         createTestCode(shop);
         //createTooManyCategories();
-        WriteCSV writeCards = new CardsWriteOutConcreteImpl();
-        writeCards.writeOut();
-        WriteCSV writePurchases = new PurchasesWriteOutConcreteImpl();
-        writePurchases.writeOut();
-        WriteCSV writeCategories = new CategoriesWriteOutConcreteImpl();
-        writeCategories.writeOut();
-
-        ReadCSV readCSV = new CardsReadConcreteImpl();
-        readCSV.read();
 
         this.mainFrame = new MainFrame();
         this.tabPane = mainFrame.getTabPane();
 
-        /*REGISTRATION AND INITIAL UPDATE CALLS FOR DATABASE OBSERVER PATTERN */
+        /* Observer Design Pattern - Registration and initial update calls */
         this.cardViewPane = mainFrame.getCardViewPane();
         db.register(cardViewPane);
         cardViewPane.setSubject(db);
@@ -77,6 +68,17 @@ public class Program {
         categoriesViewPane.setCategoriesTableModel();
 
         setupViewListeners();
+
+        /*Strategy Design Pattern - Implementation of writing and reading buried in concrete classes*/
+        WriteCSV writeCards = new CardsWriteOut();
+        writeCards.writeOut();
+        WriteCSV writePurchases = new PurchasesWriteOut();
+        writePurchases.writeOut();
+        WriteCSV writeCategories = new CategoriesWriteOut();
+        writeCategories.writeOut();
+
+        ReadCSV readCSV = new CardsReadConcreteImpl();
+        readCSV.read();
     }
 
     private ArrayList<Component> getAllComponents(final Container container) {

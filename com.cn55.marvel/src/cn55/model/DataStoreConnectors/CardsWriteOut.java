@@ -2,7 +2,6 @@ package cn55.model.DataStoreConnectors;
 
 import cn55.model.CardModel.AdvancedCard;
 import cn55.model.CardModel.Card;
-import cn55.model.DataStoreModel;
 import cn55.model.Shop;
 
 import java.io.BufferedWriter;
@@ -11,7 +10,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class CardsWriteOutConcreteImpl implements WriteCSV {
+public class CardsWriteOut implements WriteCSV {
 
     private static final char DEFAULT_SEPARATOR = ',';
     private BufferedWriter output;
