@@ -42,7 +42,7 @@ public class Program {
         shop = new Shop();
         /* Singleton Design Pattern - Only one instance of PersistentData available */
         db = shop.getDataStore();
-        //createTestCode(shop);
+        createTestCode(shop);
         //createTooManyCategories();
         WriteCSV writeCards = new CardsWriteOutConcreteImpl();
         writeCards.writeOut();
