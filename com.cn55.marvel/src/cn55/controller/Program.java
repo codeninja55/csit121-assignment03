@@ -42,11 +42,22 @@ public class Program {
         /* Singleton Design Pattern - Only one instance of Shop available */
         shop = Shop.getShopInstance();
         db = shop.getDataStore();
-        createTestCode(shop);
+        //createTestCode(shop);
         //createTooManyCategories();
 
         this.mainFrame = new MainFrame();
         this.tabPane = mainFrame.getTabPane();
+
+        /*Strategy Design Pattern - Implementation of writing and reading buried in concrete classes*/
+        /*WriteCSV writeCards = new CardsWriteOut();
+        writeCards.writeOut();
+        WriteCSV writePurchases = new PurchasesWriteOut();
+        writePurchases.writeOut();
+        WriteCSV writeCategories = new CategoriesWriteOut();
+        writeCategories.writeOut();*/
+
+        ReadCSV readCSV = new CardsReadConcreteImpl();
+        readCSV.read();
 
         /* Observer Design Pattern - Registration and initial update calls */
         this.cardViewPane = mainFrame.getCardViewPane();
@@ -69,16 +80,7 @@ public class Program {
 
         setupViewListeners();
 
-        /*Strategy Design Pattern - Implementation of writing and reading buried in concrete classes*/
-        WriteCSV writeCards = new CardsWriteOut();
-        writeCards.writeOut();
-        WriteCSV writePurchases = new PurchasesWriteOut();
-        writePurchases.writeOut();
-        WriteCSV writeCategories = new CategoriesWriteOut();
-        writeCategories.writeOut();
 
-        ReadCSV readCSV = new CardsReadConcreteImpl();
-        readCSV.read();
     }
 
     private ArrayList<Component> getAllComponents(final Container container) {
