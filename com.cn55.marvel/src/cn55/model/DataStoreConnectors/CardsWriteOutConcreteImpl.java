@@ -23,12 +23,17 @@ public class CardsWriteOutConcreteImpl implements WriteCSV {
 
         try{
             for (Card card : Shop.getShopInstance().getDataStore().getCards()) {
-                output.append(card.getID()).append(DEFAULT_SEPARATOR);
-                output.append(card.getCardType()).append(DEFAULT_SEPARATOR);
-                output.append((card instanceof AdvancedCard) ? ((AdvancedCard) card).getName() : "").append(DEFAULT_SEPARATOR);
-                output.append((card instanceof AdvancedCard) ? ((AdvancedCard) card).getEmail() : "").append(DEFAULT_SEPARATOR);
-                output.append((card instanceof AdvancedCard) ? Double.toString(((AdvancedCard) card).getBalance()) : "").append(DEFAULT_SEPARATOR);
-                output.append(Double.toString(card.getPoints()));
+                output.append(card.getID())
+                        .append(DEFAULT_SEPARATOR)
+                        .append(card.getCardType())
+                        .append(DEFAULT_SEPARATOR)
+                        .append((card instanceof AdvancedCard) ? ((AdvancedCard) card).getName() : "")
+                        .append(DEFAULT_SEPARATOR)
+                        .append((card instanceof AdvancedCard) ? ((AdvancedCard) card).getEmail() : "")
+                        .append(DEFAULT_SEPARATOR)
+                        .append((card instanceof AdvancedCard) ? Double.toString(((AdvancedCard) card).getBalance()) : "")
+                        .append(DEFAULT_SEPARATOR)
+                        .append(Double.toString(card.getPoints()));
                 output.newLine();
             }
         } catch (IOException e) {
