@@ -56,7 +56,7 @@ public class Program {
         WriteCSV writeCategories = new CategoriesWriteOut();
         writeCategories.writeOut();*/
 
-        ReadCSV readCSV = new CardsReadConcreteImpl();
+        ReadCSV readCSV = new CardsReadImpl();
         readCSV.read();
 
         /* Observer Design Pattern - Registration and initial update calls */

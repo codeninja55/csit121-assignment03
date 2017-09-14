@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class CardsReadConcreteImpl implements ReadCSV {
+public class CardsReadImpl implements ReadCSV {
 
     private static final String DEFAULT_SEPARATOR = ",";
     private BufferedReader input;
