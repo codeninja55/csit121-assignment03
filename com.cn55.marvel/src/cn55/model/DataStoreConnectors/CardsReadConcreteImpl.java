@@ -1,7 +1,10 @@
 package cn55.model.DataStoreConnectors;
 
 import cn55.model.CardModel.AnonCard;
+import cn55.model.CardModel.BasicCard;
 import cn55.model.CardModel.Card;
+import cn55.model.CardModel.PremiumCard;
+import cn55.model.CardType;
 import cn55.model.Shop;
 
 import java.io.BufferedReader;
@@ -33,8 +36,20 @@ public class CardsReadConcreteImpl implements ReadCSV {
                 System.out.println(readLine[4]); // balance
                 System.out.println(readLine[5]); // points
 
-                Card importCard = new AnonCard(readLine[0], readLine[1], Double.parseDouble(readLine[0]));
+                Card importCard = null;
 
+                if (readLine[1].equals(CardType.AnonCard.getName())) {
+                    importCard = new AnonCard(readLine[0], readLine[1], Double.parseDouble(readLine[5]));
+                } else if (readLine[1].equals(CardType.BasicCard.getName())) {
+                    importCard = new BasicCard(readLine[2], readLine[3], Double.parseDouble(readLine[4]));
+                } else if (readLine[1].equals(CardType.PremiumCard.getName())) {
+                    importCard = new PremiumCard(readLine[2], readLine[3], Double.parseDouble(readLine[4]));
+                }
+
+                Shop.getShopInstance().getDataStore().addCards(importCard);
+
+                System.out.println(importCard);
+                System.out.println(Shop.getShopInstance().getDataStore().getCards());
                 /*for (String s : readLine) {
                     System.out.println(s);
                 }*/
