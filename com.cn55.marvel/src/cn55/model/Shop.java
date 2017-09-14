@@ -29,8 +29,10 @@ public class Shop {
     // Provide global point of access
     // Double check locking mechanism but only with the initial call
     public static synchronized Shop getShopInstance() {
-        if (shop == null) shop = new Shop();
-            return shop;
+        if (shop == null)
+            shop = new Shop();
+
+        return shop;
     }
 
     /*============================== STATIC METHODS ==============================*/
