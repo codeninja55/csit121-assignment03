@@ -1,6 +1,8 @@
 package cn55.model;
 
 import cn55.model.CardModel.Card;
+import cn55.model.CategoryModel.Category;
+import cn55.model.PurchaseModel.Purchase;
 
 import java.util.ArrayList;
 

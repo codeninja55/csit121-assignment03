@@ -1,7 +1,5 @@
 package cn55.model.CardModel;
 
-import cn55.model.CardType;
-
 public class AnonCard extends Card {
     private static final double POINTS_RATE = 0.01;
 

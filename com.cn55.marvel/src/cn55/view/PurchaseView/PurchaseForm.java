@@ -1,7 +1,9 @@
 package cn55.view.PurchaseView;
 
 import cn55.model.*;
-import cn55.model.DataStoreModel;
+import cn55.model.CardModel.CardType;
+import cn55.model.CategoryModel.Category;
+import cn55.model.PurchaseModel.PurchaseType;
 import cn55.view.ButtonListener;
 import cn55.view.CustomComponents.*;
 

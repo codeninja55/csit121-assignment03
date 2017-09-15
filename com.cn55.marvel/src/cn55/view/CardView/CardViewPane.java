@@ -4,7 +4,7 @@ import cn55.model.CardModel.BasicCard;
 import cn55.model.CardModel.Card;
 import cn55.model.CardModel.PremiumCard;
 import cn55.model.Observer;
-import cn55.model.SortCardType;
+import cn55.model.CardModel.SortCardType;
 import cn55.model.Subject;
 import cn55.view.CustomComponents.ResultsPane;
 import cn55.view.CustomComponents.Style;

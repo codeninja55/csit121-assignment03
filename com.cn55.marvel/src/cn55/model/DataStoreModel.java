@@ -3,6 +3,8 @@ package cn55.model;
 /* THIS CLASS IS A LOCAL STORE DATA OBJECT */
 
 import cn55.model.CardModel.Card;
+import cn55.model.CategoryModel.Category;
+import cn55.model.PurchaseModel.Purchase;
 
 import javax.swing.*;
 import java.util.*;
@@ -81,7 +83,7 @@ public class DataStoreModel implements Subject {
         notifyObservers();
     }
 
-    void addPurchase(Purchase purchase) {
+    public void addPurchase(Purchase purchase) {
         this.purchases.add(purchase);
         mapPurchases();
         notifyObservers();

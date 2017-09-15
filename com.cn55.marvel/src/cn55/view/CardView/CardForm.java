@@ -1,7 +1,6 @@
 package cn55.view.CardView;
 
-import cn55.model.CardType;
-import cn55.model.DataStoreModel;
+import cn55.model.CardModel.CardType;
 import cn55.model.Shop;
 import cn55.view.ButtonListener;
 import cn55.view.CustomComponents.*;

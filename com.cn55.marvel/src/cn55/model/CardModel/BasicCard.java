@@ -1,7 +1,5 @@
 package cn55.model.CardModel;
 
-import cn55.model.CardType;
-
 public class BasicCard extends AdvancedCard {
     private final double POINTS_RATE = 0.015;
 

@@ -4,7 +4,7 @@ import cn55.model.CardModel.AnonCard;
 import cn55.model.CardModel.BasicCard;
 import cn55.model.CardModel.Card;
 import cn55.model.CardModel.PremiumCard;
-import cn55.model.CardType;
+import cn55.model.CardModel.CardType;
 import cn55.model.Shop;
 
 import java.io.BufferedReader;

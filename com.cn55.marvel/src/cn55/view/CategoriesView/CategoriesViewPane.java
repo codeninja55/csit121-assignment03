@@ -1,5 +1,6 @@
 package cn55.view.CategoriesView;
 import cn55.model.*;
+import cn55.model.CategoryModel.Category;
 import cn55.model.DataStoreModel;
 import cn55.view.CustomComponents.Style;
 import cn55.view.CustomComponents.Toolbar;

@@ -1,8 +1,8 @@
 package cn55.view.PurchaseView;
 
 import cn55.model.Observer;
-import cn55.model.Purchase;
-import cn55.model.SortPurchaseType;
+import cn55.model.PurchaseModel.Purchase;
+import cn55.model.PurchaseModel.SortPurchaseType;
 import cn55.model.Subject;
 import cn55.view.CustomComponents.ResultsPane;
 import cn55.view.CustomComponents.Style;

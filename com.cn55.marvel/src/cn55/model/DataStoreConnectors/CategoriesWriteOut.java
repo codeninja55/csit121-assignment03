@@ -1,6 +1,6 @@
 package cn55.model.DataStoreConnectors;
 
-import cn55.model.Category;
+import cn55.model.CategoryModel.Category;
 import cn55.model.Shop;
 
 import java.io.BufferedWriter;
