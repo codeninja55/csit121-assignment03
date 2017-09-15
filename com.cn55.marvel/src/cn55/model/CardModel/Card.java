@@ -18,6 +18,10 @@ public abstract class Card implements Comparable<Card> {
     }
 
     /*============================== MUTATORS  ==============================*/
+    public void setPoints(double points) {
+        this.points = points;
+    }
+
     /*Abstract method to force implementation in all subclasses*/
     public abstract void calcPoints(double totalAmount);
 
