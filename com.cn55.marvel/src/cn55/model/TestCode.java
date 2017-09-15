@@ -3,6 +3,7 @@ package cn55.model;
 import cn55.model.CardModel.AnonCard;
 import cn55.model.CardModel.BasicCard;
 import cn55.model.CardModel.PremiumCard;
+import cn55.model.CategoryModel.Category;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,9 +17,9 @@ public class TestCode {
     public TestCode(Shop shop) {
         this.shop = shop;
         this.db = shop.getDataStore();
+        createTestCode();
     }
 
-    /* TODO - REMOVE TEST CODE */
     @SuppressWarnings("ConstantConditions")
     private Double generateRandomValue() {
         Random randomValueObj = new Random();
@@ -42,7 +43,6 @@ public class TestCode {
         return valueOptions.get(randomValueObj.nextInt(valueOptions.size()));
     }
 
-    /* TODO - REMOVE TEST CODE */
     private HashMap<Integer, Category> generateRandomCategoriesMap() {
         HashMap<Integer, Category> testingCategoryMap = new HashMap<>();
         db.getCategories().forEach((cat) -> testingCategoryMap.put(cat.getId(), new Category(cat)));
@@ -51,13 +51,11 @@ public class TestCode {
         return testingCategoryMap;
     }
 
-    /* TODO - REMOVE TEST CODE */
     private void testMakePurchases(int numOfPurchases, String id) {
         for (int i = 0; i < numOfPurchases; i++)
             shop.makePurchase(id, Shop.generateReceiptID(), generateRandomCategoriesMap());
     }
 
-    /* TODO - REMOVE TEST CODE */
     private void createTestCode() {
 
         // Cash purchase test
@@ -153,7 +151,6 @@ public class TestCode {
         db.addCards(new BasicCard("Logan", "wolverine@xmen.com", 0));
     }
 
-    /* TODO - REMOVE TEST CODE */
     private void createTooManyCategories() {
         for (int i = 0; i < 35; i++)
             db.addCategory(new Category(String.format("%s%d","Testing", i)));

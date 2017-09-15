@@ -47,13 +47,13 @@ public class Program {
         /* Singleton Design Pattern - Only one instance of Shop available */
         shop = Shop.getShopInstance();
         db = shop.getDataStore();
+
+        //new TestCode(shop);
+
         //TestCode testCode = new TestCode(shop);
         //testCode.createTooManyCategories();
 
-        this.mainFrame = new MainFrame();
-        this.tabPane = mainFrame.getTabPane();
-
-        /*Strategy Design Pattern - Implementation of writing and reading buried in concrete classes*/
+        /* Strategy Design Pattern - Implementation of writing and reading buried in concrete classes */
         /*WriteCSV writeCards = new CardsWriteOut();
         writeCards.writeOut();
         WriteCSV writePurchases = new PurchasesWriteOut();
@@ -65,6 +65,9 @@ public class Program {
         readCardsCSV.read();
         ReadCSV readPurchaseCSV = new PurchasesReadImpl();
         readPurchaseCSV.read();
+
+        this.mainFrame = new MainFrame();
+        this.tabPane = mainFrame.getTabPane();
 
         /* Observer Design Pattern - Registration and initial update calls */
         this.cardViewPane = mainFrame.getCardViewPane();
