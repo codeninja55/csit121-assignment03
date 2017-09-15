@@ -61,9 +61,10 @@ public class Program {
         WriteCSV writeCategories = new CategoriesWriteOut();
         writeCategories.writeOut();*/
 
-        ReadCSV readCardsCSV = new CardsReadImpl();
+        ReadCSV readCategoriesCSV = new CategoriesReadImpl(), readCardsCSV = new CardsReadImpl(), readPurchaseCSV = new PurchasesReadImpl();
+        readCategoriesCSV.read();
+        DataStoreModel.mapCategoriesTotalMap(db.getCategories());
         readCardsCSV.read();
-        ReadCSV readPurchaseCSV = new PurchasesReadImpl();
         readPurchaseCSV.read();
 
         this.mainFrame = new MainFrame();
