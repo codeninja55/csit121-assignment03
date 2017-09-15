@@ -122,7 +122,9 @@ public class TestCode {
         db.addCards(new BasicCard("Matthew Murdock","thedevil@hellskitchen.com", 666));
         db.addCards(new BasicCard("Thor Odinson", "thor@asgard.com",9000));
 
-        testMakePurchases(2,"MC10005");
+        testMakePurchases(4,"MC10005");
+
+        testMakePurchases(2, "Cash");
         shop.makePurchase("Cash", Shop.generateReceiptID(),
                 generateRandomCategoriesMap());
 
@@ -130,8 +132,7 @@ public class TestCode {
         testMakePurchases(2,"MC10005");
         testMakePurchases(2,"MC10019");
 
-        shop.makePurchase("Cash", Shop.generateReceiptID(),
-                generateRandomCategoriesMap());
+        testMakePurchases(2,"Cash");
 
         db.addCards(new BasicCard("Clint Barton", "better_than_arrow@marvel.com", 500));
         db.addCards(new AnonCard());

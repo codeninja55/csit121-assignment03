@@ -48,8 +48,15 @@ public class Program {
         shop = Shop.getShopInstance();
         db = shop.getDataStore();
 
-        //new TestCode(shop);
+
         //testCode.createTooManyCategories();
+
+        /* Strategy Design Pattern - Implementation of writing and reading buried in concrete classes */
+        ReadCSV readCategoriesCSV = new CategoriesReadImpl(), readCardsCSV = new CardsReadImpl(), readPurchaseCSV = new PurchasesReadImpl();
+        readCategoriesCSV.read();
+        //readCardsCSV.read();
+        //readPurchaseCSV.read();
+        //new TestCode(shop);
 
         /*WriteCSV writeCards = new CardsWriteOut();
         writeCards.writeOut();
@@ -57,12 +64,6 @@ public class Program {
         writePurchases.writeOut();
         WriteCSV writeCategories = new CategoriesWriteOut();
         writeCategories.writeOut();*/
-
-        /* Strategy Design Pattern - Implementation of writing and reading buried in concrete classes */
-        ReadCSV readCategoriesCSV = new CategoriesReadImpl(), readCardsCSV = new CardsReadImpl(), readPurchaseCSV = new PurchasesReadImpl();
-        readCategoriesCSV.read();
-        readCardsCSV.read();
-        readPurchaseCSV.read();
 
         this.mainFrame = new MainFrame();
         this.tabPane = mainFrame.getTabPane();
