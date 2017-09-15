@@ -514,7 +514,7 @@ public class Program {
 
         /*TOOLBAR | VIEW  BUTTON*/
         purchaseViewPane.setViewPurchaseListener(() -> {
-            if (purchaseViewPane.getPurchaseTablePane().getSelectedRow() > 0) {
+            if (purchaseViewPane.getPurchaseTablePane().getSelectedRow() >= 0) {
                 int selectedRow = purchaseViewPane.getPurchaseTablePane().getSelectedRow();
                 Integer receiptID = (Integer) purchaseViewPane.getPurchaseTablePane().getValueAt(selectedRow, 0);
 
