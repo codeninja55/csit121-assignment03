@@ -20,7 +20,7 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 public class PurchaseViewPane extends JPanel implements DataObserver {
-    private DataObservable dataStoreModel;
+    private DataObservable dataDAO;
     private final ToolbarButton createPurchaseBtn;
     private final ToolbarButton deletePurchaseBtn;
     private final ToolbarButton summaryBtn;
@@ -143,12 +143,14 @@ public class PurchaseViewPane extends JPanel implements DataObserver {
 
     /* OBSERVER DESIGN PATTERN - DATA STORE OBSERVING IMPLEMENTATION */
     public void update() {
-        purchaseTableModel.setData(dataStoreModel.getPurchaseUpdate(this));
+        ArrayList<Purchase> allPurchases = new ArrayList<>();
+        allPurchases.addAll(dataDAO.getPurchaseUpdate(this).values());
+        purchaseTableModel.setData(allPurchases);
         purchaseTableModel.fireTableDataChanged();
     }
 
     public void setSubject(DataObservable dataObservable) {
-        this.dataStoreModel = dataObservable;
+        this.dataDAO = dataObservable;
     }
 
     /*============================== ACCESSORS ==============================*/

@@ -23,7 +23,7 @@ public class PurchasesWriteOut implements WriteCSV {
         openFile(purchaseStoragePath);
 
         try{
-            for (Purchase p : Shop.getShopInstance().getDataStore().getPurchases()) {
+            for (Purchase p : Shop.getShopInstance().getDataStore().getAllPurchases().values()) {
                 int lastLine = 1;
                 output.append(p.getPurchaseTime())
                         .append(DEFAULT_SEPARATOR)

@@ -34,7 +34,7 @@ public class Shop {
 
     public void makePurchase(String cardID, int receiptID, HashMap<Integer, Category> categories) {
         if (cardID.equals(CardType.Cash.getName())) {
-            db.addPurchase(new Purchase(categories, receiptID));
+            db.createPurhcase(new Purchase(categories, receiptID));
         } else {
             if (db.getAllCards().containsKey(cardID)) {
                 Card card = db.getCard(cardID);
@@ -45,7 +45,7 @@ public class Shop {
                 if(!cardType.equals(CardType.AnonCard.getName()))
                     card.calcBalance(newPurchase.getCategoriesTotal());
 
-                db.addPurchase(newPurchase);
+                db.createPurhcase(newPurchase);
             }
         }
     }
@@ -72,16 +72,15 @@ public class Shop {
 
     // Converts a purchase from a card purchase to a cash purchase when the card has been deleted
     public void convertPurchase(String cardID) {
-        db.mapPurchases();
-        db.getPurchases().forEach(p -> {
-            if (p.getCardID() != null && p.getCardID().equals(cardID)) p.convertPurchase();
+        db.getAllPurchases().forEach((k,v) -> {
+            if (v.getCardID() != null && v.getCardID().equals(cardID)) v.convertPurchase();
         });
     }
 
     public void deleteCategory(int categoryID) {
         db.mapCategories();
         // Update the amount for each purchase
-        db.getPurchases().forEach((Purchase p) -> {
+        db.getAllPurchases().values().forEach((Purchase p) -> {
             Category other = p.getCategories().get(100);
             other.setAmount(other.getAmount() + p.getCategories().get(categoryID).getAmount());
             p.getCategories().remove(categoryID);

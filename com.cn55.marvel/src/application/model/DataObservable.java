@@ -19,6 +19,6 @@ public interface DataObservable {
 
     // Methods to get updates
     TreeMap<String, Card> getCardsUpdate(DataObserver who);
-    ArrayList<Purchase> getPurchaseUpdate(DataObserver who);
+    TreeMap<Integer, Purchase> getPurchaseUpdate(DataObserver who);
     ArrayList<Category> getCategoriesUpdate(DataObserver who);
 }

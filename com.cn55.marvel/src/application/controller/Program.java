@@ -38,7 +38,6 @@ public class Program {
 
     private final WriteCSV writeCategories, writeCards, writePurchases;
     FormRule cardIDRule;
-    ExistsRule cardExistsRule;
 
     public Program() {
         /* Singleton Design Pattern - Only one instance of Shop available */
@@ -291,7 +290,7 @@ public class Program {
                     String cardText = db.getCard(cardID).toString();
                     StringBuilder purchaseText = new StringBuilder("");
 
-                    db.getPurchases().forEach((p)->{
+                    db.getAllPurchases().values().forEach((p)->{
                         if (p.getCardID() != null && p.getCardID().equals(cardID)) {
                             purchaseText.append("\n");
                             purchaseText.append(p.toString());
@@ -342,7 +341,7 @@ public class Program {
                 String cText = db.getCard(cardID).toString();
                 StringBuilder pText = new StringBuilder("");
 
-                db.getPurchases().forEach((p)-> {
+                db.getAllPurchases().values().forEach((p)-> {
                     if (p.getCardID() != null && p.getCardID().equals(cardID)) {
                         pText.append("\n");
                         pText.append(p.toString());
@@ -433,7 +432,7 @@ public class Program {
                 if (type.getSelectedItem() != null && cardID != null && categories != null) {
                     if (type.getSelectedItem().equals(PurchaseType.ExistingCardPurchase.getName())) {
                         shop.makePurchase(cardID, receiptID, categories);
-                        resultsText = db.getPurchases().get(db.getPurchaseMap().get(receiptID)).toString();
+                        resultsText = db.getPurchase(receiptID).toString();
                         showResultsPane(resultsText,resultsPane,resultsTextPane);
                         removePurchaseForms();
                     } else if (type.getSelectedItem().equals(PurchaseType.NewCardPurchase.getName())) {
@@ -461,13 +460,12 @@ public class Program {
 
                         shop.makeCard(newCard);
                         shop.makePurchase(cardID, receiptID, categories);
-                        resultsText = db.getCard(cardID).toString() +
-                                db.getPurchases().get(db.getPurchaseMap().get(receiptID));
+                        resultsText = db.getCard(cardID).toString() + db.getPurchase(receiptID).toString();
                         showResultsPane(resultsText,resultsPane,resultsTextPane);
                         removePurchaseForms();
                     } else if (type.getSelectedItem().equals(PurchaseType.CashPurchase.getName())) {
                         shop.makePurchase(cardID, receiptID, categories);
-                        resultsText = db.getPurchases().get(db.getPurchaseMap().get(receiptID)).toString();
+                        resultsText = db.getPurchase(receiptID).toString();
                         showResultsPane(resultsText,resultsPane,resultsTextPane);
                         removePurchaseForms();
                     }
@@ -488,7 +486,7 @@ public class Program {
             double cardTotal = 0;
             double allTotal = 0;
 
-            for (Purchase purchase : db.getPurchases()) {
+            for (Purchase purchase : db.getAllPurchases().values()) {
                 double purchaseTotal = purchase.getCategoriesTotal();
                 if (purchase.getCardType().equals(CardType.Cash.getName()))
                     cashTotal += purchaseTotal;
@@ -519,7 +517,7 @@ public class Program {
                 setPurchaseViewPaneMouseListeners();
 
                 String resultsText = "";
-                for (Purchase purchase : db.getPurchases()) {
+                for (Purchase purchase : db.getAllPurchases().values()) {
                     if (purchase.getReceiptID() == receiptID)
                         resultsText = purchase.toString();
                 }
@@ -537,13 +535,15 @@ public class Program {
                     purchaseViewPane.update();
                 } else if (e.getItem().equals(SortPurchaseType.Card.getName())) {
                     // NEGATIVE CASH VALIDATION
-                    for (Purchase item : db.getPurchases())
-                        if (item.getCardID() != null) tempPurchases.add(item);
+                    for (Purchase item : db.getAllPurchases().values())
+                        if (!item.getCardType().equals(CardType.Cash.getName()))
+                            tempPurchases.add(item);
                     purchaseViewPane.sortPurchaseTableMode(tempPurchases);
                 } else if (e.getItem().equals(SortPurchaseType.Cash.getName())) {
                     // POSITIVE CASH Validation
-                    for (Purchase item : db.getPurchases())
-                        if (item.getCardID() == null) tempPurchases.add(item);
+                    for (Purchase item : db.getAllPurchases().values())
+                        if (item.getCardType().equals(CardType.Cash.getName()))
+                            tempPurchases.add(item);
                     purchaseViewPane.sortPurchaseTableMode(tempPurchases);
                 }
             }
