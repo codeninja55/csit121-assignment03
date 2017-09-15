@@ -53,14 +53,14 @@ public class DataStoreModel implements Subject {
     }
 
     // Map the Categories to a HashMap to store total amounts for each category across the whole program
-    static void mapCategoriesTotalMap(ArrayList<Category> categories) {
+    public static void mapCategoriesTotalMap(ArrayList<Category> categories) {
         if (categoriesTotalMap.size() == 0)
             categories.forEach((item) -> categoriesTotalMap.put(item.getId(), 0D));
     }
 
     // Accepts the same categories HashMap stored in a Purchase object and updates the categoriesTotalMap
     // to reflect either the new Category added or the updated total amount for an existing category.
-    static void updateCategoriesTotalMap(HashMap<Integer, Category> categories) {
+    private static void updateCategoriesTotalMap(HashMap<Integer, Category> categories) {
         for (HashMap.Entry<Integer, Category> item : categories.entrySet()) {
             if (!categoriesTotalMap.containsKey(item.getKey())) {
                 DataStoreModel.categoriesTotalMap.put(item.getKey(), item.getValue().getAmount());
@@ -78,13 +78,14 @@ public class DataStoreModel implements Subject {
     }
 
     public void addCards(Card card) {
-        this.cards.add(card);
+        cards.add(card);
         mapCards();
         notifyObservers();
     }
 
     public void addPurchase(Purchase purchase) {
-        this.purchases.add(purchase);
+        updateCategoriesTotalMap(purchase.getCategories());
+        purchases.add(purchase);
         mapPurchases();
         notifyObservers();
     }

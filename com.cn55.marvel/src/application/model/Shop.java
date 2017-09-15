@@ -23,8 +23,6 @@ public class Shop {
     /*============================== CONSTRUCTORS  ==============================*/
     private Shop() {
         this.db = new DataStoreModel();
-        generateDefaultCategories();
-        DataStoreModel.mapCategoriesTotalMap(db.getCategories());
     }
 
     // Provide global point of access
@@ -62,7 +60,7 @@ public class Shop {
     private static void addReceiptID(int receiptID) { receiptSet.add(receiptID); }
 
     /*============================== MUTATORS  ==============================*/
-    private void generateDefaultCategories() {
+    /*private void generateDefaultCategories() {
         ArrayList<Category> categories = db.getCategories();
         categories.add(new Category("Other", "#Description"));
         categories.add(new Category("Motors", "#Description"));
@@ -73,7 +71,7 @@ public class Shop {
 
         db.mapCategories();
         db.notifyObservers();
-    }
+    }*/
 
     public void makeCategory(Category category) {
         db.addCategory(category);
@@ -87,7 +85,6 @@ public class Shop {
 
         if (cardID.equals(CardType.Cash.getName())) {
             db.addPurchase(new Purchase(categories, receiptID));
-            DataStoreModel.updateCategoriesTotalMap(categories);
         } else {
             if (cardExistsRule.existsValidating(validData) >= 0) {
                 Card card = db.getCards().get(db.getCardMap().get(cardID));
@@ -99,7 +96,6 @@ public class Shop {
                     card.calcBalance(newPurchase.getCategoriesTotal());
 
                 db.addPurchase(newPurchase);
-                DataStoreModel.updateCategoriesTotalMap(categories);
             }
         }
     }
