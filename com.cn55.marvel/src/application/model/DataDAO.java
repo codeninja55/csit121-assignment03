@@ -4,13 +4,14 @@ import application.model.CardModel.Card;
 import application.model.CardModel.CardsDAO;
 import application.model.CategoryModel.Category;
 import application.model.PurchaseModel.Purchase;
+import application.model.PurchaseModel.PurchaseDAO;
 
 import javax.swing.*;
 import java.util.*;
 
 /* Data Abstract Object (DAO) Implementation Layer */
 @SuppressWarnings("ConstantConditions")
-public class DataDAO implements DataObservable, CardsDAO {
+public class DataDAO implements DataObservable, CardsDAO, PurchaseDAO {
 
     private final ArrayList<DataObserver> dataObservers;
     private final HashMap<String,Card> cards;
@@ -46,7 +47,7 @@ public class DataDAO implements DataObservable, CardsDAO {
         notifyObservers();
     }
 
-    public void createPurhcase(Purchase purchase) {
+    public void createPurchase(Purchase purchase) {
         updateCategoryTotalAmount(purchase.getCategories());
         purchases.put(purchase.getReceiptID(), purchase);
         notifyObservers();
@@ -93,6 +94,10 @@ public class DataDAO implements DataObservable, CardsDAO {
     public void deleteCard(String cardID) {
         cards.remove(cardID);
         notifyObservers();
+    }
+
+    public void deletePurchase() {
+        System.out.println("NOT YET IMPLEMENTED");
     }
 
     void removeCategory(int index) {

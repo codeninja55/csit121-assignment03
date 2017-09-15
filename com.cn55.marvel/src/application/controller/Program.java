@@ -37,7 +37,7 @@ public class Program {
     private final CategoriesViewPane categoriesViewPane;
 
     private final WriteCSV writeCategories, writeCards, writePurchases;
-    FormRule cardIDRule;
+    private FormRule cardIDRule;
 
     public Program() {
         /* Singleton Design Pattern - Only one instance of Shop available */

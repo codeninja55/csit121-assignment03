@@ -34,7 +34,7 @@ public class Shop {
 
     public void makePurchase(String cardID, int receiptID, HashMap<Integer, Category> categories) {
         if (cardID.equals(CardType.Cash.getName())) {
-            db.createPurhcase(new Purchase(categories, receiptID));
+            db.createPurchase(new Purchase(categories, receiptID));
         } else {
             if (db.getAllCards().containsKey(cardID)) {
                 Card card = db.getCard(cardID);
@@ -45,7 +45,7 @@ public class Shop {
                 if(!cardType.equals(CardType.AnonCard.getName()))
                     card.calcBalance(newPurchase.getCategoriesTotal());
 
-                db.createPurhcase(newPurchase);
+                db.createPurchase(newPurchase);
             }
         }
     }

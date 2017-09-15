@@ -57,7 +57,7 @@ public class PurchasesReadImpl implements ReadCSV {
                         readLine[2], readLine[3], categories);
 
                 Generator.addReceiptID(receiptID);
-                Shop.getShopInstance().getDataStore().createPurhcase(importedPurchase);
+                Shop.getShopInstance().getDataStore().createPurchase(importedPurchase);
             }
         } catch (IOException e) {
             System.err.println("IOException: " + e.getMessage());
