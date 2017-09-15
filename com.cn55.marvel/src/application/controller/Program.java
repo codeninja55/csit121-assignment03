@@ -54,8 +54,8 @@ public class Program {
         /* Strategy Design Pattern - Implementation of writing and reading buried in concrete classes */
         ReadCSV readCategoriesCSV = new CategoriesReadImpl(), readCardsCSV = new CardsReadImpl(), readPurchaseCSV = new PurchasesReadImpl();
         readCategoriesCSV.read();
-        //readCardsCSV.read();
-        //readPurchaseCSV.read();
+        readCardsCSV.read();
+        readPurchaseCSV.read();
         //new TestCode(shop);
 
         /*WriteCSV writeCards = new CardsWriteOut();
@@ -74,7 +74,6 @@ public class Program {
         cardViewPane.setSubject(db);
         cardViewPane.update();
         cardViewPane.setCardTableModel();
-
 
         this.purchaseViewPane = mainFrame.getPurchaseViewPane();
         db.register(purchaseViewPane);
