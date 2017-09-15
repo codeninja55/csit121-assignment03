@@ -5,6 +5,7 @@ import application.model.CategoryModel.Category;
 import application.model.PurchaseModel.Purchase;
 
 import java.util.ArrayList;
+import java.util.TreeMap;
 
 @SuppressWarnings("unused")
 public interface DataObservable {
@@ -17,7 +18,7 @@ public interface DataObservable {
     void notifyObservers();
 
     // Methods to get updates
-    ArrayList<Card> getCardsUpdate(DataObserver who);
+    TreeMap<String, Card> getCardsUpdate(DataObserver who);
     ArrayList<Purchase> getPurchaseUpdate(DataObserver who);
     ArrayList<Category> getCategoriesUpdate(DataObserver who);
 }

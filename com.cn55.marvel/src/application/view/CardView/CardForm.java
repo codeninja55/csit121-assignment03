@@ -49,7 +49,6 @@ public class CardForm extends JPanel {
         clearBtn = new FormButton("Clear");
 
         /* INITIALIZE THIS PANEL */
-        setName("CardForm");
         setLayout(new BorderLayout());
         /* SIZING - Make sure the form is at least always 800 pixels */
         Dimension dim = getPreferredSize();
@@ -138,7 +137,6 @@ public class CardForm extends JPanel {
             if (item instanceof FormTextField) ((FormTextField) item).setText("");
 
         cardIDTextField.setText(Generator.getNextCardID());
-
     }
 
     private void baseCardForm() {

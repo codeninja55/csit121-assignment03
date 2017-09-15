@@ -62,14 +62,14 @@ public class TestCode {
         testMakePurchases(4, "Cash");
 
         // AnonCard Test
-        db.addCards(new AnonCard()); // MC10001
+        db.createCard(new AnonCard()); // MC10001
         testMakePurchases(1, "MC10001");
 
-        db.addCards(new AnonCard()); // MC10002
+        db.createCard(new AnonCard()); // MC10002
         testMakePurchases(2, "MC10002");
 
         // BasicCard Test
-        db.addCards(new BasicCard("Natasha Romanov",
+        db.createCard(new BasicCard("Natasha Romanov",
                 "blackwidow@avengers.team", 0));
         testMakePurchases(2,"MC10003");
 
@@ -77,7 +77,7 @@ public class TestCode {
         testMakePurchases(3, "Cash");
 
         // BasicCard Test 2
-        db.addCards(new BasicCard("Steve Rogers",
+        db.createCard(new BasicCard("Steve Rogers",
                 "captain_a@avengers.team",0D));
         testMakePurchases(2, "MC10004");
 
@@ -88,7 +88,7 @@ public class TestCode {
         testMakePurchases(5,"MC10003");
 
         // PremiumCard Test
-        db.addCards(new PremiumCard("Tony Stark",
+        db.createCard(new PremiumCard("Tony Stark",
                 "ironman@avengers.team",0));
 
         testMakePurchases(5,"MC10005");
@@ -97,57 +97,51 @@ public class TestCode {
         testMakePurchases(2, "Cash");
 
         // BasicCard Test 2
-        db.addCards(new BasicCard("Bruce Banner", "hulk@avengers.team", 0D));
+        db.createCard(new BasicCard("Bruce Banner", "hulk@avengers.team", 0D));
         testMakePurchases(2,"MC10006");
 
         // PremiumCard Test 2
-        db.addCards(new PremiumCard("Nick Fury",
+        db.createCard(new PremiumCard("Nick Fury",
                 "nick@shield.com",0));
 
         testMakePurchases(3, "MC10007");
 
-        db.addCards(new AnonCard()); //MC10008
+        db.createCard(new AnonCard()); //MC10008
         testMakePurchases(2,"MC10008");
-
-        db.addCards(new AnonCard()); //MC10009
-        db.getCards().get(7).calcPoints(300D);
-
-        db.addCards(new BasicCard("Hank Pym","ants@avengers.team",0)); // MC10009
-        db.addCards(new BasicCard("Peter Parker", "spidey@avengers.team",0)); // MC10010
-        db.addCards(new PremiumCard("Danny Rand","danny@randcorp.com",5000)); // MC10011
+        db.createCard(new AnonCard()); //MC10009
+        db.createCard(new BasicCard("Hank Pym","ants@avengers.team",0)); // MC10009
+        db.createCard(new BasicCard("Peter Parker", "spidey@avengers.team",0)); // MC10010
+        db.createCard(new PremiumCard("Danny Rand","danny@randcorp.com",5000)); // MC10011
         testMakePurchases(3, "MC10012");
-        db.addCards(new PremiumCard("Professor Charles Xavier", "x@xmen.com", 0)); // MC100012
+        db.createCard(new PremiumCard("Professor Charles Xavier", "x@xmen.com", 0)); // MC100012
         testMakePurchases(2,"MC10013");
 
-        db.addCards(new BasicCard("Matthew Murdock","thedevil@hellskitchen.com", 666));
-        db.addCards(new BasicCard("Thor Odinson", "thor@asgard.com",9000));
+        db.createCard(new BasicCard("Matthew Murdock","thedevil@hellskitchen.com", 666));
+        db.createCard(new BasicCard("Thor Odinson", "thor@asgard.com",9000));
 
         testMakePurchases(4,"MC10005");
-
         testMakePurchases(3, "Cash");
-
         testMakePurchases(2,"MC10016");
         testMakePurchases(2,"MC10005");
         testMakePurchases(2,"MC10019");
-
         testMakePurchases(2,"Cash");
 
-        db.addCards(new BasicCard("Clint Barton", "better_than_arrow@marvel.com", 500));
-        db.addCards(new AnonCard());
+        db.createCard(new BasicCard("Clint Barton", "better_than_arrow@marvel.com", 500));
+        db.createCard(new AnonCard());
         testMakePurchases(2,"MC10017");
-        db.addCards(new PremiumCard("Oliver Queen", "the_best_arrow_user@dc.comics", 1500));
+        db.createCard(new PremiumCard("Oliver Queen", "the_best_arrow_user@dc.comics", 1500));
         testMakePurchases(3,"MC10018");
-        db.addCards(new BasicCard("Loki", "the-baddest-dude@asgard.com", 0));
+        db.createCard(new BasicCard("Loki", "the-baddest-dude@asgard.com", 0));
         testMakePurchases(2,"MC10017");
-        db.addCards(new AnonCard());
-        db.addCards(new AnonCard());
-        db.addCards(new PremiumCard("Pepper Potts", "ceo@starkindustries.com", 0));
+        db.createCard(new AnonCard());
+        db.createCard(new AnonCard());
+        db.createCard(new PremiumCard("Pepper Potts", "ceo@starkindustries.com", 0));
         testMakePurchases(1,"MC10005");
-        db.addCards(new AnonCard());
-        db.addCards(new AnonCard());
-        db.addCards(new PremiumCard("King T'Challa", "tokenman@wakanda.africa", 1050));
-        db.addCards(new AnonCard());
-        db.addCards(new BasicCard("Logan", "wolverine@xmen.com", 0));
+        db.createCard(new AnonCard());
+        db.createCard(new AnonCard());
+        db.createCard(new PremiumCard("King T'Challa", "tokenman@wakanda.africa", 1050));
+        db.createCard(new AnonCard());
+        db.createCard(new BasicCard("Logan", "wolverine@xmen.com", 0));
     }
 
     private void createTooManyCategories() {

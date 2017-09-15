@@ -1,6 +1,6 @@
 package application.model.CardModel;
 
-import application.model.DataStoreConnectors.ReadCSV;
+import application.model.ReadCSV;
 import application.model.Generator;
 import application.model.Shop;
 
@@ -40,7 +40,7 @@ public class CardsReadImpl implements ReadCSV {
                 importCard.setPoints(Double.parseDouble(readLine[5]));
 
                 Generator.updateCardIDCounter();
-                Shop.getShopInstance().getDataStore().addCards(importCard);
+                Shop.getShopInstance().getDataStore().createCard(importCard);
             }
         } catch (IOException e) {
             System.err.println("IOException: " + e.getMessage());

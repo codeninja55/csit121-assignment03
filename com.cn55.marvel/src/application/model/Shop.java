@@ -1,8 +1,5 @@
 package application.model;
 
-import application.controller.Validator.CardExistsRule;
-import application.controller.Validator.ExistsRule;
-import application.controller.Validator.FormValidData;
 import application.model.CardModel.*;
 import application.model.CategoryModel.Category;
 import application.model.PurchaseModel.Purchase;
@@ -36,16 +33,11 @@ public class Shop {
     }
 
     public void makePurchase(String cardID, int receiptID, HashMap<Integer, Category> categories) {
-
-        ExistsRule cardExistsRule = new CardExistsRule();
-        FormValidData validData = new FormValidData();
-        validData.setCardID(cardID);
-
         if (cardID.equals(CardType.Cash.getName())) {
             db.addPurchase(new Purchase(categories, receiptID));
         } else {
-            if (cardExistsRule.existsValidating(validData) >= 0) {
-                Card card = db.getCards().get(db.getCardMap().get(cardID));
+            if (db.getAllCards().containsKey(cardID)) {
+                Card card = db.getCard(cardID);
                 String cardType = card.getCardType();
                 Purchase newPurchase = new Purchase(cardID, cardType, categories, receiptID);
                 card.calcPoints(newPurchase.getCategoriesTotal());
@@ -66,17 +58,16 @@ public class Shop {
 
         if (!cardType.equals(CardType.AnonCard.getName())) {
             if (cardType.equals(CardType.BasicCard.getName()))
-                db.addCards(new BasicCard(name, email));
+                db.createCard(new BasicCard(name, email));
             else
-                db.addCards(new PremiumCard(name, email));
+                db.createCard(new PremiumCard(name, email));
         } else {
-            db.addCards(new AnonCard());
+            db.createCard(new AnonCard());
         }
     }
 
-    public void deleteCard(int cardIndex) {
-        db.mapCards();
-        db.removeCard(cardIndex);
+    public void deleteCard(String cardID) {
+        db.deleteCard(cardID);
     }
 
     // Converts a purchase from a card purchase to a cash purchase when the card has been deleted

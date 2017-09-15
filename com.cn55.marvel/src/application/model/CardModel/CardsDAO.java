@@ -1,8 +1,11 @@
 package application.model.CardModel;
 
-public interface CardsDAO {
-    void createcreateCard(Person person);
-    Person getCards(String id);
+import java.util.HashMap;
 
+public interface CardsDAO {
+    void createCard(Card card);
+    Card getCard(String id);
+    HashMap<String, Card> getAllCards();
+    void deleteCard(String id);
 
 }

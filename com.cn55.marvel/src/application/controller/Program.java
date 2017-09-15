@@ -2,27 +2,19 @@ package application.controller;
 
 import application.controller.Validator.*;
 import application.model.CardModel.*;
+import application.model.CategoryModel.*;
 import application.model.*;
-import application.model.CategoryModel.CategoriesReadImpl;
-import application.model.CategoryModel.Category;
-import application.model.DataStoreConnectors.*;
-import application.model.PurchaseModel.Purchase;
-import application.model.PurchaseModel.PurchaseType;
-import application.model.PurchaseModel.PurchasesReadImpl;
-import application.model.PurchaseModel.SortPurchaseType;
+import application.model.DataStoreWriters.*;
+import application.model.PurchaseModel.*;
 import application.view.CardView.CardForm;
 import application.view.CardView.CardViewPane;
 import application.view.CategoriesView.CategoriesForm;
 import application.view.CategoriesView.CategoriesViewPane;
-import application.view.CustomComponents.FormFormattedTextField;
-import application.view.CustomComponents.ResultsPane;
-import application.view.CustomComponents.Style;
+import application.view.CustomComponents.*;
 import application.view.DeleteForm.DeleteCardForm;
 import application.view.DeleteForm.DeleteCategoryForm;
 import application.view.MainFrame;
-import application.view.PurchaseView.PurchaseEvent;
-import application.view.PurchaseView.PurchaseForm;
-import application.view.PurchaseView.PurchaseViewPane;
+import application.view.PurchaseView.*;
 import application.view.SearchForm.SearchForm;
 
 import javax.swing.*;
@@ -32,6 +24,7 @@ import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 
 public class Program {
 
@@ -44,6 +37,8 @@ public class Program {
     private final CategoriesViewPane categoriesViewPane;
 
     private final WriteCSV writeCategories, writeCards, writePurchases;
+    FormRule cardIDRule;
+    ExistsRule cardExistsRule;
 
     public Program() {
         /* Singleton Design Pattern - Only one instance of Shop available */
@@ -98,6 +93,9 @@ public class Program {
         categoriesViewPane.setSubject(db);
         categoriesViewPane.update();
         categoriesViewPane.setCategoriesTableModel();
+
+        /* STRATEGY PATTERN - Instantiate Validation rules */
+        cardIDRule = new CardIDRule();
 
         setupViewListeners();
     }
@@ -169,8 +167,7 @@ public class Program {
                     shop.makeCard(newCard);
                 }
 
-                int cardIndex = db.getCardMap().get(e.getCardIDTextField().getText().toUpperCase());
-                showResultsPane(db.getCards().get(cardIndex).toString(), resultsPane, resultsTextPane);
+                showResultsPane(db.getCard(e.getCardIDTextField().getText()).toString(), resultsPane, resultsTextPane);
                 removeCardForms();
             });
         });
@@ -202,20 +199,12 @@ public class Program {
             form.setDeleteListener(e -> {
                 String cardID = e.getIdTextField().getText().toUpperCase();
 
-                /*SETUP VALIDATOR FOR CARD ID*/
-                FormValidData input = new FormValidData();
-                input.setCardID(cardID);
-                FormRule rule = new CardIDRule();
-                ExistsRule existsRule = new CardExistsRule();
-
-                int cardIndex = existsRule.existsValidating(input);
-
-                if (!cardID.isEmpty() && cardIndex >= 0) {
+                if (!cardID.isEmpty() && db.getAllCards().containsKey(cardID)) {
                     e.getErrorLabel().setVisible(false);
                     e.getRuleErrLabel().setVisible(false);
                     e.getDeleteErrorLabel().setVisible(false);
 
-                    showResultsPane(db.getCards().get(cardIndex).toString(), resultsPane, resultsTextPane);
+                    showResultsPane(db.getCard(cardID).toString(), resultsPane, resultsTextPane);
                     cardViewPane.revalidate();
                     cardViewPane.repaint();
 
@@ -235,7 +224,7 @@ public class Program {
                     );
 
                     if (confirm == JOptionPane.OK_OPTION) {
-                        shop.deleteCard(cardIndex);
+                        shop.deleteCard(cardID);
                         // Purchases by this card will be changed to cash
                         shop.convertPurchase(cardID);
                         removeCardForms();
@@ -245,7 +234,7 @@ public class Program {
                         e.getDeleteErrorLabel().setVisible(true);
                     }
                 } else {
-                    if (!rule.validate(input)){
+                    if (!db.getAllCards().containsKey(cardID)){
                         e.getErrorLabel().setVisible(false);
                         e.getRuleErrLabel().setVisible(true);
                     } else {
@@ -288,15 +277,12 @@ public class Program {
                 FormValidData input = new FormValidData();
                 input.setCardID(cardID);
                 FormRule cardIDRule = new CardIDRule();
-                ExistsRule cardExistsRule = new CardExistsRule();
 
-                int cardIndex = cardExistsRule.existsValidating(input);
-
-                if (!cardID.isEmpty() && cardIndex >= 0) {
+                if (!cardID.isEmpty() && db.getAllCards().containsKey(cardID)) {
                     e.getErrorLabel().setVisible(false);
                     e.getRuleErrLabel().setVisible(false);
 
-                    String cardText = db.getCards().get(cardIndex).toString();
+                    String cardText = db.getCard(cardID).toString();
                     StringBuilder purchaseText = new StringBuilder("");
 
                     db.getPurchases().forEach((p)->{
@@ -347,7 +333,7 @@ public class Program {
                 ResultsPane.ResultsTextPane resultsTextPane = resultsPane.getResultsTextPane();
                 setCardViewMouseListeners();
 
-                String cText = db.getCards().get(db.getCardMap().get(cardID)).toString();
+                String cText = db.getCard(cardID).toString();
                 StringBuilder pText = new StringBuilder("");
 
                 db.getPurchases().forEach((p)-> {
@@ -369,15 +355,20 @@ public class Program {
         /*TOOLBAR | SORT COMBOBOX*/
         cardViewPane.getSortedCombo().addItemListener((e) -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
-                if (e.getItem().equals("Sort..") || e.getItem().equals(SortCardType.CreatedOrder.getName()))
+                ArrayList<Card> sortedCardsList = new ArrayList<>();
+                sortedCardsList.addAll(db.getAllCards().values());
+
+                if (e.getItem().equals("Sort..") || e.getItem().equals(SortCardType.CreatedOrder.getName())) {
                     // Lambda version of sorting with Comparator comparing method
-                    db.getCards().sort(Comparator.comparing(Card::getID));
-                else if (e.getItem().equals(SortCardType.ReverseCreatedOrder.getName()))
+                    sortedCardsList.sort(Comparator.comparing(Card::getID));
+                    cardViewPane.updateTableData(sortedCardsList);
+                } else if (e.getItem().equals(SortCardType.ReverseCreatedOrder.getName())) {
                     // Lambda version of sorting with Comparator
-                    db.getCards().sort((Card c1, Card c2)->c2.getID().compareTo(c1.getID()));
-                else if (e.getItem().equals(SortCardType.Name.getName()))
+                    sortedCardsList.sort((Card c1, Card c2) -> c2.getID().compareTo(c1.getID()));
+                    cardViewPane.updateTableData(sortedCardsList);
+                } else if (e.getItem().equals(SortCardType.Name.getName())) {
                     // Lambda version of sorting with Comparator
-                    db.getCards().sort(((c1, c2) -> {
+                    sortedCardsList.sort(((c1, c2) -> {
                         if (c1 instanceof AdvancedCard && c2 instanceof AdvancedCard)
                             return ((AdvancedCard) c1).getName().compareTo(((AdvancedCard) c2).getName());
 
@@ -386,10 +377,12 @@ public class Program {
                         else
                             return 1;
                     }));
-                else if (e.getItem().equals(SortCardType.Points.getName()))
+                    cardViewPane.updateTableData(sortedCardsList);
+                } else if (e.getItem().equals(SortCardType.Points.getName())) {
                     // Lambda version of sorting with Comparator comparingDouble method
-                    db.getCards().sort(Comparator.comparingDouble(Card::getPoints));
-                db.notifyObservers();
+                    sortedCardsList.sort(Comparator.comparingDouble(Card::getPoints));
+                    cardViewPane.updateTableData(sortedCardsList);
+                }
             }
         });
 
@@ -462,7 +455,7 @@ public class Program {
 
                         shop.makeCard(newCard);
                         shop.makePurchase(cardID, receiptID, categories);
-                        resultsText = db.getCards().get(db.getCardMap().get(cardID)).toString() +
+                        resultsText = db.getCard(cardID).toString() +
                                 db.getPurchases().get(db.getPurchaseMap().get(receiptID));
                         showResultsPane(resultsText,resultsPane,resultsTextPane);
                         removePurchaseForms();

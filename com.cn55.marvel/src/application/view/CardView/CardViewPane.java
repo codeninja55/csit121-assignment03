@@ -15,12 +15,10 @@ import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 import java.awt.*;
 import java.awt.event.*;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 
 public class CardViewPane extends JPanel implements DataObserver {
-    private DataObservable database;
+    private DataObservable dataDAO;
 
     private ToolbarButton createCardBtn;
     private ToolbarButton deleteCardBtn;
@@ -144,15 +142,19 @@ public class CardViewPane extends JPanel implements DataObserver {
         this.repaint();
     }
 
-    /* OBSERVER DESIGN PATTERN IMPLEMENTATION */
-    @Override
-    public void setSubject(DataObservable dataObservable) {
-        this.database = dataObservable;
+    public void updateTableData(ArrayList<Card> allCards) {
+        cardTableModel.setData(allCards);
+        cardTableModel.fireTableDataChanged();
     }
 
-    @Override
+    /* OBSERVER DESIGN PATTERN IMPLEMENTATION */
+    public void setSubject(DataObservable dataObservable) {
+        this.dataDAO = dataObservable;
+    }
+
     public void update() {
-        cardTableModel.setData(database.getCardsUpdate(this));
+        ArrayList<Card> allCards = new ArrayList<>(dataDAO.getCardsUpdate(this).values());
+        cardTableModel.setData(allCards);
         cardTableModel.fireTableDataChanged();
     }
 
@@ -175,6 +177,10 @@ public class CardViewPane extends JPanel implements DataObserver {
 
     public JTable getCardTablePane() {
         return cardTablePane;
+    }
+
+    public CardTableModel getCardTableModel() {
+        return cardTableModel;
     }
 
     public ResultsPane getResultsPane() {
