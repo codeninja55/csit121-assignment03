@@ -1,13 +1,13 @@
 package cn55.controller;
 
 import cn55.controller.Validator.*;
-import cn55.model.CardModel.AdvancedCard;
-import cn55.model.CardModel.AnonCard;
-import cn55.model.CardModel.Card;
+import cn55.model.CardModel.*;
 import cn55.model.*;
-import cn55.model.DataStoreConnectors.CardsReadImpl;
-import cn55.model.DataStoreConnectors.PurchasesReadImpl;
-import cn55.model.DataStoreConnectors.ReadCSV;
+import cn55.model.CategoryModel.Category;
+import cn55.model.DataStoreConnectors.*;
+import cn55.model.PurchaseModel.Purchase;
+import cn55.model.PurchaseModel.PurchaseType;
+import cn55.model.PurchaseModel.SortPurchaseType;
 import cn55.view.CardView.CardForm;
 import cn55.view.CardView.CardViewPane;
 import cn55.view.CategoriesView.CategoriesForm;
@@ -86,8 +86,6 @@ public class Program {
         categoriesViewPane.setCategoriesTableModel();
 
         setupViewListeners();
-
-
     }
 
     private ArrayList<Component> getAllComponents(final Container container) {
