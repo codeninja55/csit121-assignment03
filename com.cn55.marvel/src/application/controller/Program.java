@@ -36,12 +36,14 @@ import java.util.HashMap;
 public class Program {
 
     private final Shop shop;
-    private final DataStoreModel db;
+    private final DataDAO db;
     private final MainFrame mainFrame;
     private final JTabbedPane tabPane;
     private final CardViewPane cardViewPane;
     private final PurchaseViewPane purchaseViewPane;
     private final CategoriesViewPane categoriesViewPane;
+
+    private final WriteCSV writeCategories, writeCards, writePurchases;
 
     public Program() {
         /* Singleton Design Pattern - Only one instance of Shop available */
@@ -49,11 +51,18 @@ public class Program {
         db = shop.getDataStore();
 
         /* Strategy Design Pattern - Implementation of writing and reading buried in concrete classes */
-        ReadCSV readCategoriesCSV = new CategoriesReadImpl(), readCardsCSV = new CardsReadImpl(), readPurchaseCSV = new PurchasesReadImpl();
+        ReadCSV readCategoriesCSV = new CategoriesReadImpl();
+        ReadCSV readCardsCSV = new CardsReadImpl();
+        ReadCSV readPurchaseCSV = new PurchasesReadImpl();
+
         readCategoriesCSV.read();
         //new TestCode(shop);
         readCardsCSV.read();
         readPurchaseCSV.read();
+
+        writeCategories = new CategoriesWriteOut();
+        writeCards = new CardsWriteOut();
+        writePurchases = new PurchasesWriteOut();
 
         this.mainFrame = new MainFrame();
         this.tabPane = mainFrame.getTabPane();
@@ -62,11 +71,6 @@ public class Program {
         mainFrame.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
                 super.windowClosing(e);
-
-                WriteCSV writeCategories = new CategoriesWriteOut();
-                WriteCSV writeCards = new CardsWriteOut();
-                WriteCSV writePurchases = new PurchasesWriteOut();
-
                 writeCategories.writeOut();
                 writeCards.writeOut();
                 writePurchases.writeOut();

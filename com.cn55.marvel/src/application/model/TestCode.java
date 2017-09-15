@@ -12,7 +12,7 @@ import java.util.Random;
 public class TestCode {
 
     private Shop shop;
-    private DataStoreModel db;
+    private DataDAO db;
 
     public TestCode(Shop shop) {
         this.shop = shop;

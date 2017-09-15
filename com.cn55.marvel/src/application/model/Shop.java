@@ -14,11 +14,11 @@ import java.util.*;
 @SuppressWarnings("ConstantConditions")
 public class Shop {
     private static Shop shop;
-    private final DataStoreModel db;
+    private final DataDAO db;
 
     /*============================== CONSTRUCTORS  ==============================*/
     private Shop() {
-        this.db = new DataStoreModel();
+        this.db = new DataDAO();
     }
 
     // Provide global point of access
@@ -104,7 +104,7 @@ public class Shop {
     }
 
     /*============================== ACCESSORS ==============================*/
-    public DataStoreModel getDataStore() {
+    public DataDAO getDataStore() {
         return db;
     }
 }
