@@ -17,6 +17,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 
 public class PurchaseViewPane extends JPanel implements Observer {
@@ -230,8 +232,8 @@ public class PurchaseViewPane extends JPanel implements Observer {
         public int getColumnCount() { return tableHeaders.length; }
 
         public Object getValueAt(int rowIndex, int columnIndex) {
-            Purchase purchase = purchases.get(rowIndex);
 
+            Purchase purchase = purchases.get(rowIndex);
             switch (columnIndex) {
                 case 0:
                     return purchase.getReceiptID();
@@ -240,7 +242,8 @@ public class PurchaseViewPane extends JPanel implements Observer {
                 case 2:
                     return purchase.getCardType();
                 case 3:
-                    return "$" + purchase.getCategoriesTotal();
+
+                    return Style.currencyFormat().format(purchase.getCategoriesTotal());
                 case 4:
                     return purchase.getPurchaseTime();
             }

@@ -1,7 +1,8 @@
 package application.view.CategoriesView;
-import application.model.*;
+
 import application.model.CategoryModel.Category;
-import application.model.DataStoreModel;
+import application.model.Observer;
+import application.model.Subject;
 import application.view.CustomComponents.Style;
 import application.view.CustomComponents.Toolbar;
 import application.view.CustomComponents.ToolbarButton;
@@ -182,7 +183,7 @@ public class CategoriesViewPane extends JPanel implements Observer {
                 case 2:
                     return category.getDescription();
                 case 3:
-                    return DataStoreModel.getCategoriesTotalMap().get(category.getId());
+                    return Style.currencyFormat().format(category.getTotalAmount());
             }
             return null;
         }

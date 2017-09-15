@@ -1,10 +1,7 @@
 package application.view.CardView;
 
-import application.model.CardModel.BasicCard;
-import application.model.CardModel.Card;
-import application.model.CardModel.PremiumCard;
+import application.model.CardModel.*;
 import application.model.Observer;
-import application.model.CardModel.SortCardType;
 import application.model.Subject;
 import application.view.CustomComponents.ResultsPane;
 import application.view.CustomComponents.Style;
@@ -266,10 +263,8 @@ public class CardViewPane extends JPanel implements Observer {
                     }
 
                 case 4:
-                    if (card instanceof BasicCard) {
-                        return "S" + ((BasicCard) card).getBalance();
-                    } else if (card instanceof PremiumCard) {
-                        return "S" + ((PremiumCard) card).getBalance();
+                    if (card instanceof AdvancedCard) {
+                        return Style.currencyFormat().format(((AdvancedCard) card).getBalance());
                     } else {
                         return "";
                     }

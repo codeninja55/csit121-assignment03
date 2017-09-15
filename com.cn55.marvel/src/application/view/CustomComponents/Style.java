@@ -5,6 +5,8 @@ import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 
 @SuppressWarnings({"WeakerAccess", "unused"})
 public class Style {
@@ -108,5 +110,12 @@ public class Style {
             button.setBackground(red500());
             //button.setForeground(grey50());
         }
+    }
+
+    public static NumberFormat currencyFormat() {
+        NumberFormat formatter = DecimalFormat.getCurrencyInstance();
+        formatter.setMinimumFractionDigits(2);
+        formatter.setMaximumFractionDigits(2);
+        return formatter;
     }
 }
