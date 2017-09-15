@@ -17,17 +17,23 @@ public class PremiumCard extends AdvancedCard {
         super(name, email);
         super.cardType = CardType.PremiumCard.getName();
         super.balance = totalAmount; //- SIGNUP_FEE; - we were told to ignore this
+        calcPoints(totalAmount);
+    }
+
+    PremiumCard(String id, String name, String email, double points, double balance) {
+        super(id, name, email, points, balance);
+        super.cardType = CardType.PremiumCard.getName();
     }
 
     /*============================== MUTATORS  ==============================*/
     public void calcPoints(double totalAmount) {
-        if (totalAmount < 40 && this.balance < 1000)
-            this.points += totalAmount * POINTS_RATE_LOW;
+        if (totalAmount < 40 && super.balance < 1000)
+            super.points += totalAmount * POINTS_RATE_LOW;
         else
-            this.points += totalAmount * POINTS_RATE_HIGH;
+            super.points += totalAmount * POINTS_RATE_HIGH;
     }
 
-    public void calcBalance(double totalAmount) { this.balance += totalAmount; }
+    public void calcBalance(double totalAmount) { super.balance += totalAmount; }
 
     /*============================== ACCESSORS  ==============================*/
     public String toString() {

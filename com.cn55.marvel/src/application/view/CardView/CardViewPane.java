@@ -15,6 +15,8 @@ import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 import java.awt.*;
 import java.awt.event.*;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 
 public class CardViewPane extends JPanel implements DataObserver {
@@ -216,7 +218,6 @@ public class CardViewPane extends JPanel implements DataObserver {
 
     /*============================= CardTableModel ============================*/
     class CardTableModel extends AbstractTableModel {
-
         private ArrayList<Card> cards;
         private String[] cardHeaders = {"Card ID", "Card Type", "Name", "Email", "Balance", "Points"};
 
@@ -252,7 +253,6 @@ public class CardViewPane extends JPanel implements DataObserver {
                     } else {
                         return "";
                     }
-
                 case 3:
                     if (card instanceof BasicCard) {
                         return ((BasicCard) card).getEmail();
@@ -261,7 +261,6 @@ public class CardViewPane extends JPanel implements DataObserver {
                     } else {
                         return "";
                     }
-
                 case 4:
                     if (card instanceof AdvancedCard) {
                         return Style.currencyFormat().format(((AdvancedCard) card).getBalance());
@@ -270,7 +269,7 @@ public class CardViewPane extends JPanel implements DataObserver {
                     }
 
                 case 5:
-                    return card.getPoints();
+                    return Style.pointsFormat().format(card.getPoints());
             }
             return null;
         }

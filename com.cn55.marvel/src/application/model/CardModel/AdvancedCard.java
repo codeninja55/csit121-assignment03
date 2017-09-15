@@ -13,6 +13,13 @@ public abstract class AdvancedCard extends Card {
         this.balance = 0;
     }
 
+    AdvancedCard(String id, String name, String email,double points, double balance) {
+        super(id, points);
+        this.name = name;
+        this.email = email;
+        this.balance = balance;
+    }
+
     public boolean equals (AdvancedCard other) { return this.name.equals(other.name); }
 
     public String getName() {

@@ -1,7 +1,8 @@
-package application.model.DataStoreConnectors;
+package application.model.PurchaseModel;
 
 import application.model.CategoryModel.Category;
-import application.model.PurchaseModel.Purchase;
+import application.model.DataStoreConnectors.ReadCSV;
+import application.model.Generator;
 import application.model.Shop;
 
 import java.io.BufferedReader;
@@ -30,6 +31,7 @@ public class PurchasesReadImpl implements ReadCSV {
                 HashMap<Integer, Category> categories = new HashMap<>();
                 String categoriesAttr[];
                 String[] readLine = line.split(DEFAULT_SEPARATOR, 5);
+                int receiptID = Integer.parseInt(readLine[1]);
 
                 // readLine[0] = purchaseTime | [1] = receiptID | [2] = cardType | [3] = cardID
                 // [4] = categories --> {[Category],[Category 2],..[Category n]}
@@ -51,9 +53,10 @@ public class PurchasesReadImpl implements ReadCSV {
                                             Double.parseDouble(categoriesAttr[3])));
                 }
 
-                Purchase importedPurchase = new Purchase(readLine[0], Integer.parseInt(readLine[1]),
+                Purchase importedPurchase = new Purchase(readLine[0], receiptID,
                         readLine[2], readLine[3], categories);
 
+                Generator.addReceiptID(receiptID);
                 Shop.getShopInstance().getDataStore().addPurchase(importedPurchase);
             }
         } catch (IOException e) {

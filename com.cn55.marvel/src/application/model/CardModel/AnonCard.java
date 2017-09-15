@@ -10,9 +10,9 @@ public class AnonCard extends Card {
         super.points = 0;
     }
 
-    public AnonCard(String id, String cardType) {
-        super.id = id;
-        super.cardType = cardType;
+    AnonCard(String id, double points) {
+        super(id, points);
+        super.cardType = CardType.AnonCard.getName();
     }
 
     /*============================== MUTATORS  ==============================*/

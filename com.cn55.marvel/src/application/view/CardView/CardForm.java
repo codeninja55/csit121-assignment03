@@ -1,8 +1,7 @@
 package application.view.CardView;
 
 import application.model.CardModel.CardType;
-import application.model.GenereteID;
-import application.model.Shop;
+import application.model.Generator;
 import application.view.ButtonListener;
 import application.view.CustomComponents.*;
 
@@ -138,7 +137,7 @@ public class CardForm extends JPanel {
         for (Component item : baseCreateCardForm.getComponents())
             if (item instanceof FormTextField) ((FormTextField) item).setText("");
 
-        cardIDTextField.setText(GenereteID.getNextCardID());
+        cardIDTextField.setText(Generator.getNextCardID());
 
     }
 

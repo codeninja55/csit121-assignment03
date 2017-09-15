@@ -9,17 +9,23 @@ public class BasicCard extends AdvancedCard {
         super.cardType = CardType.BasicCard.getName();
     }
 
-    // constructor with for new cards without purchase
+    // Constructor with for new cards without purchase
     public BasicCard(String name, String email, double totalAmount) {
         super(name, email);
         super.cardType = CardType.BasicCard.getName();
         super.balance = totalAmount;
+        calcPoints(totalAmount);
+    }
+
+    BasicCard(String id, String name, String email, double points, double balance) {
+        super(id, name, email, points, balance);
+        super.cardType = CardType.BasicCard.getName();
     }
 
     /*============================== MUTATORS  ==============================*/
-    public void calcPoints(double totalAmount) { this.points += POINTS_RATE * totalAmount; }
+    public void calcPoints(double totalAmount) { super.points += POINTS_RATE * totalAmount; }
 
-    public void calcBalance(double totalAmount) { this.balance += totalAmount; }
+    public void calcBalance(double totalAmount) { super.balance += totalAmount; }
 
     /*============================== ACCESSORS  ==============================*/
     public String toString() {

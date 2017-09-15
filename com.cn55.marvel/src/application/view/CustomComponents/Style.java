@@ -118,4 +118,11 @@ public class Style {
         formatter.setMaximumFractionDigits(2);
         return formatter;
     }
+
+    public static NumberFormat pointsFormat() {
+        NumberFormat formatter = DecimalFormat.getInstance();
+        formatter.setMaximumFractionDigits(2);
+        formatter.setMinimumFractionDigits(2);
+        return formatter;
+    }
 }

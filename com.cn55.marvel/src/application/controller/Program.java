@@ -3,10 +3,12 @@ package application.controller;
 import application.controller.Validator.*;
 import application.model.CardModel.*;
 import application.model.*;
+import application.model.CategoryModel.CategoriesReadImpl;
 import application.model.CategoryModel.Category;
 import application.model.DataStoreConnectors.*;
 import application.model.PurchaseModel.Purchase;
 import application.model.PurchaseModel.PurchaseType;
+import application.model.PurchaseModel.PurchasesReadImpl;
 import application.model.PurchaseModel.SortPurchaseType;
 import application.view.CardView.CardForm;
 import application.view.CardView.CardViewPane;
@@ -48,17 +50,14 @@ public class Program {
         shop = Shop.getShopInstance();
         db = shop.getDataStore();
 
-
-        //testCode.createTooManyCategories();
-
         /* Strategy Design Pattern - Implementation of writing and reading buried in concrete classes */
         ReadCSV readCategoriesCSV = new CategoriesReadImpl(), readCardsCSV = new CardsReadImpl(), readPurchaseCSV = new PurchasesReadImpl();
         readCategoriesCSV.read();
         readCardsCSV.read();
         readPurchaseCSV.read();
-        //new TestCode(shop);
 
-        /*WriteCSV writeCards = new CardsWriteOut();
+        /*new TestCode(shop);
+        WriteCSV writeCards = new CardsWriteOut();
         writeCards.writeOut();
         WriteCSV writePurchases = new PurchasesWriteOut();
         writePurchases.writeOut();
@@ -404,7 +403,7 @@ public class Program {
             purchaseViewPane.add(form, BorderLayout.WEST);
 
             form.getPurchaseTypeCombo().setSelectedIndex(0);
-            form.setGeneratedReceiptID(GenereteID.setReceiptID());
+            form.setGeneratedReceiptID(Generator.setReceiptID());
             form.setCardModel(db.getCardModel());
             form.setCategoriesList(db.getDefaultCategories());
             form.createBasePurchaseForm();

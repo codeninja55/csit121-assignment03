@@ -1,6 +1,7 @@
-package application.model.DataStoreConnectors;
+package application.model.CategoryModel;
 
-import application.model.CategoryModel.Category;
+import application.model.DataStoreConnectors.ReadCSV;
+import application.model.Generator;
 import application.model.Shop;
 
 import java.io.BufferedReader;
@@ -29,6 +30,7 @@ public class CategoriesReadImpl implements ReadCSV {
                 Category importedCategory = new Category(Integer.parseInt(readLine[0]), readLine[1],
                                                         readLine[2], Double.parseDouble(readLine[3]));
 
+                Generator.updateCategoryIDCounter();
                 Shop.getShopInstance().getDataStore().addCategory(importedCategory);
             }
         } catch (IOException e) {

@@ -53,7 +53,7 @@ public class TestCode {
 
     private void testMakePurchases(int numOfPurchases, String id) {
         for (int i = 0; i < numOfPurchases; i++)
-            shop.makePurchase(id, GenereteID.setReceiptID(), generateRandomCategoriesMap());
+            shop.makePurchase(id, Generator.setReceiptID(), generateRandomCategoriesMap());
     }
 
     private void createTestCode() {
@@ -116,7 +116,7 @@ public class TestCode {
         db.addCards(new BasicCard("Peter Parker", "spidey@avengers.team",0)); // MC10010
         db.addCards(new PremiumCard("Danny Rand","danny@randcorp.com",5000)); // MC10011
         testMakePurchases(3, "MC10012");
-        db.addCards(new PremiumCard("Professor Charles Xavier", "x@xmen.com", 1238798)); // MC100012
+        db.addCards(new PremiumCard("Professor Charles Xavier", "x@xmen.com", 0)); // MC100012
         testMakePurchases(2,"MC10013");
 
         db.addCards(new BasicCard("Matthew Murdock","thedevil@hellskitchen.com", 666));
@@ -141,11 +141,11 @@ public class TestCode {
         testMakePurchases(2,"MC10017");
         db.addCards(new AnonCard());
         db.addCards(new AnonCard());
-        db.addCards(new PremiumCard("Pepper Potts", "ceo@starkindustries.com", 1987234));
+        db.addCards(new PremiumCard("Pepper Potts", "ceo@starkindustries.com", 0));
         testMakePurchases(1,"MC10005");
         db.addCards(new AnonCard());
         db.addCards(new AnonCard());
-        db.addCards(new PremiumCard("King T'Challa", "tokenman@wakanda.africa", 105023));
+        db.addCards(new PremiumCard("King T'Challa", "tokenman@wakanda.africa", 1050));
         db.addCards(new AnonCard());
         db.addCards(new BasicCard("Logan", "wolverine@xmen.com", 0));
     }

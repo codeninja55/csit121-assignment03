@@ -1,7 +1,6 @@
 package application.model.CardModel;
 
-import application.model.GenereteID;
-import application.model.Shop;
+import application.model.Generator;
 
 @SuppressWarnings("ALL")
 public abstract class Card implements Comparable<Card> {
@@ -13,9 +12,14 @@ public abstract class Card implements Comparable<Card> {
     /*============================== CONSTRUCTORS  ==============================*/
     // Default constructor
     Card() {
-        this.id = GenereteID.setCardID();
-
+        this.id = Generator.setCardID();
         this.points = 0;
+        this.cardType = null;
+    }
+
+    Card(String id, double points) {
+        this.id = id;
+        this.points = points;
         this.cardType = null;
     }
 
@@ -24,7 +28,7 @@ public abstract class Card implements Comparable<Card> {
         this.points = points;
     }
 
-    /*Abstract method to force implementation in all subclasses*/
+    // Abstract method to force implementation in all subclasses
     public abstract void calcPoints(double totalAmount);
 
     public void calcBalance(double totalAmount) {}
@@ -38,7 +42,6 @@ public abstract class Card implements Comparable<Card> {
         return this.id.equals(other.id);
     }
 
-    @Override
     public int compareTo(Card o) {
         return this.id.compareTo(o.getID());
     }

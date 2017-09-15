@@ -7,6 +7,8 @@ import application.view.PurchaseView.PurchaseViewPane;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.net.URL;
 
 @SuppressWarnings("Convert2Lambda")
@@ -24,8 +26,8 @@ public class MainFrame extends JFrame {
         setLayout(new BorderLayout());
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setUndecorated(false);
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setVisible(true);
+        setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 
         // Change the default Java icon to this
         URL iconURL = getClass().getResource("/img/favicon.png");

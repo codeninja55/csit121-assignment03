@@ -2,8 +2,8 @@ package application.model;
 
 import java.util.*;
 
-public class GenereteID {
-    private static int cardIDCounter = 10000;
+public class Generator {
+    public static int cardIDCounter = 10000;
     private static int categoryIDCounter = 100;
     private static final Set<Integer> receiptSet = new HashSet<>();
 
@@ -30,7 +30,11 @@ public class GenereteID {
         return categoryIDCounter++;
     }
 
-    private static void addReceiptID(int receiptID) { receiptSet.add(receiptID); }
+    public static void addReceiptID(int receiptID) { receiptSet.add(receiptID); }
+
+    public static void updateCategoryIDCounter() { categoryIDCounter++; }
+
+    public static void updateCardIDCounter() { ++cardIDCounter; }
 
     /*============================== ACCESSORS  ==============================*/
     public static int getNextCategoryID() {
