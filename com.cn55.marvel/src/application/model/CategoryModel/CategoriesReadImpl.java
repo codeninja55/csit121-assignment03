@@ -1,6 +1,6 @@
 package application.model.CategoryModel;
 
-import application.model.DataStoreConnectors.ReadCSV;
+import application.model.ReadCSV;
 import application.model.Generator;
 import application.model.Shop;
 

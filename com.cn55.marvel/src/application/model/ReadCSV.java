@@ -1,4 +1,4 @@
-package application.model.DataStoreConnectors;
+package application.model;
 
 import java.nio.file.Path;
 
