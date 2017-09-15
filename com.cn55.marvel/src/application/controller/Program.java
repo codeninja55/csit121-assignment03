@@ -63,12 +63,13 @@ public class Program {
             public void windowClosing(WindowEvent e) {
                 super.windowClosing(e);
 
-                WriteCSV writeCards = new CardsWriteOut();
-                writeCards.writeOut();
-                WriteCSV writePurchases = new PurchasesWriteOut();
-                writePurchases.writeOut();
                 WriteCSV writeCategories = new CategoriesWriteOut();
+                WriteCSV writeCards = new CardsWriteOut();
+                WriteCSV writePurchases = new PurchasesWriteOut();
+
                 writeCategories.writeOut();
+                writeCards.writeOut();
+                writePurchases.writeOut();
 
                 System.gc(); // Garbage collector
                 mainFrame.dispose();
@@ -95,20 +96,6 @@ public class Program {
         categoriesViewPane.setCategoriesTableModel();
 
         setupViewListeners();
-    }
-
-    private ArrayList<Component> getAllComponents(final Container container) {
-        // REFERENCE: http://www.java2s.com/Code/Java/Swing-JFC/GetAllComponentsinacontainer.html
-        Component[] comps = container.getComponents();
-        ArrayList<Component> compList = new ArrayList<>();
-
-        for (Component c : comps) {
-            compList.add(c);
-            if (c instanceof Container)
-                compList.addAll(getAllComponents((Container) c));
-        }
-
-        return compList;
     }
 
     /*============================== REGISTER AND HANDLE EVENTS ==============================*/
@@ -842,7 +829,4 @@ public class Program {
         return null;
     }
     /*====================================================================*/
-
-    /*============================== WINDOWS CLOSING HANDLER ==============================*/
-
 }
