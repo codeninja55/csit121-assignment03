@@ -49,11 +49,8 @@ public class Program {
         db = shop.getDataStore();
 
         //new TestCode(shop);
-
-        //TestCode testCode = new TestCode(shop);
         //testCode.createTooManyCategories();
 
-        /* Strategy Design Pattern - Implementation of writing and reading buried in concrete classes */
         /*WriteCSV writeCards = new CardsWriteOut();
         writeCards.writeOut();
         WriteCSV writePurchases = new PurchasesWriteOut();
@@ -61,9 +58,9 @@ public class Program {
         WriteCSV writeCategories = new CategoriesWriteOut();
         writeCategories.writeOut();*/
 
+        /* Strategy Design Pattern - Implementation of writing and reading buried in concrete classes */
         ReadCSV readCategoriesCSV = new CategoriesReadImpl(), readCardsCSV = new CardsReadImpl(), readPurchaseCSV = new PurchasesReadImpl();
         readCategoriesCSV.read();
-        //DataStoreModel.mapCategoriesTotalMap(db.getDefaultCategories());
         readCardsCSV.read();
         readPurchaseCSV.read();
 
@@ -87,8 +84,6 @@ public class Program {
         db.register(categoriesViewPane);
         categoriesViewPane.setSubject(db);
         categoriesViewPane.update();
-
-        // TODO
         categoriesViewPane.setCategoriesTableModel();
 
         setupViewListeners();
