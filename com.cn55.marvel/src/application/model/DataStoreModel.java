@@ -17,9 +17,8 @@ public class DataStoreModel implements Subject {
     private HashMap<String, Integer> cardMap;
     private final ArrayList<Purchase> purchases;
     private HashMap<Integer, Integer> purchaseMap;
-    private final ArrayList<Category> categories;
+    private final ArrayList<Category> defaultCategories;
     private HashMap<Integer, Integer> categoriesMap;
-    private static final HashMap<Integer, Double> categoriesTotalMap = new HashMap<>();
 
     /*============================== CONSTRUCTORS  ==============================*/
     // Private modifier prevents any other class from instantiating
@@ -29,7 +28,7 @@ public class DataStoreModel implements Subject {
         this.cardMap = new HashMap<>();
         this.purchases = new ArrayList<>();
         this.purchaseMap = new HashMap<>();
-        this.categories = new ArrayList<>();
+        this.defaultCategories = new ArrayList<>();
         this.categoriesMap = new HashMap<>();
     }
 
@@ -48,31 +47,16 @@ public class DataStoreModel implements Subject {
 
     void mapCategories() {
         HashMap<Integer, Integer> categoriesMap = new HashMap<>();
-        categories.forEach((category)->categoriesMap.put(category.getId(), categories.indexOf(category)));
+        defaultCategories.forEach((category)->categoriesMap.put(category.getId(), defaultCategories.indexOf(category)));
         this.categoriesMap = categoriesMap;
     }
 
-    // Map the Categories to a HashMap to store total amounts for each category across the whole program
-    public static void mapCategoriesTotalMap(ArrayList<Category> categories) {
-        if (categoriesTotalMap.size() == 0)
-            categories.forEach((item) -> categoriesTotalMap.put(item.getId(), 0D));
-    }
-
-    // Accepts the same categories HashMap stored in a Purchase object and updates the categoriesTotalMap
-    // to reflect either the new Category added or the updated total amount for an existing category.
-    private static void updateCategoriesTotalMap(HashMap<Integer, Category> categories) {
-        for (HashMap.Entry<Integer, Category> item : categories.entrySet()) {
-            if (!categoriesTotalMap.containsKey(item.getKey())) {
-                DataStoreModel.categoriesTotalMap.put(item.getKey(), item.getValue().getAmount());
-            } else {
-                Double newTotal = DataStoreModel.categoriesTotalMap.get(item.getKey()) + item.getValue().getAmount();
-                DataStoreModel.categoriesTotalMap.put(item.getKey(), newTotal);
-            }
-        }
+    private void updateCategoryTotalAmount(HashMap<Integer,Category> purchaseCategoriesMap) {
+        defaultCategories.forEach((c) -> c.updateTotalAmount(purchaseCategoriesMap.get(c.getId()).getAmount()));
     }
 
     public void addCategory(Category category) {
-        categories.add(category);
+        defaultCategories.add(category);
         mapCategories();
         notifyObservers();
     }
@@ -84,7 +68,7 @@ public class DataStoreModel implements Subject {
     }
 
     public void addPurchase(Purchase purchase) {
-        updateCategoriesTotalMap(purchase.getCategories());
+        updateCategoryTotalAmount(purchase.getCategories());
         purchases.add(purchase);
         mapPurchases();
         notifyObservers();
@@ -98,7 +82,7 @@ public class DataStoreModel implements Subject {
     }
 
     void removeCategory(int index) {
-        categories.remove(index);
+        defaultCategories.remove(index);
         mapCategories();
         notifyObservers();
     }
@@ -118,14 +102,10 @@ public class DataStoreModel implements Subject {
         return purchaseMap;
     }
 
-    public ArrayList<Category> getCategories() { return categories; }
+    public ArrayList<Category> getDefaultCategories() { return defaultCategories; }
 
     public HashMap<Integer, Integer> getCategoriesMap() {
         return categoriesMap;
-    }
-
-    public static HashMap<Integer, Double> getCategoriesTotalMap() {
-        return categoriesTotalMap;
     }
 
     public DefaultComboBoxModel<String> getCardModel() {
@@ -167,7 +147,7 @@ public class DataStoreModel implements Subject {
 
     @Override
     public ArrayList<Category> getCategoriesUpdate(Observer who) {
-        return categories;
+        return defaultCategories;
     }
 
 }

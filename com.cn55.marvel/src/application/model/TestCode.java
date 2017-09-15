@@ -45,7 +45,7 @@ public class TestCode {
 
     private HashMap<Integer, Category> generateRandomCategoriesMap() {
         HashMap<Integer, Category> testingCategoryMap = new HashMap<>();
-        db.getCategories().forEach((cat) -> testingCategoryMap.put(cat.getId(), new Category(cat)));
+        db.getDefaultCategories().forEach((cat) -> testingCategoryMap.put(cat.getId(), new Category(cat)));
         testingCategoryMap.forEach((k,v)->v.setAmount(generateRandomValue()));
 
         return testingCategoryMap;

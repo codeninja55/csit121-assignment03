@@ -60,19 +60,6 @@ public class Shop {
     private static void addReceiptID(int receiptID) { receiptSet.add(receiptID); }
 
     /*============================== MUTATORS  ==============================*/
-    /*private void generateDefaultCategories() {
-        ArrayList<Category> categories = db.getCategories();
-        categories.add(new Category("Other", "#Description"));
-        categories.add(new Category("Motors", "#Description"));
-        categories.add(new Category("Electronics", "#Description"));
-        categories.add(new Category("Fashion", "#Description"));
-        categories.add(new Category("Toys", "#Description"));
-        categories.add(new Category("Deals", "#Description"));
-
-        db.mapCategories();
-        db.notifyObservers();
-    }*/
-
     public void makeCategory(Category category) {
         db.addCategory(category);
     }
@@ -131,16 +118,16 @@ public class Shop {
 
     public void deleteCategory(int categoryID) {
         db.mapCategories();
-        // MOVE AMOUNT TO OTHERS FOR EACH PURCHASE
+        // Update the amount for each purchase
         db.getPurchases().forEach((Purchase p) -> {
             Category other = p.getCategories().get(100);
             other.setAmount(other.getAmount() + p.getCategories().get(categoryID).getAmount());
             p.getCategories().remove(categoryID);
         });
 
-        Double newValue = DataStoreModel.getCategoriesTotalMap().get(100) + DataStoreModel.getCategoriesTotalMap().get(categoryID);
-        DataStoreModel.getCategoriesTotalMap().replace(100, newValue);
-        DataStoreModel.getCategoriesTotalMap().remove(categoryID);
+        // Update the total amounts in the defaultCategories List
+        double deletedCategoryValue = db.getDefaultCategories().get(db.getCategoriesMap().get(categoryID)).getTotalAmount();
+        db.getDefaultCategories().get(db.getCategoriesMap().get(100)).updateTotalAmount(deletedCategoryValue);
 
         db.removeCategory(db.getCategoriesMap().get(categoryID));
     }

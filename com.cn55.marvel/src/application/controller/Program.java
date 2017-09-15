@@ -63,7 +63,7 @@ public class Program {
 
         ReadCSV readCategoriesCSV = new CategoriesReadImpl(), readCardsCSV = new CardsReadImpl(), readPurchaseCSV = new PurchasesReadImpl();
         readCategoriesCSV.read();
-        DataStoreModel.mapCategoriesTotalMap(db.getCategories());
+        //DataStoreModel.mapCategoriesTotalMap(db.getDefaultCategories());
         readCardsCSV.read();
         readPurchaseCSV.read();
 
@@ -87,6 +87,8 @@ public class Program {
         db.register(categoriesViewPane);
         categoriesViewPane.setSubject(db);
         categoriesViewPane.update();
+
+        // TODO
         categoriesViewPane.setCategoriesTableModel();
 
         setupViewListeners();
@@ -408,7 +410,7 @@ public class Program {
             form.getPurchaseTypeCombo().setSelectedIndex(0);
             form.setGeneratedReceiptID(Shop.generateReceiptID());
             form.setCardModel(db.getCardModel());
-            form.setCategoriesList(db.getCategories());
+            form.setCategoriesList(db.getDefaultCategories());
             form.createBasePurchaseForm();
             form.setVisible(true);
 
@@ -781,7 +783,7 @@ public class Program {
     // If validation is successful, this method makes a clone of categories ready to be passed
     // to the makePurchase method in Shop
     private HashMap<Integer, Category> getPurchaseFormCategories(PurchaseEvent e) {
-        ArrayList<Category> defaultCategories = db.getCategories();
+        ArrayList<Category> defaultCategories = db.getDefaultCategories();
         HashMap<Integer, Category> purchaseCategories = new HashMap<>();
 
         if (validateCatValueFields(e.getCategoriesMap())) {

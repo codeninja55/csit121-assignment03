@@ -8,6 +8,7 @@ public class Category implements Comparable<Category> {
     private String name;
     private String description;
     private double amount;
+    private double totalAmount;
 
     /*============================== CONSTRUCTORS  ==============================*/
     public Category(String name) {
@@ -15,6 +16,7 @@ public class Category implements Comparable<Category> {
         this.name = name;
         this.description = "";
         this.amount = 0;
+        this.totalAmount = 0;
     }
 
     public Category(String name, String description) {
@@ -22,6 +24,7 @@ public class Category implements Comparable<Category> {
         this.name = name;
         this.description = description;
         this.amount = 0D;
+        this.totalAmount = 0D;
     }
 
     public Category(int id, String name, String description, double amount) {
@@ -29,6 +32,7 @@ public class Category implements Comparable<Category> {
         this.name = name;
         this.description = description;
         this.amount = amount;
+        this.totalAmount = 0D;
     }
 
     /*============================== COPY CONSTRUCTOR ==============================*/
@@ -37,10 +41,10 @@ public class Category implements Comparable<Category> {
     }
 
 // --Commented out by Inspection START (6/09/17 12:12 PM):
-//    /*============================== MUTATORS  ==============================*/
 //    void setId(int id) { this.id = id; }
 // --Commented out by Inspection STOP (6/09/17 12:12 PM)
 
+    /*============================== MUTATORS ==============================*/
     void setName(String name) { this.name = name; }
 
     void setDescription(String description) {
@@ -48,6 +52,8 @@ public class Category implements Comparable<Category> {
     }
 
     public void setAmount(double amount) { this.amount = amount; }
+
+    public void updateTotalAmount(double amount) { this.totalAmount += amount; }
 
     /*============================== ACCESSORS  ==============================*/
     public int getId() { return id; }
@@ -59,6 +65,8 @@ public class Category implements Comparable<Category> {
     }
 
     public double getAmount() { return amount; }
+
+    public double getTotalAmount() { return totalAmount; }
 
     public String toString() {
         return String.format("%n%s : $%.2f", name, amount);
