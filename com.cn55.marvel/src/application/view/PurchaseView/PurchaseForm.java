@@ -20,6 +20,7 @@ import java.util.HashMap;
 @SuppressWarnings("SameParameterValue")
 public class PurchaseForm extends JPanel {
     private int generatedReceiptID;
+    private String generatedCardID;
 
     private DefaultComboBoxModel<String> existingCardModel;
     private ArrayList<Category> categoriesList;
@@ -308,7 +309,7 @@ public class PurchaseForm extends JPanel {
         receiptIDTextField.setVisible(true);
 
         cardIDLabel.setVisible(true);
-        cardIDTextField.setText(Shop.getNextCardID());
+        cardIDTextField.setText(generatedCardID);
         cardIDTextField.setVisible(true);
 
         cardTypeLabel.setVisible(true);
@@ -349,6 +350,10 @@ public class PurchaseForm extends JPanel {
 
     /*============================== MUTATORS  ==============================*/
     public void setGeneratedReceiptID(int generatedReceiptID) { this.generatedReceiptID = generatedReceiptID; }
+
+    public void setGeneratedCardID(String generatedCardID) {
+        this.generatedCardID = generatedCardID;
+    }
 
     public void setCardModel(DefaultComboBoxModel<String> cardModel) { this.existingCardModel = cardModel; }
 

@@ -53,7 +53,7 @@ public class TestCode {
 
     private void testMakePurchases(int numOfPurchases, String id) {
         for (int i = 0; i < numOfPurchases; i++)
-            shop.makePurchase(id, Shop.generateReceiptID(), generateRandomCategoriesMap());
+            shop.makePurchase(id, GenereteID.setReceiptID(), generateRandomCategoriesMap());
     }
 
     private void createTestCode() {
@@ -124,9 +124,7 @@ public class TestCode {
 
         testMakePurchases(4,"MC10005");
 
-        testMakePurchases(2, "Cash");
-        shop.makePurchase("Cash", Shop.generateReceiptID(),
-                generateRandomCategoriesMap());
+        testMakePurchases(3, "Cash");
 
         testMakePurchases(2,"MC10016");
         testMakePurchases(2,"MC10005");

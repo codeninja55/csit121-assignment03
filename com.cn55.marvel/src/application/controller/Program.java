@@ -68,12 +68,13 @@ public class Program {
         this.mainFrame = new MainFrame();
         this.tabPane = mainFrame.getTabPane();
 
-        /* Observer Design Pattern - Registration and initial update calls */
+        /* DataObserver Design Pattern - Registration and initial update calls */
         this.cardViewPane = mainFrame.getCardViewPane();
         db.register(cardViewPane);
         cardViewPane.setSubject(db);
         cardViewPane.update();
         cardViewPane.setCardTableModel();
+
 
         this.purchaseViewPane = mainFrame.getPurchaseViewPane();
         db.register(purchaseViewPane);
@@ -404,7 +405,7 @@ public class Program {
             purchaseViewPane.add(form, BorderLayout.WEST);
 
             form.getPurchaseTypeCombo().setSelectedIndex(0);
-            form.setGeneratedReceiptID(Shop.generateReceiptID());
+            form.setGeneratedReceiptID(GenereteID.setReceiptID());
             form.setCardModel(db.getCardModel());
             form.setCategoriesList(db.getDefaultCategories());
             form.createBasePurchaseForm();

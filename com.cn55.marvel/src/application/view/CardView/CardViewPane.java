@@ -1,8 +1,8 @@
 package application.view.CardView;
 
 import application.model.CardModel.*;
-import application.model.Observer;
-import application.model.Subject;
+import application.model.DataObservable;
+import application.model.DataObserver;
 import application.view.CustomComponents.ResultsPane;
 import application.view.CustomComponents.Style;
 import application.view.CustomComponents.Toolbar;
@@ -17,8 +17,8 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 
-public class CardViewPane extends JPanel implements Observer {
-    private Subject database;
+public class CardViewPane extends JPanel implements DataObserver {
+    private DataObservable database;
 
     private ToolbarButton createCardBtn;
     private ToolbarButton deleteCardBtn;
@@ -144,8 +144,8 @@ public class CardViewPane extends JPanel implements Observer {
 
     /* OBSERVER DESIGN PATTERN IMPLEMENTATION */
     @Override
-    public void setSubject(Subject subject) {
-        this.database = subject;
+    public void setSubject(DataObservable dataObservable) {
+        this.database = dataObservable;
     }
 
     @Override

@@ -7,17 +7,17 @@ import application.model.PurchaseModel.Purchase;
 import java.util.ArrayList;
 
 @SuppressWarnings("unused")
-public interface Subject {
+public interface DataObservable {
 
     // Methods to register and unregister observers
-    void register(Observer obj);
-    void unregister(Observer obj);
+    void register(DataObserver obj);
+    void unregister(DataObserver obj);
 
     // Method to notify observers of change
     void notifyObservers();
 
     // Methods to get updates
-    ArrayList<Card> getCardsUpdate(Observer who);
-    ArrayList<Purchase> getPurchaseUpdate(Observer who);
-    ArrayList<Category> getCategoriesUpdate(Observer who);
+    ArrayList<Card> getCardsUpdate(DataObserver who);
+    ArrayList<Purchase> getPurchaseUpdate(DataObserver who);
+    ArrayList<Category> getCategoriesUpdate(DataObserver who);
 }

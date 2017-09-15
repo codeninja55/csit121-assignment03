@@ -1,9 +1,9 @@
 package application.view.PurchaseView;
 
-import application.model.Observer;
+import application.model.DataObservable;
+import application.model.DataObserver;
 import application.model.PurchaseModel.Purchase;
 import application.model.PurchaseModel.SortPurchaseType;
-import application.model.Subject;
 import application.view.CustomComponents.ResultsPane;
 import application.view.CustomComponents.Style;
 import application.view.CustomComponents.Toolbar;
@@ -17,12 +17,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 
-public class PurchaseViewPane extends JPanel implements Observer {
-    private Subject database;
+public class PurchaseViewPane extends JPanel implements DataObserver {
+    private DataObservable dataStoreModel;
     private final ToolbarButton createPurchaseBtn;
     private final ToolbarButton deletePurchaseBtn;
     private final ToolbarButton summaryBtn;
@@ -104,9 +102,9 @@ public class PurchaseViewPane extends JPanel implements Observer {
         this.createPurchaseListener = listener;
     }
 
-    /*public void setDeletePurchaseListener(ToolbarButtonListener listener) {
-        this.deletePurchaseListener = listener;
-    }*/
+    //public void setDeletePurchaseListener(ToolbarButtonListener listener) {
+    //    this.deletePurchaseListener = listener;
+    //}
 
     public void setSummaryListener(ToolbarButtonListener listener) {
         this.summaryListener = listener;
@@ -143,16 +141,14 @@ public class PurchaseViewPane extends JPanel implements Observer {
         purchaseTableModel.fireTableDataChanged();
     }
 
-    /* OBSERVER DESIGN PATTERN IMPLEMENTATION */
-    @Override
+    /* OBSERVER DESIGN PATTERN - DATA STORE OBSERVING IMPLEMENTATION */
     public void update() {
-        purchaseTableModel.setData(database.getPurchaseUpdate(this));
+        purchaseTableModel.setData(dataStoreModel.getPurchaseUpdate(this));
         purchaseTableModel.fireTableDataChanged();
     }
 
-    @Override
-    public void setSubject(Subject subject) {
-        this.database = subject;
+    public void setSubject(DataObservable dataObservable) {
+        this.dataStoreModel = dataObservable;
     }
 
     /*============================== ACCESSORS ==============================*/
@@ -185,7 +181,7 @@ public class PurchaseViewPane extends JPanel implements Observer {
                 if (viewPurchaseListener != null)
                     viewPurchaseListener.toolbarButtonEventOccurred();
             } else if (e.getSource() == deletePurchaseBtn) {
-                /* TEST CODE */
+                // TODO - TEST CODE
                 System.err.println("Purchase View Delete Purchase Not Impl Yet");
                 System.out.println("Delete Purchase Button Pressed");
             } else if (e.getSource() == summaryBtn)

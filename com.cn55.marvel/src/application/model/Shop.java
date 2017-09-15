@@ -13,12 +13,8 @@ import java.util.*;
 
 @SuppressWarnings("ConstantConditions")
 public class Shop {
-
     private static Shop shop;
     private final DataStoreModel db;
-    private static int cardIDCounter = 10000;
-    private static int categoryIDCounter = 100;
-    private static final Set<Integer> receiptSet = new HashSet<>();
 
     /*============================== CONSTRUCTORS  ==============================*/
     private Shop() {
@@ -33,31 +29,6 @@ public class Shop {
 
         return shop;
     }
-
-    /*============================== STATIC METHODS ==============================*/
-    public static int generateReceiptID() {
-        Random randomObj = new Random();
-
-        int receiptID;
-        receiptID = randomObj.ints(10000000,99999999).findFirst().getAsInt();
-
-        if (receiptSet.contains(receiptID)) {
-            return generateReceiptID();
-        } else {
-            addReceiptID(receiptID);
-            return receiptID;
-        }
-    }
-
-    public static String generateCardID() {
-        return "MC" + (++cardIDCounter);
-    }
-
-    public static int generateCategoryID() {
-        return categoryIDCounter++;
-    }
-
-    private static void addReceiptID(int receiptID) { receiptSet.add(receiptID); }
 
     /*============================== MUTATORS  ==============================*/
     public void makeCategory(Category category) {
@@ -133,14 +104,6 @@ public class Shop {
     }
 
     /*============================== ACCESSORS ==============================*/
-    public static String getNextCardID() {
-        return "MC" + (cardIDCounter + 1);
-    }
-
-    public static int getNextCategoryID() {
-        return categoryIDCounter;
-    }
-
     public DataStoreModel getDataStore() {
         return db;
     }

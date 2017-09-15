@@ -1,5 +1,6 @@
 package application.model.CategoryModel;
 
+import application.model.GenereteID;
 import application.model.Shop;
 
 public class Category implements Comparable<Category> {
@@ -12,7 +13,7 @@ public class Category implements Comparable<Category> {
 
     /*============================== CONSTRUCTORS  ==============================*/
     public Category(String name) {
-        this.id = Shop.generateCategoryID();
+        this.id = GenereteID.setCategoryID();
         this.name = name;
         this.description = "";
         this.amount = 0;
@@ -20,7 +21,7 @@ public class Category implements Comparable<Category> {
     }
 
     public Category(String name, String description) {
-        this.id = Shop.generateCategoryID();
+        this.id = GenereteID.setCategoryID();
         this.name = name;
         this.description = description;
         this.amount = 0D;

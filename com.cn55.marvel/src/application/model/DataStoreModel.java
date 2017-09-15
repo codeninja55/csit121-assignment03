@@ -10,9 +10,9 @@ import javax.swing.*;
 import java.util.*;
 
 @SuppressWarnings("ConstantConditions")
-public class DataStoreModel implements Subject {
+public class DataStoreModel implements DataObservable {
 
-    private final ArrayList<application.model.Observer> observers;
+    private final ArrayList<DataObserver> dataObservers;
     private final ArrayList<Card> cards;
     private HashMap<String, Integer> cardMap;
     private final ArrayList<Purchase> purchases;
@@ -23,7 +23,7 @@ public class DataStoreModel implements Subject {
     /*============================== CONSTRUCTORS  ==============================*/
     // Private modifier prevents any other class from instantiating
     DataStoreModel() {
-        this.observers = new ArrayList<>();
+        this.dataObservers = new ArrayList<>();
         this.cards = new ArrayList<>();
         this.cardMap = new HashMap<>();
         this.purchases = new ArrayList<>();
@@ -119,35 +119,28 @@ public class DataStoreModel implements Subject {
     }
 
     /*============================== OBSERVER DESIGN PATTERN ==============================*/
-    /* Implement Subject interface making this object instance a Subject */
-    @Override
-    public void register(application.model.Observer obj) {
-        observers.add(obj);
+    /* Implement DataObservable interface making this object instance a DataObservable */
+    public void register(DataObserver obj) {
+        dataObservers.add(obj);
     }
 
-    @Override
-    public void unregister(application.model.Observer obj) {
-        observers.remove(obj);
+    public void unregister(DataObserver obj) {
+        dataObservers.remove(obj);
     }
 
-    @Override
     public void notifyObservers() {
-        observers.forEach(application.model.Observer::update);
+        dataObservers.forEach(DataObserver::update);
     }
 
-    @Override
-    public ArrayList<Card> getCardsUpdate(application.model.Observer who) {
+    public ArrayList<Card> getCardsUpdate(DataObserver who) {
         return cards;
     }
 
-    @Override
-    public ArrayList<Purchase> getPurchaseUpdate(application.model.Observer who) {
+    public ArrayList<Purchase> getPurchaseUpdate(DataObserver who) {
         return purchases;
     }
 
-    @Override
-    public ArrayList<Category> getCategoriesUpdate(Observer who) {
+    public ArrayList<Category> getCategoriesUpdate(DataObserver who) {
         return defaultCategories;
     }
-
 }

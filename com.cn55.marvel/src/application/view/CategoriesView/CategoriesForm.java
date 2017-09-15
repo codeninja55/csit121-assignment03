@@ -1,5 +1,6 @@
 package application.view.CategoriesView;
 
+import application.model.GenereteID;
 import application.model.Shop;
 import application.view.ButtonListener;
 import application.view.CustomComponents.*;
@@ -115,7 +116,7 @@ public class CategoriesForm extends JPanel {
                 c.setVisible(true);
         }
 
-        categoryIDTextField.setText(Integer.toString(Shop.getNextCategoryID()));
+        categoryIDTextField.setText(Integer.toString(GenereteID.getNextCategoryID()));
 
         /* BUTTON REGISTRATION AND CALLBACKS */
         FormListener handler = new FormListener();

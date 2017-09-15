@@ -1,5 +1,6 @@
 package application.model.CardModel;
 
+import application.model.GenereteID;
 import application.model.Shop;
 
 @SuppressWarnings("ALL")
@@ -12,7 +13,8 @@ public abstract class Card implements Comparable<Card> {
     /*============================== CONSTRUCTORS  ==============================*/
     // Default constructor
     Card() {
-        this.id = Shop.generateCardID();
+        this.id = GenereteID.setCardID();
+
         this.points = 0;
         this.cardType = null;
     }

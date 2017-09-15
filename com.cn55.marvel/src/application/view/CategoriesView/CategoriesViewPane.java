@@ -1,8 +1,8 @@
 package application.view.CategoriesView;
 
 import application.model.CategoryModel.Category;
-import application.model.Observer;
-import application.model.Subject;
+import application.model.DataObservable;
+import application.model.DataObserver;
 import application.view.CustomComponents.Style;
 import application.view.CustomComponents.Toolbar;
 import application.view.CustomComponents.ToolbarButton;
@@ -20,8 +20,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-public class CategoriesViewPane extends JPanel implements Observer {
-    private Subject database;
+public class CategoriesViewPane extends JPanel implements DataObserver {
+    private DataObservable database;
 
     private ToolbarButton createCategoryBtn;
     private ToolbarButton deleteCategoryBtn;
@@ -98,8 +98,8 @@ public class CategoriesViewPane extends JPanel implements Observer {
 
     /* OBSERVER DESIGN PATTERN IMPLEMENTATION */
     @Override
-    public void setSubject(Subject subject) {
-        this.database = subject;
+    public void setSubject(DataObservable dataObservable) {
+        this.database = dataObservable;
     }
 
     @Override
