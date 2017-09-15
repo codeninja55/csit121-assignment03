@@ -1,7 +1,5 @@
 package application.model;
 
-/* THIS CLASS IS A LOCAL STORE DATA OBJECT */
-
 import application.model.CardModel.Card;
 import application.model.CategoryModel.Category;
 import application.model.PurchaseModel.Purchase;
@@ -9,8 +7,9 @@ import application.model.PurchaseModel.Purchase;
 import javax.swing.*;
 import java.util.*;
 
+/* Data Abstract Object (DAO) Implementation Layer */
 @SuppressWarnings("ConstantConditions")
-public class DataStoreModel implements DataObservable {
+public class DataDAO implements DataObservable {
 
     private final ArrayList<DataObserver> dataObservers;
     private final ArrayList<Card> cards;
@@ -22,7 +21,7 @@ public class DataStoreModel implements DataObservable {
 
     /*============================== CONSTRUCTORS  ==============================*/
     // Private modifier prevents any other class from instantiating
-    DataStoreModel() {
+    DataDAO() {
         this.dataObservers = new ArrayList<>();
         this.cards = new ArrayList<>();
         this.cardMap = new HashMap<>();
