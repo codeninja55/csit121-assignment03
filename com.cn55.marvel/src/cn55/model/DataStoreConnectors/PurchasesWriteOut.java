@@ -1,7 +1,8 @@
 package cn55.model.DataStoreConnectors;
 
-import cn55.model.Category;
-import cn55.model.Purchase;
+import cn55.model.CardModel.CardType;
+import cn55.model.CategoryModel.Category;
+import cn55.model.PurchaseModel.Purchase;
 import cn55.model.Shop;
 
 import java.io.BufferedWriter;
@@ -17,26 +18,30 @@ public class PurchasesWriteOut implements WriteCSV {
 
     @Override
     public void writeOut() {
-        String purchaseHeaders = "purchaseTime,receiptID,cardType,cardID,categories[]";
         Path purchaseStoragePath = Paths.get("com.cn55.marvel/src/cn55/model/PersistentData/purchaseStorage.csv");
         openFile(purchaseStoragePath);
 
         try{
-            output.append(purchaseHeaders);
-            output.newLine();
-
             for (Purchase p : Shop.getShopInstance().getDataStore().getPurchases()) {
                 int lastLine = 1;
-                output.append(p.getPurchaseTime().toString()).append(DEFAULT_SEPARATOR);
-                output.append(Integer.toString(p.getReceiptID())).append(DEFAULT_SEPARATOR);
-                output.append(p.getCardType()).append(DEFAULT_SEPARATOR);
-                output.append(p.getCardID()).append(DEFAULT_SEPARATOR);
-                output.append("{");
+                output.append(p.getPurchaseTime())
+                        .append(DEFAULT_SEPARATOR)
+                        .append(Integer.toString(p.getReceiptID()))
+                        .append(DEFAULT_SEPARATOR)
+                        .append(p.getCardType())
+                        .append(DEFAULT_SEPARATOR);
+
+                if (p.getCardType().equals(CardType.Cash.getName())) output.append("");
+                else output.append(p.getCardID());
+
+                output.append(DEFAULT_SEPARATOR).append("{");
                 for (Category c : p.getCategories().values()) {
-                    output.append("[").append(Integer.toString(c.getId())).append(DEFAULT_SEPARATOR);
-                    output.append(c.getName()).append(DEFAULT_SEPARATOR);
-                    output.append(c.getDescription()).append(DEFAULT_SEPARATOR);
-                    output.append(Double.toString(c.getAmount())).append("]");
+                    output.append("[")
+                            .append(Integer.toString(c.getId()))
+                            .append(DEFAULT_SEPARATOR)
+                            .append(c.getName()).append(DEFAULT_SEPARATOR)
+                            .append(c.getDescription()).append(DEFAULT_SEPARATOR)
+                            .append(Double.toString(c.getAmount())).append("]");
 
                     if (lastLine != p.getCategories().size()) {
                         output.append(DEFAULT_SEPARATOR);
