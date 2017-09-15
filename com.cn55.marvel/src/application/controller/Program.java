@@ -28,9 +28,7 @@ import application.view.SearchForm.SearchForm;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import java.awt.*;
-import java.awt.event.ItemEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -53,19 +51,29 @@ public class Program {
         /* Strategy Design Pattern - Implementation of writing and reading buried in concrete classes */
         ReadCSV readCategoriesCSV = new CategoriesReadImpl(), readCardsCSV = new CardsReadImpl(), readPurchaseCSV = new PurchasesReadImpl();
         readCategoriesCSV.read();
+        //new TestCode(shop);
         readCardsCSV.read();
         readPurchaseCSV.read();
 
-        /*new TestCode(shop);
-        WriteCSV writeCards = new CardsWriteOut();
-        writeCards.writeOut();
-        WriteCSV writePurchases = new PurchasesWriteOut();
-        writePurchases.writeOut();
-        WriteCSV writeCategories = new CategoriesWriteOut();
-        writeCategories.writeOut();*/
-
         this.mainFrame = new MainFrame();
         this.tabPane = mainFrame.getTabPane();
+
+        /* Windows Closing Listener */
+        mainFrame.addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                super.windowClosing(e);
+
+                WriteCSV writeCards = new CardsWriteOut();
+                writeCards.writeOut();
+                WriteCSV writePurchases = new PurchasesWriteOut();
+                writePurchases.writeOut();
+                WriteCSV writeCategories = new CategoriesWriteOut();
+                writeCategories.writeOut();
+
+                System.gc(); // Garbage collector
+                mainFrame.dispose();
+            }
+        });
 
         /* DataObserver Design Pattern - Registration and initial update calls */
         this.cardViewPane = mainFrame.getCardViewPane();
@@ -834,5 +842,7 @@ public class Program {
         return null;
     }
     /*====================================================================*/
+
+    /*============================== WINDOWS CLOSING HANDLER ==============================*/
 
 }
