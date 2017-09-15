@@ -14,13 +14,11 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class CardsReadImpl implements ReadCSV {
-
     private static final String DEFAULT_SEPARATOR = ",";
     private BufferedReader input;
 
     @Override
     public void read() {
-
         Path cardsStoragePath = Paths.get("com.cn55.marvel/src/PersistentData/CardsStorage.csv");
         String line;
         openFile(cardsStoragePath);
@@ -29,12 +27,7 @@ public class CardsReadImpl implements ReadCSV {
             while((line = input.readLine()) != null) {
                 String[] readLine = line.split(DEFAULT_SEPARATOR);
 
-                // readLine[0] // ID
-                // readLine[1] // cardType
-                // readLine[2] // name
-                // readLine[3] // email
-                // readLine[4] // balance
-                // readLine[5] // points
+                // readLine[0] = ID | [1] = cardType | [2] = name | [3] = email | readLine[4] = balance | [5] = points
 
                 Card importCard = null;
 
@@ -53,7 +46,6 @@ public class CardsReadImpl implements ReadCSV {
         } catch (IOException e) {
             System.err.println("IOException: " + e.getMessage());
         }
-
     }
 
     @Override
