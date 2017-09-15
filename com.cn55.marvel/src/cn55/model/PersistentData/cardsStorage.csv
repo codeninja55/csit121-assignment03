@@ -1,21 +1,21 @@
-MC10001,AnonCard,,,,6.7
-MC10002,AnonCard,,,,20.8
-MC10003,BasicCard,Natasha Romanov,blackwidow@avengers.team,5510.0,82.65
-MC10004,BasicCard,Steve Rogers,captain_a@avengers.team,1850.0,27.75
-MC10005,PremiumCard,Tony Stark,ironman@avengers.team,6710.0,201.3
-MC10006,BasicCard,Bruce Banner,hulk@avengers.team,2630.0,39.45
-MC10007,PremiumCard,Nick Fury,nick@shield.com,2530.0,75.89999999999999
-MC10008,AnonCard,,,,18.4
+MC10001,AnonCard,,,,4.6000000000000005
+MC10002,AnonCard,,,,26.9
+MC10003,BasicCard,Natasha Romanov,blackwidow@avengers.team,5700.0,85.5
+MC10004,BasicCard,Steve Rogers,captain_a@avengers.team,2080.0,31.199999999999996
+MC10005,PremiumCard,Tony Stark,ironman@avengers.team,8110.0,243.29999999999995
+MC10006,BasicCard,Bruce Banner,hulk@avengers.team,1020.0,15.3
+MC10007,PremiumCard,Nick Fury,nick@shield.com,2140.0,64.2
+MC10008,AnonCard,,,,20.9
 MC10009,AnonCard,,,,0.0
 MC10010,BasicCard,Hank Pym,ants@avengers.team,0.0,0.0
 MC10011,BasicCard,Peter Parker,spidey@avengers.team,0.0,0.0
-MC10012,PremiumCard,Danny Rand,danny@randcorp.com,6310.0,39.3
-MC10013,PremiumCard,Professor Charles Xavier,x@xmen.com,1240338.0,46.2
+MC10012,PremiumCard,Danny Rand,danny@randcorp.com,7020.0,60.599999999999994
+MC10013,PremiumCard,Professor Charles Xavier,x@xmen.com,1239938.0,34.199999999999996
 MC10014,BasicCard,Matthew Murdock,thedevil@hellskitchen.com,666.0,0.0
 MC10015,BasicCard,Thor Odinson,thor@asgard.com,9000.0,0.0
 MC10016,BasicCard,Clint Barton,better_than_arrow@marvel.com,500.0,0.0
-MC10017,AnonCard,,,,36.2
-MC10018,PremiumCard,Oliver Queen,the_best_arrow_user@dc.comics,3780.0,68.4
+MC10017,AnonCard,,,,32.800000000000004
+MC10018,PremiumCard,Oliver Queen,the_best_arrow_user@dc.comics,3880.0,71.39999999999999
 MC10019,BasicCard,Loki,the-baddest-dude@asgard.com,0.0,0.0
 MC10020,AnonCard,,,,0.0
 MC10021,AnonCard,,,,0.0
