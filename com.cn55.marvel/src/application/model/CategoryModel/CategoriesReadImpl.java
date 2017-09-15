@@ -31,7 +31,7 @@ public class CategoriesReadImpl implements ReadCSV {
                                                         readLine[2], Double.parseDouble(readLine[3]));
 
                 Generator.updateCategoryIDCounter();
-                Shop.getShopInstance().getDataStore().addCategory(importedCategory);
+                Shop.getShopInstance().getDataStore().createCategory(importedCategory);
             }
         } catch (IOException e) {
             System.err.println("IOException: " + e.getMessage());

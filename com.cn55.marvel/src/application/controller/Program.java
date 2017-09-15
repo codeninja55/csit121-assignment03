@@ -2,19 +2,29 @@ package application.controller;
 
 import application.controller.Validator.*;
 import application.model.CardModel.*;
-import application.model.CategoryModel.*;
+import application.model.CategoryModel.CategoriesReadImpl;
+import application.model.CategoryModel.Category;
 import application.model.*;
-import application.model.DataStoreWriters.*;
-import application.model.PurchaseModel.*;
+import application.model.DataStoreWriters.CardsWriteOut;
+import application.model.DataStoreWriters.CategoriesWriteOut;
+import application.model.DataStoreWriters.PurchasesWriteOut;
+import application.model.PurchaseModel.Purchase;
+import application.model.PurchaseModel.PurchaseType;
+import application.model.PurchaseModel.PurchasesReadImpl;
+import application.model.PurchaseModel.SortPurchaseType;
 import application.view.CardView.CardForm;
 import application.view.CardView.CardViewPane;
 import application.view.CategoriesView.CategoriesForm;
 import application.view.CategoriesView.CategoriesViewPane;
-import application.view.CustomComponents.*;
+import application.view.CustomComponents.FormFormattedTextField;
+import application.view.CustomComponents.ResultsPane;
+import application.view.CustomComponents.Style;
 import application.view.DeleteForm.DeleteCardForm;
 import application.view.DeleteForm.DeleteCategoryForm;
 import application.view.MainFrame;
-import application.view.PurchaseView.*;
+import application.view.PurchaseView.PurchaseEvent;
+import application.view.PurchaseView.PurchaseForm;
+import application.view.PurchaseView.PurchaseViewPane;
 import application.view.SearchForm.SearchForm;
 
 import javax.swing.*;
@@ -24,7 +34,6 @@ import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.List;
 
 public class Program {
 
@@ -37,7 +46,6 @@ public class Program {
     private final CategoriesViewPane categoriesViewPane;
 
     private final WriteCSV writeCategories, writeCards, writePurchases;
-    private FormRule cardIDRule;
 
     public Program() {
         /* Singleton Design Pattern - Only one instance of Shop available */
@@ -98,9 +106,6 @@ public class Program {
         categoriesViewPane.setSubject(db);
         categoriesViewPane.update();
         categoriesViewPane.setCategoriesTableModel();
-
-        /* STRATEGY PATTERN - Instantiate Validation rules */
-        cardIDRule = new CardIDRule();
 
         setupViewListeners();
     }
@@ -402,7 +407,7 @@ public class Program {
             form.getPurchaseTypeCombo().setSelectedIndex(0);
             form.setGeneratedReceiptID(Generator.setReceiptID());
             form.setCardModel(db.getCardModel());
-            form.setCategoriesList(db.getDefaultCategories());
+            form.setCategoriesList(new ArrayList<>(db.getCategories().values()));
             form.createBasePurchaseForm();
             form.setVisible(true);
 
@@ -592,12 +597,11 @@ public class Program {
             //ADD A DELETE BUTTON LISTENER AFTER CREATING FORM
             form.setDeleteListener(e -> {
                 String categoryIDStr = e.getIdTextField().getText();
-
+                int categoryID = Integer.parseInt(categoryIDStr);
                 //SETUP VALIDATOR FOR CATEGORY ID
                 FormValidData input = new FormValidData();
                 input.setCategoryID(categoryIDStr);
                 FormRule validIDRule = new CategoryIDRule();
-                ExistsRule existsIDRule = new CategoryExistsRule();
 
                 if (!validIDRule.validate(input)) {
                     e.getErrorLabel().setVisible(false);
@@ -607,17 +611,13 @@ public class Program {
                     e.getIdTextField().setForeground(Style.redA700());
                     e.getDeleteErrorLabel().setVisible(true);
                 } else {
-                    int categoryIndex = existsIDRule.existsValidating(input);
-
                     if (Integer.parseInt(categoryIDStr) == 100) {
                         // Do NOT allow user to delete category Others
                         e.getErrorLabel().setVisible(false);
                         e.getRuleErrLabel().setVisible(false);
                         e.getOthersDeleteErrLabel().setVisible(true);
                         e.getDeleteErrorLabel().setVisible(true);
-                    } else if (categoryIndex >= 0) {
-                        int categoryID = Integer.parseInt(categoryIDStr);
-
+                    } else if (db.getCategories().containsKey(categoryID)) {
                         e.getErrorLabel().setVisible(false);
                         e.getRuleErrLabel().setVisible(false);
                         e.getOthersDeleteErrLabel().setVisible(false);
@@ -776,7 +776,7 @@ public class Program {
     // If validation is successful, this method makes a clone of categories ready to be passed
     // to the makePurchase method in Shop
     private HashMap<Integer, Category> getPurchaseFormCategories(PurchaseEvent e) {
-        ArrayList<Category> defaultCategories = db.getDefaultCategories();
+        ArrayList<Category> defaultCategories = new ArrayList<>(db.getCategories().values());
         HashMap<Integer, Category> purchaseCategories = new HashMap<>();
 
         if (validateCatValueFields(e.getCategoriesMap())) {

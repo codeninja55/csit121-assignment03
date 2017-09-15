@@ -7,7 +7,10 @@ import application.model.PurchaseModel.Purchase;
 import application.model.PurchaseModel.PurchaseDAO;
 
 import javax.swing.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.TreeMap;
 
 /* Data Abstract Object (DAO) Implementation Layer */
 @SuppressWarnings("ConstantConditions")
@@ -16,8 +19,7 @@ public class DataDAO implements DataObservable, CardsDAO, PurchaseDAO {
     private final ArrayList<DataObserver> dataObservers;
     private final HashMap<String,Card> cards;
     private final HashMap<Integer,Purchase> purchases;
-    private final ArrayList<Category> defaultCategories;
-    private HashMap<Integer, Integer> categoriesMap;
+    private final HashMap<Integer,Category> categories;
 
     /*============================== CONSTRUCTORS  ==============================*/
     // Private modifier prevents any other class from instantiating
@@ -25,20 +27,12 @@ public class DataDAO implements DataObservable, CardsDAO, PurchaseDAO {
         this.cards = new HashMap<>();
         this.purchases = new HashMap<>();
         this.dataObservers = new ArrayList<>();
-        this.defaultCategories = new ArrayList<>();
-        this.categoriesMap = new HashMap<>();
+        this.categories = new HashMap<>();
     }
 
     /*============================== CREATE ==============================*/
-    void mapCategories() {
-        HashMap<Integer, Integer> categoriesMap = new HashMap<>();
-        defaultCategories.forEach((category)->categoriesMap.put(category.getId(), defaultCategories.indexOf(category)));
-        this.categoriesMap = categoriesMap;
-    }
-
-    public void addCategory(Category category) {
-        defaultCategories.add(category);
-        mapCategories();
+    public void createCategory(Category category) {
+        categories.put(category.getId(), category);
         notifyObservers();
     }
 
@@ -78,16 +72,13 @@ public class DataDAO implements DataObservable, CardsDAO, PurchaseDAO {
         return purchases.get(receiptID);
     }
 
-    public ArrayList<Category> getDefaultCategories() { return defaultCategories; }
-
-    public HashMap<Integer, Integer> getCategoriesMap() {
-        return categoriesMap;
+    public HashMap<Integer, Category> getCategories() {
+        return categories;
     }
 
     /*============================== UPDATE ==============================*/
-
     private void updateCategoryTotalAmount(HashMap<Integer,Category> purchaseCategoriesMap) {
-        defaultCategories.forEach((c) -> c.updateTotalAmount(purchaseCategoriesMap.get(c.getId()).getAmount()));
+        categories.values().forEach((c) -> c.updateTotalAmount(purchaseCategoriesMap.get(c.getId()).getAmount()));
     }
 
     /*============================== DELETE ==============================*/
@@ -100,9 +91,8 @@ public class DataDAO implements DataObservable, CardsDAO, PurchaseDAO {
         System.out.println("NOT YET IMPLEMENTED");
     }
 
-    void removeCategory(int index) {
-        defaultCategories.remove(index);
-        mapCategories();
+    void deleteCategory(int id) {
+        categories.remove(id);
         notifyObservers();
     }
 
@@ -129,7 +119,7 @@ public class DataDAO implements DataObservable, CardsDAO, PurchaseDAO {
         return new TreeMap<>(purchases);
     }
 
-    public ArrayList<Category> getCategoriesUpdate(DataObserver who) {
-        return defaultCategories;
+    public TreeMap<Integer, Category> getCategoriesUpdate(DataObserver who) {
+        return new TreeMap<>(categories);
     }
 }

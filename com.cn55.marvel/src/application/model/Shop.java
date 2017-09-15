@@ -29,7 +29,7 @@ public class Shop {
 
     /*============================== MUTATORS  ==============================*/
     public void makeCategory(Category category) {
-        db.addCategory(category);
+        db.createCategory(category);
     }
 
     public void makePurchase(String cardID, int receiptID, HashMap<Integer, Category> categories) {
@@ -78,7 +78,6 @@ public class Shop {
     }
 
     public void deleteCategory(int categoryID) {
-        db.mapCategories();
         // Update the amount for each purchase
         db.getAllPurchases().values().forEach((Purchase p) -> {
             Category other = p.getCategories().get(100);
@@ -87,10 +86,10 @@ public class Shop {
         });
 
         // Update the total amounts in the defaultCategories List
-        double deletedCategoryValue = db.getDefaultCategories().get(db.getCategoriesMap().get(categoryID)).getTotalAmount();
-        db.getDefaultCategories().get(db.getCategoriesMap().get(100)).updateTotalAmount(deletedCategoryValue);
+        double deletedCategoryValue = db.getCategories().get(categoryID).getTotalAmount();
+        db.getCategories().get(100).updateTotalAmount(deletedCategoryValue);
 
-        db.removeCategory(db.getCategoriesMap().get(categoryID));
+        db.deleteCategory(categoryID);
     }
 
     /*============================== ACCESSORS ==============================*/

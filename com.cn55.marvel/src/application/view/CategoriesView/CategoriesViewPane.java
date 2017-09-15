@@ -21,7 +21,7 @@ import java.util.Collections;
 import java.util.Comparator;
 
 public class CategoriesViewPane extends JPanel implements DataObserver {
-    private DataObservable database;
+    private DataObservable dataDAO;
 
     private ToolbarButton createCategoryBtn;
     private ToolbarButton deleteCategoryBtn;
@@ -97,14 +97,14 @@ public class CategoriesViewPane extends JPanel implements DataObserver {
     }
 
     /* OBSERVER DESIGN PATTERN IMPLEMENTATION */
-    @Override
     public void setSubject(DataObservable dataObservable) {
-        this.database = dataObservable;
+        this.dataDAO = dataObservable;
     }
 
-    @Override
     public void update() {
-        categoriesTableModel.setData(database.getCategoriesUpdate(this));
+        ArrayList<Category> allCategories = new ArrayList<>();
+        allCategories.addAll(dataDAO.getCategoriesUpdate(this).values());
+        categoriesTableModel.setData(allCategories);
         categoriesTableModel.fireTableDataChanged();
     }
 

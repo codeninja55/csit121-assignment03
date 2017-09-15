@@ -45,7 +45,7 @@ public class TestCode {
 
     private HashMap<Integer, Category> generateRandomCategoriesMap() {
         HashMap<Integer, Category> testingCategoryMap = new HashMap<>();
-        db.getDefaultCategories().forEach((cat) -> testingCategoryMap.put(cat.getId(), new Category(cat)));
+        db.getCategories().values().forEach((cat) -> testingCategoryMap.put(cat.getId(), new Category(cat)));
         testingCategoryMap.forEach((k,v)->v.setAmount(generateRandomValue()));
 
         return testingCategoryMap;
@@ -146,7 +146,7 @@ public class TestCode {
 
     private void createTooManyCategories() {
         for (int i = 0; i < 35; i++)
-            db.addCategory(new Category(String.format("%s%d","Testing", i)));
+            db.createCategory(new Category(String.format("%s%d","Testing", i)));
     }
 
 }

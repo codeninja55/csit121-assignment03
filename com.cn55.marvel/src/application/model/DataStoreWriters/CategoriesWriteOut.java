@@ -21,7 +21,7 @@ public class CategoriesWriteOut implements WriteCSV {
         openFile(categoriesStoragePath);
 
         try{
-            for (Category c : Shop.getShopInstance().getDataStore().getDefaultCategories()) {
+            for (Category c : Shop.getShopInstance().getDataStore().getCategories().values()) {
                 output.append(Integer.toString(c.getId())).append(DEFAULT_SEPARATOR);
                 output.append(c.getName()).append(DEFAULT_SEPARATOR);
                 output.append(c.getDescription()).append(DEFAULT_SEPARATOR);
