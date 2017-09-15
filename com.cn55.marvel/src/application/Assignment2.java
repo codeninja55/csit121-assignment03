@@ -10,12 +10,6 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-/*
- * @author Dinh Che
- * Student Number: 5721970
- * Email: dbac496@uowmail.edu.au
- */
-
 class Assignment2 {
     public static void main(String[] args) {
 
