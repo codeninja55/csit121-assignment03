@@ -66,9 +66,15 @@ public class Program {
         mainFrame.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
                 super.windowClosing(e);
-                writeCategories.writeOut();
-                writeCards.writeOut();
-                writePurchases.writeOut();
+
+                int confirmSave = JOptionPane.showConfirmDialog(mainFrame,"Would you like to save your session data?",
+                        "Save on Exit", JOptionPane.OK_CANCEL_OPTION,JOptionPane.WARNING_MESSAGE);
+
+                if (confirmSave == JOptionPane.OK_OPTION) {
+                    writeCategories.writeOut();
+                    writeCards.writeOut();
+                    writePurchases.writeOut();
+                }
 
                 System.gc(); // Garbage collector
                 mainFrame.dispose();
