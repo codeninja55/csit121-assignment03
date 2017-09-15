@@ -29,30 +29,26 @@ public class CardsReadImpl implements ReadCSV {
             while((line = input.readLine()) != null) {
                 String[] readLine = line.split(DEFAULT_SEPARATOR);
 
-                System.out.println(readLine[0]); // ID
-                System.out.println(readLine[1]); // cardType
-                System.out.println(readLine[2]); // name
-                System.out.println(readLine[3]); // email
-                System.out.println(readLine[4]); // balance
-                System.out.println(readLine[5]); // points
+                // readLine[0] // ID
+                // readLine[1] // cardType
+                // readLine[2] // name
+                // readLine[3] // email
+                // readLine[4] // balance
+                // readLine[5] // points
 
                 Card importCard = null;
 
-                if (readLine[1].equals(CardType.AnonCard.getName())) {
-                    importCard = new AnonCard(readLine[0], readLine[1], Double.parseDouble(readLine[5]));
-                } else if (readLine[1].equals(CardType.BasicCard.getName())) {
+                if (readLine[1].equals(CardType.AnonCard.getName()))
+                    importCard = new AnonCard(readLine[0], readLine[1]);
+                else if (readLine[1].equals(CardType.BasicCard.getName()))
                     importCard = new BasicCard(readLine[2], readLine[3], Double.parseDouble(readLine[4]));
-                } else if (readLine[1].equals(CardType.PremiumCard.getName())) {
+                else if (readLine[1].equals(CardType.PremiumCard.getName()))
                     importCard = new PremiumCard(readLine[2], readLine[3], Double.parseDouble(readLine[4]));
-                }
+
+                assert importCard != null;
+                importCard.setPoints(Double.parseDouble(readLine[5]));
 
                 Shop.getShopInstance().getDataStore().addCards(importCard);
-
-                System.out.println(importCard);
-                System.out.println(Shop.getShopInstance().getDataStore().getCards());
-                /*for (String s : readLine) {
-                    System.out.println(s);
-                }*/
             }
         } catch (IOException e) {
             System.err.println("IOException: " + e.getMessage());
