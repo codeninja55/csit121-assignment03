@@ -2,6 +2,8 @@ package application.view.CustomComponents;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 /* NOTE:
 *  To make this appear and hide dynamically, run these steps in Controller on Event Occurred
@@ -21,12 +23,10 @@ public class ResultsPane extends JPanel {
 
     public ResultsPane(String paneName) {
         setLayout(new BorderLayout());
-
         Dimension resultsDim = getPreferredSize();
         resultsDim.width = 800;
         setPreferredSize(resultsDim);
         setMinimumSize(getPreferredSize());
-
         setName(paneName);
         setVisible(false);
     }
@@ -59,13 +59,11 @@ public class ResultsPane extends JPanel {
             textPaneDim.width = 800;
             setPreferredSize(textPaneDim);
             setMinimumSize(getPreferredSize());
-
             setBorder(Style.resultsPaneBorder());
             setFont(Style.textPaneFont());
             setBackground(Style.blueGrey400());
             setForeground(Style.grey50());
             setText(null);
-
             setVisible(true);
             ResultsPane.this.revalidate();
             ResultsPane.this.repaint();
