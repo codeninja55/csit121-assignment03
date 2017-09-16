@@ -34,6 +34,7 @@ import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.function.Predicate;
 
 public class Program {
 
@@ -487,20 +488,30 @@ public class Program {
             ResultsPane.ResultsTextPane resultsTextPane = resultsPane.getResultsTextPane();
             setPurchaseViewPaneMouseListeners();
 
-            double cashTotal = 0;
-            double cardTotal = 0;
-            double allTotal = 0;
+            Predicate<Purchase> cashPurchases = e ->
+                    (e.getCardType().equals(CardType.Cash.getName()));
 
-            for (Purchase purchase : db.getAllPurchases().values()) {
-                double purchaseTotal = purchase.getCategoriesTotal();
-                if (purchase.getCardType().equals(CardType.Cash.getName()))
-                    cashTotal += purchaseTotal;
-                else
-                    cardTotal += purchaseTotal;
-                allTotal += purchaseTotal;
-            }
+            double cashTotal = db.getAllPurchases().values().stream()
+                    .filter(cashPurchases)
+                    .mapToDouble(Purchase::getCategoriesTotal)
+                    .sum();
 
-            String resultsText = String.format("%n%n%s%n%n%s: $%.2f%n%n%s: $%.2f%n%n%s: $%.2f", "SUMMARY OF PURCHASES",
+            Predicate<Purchase> cardPurchases = new Predicate<Purchase>() {
+                public boolean test(Purchase purchase) {
+                    return !purchase.getCardType().equals(CardType.Cash.getName());
+                }
+            };
+
+            double cardTotal = db.getAllPurchases().values().stream()
+                    .filter(cardPurchases)
+                    .mapToDouble(Purchase::getCategoriesTotal)
+                    .sum();
+
+            double allTotal = db.getAllPurchases().values().stream()
+                    .mapToDouble(Purchase::getCategoriesTotal)
+                    .sum();
+
+            String resultsText = String.format("%n%s%n%n%s: $%.2f%n%n%s: $%.2f%n%n%s: $%.2f", "SUMMARY OF PURCHASES",
                     "Card Purchase Total", cardTotal,
                     "Cash Purchase Total", cashTotal,
                     "Total for All Purchases", allTotal);
