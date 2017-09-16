@@ -20,12 +20,10 @@ import java.util.ArrayList;
 
 public class CardViewPane extends JPanel implements DataObserver {
     private DataObservable dataDAO;
-
     private ToolbarButton createCardBtn;
     private ToolbarButton deleteCardBtn;
     private ToolbarButton searchBtn;
     private ToolbarButton viewBtn;
-
     private CardTableModel cardTableModel;
     private JComboBox<String> sortedCombo;
     private JTable cardTablePane;
@@ -186,10 +184,6 @@ public class CardViewPane extends JPanel implements DataObserver {
         return cardTablePane;
     }
 
-    public CardTableModel getCardTableModel() {
-        return cardTableModel;
-    }
-
     public ResultsPane getResultsPane() {
         return resultsPane;
     }
@@ -236,7 +230,6 @@ public class CardViewPane extends JPanel implements DataObserver {
 
         public Object getValueAt(int rowIndex, int columnIndex) {
             Card card = cards.get(rowIndex);
-
             switch (columnIndex) {
                 case 0:
                     return card.getID();

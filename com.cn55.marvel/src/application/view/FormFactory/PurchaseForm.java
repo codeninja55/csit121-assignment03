@@ -447,7 +447,6 @@ public class PurchaseForm extends JPanel implements FormFactory {
     }
 
     public JPanel getBaseCreatePurchaseForm() {
-
         return baseCreatePurchaseForm;
     }
 
@@ -458,16 +457,13 @@ public class PurchaseForm extends JPanel implements FormFactory {
     private class FormListener implements ActionListener, ItemListener {
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() == cancelBtn) {
-                if (cancelListener != null) {
-                    cancelListener.buttonActionOccurred();
-                }
+                if (cancelListener != null) cancelListener.buttonActionOccurred();
             } else if (e.getSource() == createBtn) {
                 PurchaseEvent event = new PurchaseEvent(this, purchaseTypeCombo, categoriesMap, receiptIDTextField,
                         cardIDLabel, cardIDTextField, cardIDErrorLabel, existingCardCombo, anonCardRB, basicCardRB,
                         premiumCardRB, cardNameLabel, cardNameTextField, cardEmailLabel, cardEmailTextField, purchaseErrorLabel);
 
-                if (createPurchaseListener != null)
-                    createPurchaseListener.formActionOccurred(event);
+                if (createPurchaseListener != null) createPurchaseListener.formActionOccurred(event);
             } else if (e.getSource() == clearBtn) {
                 for (Component c : baseCreatePurchaseForm.getComponents()) {
                     if (c instanceof JTextField && ((JTextField) c).isEditable())
