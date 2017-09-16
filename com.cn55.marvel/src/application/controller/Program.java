@@ -48,6 +48,7 @@ public class Program {
         shop = Shop.getShopInstance();
         db = shop.getDataStore();
 
+        // TODO - Move connection, writing, and reading methods into DataDAO
         /* Strategy Design Pattern - Implementation of writing and reading buried in concrete classes */
         ReadCSV readCategoriesCSV = new CategoriesReadImpl();
         ReadCSV readCardsCSV = new CardsReadImpl();
@@ -91,10 +92,12 @@ public class Program {
                     purchaseViewPane.getResultsPane().setVisible(false);
                     removePurchaseForms();
                 }
+
                 if (tabPane.getSelectedComponent() != cardViewPane) {
                     cardViewPane.getResultsPane().setVisible(false);
                     removeCardForms();
                 }
+
                 if (tabPane.getSelectedComponent() != categoriesViewPane) {
                     removeCategoryForms();
                 }
@@ -515,7 +518,7 @@ public class Program {
         purchaseViewPane.setViewPurchaseListener(() -> {
             if (purchaseViewPane.getPurchaseTablePane().getSelectedRow() >= 0) {
                 int selectedRow = purchaseViewPane.getPurchaseTablePane().getSelectedRow();
-                Integer receiptID = (Integer) purchaseViewPane.getPurchaseTablePane().getValueAt(selectedRow, 0);
+                int receiptID = (Integer)purchaseViewPane.getPurchaseTablePane().getValueAt(selectedRow, 0);
 
                 ResultsPane resultsPane = purchaseViewPane.getResultsPane();
                 resultsPane.setResultsTextPane();
@@ -676,7 +679,7 @@ public class Program {
         for (Component comp : cardViewPane.getComponents()) {
             if (comp instanceof CardForm || comp instanceof DeleteCardForm || comp instanceof SearchForm) {
                 comp.setVisible(false);
-                if (cardViewPane.getCardForm().getBaseCreateCardForm() != null)
+                if (cardViewPane.getCardForm() != null)
                     cardViewPane.getCardForm().remove(cardViewPane.getCardForm().getBaseCreateCardForm());
                 cardViewPane.remove(comp);
             }
