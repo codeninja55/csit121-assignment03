@@ -8,15 +8,16 @@ import java.awt.event.MouseEvent;
 public class CancelButton extends JButton{
 
     public CancelButton(String text) {
-        super(text);
+        super((" " + text));
 
+        setIcon(Style.cancelIcon());
         setFont(Style.buttonFont());
         setForeground(Style.grey50());
         setBackground(Style.red500());
         Dimension dim = getPreferredSize();
-        dim.height = 50;
+        dim.height = 70;
         setPreferredSize(dim);
-        setMinimumSize(getPreferredSize());
+        setMinimumSize(dim);
 
         this.addMouseListener(new MouseAdapter() {
             @Override
