@@ -53,7 +53,9 @@ public class DataDAO implements DataObservable, CardsDAO, PurchaseDAO, CategoryD
         return cards;
     }
 
-    public Card getCard(String cardID) { return cards.get(cardID); }
+    public Card getCard(String cardID) {
+        return cards.getOrDefault(cardID, null);
+    }
 
     public DefaultComboBoxModel<String> getCardModel() {
         DefaultComboBoxModel<String> cardModel = new DefaultComboBoxModel<>();
@@ -70,7 +72,7 @@ public class DataDAO implements DataObservable, CardsDAO, PurchaseDAO, CategoryD
     }
 
     public Purchase getPurchase(int receiptID) {
-        return purchases.get(receiptID);
+        return purchases.getOrDefault(receiptID, null);
     }
 
     public HashMap<Integer, Category> getAllCategories() {
@@ -78,7 +80,7 @@ public class DataDAO implements DataObservable, CardsDAO, PurchaseDAO, CategoryD
     }
 
     public Category getCategory(int categoryID) {
-        return categories.get(categoryID);
+        return categories.getOrDefault(categoryID, null);
     }
 
     /*============================== UPDATE ==============================*/
