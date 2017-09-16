@@ -34,8 +34,8 @@ public class CategoriesForm extends JPanel implements FormFactory {
         categoryNameTextField = new FormTextField(35);
         categoryDescLabel = new FormLabel("Category Description");
         categoryDescTextField = new JTextArea(15,35);
-        createBtn = new FormButton("Create Category");
-        clearBtn = new FormButton("Clear");
+        createBtn = new FormButton("Create Category", Style.addIcon());
+        clearBtn = new FormButton("Clear", Style.clearIcon());
         cancelBtn = new CancelButton("Cancel New Category");
 
         /* INITIALIZE THIS PANEL */

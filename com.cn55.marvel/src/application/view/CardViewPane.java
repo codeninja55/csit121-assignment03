@@ -39,10 +39,10 @@ public class CardViewPane extends JPanel implements DataObserver {
     /*============================== CONSTRUCTORS ==============================*/
     CardViewPane() {
         Toolbar toolbar = new Toolbar();
-        createCardBtn = new ToolbarButton("Create");
-        deleteCardBtn = new ToolbarButton("Delete");
-        searchBtn = new ToolbarButton("Search");
-        viewBtn = new ToolbarButton("View");
+        createCardBtn = new ToolbarButton("Create", Style.createIcon());
+        deleteCardBtn = new ToolbarButton("Delete", Style.deleteIcon());
+        searchBtn = new ToolbarButton("Search", Style.searchIcon());
+        viewBtn = new ToolbarButton("View", Style.viewIcon());
 
         cardTableModel = new CardTableModel();
         cardTablePane = new JTable();

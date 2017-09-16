@@ -27,7 +27,6 @@ public class PurchaseViewPane extends JPanel implements DataObserver {
     private final JTable purchaseTablePane;
     private PurchaseForm createPurchaseForm;
     private final ResultsPane resultsPane;
-    private final JPopupMenu tablePopup;
 
     private ToolbarButtonListener createPurchaseListener;
     //private ToolbarButtonListener deletePurchaseListener;
@@ -35,12 +34,12 @@ public class PurchaseViewPane extends JPanel implements DataObserver {
     private ToolbarButtonListener viewPurchaseListener;
 
     /*============================== CONSTRUCTORS ==============================*/
-    public PurchaseViewPane() {
+    PurchaseViewPane() {
         Toolbar toolbar = new Toolbar();
-        createPurchaseBtn = new ToolbarButton("Create");
-        deletePurchaseBtn = new ToolbarButton("Delete");
-        summaryBtn = new ToolbarButton("Summary");
-        viewPurchaseBtn = new ToolbarButton("View");
+        createPurchaseBtn = new ToolbarButton("Create", Style.createIcon());
+        deletePurchaseBtn = new ToolbarButton("Delete", Style.deleteIconDisabled());
+        summaryBtn = new ToolbarButton("Summary", Style.summaryIcon());
+        viewPurchaseBtn = new ToolbarButton("View", Style.viewIcon());
         sortPurchaseCombo = new JComboBox<>();
         DefaultComboBoxModel<String> options = new DefaultComboBoxModel<>();
 
@@ -48,12 +47,10 @@ public class PurchaseViewPane extends JPanel implements DataObserver {
         purchaseTablePane = new JTable();
         JScrollPane tableScrollPane = new JScrollPane(purchaseTablePane);
 
-
         resultsPane = new ResultsPane("PurchaseViewResultsPane");
-        tablePopup = new JPopupMenu();
-        JMenuItem removePurchase = new JMenuItem("Delete Purchase");
 
-        setName("PurchaseViewPane");
+        JPopupMenu tablePopup = new JPopupMenu();
+        JMenuItem removePurchase = new JMenuItem("Delete Purchase");
         setLayout(new BorderLayout());
 
         /* Sort Purchases Combo Setup */
@@ -78,7 +75,6 @@ public class PurchaseViewPane extends JPanel implements DataObserver {
         tablePopup.add(removePurchase);
 
         add(tableScrollPane, BorderLayout.CENTER);
-
         add(resultsPane, BorderLayout.EAST);
 
         /* REGISTRATION OF TOOLBAR BUTTON LISTENERS */
@@ -87,10 +83,6 @@ public class PurchaseViewPane extends JPanel implements DataObserver {
         deletePurchaseBtn.addActionListener(handler);
         summaryBtn.addActionListener(handler);
         viewPurchaseBtn.addActionListener(handler);
-        createPurchaseBtn.addMouseListener(handler);
-        deletePurchaseBtn.addMouseListener(handler);
-        summaryBtn.addMouseListener(handler);
-        viewPurchaseBtn.addMouseListener(handler);
     }
 
     /*============================== MUTATORS ==============================*/
@@ -153,13 +145,9 @@ public class PurchaseViewPane extends JPanel implements DataObserver {
 
     /*============================== ACCESSORS ==============================*/
     public PurchaseForm getCreatePurchaseForm() {
-        if (createPurchaseForm != null)
-            return createPurchaseForm;
-        else
-            return null;
+        if (createPurchaseForm != null) return createPurchaseForm;
+        else return null;
     }
-
-
 
     public JComboBox<String> getSortPurchaseCombo() {
         return sortPurchaseCombo;
@@ -180,18 +168,15 @@ public class PurchaseViewPane extends JPanel implements DataObserver {
     public class ToolbarListener extends MouseAdapter implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() == createPurchaseBtn) {
-                if (createPurchaseListener != null)
-                    createPurchaseListener.toolbarButtonEventOccurred();
+                if (createPurchaseListener != null) createPurchaseListener.toolbarButtonEventOccurred();
             } else if (e.getSource() == viewPurchaseBtn) {
-                if (viewPurchaseListener != null)
-                    viewPurchaseListener.toolbarButtonEventOccurred();
+                if (viewPurchaseListener != null) viewPurchaseListener.toolbarButtonEventOccurred();
             } else if (e.getSource() == deletePurchaseBtn) {
                 // TODO - TEST CODE
                 System.err.println("Purchase View Delete Purchase Not Impl Yet");
                 System.out.println("Delete Purchase Button Pressed");
             } else if (e.getSource() == summaryBtn)
-                if (summaryListener != null)
-                    summaryListener.toolbarButtonEventOccurred();
+                if (summaryListener != null) summaryListener.toolbarButtonEventOccurred();
         }
     }
 
@@ -213,7 +198,6 @@ public class PurchaseViewPane extends JPanel implements DataObserver {
         public int getColumnCount() { return tableHeaders.length; }
 
         public Object getValueAt(int rowIndex, int columnIndex) {
-
             Purchase purchase = purchases.get(rowIndex);
             switch (columnIndex) {
                 case 0:
@@ -227,7 +211,6 @@ public class PurchaseViewPane extends JPanel implements DataObserver {
                 case 4:
                     return purchase.getPurchaseTime();
             }
-
             return null;
         }
     }
