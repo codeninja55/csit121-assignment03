@@ -7,9 +7,9 @@ import application.view.CustomComponents.ResultsPane;
 import application.view.CustomComponents.Style;
 import application.view.CustomComponents.Toolbar;
 import application.view.CustomComponents.ToolbarButton;
-import application.view.DeleteForm.DeleteCardForm;
-import application.view.SearchForm.SearchForm;
-import application.view.ToolbarButtonListener;
+import application.view.FormFactory.DeleteCardForm;
+import application.view.FormFactory.SearchForm;
+import application.view.CustomComponents.ToolbarButtonListener;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
@@ -204,22 +204,6 @@ public class CardViewPane extends JPanel implements DataObserver {
                 if (viewCardListener != null) viewCardListener.toolbarButtonEventOccurred();
             }
         }
-
-        public void mouseEntered(MouseEvent e) {
-            if (e.getSource() == createCardBtn) Style.hoverEffect(createCardBtn, true);
-            else if (e.getSource() == deleteCardBtn) Style.hoverEffect(deleteCardBtn, true);
-            else if (e.getSource() == viewBtn) Style.hoverEffect(viewBtn, true);
-            else if (e.getSource() == searchBtn) Style.hoverEffect(searchBtn, true);
-        }
-
-        public void mouseExited(MouseEvent e) {
-            if (e.getSource() == createCardBtn) Style.hoverEffect(createCardBtn, false);
-            else if (e.getSource() == deleteCardBtn) Style.hoverEffect(deleteCardBtn, false);
-            else if (e.getSource() == viewBtn) Style.hoverEffect(viewBtn, false);
-            else if (e.getSource() == searchBtn) Style.hoverEffect(searchBtn, false);
-        }
-
-
     }
 
     /*============================= CardTableModel ============================*/

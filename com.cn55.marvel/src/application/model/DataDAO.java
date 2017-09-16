@@ -3,6 +3,7 @@ package application.model;
 import application.model.CardModel.Card;
 import application.model.CardModel.CardsDAO;
 import application.model.CategoryModel.Category;
+import application.model.CategoryModel.CategoryDAO;
 import application.model.PurchaseModel.Purchase;
 import application.model.PurchaseModel.PurchaseDAO;
 
@@ -12,9 +13,9 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.TreeMap;
 
-/* Data Abstract Object (DAO) Implementation Layer */
+/* Data Access Object (DAO) Implementation Layer */
 @SuppressWarnings("ConstantConditions")
-public class DataDAO implements DataObservable, CardsDAO, PurchaseDAO {
+public class DataDAO implements DataObservable, CardsDAO, PurchaseDAO, CategoryDAO {
 
     private final ArrayList<DataObserver> dataObservers;
     private final HashMap<String,Card> cards;
@@ -72,12 +73,16 @@ public class DataDAO implements DataObservable, CardsDAO, PurchaseDAO {
         return purchases.get(receiptID);
     }
 
-    public HashMap<Integer, Category> getCategories() {
+    public HashMap<Integer, Category> getAllCategories() {
         return categories;
     }
 
+    public Category getCategory(int categoryID) {
+        return categories.get(categoryID);
+    }
+
     /*============================== UPDATE ==============================*/
-    private void updateCategoryTotalAmount(HashMap<Integer,Category> purchaseCategoriesMap) {
+    public void updateCategoryTotalAmount(HashMap<Integer,Category> purchaseCategoriesMap) {
         categories.values().forEach((c) -> c.updateTotalAmount(purchaseCategoriesMap.get(c.getId()).getAmount()));
     }
 
@@ -91,7 +96,7 @@ public class DataDAO implements DataObservable, CardsDAO, PurchaseDAO {
         System.out.println("NOT YET IMPLEMENTED");
     }
 
-    void deleteCategory(int id) {
+    public void deleteCategory(int id) {
         categories.remove(id);
         notifyObservers();
     }

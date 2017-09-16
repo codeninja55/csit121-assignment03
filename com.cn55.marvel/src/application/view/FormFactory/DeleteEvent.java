@@ -1,4 +1,4 @@
-package application.view.DeleteForm;
+package application.view.FormFactory;
 
 import application.view.CustomComponents.ErrorLabel;
 import application.view.CustomComponents.FormLabel;

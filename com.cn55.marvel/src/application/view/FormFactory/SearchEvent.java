@@ -1,4 +1,4 @@
-package application.view.SearchForm;
+package application.view.FormFactory;
 
 import application.view.CustomComponents.FormLabel;
 import application.view.CustomComponents.FormTextField;

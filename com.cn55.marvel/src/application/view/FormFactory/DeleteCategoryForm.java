@@ -1,6 +1,6 @@
-package application.view.DeleteForm;
+package application.view.FormFactory;
 
-import application.view.ButtonListener;
+import application.view.CustomComponents.ButtonListener;
 import application.view.CustomComponents.*;
 
 import javax.swing.*;
@@ -12,8 +12,8 @@ public class DeleteCategoryForm extends JPanel {
 
     private JPanel deleteCategoryForm;
     private CancelButton cancelBtn;
-    private JRadioButton idRB;
-    private JRadioButton nameRB;
+    private FormRadioButton idRB;
+    private FormRadioButton nameRB;
 
     private FormLabel categoryIDLabel;
     private FormTextField categoryIDTextField;
@@ -35,8 +35,8 @@ public class DeleteCategoryForm extends JPanel {
         JPanel rbSubPane = new JPanel(new GridLayout(1, 3));
         ButtonGroup categoryRBGroup = new ButtonGroup();
         FormLabel deleteTypeLabel = new FormLabel("Delete By: ");
-        idRB = new JRadioButton("Category ID");
-        nameRB = new JRadioButton("Category Name");
+        idRB = new FormRadioButton("Category ID");
+        nameRB = new FormRadioButton("Category Name");
 
         categoryIDLabel = new FormLabel("Category ID");
         categoryIDTextField = new FormTextField(20);
@@ -59,6 +59,8 @@ public class DeleteCategoryForm extends JPanel {
         /* RADIO BUTTONS SUB PANE */
         categoryRBGroup.add(idRB);
         categoryRBGroup.add(nameRB);
+
+
         idRB.setSelected(true);
         deleteTypeLabel.setVisible(true);
         rbSubPane.add(deleteTypeLabel);

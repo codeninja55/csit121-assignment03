@@ -1,7 +1,7 @@
 package application.view.CategoriesView;
 
 import application.model.Generator;
-import application.view.ButtonListener;
+import application.view.CustomComponents.ButtonListener;
 import application.view.CustomComponents.*;
 
 import javax.swing.*;
@@ -34,7 +34,7 @@ public class CategoriesForm extends JPanel {
         categoryNameLabel = new FormLabel("Category Name");
         categoryNameTextField = new FormTextField(35);
         categoryDescLabel = new FormLabel("Category Description");
-        categoryDescTextField = new JTextArea(5,35);
+        categoryDescTextField = new JTextArea(15,35);
         createBtn = new FormButton("Create Category");
         clearBtn = new FormButton("Clear");
         cancelBtn = new CancelButton("Cancel New Category");
@@ -89,8 +89,13 @@ public class CategoriesForm extends JPanel {
         gc.gridy++;
         gc.anchor = GridBagConstraints.PAGE_START;
         gc.insets = new Insets(20,0,10,0);
+        Dimension descTextFieldDim = getPreferredSize();
+        descTextFieldDim.width = 350;
+        descTextFieldDim.height = 350;
+        categoryDescTextField.setPreferredSize(descTextFieldDim);
         categoryDescTextField.setFont(Style.textAreaFont());
         createCategoriesForm.add(categoryDescTextField, gc);
+        categoryDescTextField.setVisible(true);
 
         /*========== BUTTON ROW ==========*/
         gc.gridy++; gc.gridx = 0; gc.weightx = 0.5; gc.weighty = 3; gc.gridwidth = 1;

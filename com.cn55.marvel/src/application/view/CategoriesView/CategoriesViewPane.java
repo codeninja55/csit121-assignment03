@@ -6,8 +6,8 @@ import application.model.DataObserver;
 import application.view.CustomComponents.Style;
 import application.view.CustomComponents.Toolbar;
 import application.view.CustomComponents.ToolbarButton;
-import application.view.DeleteForm.DeleteCategoryForm;
-import application.view.ToolbarButtonListener;
+import application.view.FormFactory.DeleteCategoryForm;
+import application.view.CustomComponents.ToolbarButtonListener;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
@@ -133,20 +133,6 @@ public class CategoriesViewPane extends JPanel implements DataObserver {
                     deleteCategoryListener.toolbarButtonEventOccurred();
                 }
             }
-        }
-
-        public void mouseEntered(MouseEvent e) {
-            if (e.getSource() == createCategoryBtn)
-                Style.hoverEffect(createCategoryBtn, true);
-            else if (e.getSource() == deleteCategoryBtn)
-                Style.hoverEffect(deleteCategoryBtn, true);
-        }
-
-        public void mouseExited(MouseEvent e) {
-            if (e.getSource() == createCategoryBtn)
-                Style.hoverEffect(createCategoryBtn, false);
-            else if (e.getSource() == deleteCategoryBtn)
-                Style.hoverEffect(deleteCategoryBtn, false);
         }
     }
 

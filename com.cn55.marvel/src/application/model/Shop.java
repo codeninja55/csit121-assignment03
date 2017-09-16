@@ -86,8 +86,8 @@ public class Shop {
         });
 
         // Update the total amounts in the defaultCategories List
-        double deletedCategoryValue = db.getCategories().get(categoryID).getTotalAmount();
-        db.getCategories().get(100).updateTotalAmount(deletedCategoryValue);
+        double deletedCategoryValue = db.getAllCategories().get(categoryID).getTotalAmount();
+        db.getAllCategories().get(100).updateTotalAmount(deletedCategoryValue);
 
         db.deleteCategory(categoryID);
     }

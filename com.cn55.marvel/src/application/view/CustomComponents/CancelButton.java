@@ -2,6 +2,8 @@ package application.view.CustomComponents;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class CancelButton extends JButton{
 
@@ -15,6 +17,18 @@ public class CancelButton extends JButton{
         dim.height = 50;
         setPreferredSize(dim);
         setMinimumSize(getPreferredSize());
+
+        this.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                super.mouseEntered(e);
+                setBackground(Style.blueGrey500());
+            }
+            public void mouseExited(MouseEvent e) {
+                super.mouseExited(e);
+                setBackground(Style.red500());
+            }
+        });
     }
 
 }

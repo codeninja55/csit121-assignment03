@@ -1,6 +1,6 @@
-package application.view.SearchForm;
+package application.view.FormFactory;
 
-import application.view.ButtonListener;
+import application.view.CustomComponents.ButtonListener;
 import application.view.CustomComponents.*;
 
 import javax.swing.*;

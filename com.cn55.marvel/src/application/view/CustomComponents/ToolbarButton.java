@@ -2,6 +2,8 @@ package application.view.CustomComponents;
 
 import javax.swing.JButton;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class ToolbarButton extends JButton {
 
@@ -15,5 +17,17 @@ public class ToolbarButton extends JButton {
         setPreferredSize(dim);
         setMinimumSize(getPreferredSize());
         setVisible(true);
+
+        this.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                super.mouseEntered(e);
+                setBackground(Style.blueGrey500());
+            }
+            public void mouseExited(MouseEvent e) {
+                super.mouseExited(e);
+                setBackground(Style.red500());
+            }
+        });
     }
 }

@@ -1,10 +1,10 @@
 package application.view.PurchaseView;
 
-import application.model.*;
 import application.model.CardModel.CardType;
 import application.model.CategoryModel.Category;
+import application.model.Generator;
 import application.model.PurchaseModel.PurchaseType;
-import application.view.ButtonListener;
+import application.view.CustomComponents.ButtonListener;
 import application.view.CustomComponents.*;
 
 import javax.swing.*;
@@ -20,7 +20,6 @@ import java.util.HashMap;
 @SuppressWarnings("SameParameterValue")
 public class PurchaseForm extends JPanel {
     private int generatedReceiptID;
-    private String generatedCardID;
 
     private DefaultComboBoxModel<String> existingCardModel;
     private ArrayList<Category> categoriesList;
@@ -40,9 +39,9 @@ public class PurchaseForm extends JPanel {
     private JComboBox<String> existingCardCombo;
 
     private FormLabel cardTypeLabel;
-    private JRadioButton anonCardRB;
-    private JRadioButton basicCardRB;
-    private JRadioButton premiumCardRB;
+    private FormRadioButton anonCardRB;
+    private FormRadioButton basicCardRB;
+    private FormRadioButton premiumCardRB;
 
     private FormLabel cardNameLabel;
     private FormTextField cardNameTextField;
@@ -73,9 +72,9 @@ public class PurchaseForm extends JPanel {
 
         cardTypeLabel = new FormLabel("Card Type: ");
         ButtonGroup cardTypeRBGroup = new ButtonGroup();
-        anonCardRB = new JRadioButton(CardType.AnonCard.getName());
-        basicCardRB = new JRadioButton(CardType.BasicCard.getName());
-        premiumCardRB = new JRadioButton(CardType.PremiumCard.getName());
+        anonCardRB = new FormRadioButton(CardType.AnonCard.getName());
+        basicCardRB = new FormRadioButton(CardType.BasicCard.getName());
+        premiumCardRB = new FormRadioButton(CardType.PremiumCard.getName());
 
         cardNameLabel = new FormLabel("Customer Name: ");
         cardNameTextField = new FormTextField(20);
@@ -309,7 +308,7 @@ public class PurchaseForm extends JPanel {
         receiptIDTextField.setVisible(true);
 
         cardIDLabel.setVisible(true);
-        cardIDTextField.setText(generatedCardID);
+        cardIDTextField.setText(Generator.getNextCardID());
         cardIDTextField.setVisible(true);
 
         cardTypeLabel.setVisible(true);
@@ -350,10 +349,6 @@ public class PurchaseForm extends JPanel {
 
     /*============================== MUTATORS  ==============================*/
     public void setGeneratedReceiptID(int generatedReceiptID) { this.generatedReceiptID = generatedReceiptID; }
-
-    public void setGeneratedCardID(String generatedCardID) {
-        this.generatedCardID = generatedCardID;
-    }
 
     public void setCardModel(DefaultComboBoxModel<String> cardModel) { this.existingCardModel = cardModel; }
 

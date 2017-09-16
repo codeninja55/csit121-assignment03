@@ -1,4 +1,4 @@
-package application.view;
+package application.view.CustomComponents;
 
 import java.util.EventListener;
 

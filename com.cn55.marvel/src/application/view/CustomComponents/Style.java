@@ -102,16 +102,6 @@ public class Style {
         return rightRenderer;
     }
 
-    public static void hoverEffect(ToolbarButton button, boolean mouseEntered) {
-        if (mouseEntered) {
-            button.setBackground(blueGrey500());
-            //button.setForeground(red500());
-        } else {
-            button.setBackground(red500());
-            //button.setForeground(grey50());
-        }
-    }
-
     public static NumberFormat currencyFormat() {
         NumberFormat formatter = DecimalFormat.getCurrencyInstance();
         formatter.setMinimumFractionDigits(2);

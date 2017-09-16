@@ -8,7 +8,7 @@ import application.view.CustomComponents.ResultsPane;
 import application.view.CustomComponents.Style;
 import application.view.CustomComponents.Toolbar;
 import application.view.CustomComponents.ToolbarButton;
-import application.view.ToolbarButtonListener;
+import application.view.CustomComponents.ToolbarButtonListener;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
@@ -189,26 +189,6 @@ public class PurchaseViewPane extends JPanel implements DataObserver {
             } else if (e.getSource() == summaryBtn)
                 if (summaryListener != null)
                     summaryListener.toolbarButtonEventOccurred();
-        }
-
-        public void mouseEntered(MouseEvent e) {
-            if (e.getSource() == createPurchaseBtn)
-                Style.hoverEffect(createPurchaseBtn, true);
-            else if (e.getSource() == summaryBtn)
-                Style.hoverEffect(summaryBtn, true);
-            else if (e.getSource() == viewPurchaseBtn) {
-                Style.hoverEffect(viewPurchaseBtn, true);
-            }
-        }
-
-        public void mouseExited(MouseEvent e) {
-            if (e.getSource() == createPurchaseBtn) {
-                Style.hoverEffect(createPurchaseBtn, false);
-            } else if (e.getSource() == viewPurchaseBtn)
-                Style.hoverEffect(viewPurchaseBtn, false);
-            else if (e.getSource() == summaryBtn)
-                Style.hoverEffect(summaryBtn, false);
-
         }
     }
 

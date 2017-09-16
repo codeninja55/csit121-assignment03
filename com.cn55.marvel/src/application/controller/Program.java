@@ -19,13 +19,13 @@ import application.view.CategoriesView.CategoriesViewPane;
 import application.view.CustomComponents.FormFormattedTextField;
 import application.view.CustomComponents.ResultsPane;
 import application.view.CustomComponents.Style;
-import application.view.DeleteForm.DeleteCardForm;
-import application.view.DeleteForm.DeleteCategoryForm;
+import application.view.FormFactory.DeleteCardForm;
+import application.view.FormFactory.DeleteCategoryForm;
 import application.view.MainFrame;
 import application.view.PurchaseView.PurchaseEvent;
 import application.view.PurchaseView.PurchaseForm;
 import application.view.PurchaseView.PurchaseViewPane;
-import application.view.SearchForm.SearchForm;
+import application.view.FormFactory.SearchForm;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -407,7 +407,7 @@ public class Program {
             form.getPurchaseTypeCombo().setSelectedIndex(0);
             form.setGeneratedReceiptID(Generator.setReceiptID());
             form.setCardModel(db.getCardModel());
-            form.setCategoriesList(new ArrayList<>(db.getCategories().values()));
+            form.setCategoriesList(new ArrayList<>(db.getAllCategories().values()));
             form.createBasePurchaseForm();
             form.setVisible(true);
 
@@ -617,7 +617,7 @@ public class Program {
                         e.getRuleErrLabel().setVisible(false);
                         e.getOthersDeleteErrLabel().setVisible(true);
                         e.getDeleteErrorLabel().setVisible(true);
-                    } else if (db.getCategories().containsKey(categoryID)) {
+                    } else if (db.getAllCategories().containsKey(categoryID)) {
                         e.getErrorLabel().setVisible(false);
                         e.getRuleErrLabel().setVisible(false);
                         e.getOthersDeleteErrLabel().setVisible(false);
@@ -712,7 +712,6 @@ public class Program {
             resultsPane.remove(resultsPane.getScrollPane());
         }
     }
-    /*===============================================================*/
 
     /*=============== SETTING MOUSE LISTENERS METHODS ===============*/
     // These methods add a mouse listener to the JTable whenever a ResultsPane is added to the right
@@ -747,7 +746,6 @@ public class Program {
             });
         }
     }
-    /*===============================================================*/
 
     /*=============== ADDITIONAL CREATING PURCHASES METHODS ===============*/
     // Validates each category field of the form
@@ -776,7 +774,7 @@ public class Program {
     // If validation is successful, this method makes a clone of categories ready to be passed
     // to the makePurchase method in Shop
     private HashMap<Integer, Category> getPurchaseFormCategories(PurchaseEvent e) {
-        ArrayList<Category> defaultCategories = new ArrayList<>(db.getCategories().values());
+        ArrayList<Category> defaultCategories = new ArrayList<>(db.getAllCategories().values());
         HashMap<Integer, Category> purchaseCategories = new HashMap<>();
 
         if (validateCatValueFields(e.getCategoriesMap())) {
@@ -831,5 +829,4 @@ public class Program {
         }
         return null;
     }
-    /*====================================================================*/
 }
