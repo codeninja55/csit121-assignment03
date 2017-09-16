@@ -79,7 +79,6 @@ class Assignment2 {
         UIManager.put("TableHeader.background", Style.red500());
         UIManager.put("TableHeader.foreground", Style.grey50());
 
-        UIManager.put("TextField.selectionBackground", Style.grey500());
         UIManager.put("TextField.font", Style.textFieldFont());
         UIManager.put("TextField.caretForeground", Style.red500());
 
