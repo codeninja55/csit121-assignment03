@@ -22,11 +22,11 @@ public class CancelButton extends JButton{
             @Override
             public void mouseEntered(MouseEvent e) {
                 super.mouseEntered(e);
-                setBackground(Style.blueGrey500());
+                if (isEnabled()) setBackground(Style.blueGrey500());
             }
             public void mouseExited(MouseEvent e) {
                 super.mouseExited(e);
-                setBackground(Style.red500());
+                if (isEnabled()) setBackground(Style.red500());
             }
         });
     }

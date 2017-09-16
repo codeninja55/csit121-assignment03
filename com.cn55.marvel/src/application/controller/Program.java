@@ -732,7 +732,7 @@ public class Program {
     }
 
     private void setPurchaseViewPaneMouseListeners() {
-         /*SET UP A MOUSE LISTENER TO CLOSE PANEL WHEN CLICKING ON TABLE OR OUTER PANEL*/
+         // SET UP A MOUSE LISTENER TO CLOSE PANEL WHEN CLICKING ON TABLE OR OUTER PANEL
         // Only add a new MouseListener if there are less than 3 in the MouseListener[]
         // Unknown reasons why there are already 2 other ones in a JTable
         if (purchaseViewPane.getPurchaseTablePane().getMouseListeners().length < 3) {

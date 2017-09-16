@@ -220,7 +220,6 @@ public class PurchaseViewPane extends JPanel implements DataObserver {
                 case 2:
                     return purchase.getCardType();
                 case 3:
-
                     return Style.currencyFormat().format(purchase.getCategoriesTotal());
                 case 4:
                     return purchase.getPurchaseTime();
