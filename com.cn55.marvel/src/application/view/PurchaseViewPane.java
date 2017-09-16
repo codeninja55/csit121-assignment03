@@ -168,15 +168,18 @@ public class PurchaseViewPane extends JPanel implements DataObserver {
     public class ToolbarListener extends MouseAdapter implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() == createPurchaseBtn) {
-                if (createPurchaseListener != null) createPurchaseListener.toolbarButtonEventOccurred();
+                if (createPurchaseListener != null)
+                    createPurchaseListener.toolbarButtonEventOccurred();
             } else if (e.getSource() == viewPurchaseBtn) {
-                if (viewPurchaseListener != null) viewPurchaseListener.toolbarButtonEventOccurred();
+                if (viewPurchaseListener != null)
+                    viewPurchaseListener.toolbarButtonEventOccurred();
             } else if (e.getSource() == deletePurchaseBtn) {
                 // TODO - TEST CODE
                 System.err.println("Purchase View Delete Purchase Not Impl Yet");
                 System.out.println("Delete Purchase Button Pressed");
             } else if (e.getSource() == summaryBtn)
-                if (summaryListener != null) summaryListener.toolbarButtonEventOccurred();
+                if (summaryListener != null)
+                    summaryListener.toolbarButtonEventOccurred();
         }
     }
 
