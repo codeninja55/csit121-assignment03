@@ -1,4 +1,4 @@
-package application.view.CategoriesView;
+package application.view;
 
 import application.model.CategoryModel.Category;
 import application.model.DataObservable;
@@ -6,6 +6,7 @@ import application.model.DataObserver;
 import application.view.CustomComponents.Style;
 import application.view.CustomComponents.Toolbar;
 import application.view.CustomComponents.ToolbarButton;
+import application.view.FormFactory.CategoriesForm;
 import application.view.FormFactory.DeleteCategoryForm;
 import application.view.CustomComponents.ToolbarButtonListener;
 
@@ -15,7 +16,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -28,9 +28,6 @@ public class CategoriesViewPane extends JPanel implements DataObserver {
 
     private CategoriesTableModel categoriesTableModel;
     private JTable categoriesTablePane;
-
-    private CategoriesForm createCategoryForm;
-    private DeleteCategoryForm deleteCategoryForm;
 
     private ToolbarButtonListener createCategoryListener;
     private ToolbarButtonListener deleteCategoryListener;
@@ -89,11 +86,13 @@ public class CategoriesViewPane extends JPanel implements DataObserver {
     }
 
     public void setCreateCategoryForm(CategoriesForm createCategoryForm) {
-        this.createCategoryForm = createCategoryForm;
+        this.add(createCategoryForm, BorderLayout.WEST);
+        createCategoryForm.setVisible(true);
     }
 
     public void setDeleteCategoryForm(DeleteCategoryForm deleteCategoryForm) {
-        this.deleteCategoryForm = deleteCategoryForm;
+        this.add(deleteCategoryForm, BorderLayout.WEST);
+        deleteCategoryForm.setVisible(true);
     }
 
     /* OBSERVER DESIGN PATTERN IMPLEMENTATION */
@@ -109,13 +108,6 @@ public class CategoriesViewPane extends JPanel implements DataObserver {
     }
 
     /*============================== ACCESSORS  ==============================*/
-    public CategoriesForm getCreateCategoryForm() {
-        return createCategoryForm;
-    }
-
-    public DeleteCategoryForm getDeleteCategoryForm() {
-        return deleteCategoryForm;
-    }
 
     /*=========================================================================*/
     /*============================== INNER CLASS ==============================*/

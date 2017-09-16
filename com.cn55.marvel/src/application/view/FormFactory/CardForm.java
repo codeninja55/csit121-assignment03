@@ -1,4 +1,4 @@
-package application.view.CardView;
+package application.view.FormFactory;
 
 import application.model.CardModel.CardType;
 import application.model.Generator;
@@ -12,7 +12,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
-public class CardForm extends JPanel {
+public class CardForm extends JPanel implements FormFactory {
     private JComboBox<String> cardTypeCombo;
     private DefaultComboBoxModel<String> options;
     private CancelButton cancelBtn;
@@ -31,8 +31,9 @@ public class CardForm extends JPanel {
     private FormButton clearBtn;
 
     /*====================  CONSTRUCTOR for Creating Cards ====================*/
-    public CardForm() {
+    CardForm() {
         /* INITIALIZE ALL COMPONENTS */
+        baseCreateCardForm = new JPanel(new GridBagLayout());
         cardTypeCombo = new JComboBox<>();
         options = new DefaultComboBoxModel<>();
         cancelBtn = new CancelButton("Cancel New Card");
@@ -82,9 +83,6 @@ public class CardForm extends JPanel {
 
     /*============================== BASE CREATE CARD FORM ==============================*/
     public void createBaseCreateCardForm() {
-        /* CREATE BASE FORM - PANEL */
-        baseCreateCardForm = new JPanel(new GridBagLayout());
-
         this.add(baseCreateCardForm, BorderLayout.CENTER);
 
         GridBagConstraints gc = new GridBagConstraints();

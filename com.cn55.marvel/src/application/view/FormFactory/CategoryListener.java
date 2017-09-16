@@ -1,4 +1,4 @@
-package application.view.CategoriesView;
+package application.view.FormFactory;
 
 import java.util.EventListener;
 

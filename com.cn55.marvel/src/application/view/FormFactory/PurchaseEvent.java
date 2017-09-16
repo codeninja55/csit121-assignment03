@@ -1,4 +1,4 @@
-package application.view.PurchaseView;
+package application.view.FormFactory;
 
 import application.view.CustomComponents.ErrorLabel;
 import application.view.CustomComponents.FormFormattedTextField;

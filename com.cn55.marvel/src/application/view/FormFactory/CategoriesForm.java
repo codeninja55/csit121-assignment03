@@ -1,4 +1,4 @@
-package application.view.CategoriesView;
+package application.view.FormFactory;
 
 import application.model.Generator;
 import application.view.CustomComponents.ButtonListener;
@@ -10,7 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 @SuppressWarnings("FieldCanBeLocal")
-public class CategoriesForm extends JPanel {
+public class CategoriesForm extends JPanel implements FormFactory {
     private final JPanel createCategoriesForm;
     private final FormLabel categoryIDLabel;
     private final FormTextField categoryIDTextField;
@@ -26,7 +26,7 @@ public class CategoriesForm extends JPanel {
     private CategoryListener createCategoryListener;
     private ButtonListener cancelListener;
 
-    public CategoriesForm() {
+    CategoriesForm() {
         /* INITIALIZE ALL COMPONENTS */
         createCategoriesForm = new JPanel(new GridBagLayout());
         categoryIDLabel = new FormLabel("Category ID");
@@ -63,6 +63,10 @@ public class CategoriesForm extends JPanel {
         gc.gridy++;
         gc.anchor = GridBagConstraints.PAGE_START;
         categoryIDTextField.setEditable(false);
+        Dimension textFieldDim = getPreferredSize();
+        textFieldDim.width = 350;
+        textFieldDim.height = 50;
+        categoryIDTextField.setMinimumSize(textFieldDim);
         categoryIDTextField.setHorizontalAlignment(SwingConstants.CENTER);
         createCategoriesForm.add(categoryIDTextField, gc);
 
@@ -74,10 +78,8 @@ public class CategoriesForm extends JPanel {
         /*========== NEW ROW ==========*/
         gc.gridy++;
         gc.anchor = GridBagConstraints.PAGE_START;
-        Dimension textFieldDim = getPreferredSize();
-        textFieldDim.width = 350;
-        textFieldDim.height = 50;
         categoryNameTextField.setPreferredSize(textFieldDim);
+        categoryNameTextField.setMinimumSize(textFieldDim);
         createCategoriesForm.add(categoryNameTextField, gc);
 
         /*========== NEW ROW ==========*/
@@ -93,6 +95,7 @@ public class CategoriesForm extends JPanel {
         descTextFieldDim.width = 350;
         descTextFieldDim.height = 350;
         categoryDescTextField.setPreferredSize(descTextFieldDim);
+        categoryDescTextField.setMinimumSize(descTextFieldDim);
         categoryDescTextField.setFont(Style.textAreaFont());
         createCategoriesForm.add(categoryDescTextField, gc);
         categoryDescTextField.setVisible(true);

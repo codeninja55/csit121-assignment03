@@ -1,11 +1,11 @@
-package application.view.SummaryView;
+package application.view;
 import javax.swing.*;
 import java.awt.*;
 
-class SummaryPanel extends JPanel {
+class SummaryViewPane extends JPanel {
     private JPanel summaryPanel;
 
-    public SummaryPanel() {
+    public SummaryViewPane() {
         summaryPanel = new JPanel();
 
         setLayout(new BorderLayout());

@@ -1,14 +1,9 @@
 package application.view;
 
-import application.view.CardView.CardViewPane;
-import application.view.CategoriesView.CategoriesViewPane;
 import application.view.CustomComponents.Style;
-import application.view.PurchaseView.PurchaseViewPane;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.net.URL;
 
 @SuppressWarnings("Convert2Lambda")
@@ -18,7 +13,7 @@ public class MainFrame extends JFrame {
     private final CardViewPane cardViewPane;
     private final PurchaseViewPane purchaseViewPane;
     private final CategoriesViewPane categoriesViewPane;
-    //private SummaryPanel summaryPanel;
+    //private SummaryViewPane summaryPanel;
 
     public MainFrame() {
         super("Marvel Rewards Cards");
@@ -30,8 +25,7 @@ public class MainFrame extends JFrame {
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 
         // Change the default Java icon to this
-        URL iconURL = getClass().getResource("/img/favicon.png");
-        ImageIcon mainIcon = new ImageIcon(iconURL);
+        ImageIcon mainIcon = new ImageIcon("com.cn55.marvel/src/img/favicon.png");
         setIconImage(mainIcon.getImage());
 
         this.tabPane = new JTabbedPane();

@@ -8,7 +8,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class SearchForm extends JPanel {
+public class SearchForm extends JPanel implements FormFactory {
 
     private JPanel searchForm;
     private FormLabel searchLabel;
@@ -19,7 +19,7 @@ public class SearchForm extends JPanel {
     private SearchListener searchListener;
     private ButtonListener cancelListener;
 
-    public SearchForm() {
+    SearchForm() {
         /* NOTE: searchForm is the form Container within*/
         searchForm = new JPanel(new GridBagLayout());
         CancelButton cancelBtn = new CancelButton("Cancel Search");

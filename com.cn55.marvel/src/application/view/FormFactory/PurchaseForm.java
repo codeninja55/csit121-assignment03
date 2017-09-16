@@ -1,4 +1,4 @@
-package application.view.PurchaseView;
+package application.view.FormFactory;
 
 import application.model.CardModel.CardType;
 import application.model.CategoryModel.Category;
@@ -18,7 +18,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 
 @SuppressWarnings("SameParameterValue")
-public class PurchaseForm extends JPanel {
+public class PurchaseForm extends JPanel implements FormFactory {
     private int generatedReceiptID;
 
     private DefaultComboBoxModel<String> existingCardModel;
@@ -55,8 +55,9 @@ public class PurchaseForm extends JPanel {
     private ErrorLabel purchaseErrorLabel;
 
     /*============================== CONSTRUCTORS ==============================*/
-    public PurchaseForm() {
+    PurchaseForm() {
         /* INITIALIZE ALL COMPONENTS */
+        baseCreatePurchaseForm = new JPanel(new GridBagLayout());
         purchaseTypeCombo = new JComboBox<>();
         options = new DefaultComboBoxModel<>();
         cancelBtn = new CancelButton("Cancel New Purchase");
@@ -130,8 +131,6 @@ public class PurchaseForm extends JPanel {
     /*==================== BASE FORM ====================*/
 
     public void createBasePurchaseForm() {
-        /* CREATE BASE FORM WITH PURCHASE - PANEL */
-        baseCreatePurchaseForm = new JPanel(new GridBagLayout());
 
         // Dynamically creates categoriesMap HashMap<FormLabel, FormTextField>
         createCategoriesListForm();
@@ -448,6 +447,7 @@ public class PurchaseForm extends JPanel {
     }
 
     public JPanel getBaseCreatePurchaseForm() {
+
         return baseCreatePurchaseForm;
     }
 

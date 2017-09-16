@@ -1,4 +1,4 @@
-package application.view.CardView;
+package application.view;
 
 import application.model.CardModel.*;
 import application.model.DataObservable;
@@ -7,6 +7,7 @@ import application.view.CustomComponents.ResultsPane;
 import application.view.CustomComponents.Style;
 import application.view.CustomComponents.Toolbar;
 import application.view.CustomComponents.ToolbarButton;
+import application.view.FormFactory.CardForm;
 import application.view.FormFactory.DeleteCardForm;
 import application.view.FormFactory.SearchForm;
 import application.view.CustomComponents.ToolbarButtonListener;
@@ -40,7 +41,7 @@ public class CardViewPane extends JPanel implements DataObserver {
     private ToolbarButtonListener viewCardListener;
 
     /*============================== CONSTRUCTORS ==============================*/
-    public CardViewPane() {
+    CardViewPane() {
         Toolbar toolbar = new Toolbar();
         createCardBtn = new ToolbarButton("Create");
         deleteCardBtn = new ToolbarButton("Delete");
@@ -109,14 +110,20 @@ public class CardViewPane extends JPanel implements DataObserver {
 
     public void setCardForm(CardForm cardForm) {
         this.cardForm = cardForm;
+        this.add(cardForm, BorderLayout.WEST);
+        cardForm.setVisible(true);
     }
 
     public void setDeleteForm(DeleteCardForm deleteForm) {
         this.deleteForm = deleteForm;
+        this.add(deleteForm, BorderLayout.WEST);
+        deleteForm.setVisible(true);
     }
 
     public void setSearchForm(SearchForm searchForm) {
         this.searchForm = searchForm;
+        this.add(searchForm, BorderLayout.WEST);
+        searchForm.setVisible(true);
     }
 
     private void cardTableFormatter() {

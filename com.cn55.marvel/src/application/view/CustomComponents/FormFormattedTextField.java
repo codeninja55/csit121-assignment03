@@ -10,7 +10,6 @@ public class FormFormattedTextField extends JFormattedTextField {
         setColumns(20);
         setMinimumSize(getPreferredSize());
         setFont(Style.textFieldFont());
-        //setBackground(Style.red100());
         setVisible(false);
     }
 }

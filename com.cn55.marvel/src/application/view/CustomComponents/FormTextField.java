@@ -1,6 +1,9 @@
 package application.view.CustomComponents;
 
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class FormTextField extends JTextField {
 
@@ -9,21 +12,23 @@ public class FormTextField extends JTextField {
         setMinimumSize(getPreferredSize());
         setFont(Style.textFieldFont());
         setVisible(false);
-    }
 
-    @SuppressWarnings("unused")
-    public FormTextField(String text) {
-        super(text);
-        setMinimumSize(getPreferredSize());
-        setFont(Style.textFieldFont());
-        setVisible(false);
-    }
+        this.addPropertyChangeListener(evt -> {
+            if (!isEnabled() || !isEditable()) {
+                setBackground(Style.blueGrey500());
+                setForeground(Style.grey50());
+                setDisabledTextColor(Style.grey700());
+            } else {
+                setBackground(Color.WHITE);
+                setForeground(Color.BLACK);
+            }
+        });
 
-    @SuppressWarnings("unused")
-    public FormTextField(String text, int columns) {
-        super(text, columns);
-        setMinimumSize(getPreferredSize());
-        setFont(Style.textFieldFont());
-        setVisible(false);
+        this.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                setBackground(Style.blueGrey100());
+            }
+        });
     }
 }

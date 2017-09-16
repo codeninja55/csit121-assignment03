@@ -1,4 +1,4 @@
-package application.view.PurchaseView;
+package application.view;
 
 import application.model.DataObservable;
 import application.model.DataObserver;
@@ -9,6 +9,7 @@ import application.view.CustomComponents.Style;
 import application.view.CustomComponents.Toolbar;
 import application.view.CustomComponents.ToolbarButton;
 import application.view.CustomComponents.ToolbarButtonListener;
+import application.view.FormFactory.PurchaseForm;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
@@ -16,7 +17,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 public class PurchaseViewPane extends JPanel implements DataObserver {
@@ -116,6 +116,8 @@ public class PurchaseViewPane extends JPanel implements DataObserver {
 
     public void setCreatePurchaseForm(PurchaseForm createPurchaseForm) {
         this.createPurchaseForm = createPurchaseForm;
+        this.add(createPurchaseForm, BorderLayout.WEST);
+        createPurchaseForm.setVisible(true);
     }
 
     private void purchasesTableFormatter() {
@@ -155,8 +157,13 @@ public class PurchaseViewPane extends JPanel implements DataObserver {
 
     /*============================== ACCESSORS ==============================*/
     public PurchaseForm getCreatePurchaseForm() {
-        return createPurchaseForm;
+        if (createPurchaseForm != null)
+            return createPurchaseForm;
+        else
+            return null;
     }
+
+
 
     public JComboBox<String> getSortPurchaseCombo() {
         return sortPurchaseCombo;

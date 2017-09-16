@@ -8,7 +8,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class DeleteCardForm extends JPanel {
+public class DeleteCardForm extends JPanel implements FormFactory {
 
     private JPanel deleteForm;
     private FormLabel cardIDLabel;
