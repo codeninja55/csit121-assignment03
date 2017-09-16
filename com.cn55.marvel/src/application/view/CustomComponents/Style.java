@@ -148,7 +148,7 @@ public class Style {
 
     public static ImageIcon cancelIcon() { return new ImageIcon("com.cn55.marvel/src/img/cancel_white_36.png");}
 
-    public static ImageIcon clearIcon() { return new ImageIcon("com.cn55.marvel/src/img/clear_all_white_36.png");}
+    public static ImageIcon clearIcon() { return new ImageIcon("com.cn55.marvel/src/img/clear_all_white_27.png");}
 
-    public static ImageIcon addIcon() { return new ImageIcon("com.cn55.marvel/src/img/add_white_36.png");}
+    public static ImageIcon addIcon() { return new ImageIcon("com.cn55.marvel/src/img/add_white_27.png");}
 }
