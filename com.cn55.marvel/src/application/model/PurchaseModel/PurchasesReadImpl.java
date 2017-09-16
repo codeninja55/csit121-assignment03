@@ -1,8 +1,8 @@
 package application.model.PurchaseModel;
 
 import application.model.CategoryModel.Category;
-import application.model.ReadCSV;
 import application.model.Generator;
+import application.model.ReadCSV;
 import application.model.Shop;
 
 import java.io.BufferedReader;

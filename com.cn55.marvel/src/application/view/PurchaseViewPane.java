@@ -4,11 +4,7 @@ import application.model.DataObservable;
 import application.model.DataObserver;
 import application.model.PurchaseModel.Purchase;
 import application.model.PurchaseModel.SortPurchaseType;
-import application.view.CustomComponents.ResultsPane;
-import application.view.CustomComponents.Style;
-import application.view.CustomComponents.Toolbar;
-import application.view.CustomComponents.ToolbarButton;
-import application.view.CustomComponents.ToolbarButtonListener;
+import application.view.CustomComponents.*;
 import application.view.FormFactory.PurchaseForm;
 
 import javax.swing.*;

@@ -4,7 +4,6 @@ import application.model.CardModel.CardType;
 import application.model.CategoryModel.Category;
 import application.model.Generator;
 import application.model.PurchaseModel.PurchaseType;
-import application.view.CustomComponents.ButtonListener;
 import application.view.CustomComponents.*;
 
 import javax.swing.*;

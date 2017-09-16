@@ -1,7 +1,7 @@
 package application.model.CategoryModel;
 
-import application.model.ReadCSV;
 import application.model.Generator;
+import application.model.ReadCSV;
 import application.model.Shop;
 
 import java.io.BufferedReader;

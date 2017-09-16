@@ -4,7 +4,6 @@ import application.model.CardModel.Card;
 import application.model.CategoryModel.Category;
 import application.model.PurchaseModel.Purchase;
 
-import java.util.ArrayList;
 import java.util.TreeMap;
 
 @SuppressWarnings("unused")

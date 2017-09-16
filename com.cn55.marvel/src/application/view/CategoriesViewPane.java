@@ -6,9 +6,9 @@ import application.model.DataObserver;
 import application.view.CustomComponents.Style;
 import application.view.CustomComponents.Toolbar;
 import application.view.CustomComponents.ToolbarButton;
+import application.view.CustomComponents.ToolbarButtonListener;
 import application.view.FormFactory.CategoriesForm;
 import application.view.FormFactory.DeleteCategoryForm;
-import application.view.CustomComponents.ToolbarButtonListener;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;

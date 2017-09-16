@@ -12,16 +12,13 @@ import application.model.PurchaseModel.Purchase;
 import application.model.PurchaseModel.PurchaseType;
 import application.model.PurchaseModel.PurchasesReadImpl;
 import application.model.PurchaseModel.SortPurchaseType;
-import application.view.FormFactory.CardForm;
 import application.view.CardViewPane;
-import application.view.FormFactory.*;
 import application.view.CategoriesViewPane;
 import application.view.CustomComponents.FormFormattedTextField;
 import application.view.CustomComponents.ResultsPane;
 import application.view.CustomComponents.Style;
+import application.view.FormFactory.*;
 import application.view.MainFrame;
-import application.view.FormFactory.PurchaseEvent;
-import application.view.FormFactory.PurchaseForm;
 import application.view.PurchaseViewPane;
 
 import javax.swing.*;

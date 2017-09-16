@@ -4,7 +4,7 @@ import application.model.CardModel.*;
 import application.model.CategoryModel.Category;
 import application.model.PurchaseModel.Purchase;
 
-import java.util.*;
+import java.util.HashMap;
 
 /* SINGLETON DESIGN PATTERN */
 

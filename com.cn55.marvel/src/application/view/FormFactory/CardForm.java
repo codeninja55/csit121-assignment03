@@ -2,7 +2,6 @@ package application.view.FormFactory;
 
 import application.model.CardModel.CardType;
 import application.model.Generator;
-import application.view.CustomComponents.ButtonListener;
 import application.view.CustomComponents.*;
 
 import javax.swing.*;

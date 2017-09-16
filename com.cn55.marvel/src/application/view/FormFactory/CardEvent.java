@@ -9,11 +9,8 @@ import java.util.EventObject;
 public class CardEvent extends EventObject {
 
     private JComboBox<String> cardTypeCombo;
-    private FormLabel cardIDLabel;
     private FormTextField cardIDTextField;
-    private FormLabel cardNameLabel;
     private FormTextField cardNameTextField;
-    private FormLabel cardEmailLabel;
     private FormTextField cardEmailTextField;
 
     /*============================== CONSTRUCTORS ==============================*/
@@ -27,7 +24,7 @@ public class CardEvent extends EventObject {
     }
 
     void setCardIDLabel(FormLabel cardIDLabel) {
-        this.cardIDLabel = cardIDLabel;
+        FormLabel cardIDLabel1 = cardIDLabel;
     }
 
     void setCardIDTextField(FormTextField cardIDTextField) {
@@ -35,7 +32,7 @@ public class CardEvent extends EventObject {
     }
 
     void setCardNameLabel(FormLabel cardNameLabel) {
-        this.cardNameLabel = cardNameLabel;
+        FormLabel cardNameLabel1 = cardNameLabel;
     }
 
     void setCardNameTextField(FormTextField cardNameTextField) {
@@ -43,7 +40,7 @@ public class CardEvent extends EventObject {
     }
 
     void setCardEmailLabel(FormLabel cardEmailLabel) {
-        this.cardEmailLabel = cardEmailLabel;
+        FormLabel cardEmailLabel1 = cardEmailLabel;
     }
 
     void setCardEmailTextField(FormTextField cardEmailTextField) {

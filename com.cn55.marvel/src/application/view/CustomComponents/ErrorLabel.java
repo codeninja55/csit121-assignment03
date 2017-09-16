@@ -1,6 +1,6 @@
 package application.view.CustomComponents;
 
-import javax.swing.JLabel;
+import javax.swing.*;
 
 public class ErrorLabel extends JLabel {
 

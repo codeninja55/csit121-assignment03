@@ -3,19 +3,17 @@ package application.view;
 import application.model.CardModel.*;
 import application.model.DataObservable;
 import application.model.DataObserver;
-import application.view.CustomComponents.ResultsPane;
-import application.view.CustomComponents.Style;
-import application.view.CustomComponents.Toolbar;
-import application.view.CustomComponents.ToolbarButton;
+import application.view.CustomComponents.*;
 import application.view.FormFactory.CardForm;
 import application.view.FormFactory.DeleteCardForm;
 import application.view.FormFactory.SearchForm;
-import application.view.CustomComponents.ToolbarButtonListener;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
 import java.util.ArrayList;
 
 public class CardViewPane extends JPanel implements DataObserver {
