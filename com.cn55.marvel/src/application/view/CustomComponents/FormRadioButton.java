@@ -7,9 +7,9 @@ public class FormRadioButton extends JRadioButton{
 
     public FormRadioButton(String text) {
         ImageIcon defaultIcon = new ImageIcon(
-                "com.cn55.marvel/src/img/radio_button_on_white_24.png");
+                "com.cn55.marvel/src/img/radio_button_off_red500_24-custom.png");
         ImageIcon selectedIcon = new ImageIcon(
-                "com.cn55.marvel/src/img/radio_button_on_grey_24.png");
+                "com.cn55.marvel/src/img/radio_button_on_red500_24-custom.png");
 
         setText(text);
         setFont(Style.labelFont());
