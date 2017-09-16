@@ -33,10 +33,10 @@ public class CategoriesViewPane extends JPanel implements DataObserver {
     private ToolbarButtonListener deleteCategoryListener;
 
     /*============================== CONSTRUCTORS  ==============================*/
-    public CategoriesViewPane() {
+    CategoriesViewPane() {
         Toolbar toolbar = new Toolbar();
-        createCategoryBtn = new ToolbarButton("Create");
-        deleteCategoryBtn = new ToolbarButton("Delete");
+        createCategoryBtn = new ToolbarButton("Create", Style.createIcon());
+        deleteCategoryBtn = new ToolbarButton("Delete", Style.deleteIcon());
 
         categoriesTableModel = new CategoriesTableModel();
         categoriesTablePane = new JTable();

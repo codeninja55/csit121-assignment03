@@ -29,7 +29,7 @@ public class SearchForm extends JPanel implements FormFactory {
         searchIDTextField.setVisible(true);
         errorLabel = new ErrorLabel("CARD DOES NOT EXIST");
         ruleErrLabel = new ErrorLabel("INVALID CARD ID NUMBER");
-        searchBtn = new FormButton("Search");
+        searchBtn = new FormButton("Search", Style.searchIcon());
         searchBtn.setVisible(true);
 
         setName("SearchForm");

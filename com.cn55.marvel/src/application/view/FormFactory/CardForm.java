@@ -46,8 +46,8 @@ public class CardForm extends JPanel implements FormFactory {
         cardEmailLabel = new FormLabel("Email: ");
         cardEmailTextField = new FormTextField(20);
 
-        createBtn = new FormButton("Add Card");
-        clearBtn = new FormButton("Clear");
+        createBtn = new FormButton("Add Card", Style.addIcon());
+        clearBtn = new FormButton("Clear", Style.clearIcon());
 
         /* INITIALIZE THIS PANEL */
         setLayout(new BorderLayout());

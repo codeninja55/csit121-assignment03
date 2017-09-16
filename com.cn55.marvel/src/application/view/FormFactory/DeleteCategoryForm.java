@@ -47,7 +47,7 @@ public class DeleteCategoryForm extends JPanel {
         idRuleErrLabel = new ErrorLabel("INVALID CATEGORY ID");
         othersDeleteErrLabel = new ErrorLabel("CANNOT DELETE OTHERS CATEGORY");
         deleteErrorLabel = new ErrorLabel("CATEGORY NOT DELETED");
-        deleteBtn = new FormButton("Delete Category");
+        deleteBtn = new FormButton("Delete Category", Style.deleteActionIcon());
 
         setLayout(new BorderLayout());
         Dimension dim = getPreferredSize();

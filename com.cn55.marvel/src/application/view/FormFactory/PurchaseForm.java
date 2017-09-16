@@ -82,8 +82,8 @@ public class PurchaseForm extends JPanel implements FormFactory {
         cardEmailLabel = new FormLabel("Customer Email: ");
         cardEmailTextField = new FormTextField(20);
 
-        createBtn = new FormButton("Add Purchase");
-        clearBtn = new FormButton("Clear");
+        createBtn = new FormButton("Add Purchase", Style.addIcon());
+        clearBtn = new FormButton("Clear", Style.clearIcon());
         purchaseErrorLabel = new ErrorLabel("PURCHASE NOT ADDED");
 
         /* INITIALIZE THIS PANEL */
@@ -251,13 +251,13 @@ public class PurchaseForm extends JPanel implements FormFactory {
         baseCreatePurchaseForm.add(purchaseErrorLabel, gc);
 
         /*========== BUTTON ROW ==========*/
-        gc.gridy++; gc.gridx = 0; gc.weightx = 0.5; gc.weighty = 3; gc.gridwidth = 1;
+        gc.gridy++; gc.gridx = 0; gc.weightx = 0.4; gc.weighty = 3; gc.gridwidth = 1;
         gc.fill = GridBagConstraints.HORIZONTAL;
         gc.anchor = GridBagConstraints.FIRST_LINE_END;
         gc.insets = new Insets(20,0,0,10);
         baseCreatePurchaseForm.add(createBtn, gc);
 
-        gc.gridx = 1; gc.weightx = 0.5;
+        gc.gridx = 1; gc.weightx = 0.4;
         gc.anchor = GridBagConstraints.FIRST_LINE_START;
         gc.insets = new Insets(20,10,0,0);
         baseCreatePurchaseForm.add(clearBtn, gc);

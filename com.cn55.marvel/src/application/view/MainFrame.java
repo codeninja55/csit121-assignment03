@@ -72,10 +72,10 @@ public class MainFrame extends JFrame {
         add(tabPane, BorderLayout.CENTER);
 
         // Add tabs to tabPane group
-        tabPane.addTab("Start", welcomePane);
-        tabPane.addTab("Cards", cardViewPane);
-        tabPane.addTab("Purchases", purchaseViewPane);
-        tabPane.addTab("Categories", categoriesViewPane);
+        tabPane.addTab(" Start ", Style.homeIcon(), welcomePane);
+        tabPane.addTab(" Cards ", Style.cardIcon(),cardViewPane);
+        tabPane.addTab(" Purchases ", Style.purchaseIcon(), purchaseViewPane);
+        tabPane.addTab(" Categories ", Style.categoryIcon(), categoriesViewPane);
 
         // DEFAULT PANE BEGIN AT
         tabPane.setSelectedIndex(0);

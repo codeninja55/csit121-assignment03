@@ -32,7 +32,7 @@ public class DeleteCardForm extends JPanel implements FormFactory {
         errorLabel = new ErrorLabel("CARD DOES NOT EXIST");
         ruleErrLabel = new ErrorLabel("INVALID CARD ID NUMBER");
         deleteErrorLabel = new ErrorLabel("CARD NOT DELETED");
-        deleteBtn = new FormButton("Delete Card");
+        deleteBtn = new FormButton("Delete Card", Style.deleteActionIcon());
 
         setLayout(new BorderLayout());
         Dimension dim = getPreferredSize();
