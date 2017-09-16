@@ -12,23 +12,21 @@ import application.model.PurchaseModel.Purchase;
 import application.model.PurchaseModel.PurchaseType;
 import application.model.PurchaseModel.PurchasesReadImpl;
 import application.model.PurchaseModel.SortPurchaseType;
-import application.view.CardView.CardForm;
-import application.view.CardView.CardViewPane;
-import application.view.CategoriesView.CategoriesForm;
-import application.view.CategoriesView.CategoriesViewPane;
+import application.view.FormFactory.CardForm;
+import application.view.CardViewPane;
+import application.view.FormFactory.*;
+import application.view.CategoriesViewPane;
 import application.view.CustomComponents.FormFormattedTextField;
 import application.view.CustomComponents.ResultsPane;
 import application.view.CustomComponents.Style;
-import application.view.FormFactory.DeleteCardForm;
-import application.view.FormFactory.DeleteCategoryForm;
 import application.view.MainFrame;
-import application.view.PurchaseView.PurchaseEvent;
-import application.view.PurchaseView.PurchaseForm;
-import application.view.PurchaseView.PurchaseViewPane;
-import application.view.FormFactory.SearchForm;
+import application.view.FormFactory.PurchaseEvent;
+import application.view.FormFactory.PurchaseForm;
+import application.view.PurchaseViewPane;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
@@ -68,7 +66,6 @@ public class Program {
         writePurchases = new PurchasesWriteOut();
 
         this.mainFrame = new MainFrame();
-        this.tabPane = mainFrame.getTabPane();
 
         /* Windows Closing Listener */
         mainFrame.addWindowListener(new WindowAdapter() {
@@ -86,6 +83,24 @@ public class Program {
 
                 System.gc(); // Garbage collector
                 mainFrame.dispose();
+            }
+        });
+
+        this.tabPane = mainFrame.getTabPane();
+        tabPane.addChangeListener(new ChangeListener() {
+            public void stateChanged(ChangeEvent e) {
+                // DESELECTED LISTENERS
+                if (tabPane.getSelectedComponent() != purchaseViewPane) {
+                    purchaseViewPane.getResultsPane().setVisible(false);
+                    removePurchaseForms();
+                }
+                if (tabPane.getSelectedComponent() != cardViewPane) {
+                    cardViewPane.getResultsPane().setVisible(false);
+                    removeCardForms();
+                }
+                if (tabPane.getSelectedComponent() != categoriesViewPane) {
+                    removeCategoryForms();
+                }
             }
         });
 
@@ -113,29 +128,12 @@ public class Program {
 
     /*============================== REGISTER AND HANDLE EVENTS ==============================*/
     private void setupViewListeners() {
-        /*TAB PANE LISTENER*/
-        // This method removes forms from the selected pane if the user selects another pane
-        tabPane.addChangeListener((ChangeEvent e) -> {
-            // DESELECTED LISTENERS
-            if (tabPane.getSelectedComponent() != purchaseViewPane) {
-                purchaseViewPane.getResultsPane().setVisible(false);
-                removePurchaseForms();
-            } else if (tabPane.getSelectedComponent() != cardViewPane) {
-                cardViewPane.getResultsPane().setVisible(false);
-                removeCardForms();
-            } else if (tabPane.getSelectedComponent() != categoriesViewPane) {
-                removeCategoryForms();
-            }
-        });
-
         /*============================== CARD VIEW HANDLERS ==============================*/
         /*TOOLBAR | CREATE CARD BUTTON*/
         cardViewPane.setCreateCardListener(() -> {
             removeCardForms();
-            cardViewPane.setCardForm(new CardForm());
-            CardForm form = cardViewPane.getCardForm();
-            cardViewPane.add(form, BorderLayout.WEST);
-            form.setVisible(true);
+            CardForm form = FormFactory.createCardForm();
+            cardViewPane.setCardForm(form);
             form.createBaseCreateCardForm();
 
             // Setup a text pane to put all the necessary data into
@@ -186,10 +184,8 @@ public class Program {
         /*TOOLBAR | DELETE CARD BUTTON*/
         cardViewPane.setDeleteCardListener(() -> {
             removeCardForms();
-            cardViewPane.setDeleteForm(new DeleteCardForm());
-            DeleteCardForm form = cardViewPane.getDeleteForm();
-            cardViewPane.add(form, BorderLayout.WEST);
-            form.setVisible(true);
+            DeleteCardForm form = FormFactory.deleteCardForm();
+            cardViewPane.setDeleteForm(form);
 
             // Setup a text pane to put all the necessary data into
             ResultsPane resultsPane = cardViewPane.getResultsPane();
@@ -263,19 +259,18 @@ public class Program {
         /*TOOLBAR | SEARCH BUTTON*/
         cardViewPane.setSearchCardListener(() -> {
             removeCardForms();
-            cardViewPane.setSearchForm(new SearchForm());
-            cardViewPane.add(cardViewPane.getSearchForm(), BorderLayout.WEST);
-            cardViewPane.getSearchForm().setVisible(true);
+            SearchForm form = FormFactory.searchCardForm();
+            cardViewPane.setSearchForm(form);
 
             // ADD A CANCEL BUTTON LISTENER AFTER CREATING FORM
-            cardViewPane.getSearchForm().setCancelListener(() -> {
+            form.setCancelListener(() -> {
                 cardViewPane.getSearchForm().setVisible(false);
                 cardViewPane.getResultsPane().setVisible(false);
                 removeCardForms();
             });
 
             // ADD A CANCEL BUTTON LISTENER AFTER CREATING FORM
-            cardViewPane.getSearchForm().setSearchListener(e -> {
+            form.setSearchListener(e -> {
                 // Setup a text pane to put all the necessary data into
                 ResultsPane resultsPane = cardViewPane.getResultsPane();
                 resultsPane.setResultsTextPane();
@@ -401,16 +396,14 @@ public class Program {
         /*TOOLBAR | CREATE BUTTON*/
         purchaseViewPane.setCreatePurchaseListener(() -> {
             removePurchaseForms();
-            purchaseViewPane.setCreatePurchaseForm(new PurchaseForm());
-            PurchaseForm form = purchaseViewPane.getCreatePurchaseForm();
-            purchaseViewPane.add(form, BorderLayout.WEST);
+            PurchaseForm form = FormFactory.createPurchaseForm();
+            purchaseViewPane.setCreatePurchaseForm(form);
 
             form.getPurchaseTypeCombo().setSelectedIndex(0);
             form.setGeneratedReceiptID(Generator.setReceiptID());
             form.setCardModel(db.getCardModel());
             form.setCategoriesList(new ArrayList<>(db.getAllCategories().values()));
             form.createBasePurchaseForm();
-            form.setVisible(true);
 
             // SET UP A RESULTS PANE TO SHOW END RESULT
             ResultsPane resultsPane = purchaseViewPane.getResultsPane();
@@ -539,7 +532,6 @@ public class Program {
                 }
 
                 showResultsPane(resultsText, resultsPane, resultsTextPane);
-
             }
         });
 
@@ -569,10 +561,8 @@ public class Program {
         /*TOOLBAR | CREATE CATEGORY BUTTON*/
         categoriesViewPane.setCreateCategoryListener(() -> {
             removeCategoryForms();
-            categoriesViewPane.setCreateCategoryForm(new CategoriesForm());
-            CategoriesForm form = categoriesViewPane.getCreateCategoryForm();
-            categoriesViewPane.add(form, BorderLayout.WEST);
-            form.setVisible(true);
+            CategoriesForm form = FormFactory.createCategoryForm();
+            categoriesViewPane.setCreateCategoryForm(form);
 
             // ADD A CANCEL BUTTON LISTENER AFTER CREATING FORM
             form.setCancelListener(() -> {
@@ -593,11 +583,8 @@ public class Program {
         /*TOOLBAR | DELETE CATEGORY BUTTON*/
         categoriesViewPane.setDeleteCategoryListener(() -> {
             removeCategoryForms();
-            categoriesViewPane.setDeleteCategoryForm(new DeleteCategoryForm());
-            DeleteCategoryForm form = categoriesViewPane.getDeleteCategoryForm();
-
-            categoriesViewPane.add(form, BorderLayout.WEST);
-            form.setVisible(true);
+            DeleteCategoryForm form = FormFactory.deleteCategoryForm();
+            categoriesViewPane.setDeleteCategoryForm(form);
 
             //ADD A CANCEL BUTTON LISTENER AFTER CREATING FORM
             form.setCancelListener(() -> {
@@ -692,7 +679,7 @@ public class Program {
         for (Component comp : cardViewPane.getComponents()) {
             if (comp instanceof CardForm || comp instanceof DeleteCardForm || comp instanceof SearchForm) {
                 comp.setVisible(false);
-                if (comp instanceof CardForm && cardViewPane.getCardForm().getBaseCreateCardForm() != null)
+                if (cardViewPane.getCardForm().getBaseCreateCardForm() != null)
                     cardViewPane.getCardForm().remove(cardViewPane.getCardForm().getBaseCreateCardForm());
                 cardViewPane.remove(comp);
             }
@@ -701,9 +688,9 @@ public class Program {
 
     private void removePurchaseForms() {
         for (Component comp : purchaseViewPane.getComponents()) {
-            if (comp instanceof PurchaseForm) {
+            if (comp instanceof FormFactory || comp instanceof ResultsPane) {
                 comp.setVisible(false);
-                if (purchaseViewPane.getCreatePurchaseForm().getBaseCreatePurchaseForm() != null)
+                if (purchaseViewPane.getCreatePurchaseForm() != null)
                     purchaseViewPane.getCreatePurchaseForm().remove(purchaseViewPane.getCreatePurchaseForm().getBaseCreatePurchaseForm());
                 purchaseViewPane.remove(comp);
             }
@@ -712,8 +699,10 @@ public class Program {
 
     private void removeCategoryForms() {
         for (Component comp : categoriesViewPane.getComponents()) {
-            if (comp instanceof CategoriesForm || comp instanceof DeleteCategoryForm)
+            if (comp instanceof FormFactory) {
+                comp.setVisible(false);
                 categoriesViewPane.remove(comp);
+            }
         }
     }
 
