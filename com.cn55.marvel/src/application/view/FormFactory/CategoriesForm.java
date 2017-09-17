@@ -6,40 +6,29 @@ import application.view.CustomComponents.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Arrays;
 
 public class CategoriesForm extends JPanel implements FormFactory {
     private final JPanel createCategoriesForm;
-    private final FormLabel categoryIDLabel;
-    private final FormTextField categoryIDTextField;
-    private final FormLabel categoryNameLabel;
     private final FormTextField categoryNameTextField;
-    private final FormLabel categoryDescLabel;
     private final JTextArea categoryDescTextField;
-
-    private final FormButton createBtn;
-    private final FormButton clearBtn;
-    private final CancelButton cancelBtn;
 
     private CategoryListener createCategoryListener;
 
     CategoriesForm() {
         /* INITIALIZE ALL COMPONENTS */
         createCategoriesForm = new JPanel(new GridBagLayout());
-        categoryIDLabel = new FormLabel("Category ID");
-        categoryIDTextField = new FormTextField(20);
-        categoryNameLabel = new FormLabel("Category Name");
+        FormLabel categoryIDLabel = new FormLabel("Category ID");
+        FormTextField categoryIDTextField = new FormTextField(20);
+        FormLabel categoryNameLabel = new FormLabel("Category Name");
         categoryNameTextField = new FormTextField(35);
-        categoryDescLabel = new FormLabel("Category Description");
+        FormLabel categoryDescLabel = new FormLabel("Category Description");
         categoryDescTextField = new JTextArea(15,35);
-        createBtn = new FormButton("Create Category", Style.addIcon());
-        clearBtn = new FormButton("Clear", Style.clearIcon());
-        cancelBtn = new CancelButton("Cancel New Category");
+        FormButton createBtn = new FormButton("Create Category", Style.addIcon());
+        FormButton clearBtn = new FormButton("Clear", Style.clearIcon());
+        CancelButton cancelBtn = new CancelButton("Cancel New Category");
 
-        /* INITIALIZE THIS PANEL */
         setLayout(new BorderLayout());
-        /* SIZING - Make sure the form is at least always 800 pixels */
         Dimension dim = getPreferredSize();
         dim.width = 800;
         setPreferredSize(dim);
@@ -91,7 +80,7 @@ public class CategoriesForm extends JPanel implements FormFactory {
         gc.insets = new Insets(20,0,10,0);
         Dimension descTextFieldDim = getPreferredSize();
         descTextFieldDim.width = 350;
-        descTextFieldDim.height = 350;
+        descTextFieldDim.height = 250;
         categoryDescTextField.setPreferredSize(descTextFieldDim);
         categoryDescTextField.setMinimumSize(descTextFieldDim);
         categoryDescTextField.setFont(Style.textAreaFont());
@@ -105,28 +94,46 @@ public class CategoriesForm extends JPanel implements FormFactory {
         gc.insets = new Insets(20,0,0,10);
         createCategoriesForm.add(createBtn, gc);
 
-        gc.gridx = 1; gc.gridwidth = 1; gc.weightx = 1.5;
+        gc.gridx = 1; gc.gridwidth = 1; gc.weightx = 0.5;
         gc.anchor = GridBagConstraints.FIRST_LINE_START;
         gc.insets = new Insets(20,10,0,0);
         createCategoriesForm.add(clearBtn, gc);
 
         add(createCategoriesForm, BorderLayout.CENTER);
 
-        /* CANCEL BUTTON SETUP */
         add(cancelBtn, BorderLayout.SOUTH);
 
         /* SET FORM CUSTOM COMPONENTS VISIBLE */
         Arrays.stream(createCategoriesForm.getComponents())
-                .filter(c -> c instanceof FormLabel || c instanceof FormTextField || c instanceof FormButton)
+                .filter(c -> c instanceof FormLabel)
+                .filter(c -> c instanceof FormTextField)
+                .filter(c -> c instanceof FormButton)
                 .forEach(c -> c.setVisible(true));
 
         categoryIDTextField.setText(Integer.toString(Generator.getNextCategoryID()));
 
         /* BUTTON REGISTRATION AND CALLBACKS */
-        FormListener handler = new FormListener();
-        createBtn.addActionListener(handler);
-        clearBtn.addActionListener(handler);
-        cancelBtn.addActionListener(handler);
+        createBtn.addActionListener((ActionEvent e) -> {
+            CategoryEvent event = new CategoryEvent(this, categoryNameTextField, categoryDescTextField);
+
+            if (createCategoryListener != null)
+                createCategoryListener.createCategoryEventOccurred(event);
+        });
+
+        clearBtn.addActionListener((ActionEvent e) -> {
+            for (Component c : createCategoriesForm.getComponents()) {
+                if (c instanceof JTextField && ((JTextField) c).isEditable()) ((JTextField) c).setText("");
+
+                if (c instanceof JTextArea) ((JTextArea) c).setText("");
+
+                if (c instanceof FormLabel) c.setForeground(Color.BLACK);
+            }
+        });
+
+        cancelBtn.addActionListener((ActionEvent e) -> {
+            setVisible(false);
+            getParent().remove(CategoriesForm.this);
+        });
     }
 
     /*============================== MUTATORS  ==============================*/
@@ -136,31 +143,4 @@ public class CategoriesForm extends JPanel implements FormFactory {
 
     /*============================== ACCESSORS  ==============================*/
 
-    /*=========================================================================*/
-    /*============================== INNER CLASS ==============================*/
-    /*=========================================================================*/
-    class FormListener implements ActionListener {
-        public void actionPerformed(ActionEvent e) {
-            if (e.getSource() == createBtn) {
-                CategoryEvent event = new CategoryEvent(this, categoryNameTextField, categoryDescTextField);
-
-                if (createCategoryListener != null)
-                    createCategoryListener.createCategoryEventOccurred(event);
-            } else if (e.getSource() == clearBtn) {
-                for (Component c : createCategoriesForm.getComponents()) {
-                    if (c instanceof JTextField && ((JTextField) c).isEditable())
-                        ((JTextField) c).setText("");
-
-                    if (c instanceof JTextArea)
-                        ((JTextArea) c).setText("");
-
-                    if (c instanceof FormLabel)
-                        c.setForeground(Color.BLACK);
-                }
-            } else if (e.getSource() == cancelBtn) {
-                setVisible(false);
-                getParent().remove(CategoriesForm.this);
-            }
-        }
-    }
 }

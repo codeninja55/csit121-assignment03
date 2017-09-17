@@ -9,12 +9,7 @@ import java.awt.event.ActionListener;
 import java.util.Arrays;
 
 public class DeleteCategoryForm extends JPanel {
-
     private JPanel deleteCategoryForm;
-    private CancelButton cancelBtn;
-    private FormRadioButton idRB;
-    private FormRadioButton nameRB;
-
     private FormLabel categoryIDLabel;
     private FormTextField categoryIDTextField;
     private FormLabel categoryNameLabel;
@@ -29,13 +24,13 @@ public class DeleteCategoryForm extends JPanel {
 
     /*============================== CONSTRUCTORS  ==============================*/
     DeleteCategoryForm() {
-        cancelBtn = new CancelButton("Cancel Category Delete");
+        CancelButton cancelBtn = new CancelButton("Cancel Category Delete");
 
         JPanel rbSubPane = new JPanel(new GridLayout(1, 3));
         ButtonGroup categoryRBGroup = new ButtonGroup();
         FormLabel deleteTypeLabel = new FormLabel("Delete By: ");
-        idRB = new FormRadioButton("Category ID");
-        nameRB = new FormRadioButton("Category Name");
+        FormRadioButton idRB = new FormRadioButton("Category ID");
+        FormRadioButton nameRB = new FormRadioButton("Category Name");
 
         categoryIDLabel = new FormLabel("Category ID");
         categoryIDTextField = new FormTextField(20);
@@ -74,11 +69,30 @@ public class DeleteCategoryForm extends JPanel {
         setVisible(false);
 
         /* REGISTRATION OF LISTENERS AND CALLBACKS */
-        FormListener handler = new FormListener();
-        cancelBtn.addActionListener(handler);
-        deleteBtn.addActionListener(handler);
-        idRB.addActionListener(handler);
-        nameRB.addActionListener(handler);
+        cancelBtn.addActionListener((ActionEvent e) -> {
+            setVisible(false);
+            getParent().remove(DeleteCategoryForm.this);
+        });
+
+        deleteBtn.addActionListener((ActionEvent e) -> {
+            if (deleteListener != null) {
+                DeleteEvent event = new DeleteEvent(this, categoryIDLabel, categoryIDTextField,
+                        categoryNameLabel, categoryNameTextField, errLabel,
+                        idRuleErrLabel, othersDeleteErrLabel, deleteErrorLabel);
+                deleteListener.deleteEventOccurred(event);
+            }
+        });
+
+        idRB.addActionListener((ActionEvent e) -> {
+            deleteByIDForm();
+        });
+
+        nameRB.addActionListener((ActionEvent e) -> {
+            deleteByNameForm();
+            /* TEST CODE */
+            System.err.println("NAME Radio Button NOT IMPL");
+            System.out.println("NAME RADIO BUTTON SEL");
+        });
 
         baseForm();
     }
@@ -179,35 +193,5 @@ public class DeleteCategoryForm extends JPanel {
     private void hideErrorLabels() {
         Arrays.stream(deleteCategoryForm.getComponents()).filter(c -> c instanceof ErrorLabel)
                 .forEach(c -> c.setVisible(false));
-    }
-
-    /*=========================================================================*/
-    /*============================== INNER CLASS ==============================*/
-    /*=========================================================================*/
-    /*=========================== LISTENER HANDLER ============================*/
-    class FormListener implements ActionListener {
-        public void actionPerformed(ActionEvent e) {
-            if (e.getSource() == cancelBtn) {
-                setVisible(false);
-                getParent().remove(DeleteCategoryForm.this);
-            } else if (e.getSource() == deleteBtn) {
-                if (deleteListener != null) {
-                    DeleteEvent event = new DeleteEvent(this, categoryIDLabel, categoryIDTextField,
-                            categoryNameLabel, categoryNameTextField, errLabel,
-                            idRuleErrLabel, othersDeleteErrLabel, deleteErrorLabel);
-                    deleteListener.deleteEventOccurred(event);
-                }
-            } else if (e.getSource() == idRB) {
-                deleteByIDForm();
-                /* TEST CODE */
-                System.err.println("INNER CLASS ID Radio Button NOT IMPL");
-                System.out.println("INNER CLASS ID RADIO BUTTON SEL");
-            } else if (e.getSource() == nameRB) {
-                deleteByNameForm();
-                /* TEST CODE */
-                System.err.println("NAME Radio Button NOT IMPL");
-                System.out.println("NAME RADIO BUTTON SEL");
-            }
-        }
     }
 }

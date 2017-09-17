@@ -9,6 +9,7 @@ import application.view.CustomComponents.ToolbarButton;
 import application.view.CustomComponents.ToolbarButtonListener;
 import application.view.FormFactory.CategoriesForm;
 import application.view.FormFactory.DeleteCategoryForm;
+import application.view.FormFactory.FormFactory;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
@@ -17,14 +18,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 
 public class CategoriesViewPane extends JPanel implements DataObserver {
     private DataObservable dataDAO;
-
-    private ToolbarButton createCategoryBtn;
-    private ToolbarButton deleteCategoryBtn;
 
     private CategoriesTableModel categoriesTableModel;
     private JTable categoriesTablePane;
@@ -35,8 +34,8 @@ public class CategoriesViewPane extends JPanel implements DataObserver {
     /*============================== CONSTRUCTORS  ==============================*/
     CategoriesViewPane() {
         Toolbar toolbar = new Toolbar();
-        createCategoryBtn = new ToolbarButton("Create", Style.createIcon());
-        deleteCategoryBtn = new ToolbarButton("Delete", Style.deleteIcon());
+        ToolbarButton createCategoryBtn = new ToolbarButton("Create", Style.createIcon());
+        ToolbarButton deleteCategoryBtn = new ToolbarButton("Delete", Style.deleteIcon());
 
         categoriesTableModel = new CategoriesTableModel();
         categoriesTablePane = new JTable();
@@ -52,11 +51,15 @@ public class CategoriesViewPane extends JPanel implements DataObserver {
         add(tableScrollPane, BorderLayout.CENTER);
 
         /* REGISTRATION OF TOOLBAR BUTTON LISTENERS */
-        ToolbarListener handler = new ToolbarListener();
-        createCategoryBtn.addActionListener(handler);
-        deleteCategoryBtn.addActionListener(handler);
-        createCategoryBtn.addMouseListener(handler);
-        deleteCategoryBtn.addMouseListener(handler);
+        createCategoryBtn.addActionListener((ActionEvent e) -> {
+            if (createCategoryListener != null)
+                createCategoryListener.toolbarButtonEventOccurred();
+        });
+
+        deleteCategoryBtn.addActionListener((ActionEvent e) -> {
+            if (deleteCategoryListener != null)
+                deleteCategoryListener.toolbarButtonEventOccurred();
+        });
     }
 
     /*============================== MUTATORS  ==============================*/
@@ -112,21 +115,6 @@ public class CategoriesViewPane extends JPanel implements DataObserver {
     /*=========================================================================*/
     /*============================== INNER CLASS ==============================*/
     /*=========================================================================*/
-
-    /*=========================== TOOLBAR LISTENER ============+===============*/
-    class ToolbarListener extends MouseAdapter implements ActionListener {
-        public void actionPerformed(ActionEvent e) {
-            if (e.getSource() == createCategoryBtn) {
-                if (createCategoryListener != null) {
-                    createCategoryListener.toolbarButtonEventOccurred();
-                }
-            } else if (e.getSource() == deleteCategoryBtn) {
-                if (deleteCategoryListener != null) {
-                    deleteCategoryListener.toolbarButtonEventOccurred();
-                }
-            }
-        }
-    }
 
     /*========================== CategoriesTableModel =========================*/
     public class CategoriesTableModel extends AbstractTableModel {
