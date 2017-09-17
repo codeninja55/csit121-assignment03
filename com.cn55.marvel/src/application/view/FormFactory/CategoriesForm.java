@@ -7,8 +7,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Arrays;
 
-@SuppressWarnings("FieldCanBeLocal")
 public class CategoriesForm extends JPanel implements FormFactory {
     private final JPanel createCategoriesForm;
     private final FormLabel categoryIDLabel;
@@ -23,7 +23,6 @@ public class CategoriesForm extends JPanel implements FormFactory {
     private final CancelButton cancelBtn;
 
     private CategoryListener createCategoryListener;
-    private ButtonListener cancelListener;
 
     CategoriesForm() {
         /* INITIALIZE ALL COMPONENTS */
@@ -117,10 +116,9 @@ public class CategoriesForm extends JPanel implements FormFactory {
         add(cancelBtn, BorderLayout.SOUTH);
 
         /* SET FORM CUSTOM COMPONENTS VISIBLE */
-        for (Component c : createCategoriesForm.getComponents()) {
-            if (c instanceof FormLabel || c instanceof FormTextField || c instanceof FormButton)
-                c.setVisible(true);
-        }
+        Arrays.stream(createCategoriesForm.getComponents())
+                .filter(c -> c instanceof FormLabel || c instanceof FormTextField || c instanceof FormButton)
+                .forEach(c -> c.setVisible(true));
 
         categoryIDTextField.setText(Integer.toString(Generator.getNextCategoryID()));
 
@@ -136,12 +134,7 @@ public class CategoriesForm extends JPanel implements FormFactory {
         this.createCategoryListener = listener;
     }
 
-    public void setCancelListener(ButtonListener listener) {
-        this.cancelListener = listener;
-    }
-
     /*============================== ACCESSORS  ==============================*/
-
 
     /*=========================================================================*/
     /*============================== INNER CLASS ==============================*/
@@ -165,8 +158,8 @@ public class CategoriesForm extends JPanel implements FormFactory {
                         c.setForeground(Color.BLACK);
                 }
             } else if (e.getSource() == cancelBtn) {
-                if (cancelListener != null)
-                    cancelListener.buttonActionOccurred();
+                setVisible(false);
+                getParent().remove(CategoriesForm.this);
             }
         }
     }

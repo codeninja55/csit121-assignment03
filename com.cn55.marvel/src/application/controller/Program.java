@@ -453,12 +453,6 @@ public class Program {
             CategoriesForm form = FormFactory.createCategoryForm();
             categoriesViewPane.setCreateCategoryForm(form);
 
-            // ADD A CANCEL BUTTON LISTENER AFTER CREATING FORM
-            form.setCancelListener(() -> {
-                form.setVisible(false);
-                removeCategoryForms();
-            });
-
             // ADD A CREATE BUTTON LISTENER AFTER CREATING FORM
             form.setCreateCategoryListener(e -> {
                 shop.makeCategory(new Category(e.getCategoryNameTextField().getText(),
@@ -474,12 +468,6 @@ public class Program {
             removeCategoryForms();
             DeleteCategoryForm form = FormFactory.deleteCategoryForm();
             categoriesViewPane.setDeleteCategoryForm(form);
-
-            //ADD A CANCEL BUTTON LISTENER AFTER CREATING FORM
-            form.setCancelListener(() -> {
-                form.setVisible(false);
-                removeCategoryForms();
-            });
 
             //ADD A DELETE BUTTON LISTENER AFTER CREATING FORM
             form.setDeleteListener(e -> {
@@ -547,7 +535,6 @@ public class Program {
             });
 
         });
-
     }
 
     /*============================== MUTATORS  ==============================*/

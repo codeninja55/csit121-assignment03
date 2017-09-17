@@ -6,6 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Arrays;
 
 public class DeleteCategoryForm extends JPanel {
 
@@ -24,11 +25,10 @@ public class DeleteCategoryForm extends JPanel {
     private ErrorLabel deleteErrorLabel;
     private FormButton deleteBtn;
 
-    private ButtonListener cancelListener;
     private DeleteListener deleteListener;
 
     /*============================== CONSTRUCTORS  ==============================*/
-    public DeleteCategoryForm() {
+    DeleteCategoryForm() {
         cancelBtn = new CancelButton("Cancel Category Delete");
 
         JPanel rbSubPane = new JPanel(new GridLayout(1, 3));
@@ -58,7 +58,6 @@ public class DeleteCategoryForm extends JPanel {
         /* RADIO BUTTONS SUB PANE */
         categoryRBGroup.add(idRB);
         categoryRBGroup.add(nameRB);
-
 
         idRB.setSelected(true);
         deleteTypeLabel.setVisible(true);
@@ -166,11 +165,6 @@ public class DeleteCategoryForm extends JPanel {
     }
 
     /*============================== MUTATORS  ==============================*/
-
-    public void setCancelListener(ButtonListener listener) {
-        this.cancelListener = listener;
-    }
-
     public void setDeleteListener(DeleteListener listener) {
         this.deleteListener = listener;
     }
@@ -183,11 +177,8 @@ public class DeleteCategoryForm extends JPanel {
     }
 
     private void hideErrorLabels() {
-        for (Component c : deleteCategoryForm.getComponents()) {
-            if (c instanceof ErrorLabel) {
-                c.setVisible(false);
-            }
-        }
+        Arrays.stream(deleteCategoryForm.getComponents()).filter(c -> c instanceof ErrorLabel)
+                .forEach(c -> c.setVisible(false));
     }
 
     /*=========================================================================*/
@@ -197,9 +188,8 @@ public class DeleteCategoryForm extends JPanel {
     class FormListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() == cancelBtn) {
-                if (cancelListener != null) {
-                    cancelListener.buttonActionOccurred();
-                }
+                setVisible(false);
+                getParent().remove(DeleteCategoryForm.this);
             } else if (e.getSource() == deleteBtn) {
                 if (deleteListener != null) {
                     DeleteEvent event = new DeleteEvent(this, categoryIDLabel, categoryIDTextField,
