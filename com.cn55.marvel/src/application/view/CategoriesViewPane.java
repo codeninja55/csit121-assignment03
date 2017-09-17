@@ -130,7 +130,6 @@ public class CategoriesViewPane extends JPanel implements DataObserver {
 
     /*========================== CategoriesTableModel =========================*/
     public class CategoriesTableModel extends AbstractTableModel {
-
         private ArrayList<Category> categories;
         private String[] tableHeaders = {"ID", "Name", "Description", "Total Amount"};
 
@@ -152,7 +151,6 @@ public class CategoriesViewPane extends JPanel implements DataObserver {
 
         public Object getValueAt(int rowIndex, int columnIndex) {
             Category category = categories.get(rowIndex);
-
             switch (columnIndex) {
                 case 0:
                     return category.getId();
