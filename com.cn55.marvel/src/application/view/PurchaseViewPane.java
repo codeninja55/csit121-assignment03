@@ -66,7 +66,7 @@ public class PurchaseViewPane extends JPanel implements DataObserver {
         toolbar.getLeftToolbar().add(createPurchaseBtn);
         toolbar.getLeftToolbar().add(deletePurchaseBtn);
         toolbar.getLeftToolbar().add(summaryBtn);
-        deletePurchaseBtn.setBackground(Style.blueGrey800());
+        deletePurchaseBtn.setBackground(Style.blueGrey700());
         deletePurchaseBtn.setEnabled(false);
         toolbar.getRightToolbar().add(viewPurchaseBtn);
         toolbar.getRightToolbar().add(sortPurchaseCombo);
