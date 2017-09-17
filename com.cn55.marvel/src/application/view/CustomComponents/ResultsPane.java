@@ -2,59 +2,79 @@ package application.view.CustomComponents;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Arrays;
 
-/* NOTE:
-*  To make this appear and hide dynamically, run these steps in Controller on Event Occurred
-*  1. Create the JPanel first and set it to visible
-*  2. Create the ResultsTextPane by invoking setResultsTextPane()
-*  3. Populate the ResultsTextPane with all the data
-*  4. Create the JScrollPane by invoking setScrollPane() with the ResultsTextPane component added
-*  5. Add the JScrollPane to the ResultsPane
-*  6. Invoke grabFocus() and setCaretPosition(0) on the ResultsTextPane
-*
-*  DO NOT FORGET TO REMOVE BOTH JScrollPane and ResultsTextPane after finishing */
+/* BUILDER DESIGN PATTERN - Build a text pane with the appropriate sequential order */
 
 public class ResultsPane extends JPanel {
+    private ResultsTextPane resultsTextPane; // required
+    private JScrollPane scrollPane; // required but only initialized after this pane is shown
 
-    private ResultsTextPane resultsTextPane;
-    private JScrollPane scrollPane;
-
-    public ResultsPane(String paneName) {
+    private ResultsPane(ResultsPaneBuilder builder) {
+        this.resultsTextPane = builder.resultsTextPane;
         setLayout(new BorderLayout());
         Dimension resultsDim = getPreferredSize();
         resultsDim.width = 800;
         setPreferredSize(resultsDim);
         setMinimumSize(getPreferredSize());
-        setName(paneName);
         setVisible(false);
+
+        this.addComponentListener(new ComponentAdapter() {
+            public void componentShown(ComponentEvent e) {
+                super.componentShown(e);
+                scrollPane = new JScrollPane(resultsTextPane);
+                ResultsPane.super.add(scrollPane);
+
+                getParent().addMouseListener(new MouseAdapter() {
+                    public void mouseClicked(MouseEvent e) {
+                        super.mouseClicked(e);
+                        setVisible(false);
+                    }
+                });
+
+                JScrollPane table = (JScrollPane) Arrays.stream(getParent().getComponents())
+                        .filter(comp -> comp instanceof JScrollPane)
+                        .findAny().orElse(null);
+
+                if (table != null) {
+                    table.getViewport().getView().addMouseListener(new MouseAdapter() {
+                        public void mouseClicked(MouseEvent e) {
+                            super.mouseClicked(e);
+                            setVisible(false);
+                        }
+                    });
+                }
+            }
+        });
+
+        this.addComponentListener(new ComponentAdapter() {
+            public void componentHidden(ComponentEvent e) {
+                super.componentHidden(e);
+                getParent().remove(ResultsPane.this);
+            }
+        });
     }
 
-    /*============================== MUTATORS ==============================*/
+    /*============================== BUILDER CLASS ==============================*/
+    public static class ResultsPaneBuilder {
+        private ResultsTextPane resultsTextPane;
 
-    public void setResultsTextPane() {
-        this.resultsTextPane = new ResultsTextPane();
-    }
+        public ResultsPaneBuilder(String resultsText) {
+            this.resultsTextPane = new ResultsTextPane(resultsText);
+        }
 
-    public void setScrollPane(ResultsTextPane resultsTextPane) {
-        this.scrollPane = new JScrollPane(resultsTextPane);
-    }
-
-    /*============================== ACCESSORS  ==============================*/
-    public ResultsTextPane getResultsTextPane() {
-        return resultsTextPane;
-    }
-
-    public JScrollPane getScrollPane() {
-        return scrollPane;
+        public ResultsPane build() {
+            return new ResultsPane(this);
+        }
     }
 
     /*============================== INNER CLASS ==============================*/
-    public class ResultsTextPane extends JTextPane {
-
-        ResultsTextPane() {
-
+    private static class ResultsTextPane extends JTextPane {
+        ResultsTextPane(String resultsText) {
             Dimension textPaneDim = getPreferredSize();
             textPaneDim.width = 800;
             setPreferredSize(textPaneDim);
@@ -63,10 +83,8 @@ public class ResultsPane extends JPanel {
             setFont(Style.textPaneFont());
             setBackground(Style.blueGrey400());
             setForeground(Style.grey50());
-            setText(null);
             setVisible(true);
-            ResultsPane.this.revalidate();
-            ResultsPane.this.repaint();
+            setText(resultsText);
         }
 
     }

@@ -27,9 +27,11 @@ import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class Program {
 
@@ -89,12 +91,12 @@ public class Program {
             public void stateChanged(ChangeEvent e) {
                 // DESELECTED LISTENERS
                 if (tabPane.getSelectedComponent() != purchaseViewPane) {
-                    purchaseViewPane.getResultsPane().setVisible(false);
+                    //purchaseViewPane.getResultsPane().setVisible(false);
                     removePurchaseForms();
                 }
 
                 if (tabPane.getSelectedComponent() != cardViewPane) {
-                    cardViewPane.getResultsPane().setVisible(false);
+                    //cardViewPane.getResultsPane().setVisible(false);
                     removeCardForms();
                 }
 
@@ -136,20 +138,8 @@ public class Program {
             cardViewPane.setCardForm(form);
             form.createBaseCreateCardForm();
 
-            // Setup a text pane to put all the necessary data into
-            ResultsPane resultsPane = cardViewPane.getResultsPane();
-            resultsPane.setVisible(false);
-            resultsPane.setResultsTextPane();
-            ResultsPane.ResultsTextPane resultsTextPane = resultsPane.getResultsTextPane();
-            setCardViewMouseListeners();
-
             // ADD A CANCEL BUTTON LISTENER AFTER CREATING FORM
-            form.setCancelListener(() -> {
-                cardViewPane.getCardForm().setVisible(false);
-                cardViewPane.getResultsPane().setVisible(false);
-                removeCardForms();
-                removeResultsPane(resultsPane);
-            });
+            form.setCancelListener(this::removeCardForms);
 
             // ADD A CREATE BUTTON LISTENER AFTER CREATING FORM
             form.setCardListener(e -> {
@@ -176,7 +166,8 @@ public class Program {
                     shop.makeCard(newCard);
                 }
 
-                showResultsPane(db.getCard(e.getCardIDTextField().getText()).toString(), resultsPane, resultsTextPane);
+                final String cardID = e.getCardIDTextField().getText();
+                showResults(cardViewPane, printCard(cardID, "CARD ADDED"));
                 removeCardForms();
             });
         });
@@ -187,33 +178,22 @@ public class Program {
             DeleteCardForm form = FormFactory.deleteCardForm();
             cardViewPane.setDeleteForm(form);
 
-            // Setup a text pane to put all the necessary data into
-            ResultsPane resultsPane = cardViewPane.getResultsPane();
-            resultsPane.setVisible(false);
-            resultsPane.setResultsTextPane();
-            ResultsPane.ResultsTextPane resultsTextPane = resultsPane.getResultsTextPane();
-            setCardViewMouseListeners();
-
             // REGISTER A CANCEL BUTTON LISTENER AFTER CREATING FORM
             form.setCancelListener(() -> {
                 cardViewPane.getDeleteForm().setVisible(false);
-                cardViewPane.getResultsPane().setVisible(false);
                 removeCardForms();
-                removeResultsPane(resultsPane);
             });
 
             // REGISTER A DELETE BUTTON LISTENER AFTER CREATING FORM
             form.setDeleteListener(e -> {
-                String cardID = e.getIdTextField().getText().toUpperCase();
+                final String cardID = e.getIdTextField().getText().toUpperCase();
 
                 if (!cardID.isEmpty() && db.getAllCards().containsKey(cardID)) {
                     e.getErrorLabel().setVisible(false);
                     e.getRuleErrLabel().setVisible(false);
                     e.getDeleteErrorLabel().setVisible(false);
 
-                    showResultsPane(db.getCard(cardID).toString(), resultsPane, resultsTextPane);
-                    cardViewPane.revalidate();
-                    cardViewPane.repaint();
+                    showResults(cardViewPane, printCard(cardID, "DELETE CARD?"));
 
                     String[] btnOptions = {"Yes","Cancel"};
                     String message = "Are you sure you want to DELETE card: " + cardID +
@@ -235,7 +215,6 @@ public class Program {
                         // Purchases by this card will be changed to cash
                         shop.convertPurchase(cardID);
                         removeCardForms();
-                        removeResultsPane(resultsPane);
                     } else {
                         e.getIdTextField().setText(null);
                         e.getDeleteErrorLabel().setVisible(true);
@@ -265,20 +244,12 @@ public class Program {
             // ADD A CANCEL BUTTON LISTENER AFTER CREATING FORM
             form.setCancelListener(() -> {
                 cardViewPane.getSearchForm().setVisible(false);
-                cardViewPane.getResultsPane().setVisible(false);
                 removeCardForms();
             });
 
             // ADD A CANCEL BUTTON LISTENER AFTER CREATING FORM
             form.setSearchListener(e -> {
-                // Setup a text pane to put all the necessary data into
-                ResultsPane resultsPane = cardViewPane.getResultsPane();
-                resultsPane.setResultsTextPane();
-                ResultsPane.ResultsTextPane resultsTextPane = resultsPane.getResultsTextPane();
-                setCardViewMouseListeners();
-
-                String cardID = e.getSearchIDTextField().getText().toUpperCase();
-
+                final String cardID = e.getSearchIDTextField().getText().toUpperCase();
                 // SETUP VALIDATOR FOR CARD ID
                 FormValidData input = new FormValidData();
                 input.setCardID(cardID);
@@ -288,26 +259,7 @@ public class Program {
                     e.getErrorLabel().setVisible(false);
                     e.getRuleErrLabel().setVisible(false);
 
-                    String cardText = db.getCard(cardID).toString();
-                    StringBuilder purchaseText = new StringBuilder("");
-
-                    db.getAllPurchases().values().forEach((p)->{
-                        if (p.getCardID() != null && p.getCardID().equals(cardID)) {
-                            purchaseText.append("\n");
-                            purchaseText.append(p.toString());
-                        }
-                    });
-
-                    String results = String.format("%s%n%n%s%n%n%s%s","CARD FOUND",
-                            cardText,"PURCHASE(S)",purchaseText);
-
-                    // Create the inner class ResultsTextPane and popular first.
-                    // Then set the ResultsPane to visible and add the new ScrollPane
-                    // Achieved in method below - showResultsPane()
-                    showResultsPane(results, resultsPane, resultsTextPane);
-                    cardViewPane.revalidate();
-                    cardViewPane.repaint();
-
+                    showResults(cardViewPane, printCard(cardID,"CARD FOUND"));
                     e.getSearchIDTextField().setText(null);
                 } else { // If card does not exists, it will be a negative number so invoked below
                     if (!cardIDRule.validate(input)) {
@@ -317,9 +269,6 @@ public class Program {
                         e.getErrorLabel().setVisible(true);
                         e.getRuleErrLabel().setVisible(false);
                     }
-
-                    removeResultsPane(resultsPane);
-                    resultsPane.setVisible(false);
                     e.getSearchIDTextField().setForeground(Style.redA700());
                     e.getSearchIDLabel().setForeground(Style.redA700());
                 }
@@ -330,31 +279,9 @@ public class Program {
         cardViewPane.setViewCardListener(() -> {
             if (cardViewPane.getCardTablePane().getSelectedRow() >= 0) {
                 removeCardForms();
-
                 int selectedRow = cardViewPane.getCardTablePane().getSelectedRow();
-                String cardID = (String)cardViewPane.getCardTablePane().getValueAt(selectedRow, 0);
-
-                ResultsPane resultsPane = cardViewPane.getResultsPane();
-                resultsPane.setResultsTextPane();
-                ResultsPane.ResultsTextPane resultsTextPane = resultsPane.getResultsTextPane();
-                setCardViewMouseListeners();
-
-                String cText = db.getCard(cardID).toString();
-                StringBuilder pText = new StringBuilder("");
-
-                db.getAllPurchases().values().forEach((p)-> {
-                    if (p.getCardID() != null && p.getCardID().equals(cardID)) {
-                        pText.append("\n");
-                        pText.append(p.toString());
-                    }
-                });
-
-                String textResults = String.format("%s%n%s%n%n%s%n%s","CARD",
-                        cText,"PURCHASE(S)", pText);
-
-                showResultsPane(textResults, resultsPane, resultsTextPane);
-                cardViewPane.revalidate();
-                cardViewPane.repaint();
+                final String cardID = (String)cardViewPane.getCardTablePane().getValueAt(selectedRow, 0);
+                showResults(cardViewPane, printCard(cardID,"CARD"));
             }
         });
 
@@ -405,12 +332,6 @@ public class Program {
             form.setCategoriesList(new ArrayList<>(db.getAllCategories().values()));
             form.createBasePurchaseForm();
 
-            // SET UP A RESULTS PANE TO SHOW END RESULT
-            ResultsPane resultsPane = purchaseViewPane.getResultsPane();
-            resultsPane.setResultsTextPane();
-            ResultsPane.ResultsTextPane resultsTextPane = resultsPane.getResultsTextPane();
-            setPurchaseViewPaneMouseListeners();
-
             // FORM CANCEL BUTTON
             form.setCancelPurchaseListener(() -> {
                 form.setVisible(false);
@@ -426,18 +347,14 @@ public class Program {
 
                 String cardID = getPurchaseFormCardID(event);
                 HashMap<Integer, Category> categories = getPurchaseFormCategories(event);
-                String resultsText;
+                String resultsText = "";
 
                 if (type.getSelectedItem() != null && cardID != null && categories != null) {
                     if (type.getSelectedItem().equals(PurchaseType.ExistingCardPurchase.getName())) {
                         shop.makePurchase(cardID, receiptID, categories);
                         resultsText = db.getPurchase(receiptID).toString();
-                        showResultsPane(resultsText,resultsPane,resultsTextPane);
-                        removePurchaseForms();
                     } else if (type.getSelectedItem().equals(PurchaseType.NewCardPurchase.getName())) {
-                        String cardType = null;
-                        String name = null;
-                        String email = null;
+                        String cardType = null, name = null, email = null;
 
                         if (event.getAnonCardRB().isSelected()) {
                             cardType = CardType.AnonCard.getName();
@@ -460,14 +377,12 @@ public class Program {
                         shop.makeCard(newCard);
                         shop.makePurchase(cardID, receiptID, categories);
                         resultsText = db.getCard(cardID).toString() + db.getPurchase(receiptID).toString();
-                        showResultsPane(resultsText,resultsPane,resultsTextPane);
-                        removePurchaseForms();
                     } else if (type.getSelectedItem().equals(PurchaseType.CashPurchase.getName())) {
                         shop.makePurchase(cardID, receiptID, categories);
                         resultsText = db.getPurchase(receiptID).toString();
-                        showResultsPane(resultsText,resultsPane,resultsTextPane);
-                        removePurchaseForms();
                     }
+                    showResults(purchaseViewPane, resultsText);
+                    removePurchaseForms();
                 } else {
                     event.getPurchaseErrorLabel().setVisible(true);
                 }
@@ -476,42 +391,24 @@ public class Program {
 
         /*TOOLBAR | SUMMARY BUTTON*/
         purchaseViewPane.setSummaryListener(() -> {
-            ResultsPane resultsPane = purchaseViewPane.getResultsPane();
-            resultsPane.setResultsTextPane();
-            ResultsPane.ResultsTextPane resultsTextPane = resultsPane.getResultsTextPane();
-            setPurchaseViewPaneMouseListeners();
-
             Predicate<Purchase> cashPurchases = e ->
                     (e.getCardType().equals(CardType.Cash.getName()));
 
-            double cashTotal = db.getAllPurchases().values().stream()
-                    .filter(cashPurchases)
-                    .mapToDouble(Purchase::getCategoriesTotal)
-                    .sum();
+            double cashTotal = db.getAllPurchases().values().stream().filter(cashPurchases)
+                    .mapToDouble(Purchase::getCategoriesTotal).sum();
 
-            Predicate<Purchase> cardPurchases = new Predicate<Purchase>() {
-                public boolean test(Purchase purchase) {
-                    return !purchase.getCardType().equals(CardType.Cash.getName());
-                }
-            };
 
-            double cardTotal = db.getAllPurchases().values().stream()
-                    .filter(cardPurchases)
-                    .mapToDouble(Purchase::getCategoriesTotal)
-                    .sum();
+            double cardTotal = db.getAllPurchases().values().stream().filter(p -> !p.getCardType().equals(CardType.Cash.getName()))
+                    .mapToDouble(Purchase::getCategoriesTotal).sum();
 
-            double allTotal = db.getAllPurchases().values().stream()
-                    .mapToDouble(Purchase::getCategoriesTotal)
-                    .sum();
+            double allTotal = db.getAllPurchases().values().stream().mapToDouble(Purchase::getCategoriesTotal).sum();
 
             String resultsText = String.format("%n%s%n%n%s: $%.2f%n%n%s: $%.2f%n%n%s: $%.2f", "SUMMARY OF PURCHASES",
                     "Card Purchase Total", cardTotal,
                     "Cash Purchase Total", cashTotal,
                     "Total for All Purchases", allTotal);
 
-            showResultsPane(resultsText, resultsPane, resultsTextPane);
-            purchaseViewPane.revalidate();
-            purchaseViewPane.repaint();
+            showResults(purchaseViewPane, resultsText);
         });
 
         /*TOOLBAR | VIEW  BUTTON*/
@@ -520,18 +417,10 @@ public class Program {
                 int selectedRow = purchaseViewPane.getPurchaseTablePane().getSelectedRow();
                 int receiptID = (Integer)purchaseViewPane.getPurchaseTablePane().getValueAt(selectedRow, 0);
 
-                ResultsPane resultsPane = purchaseViewPane.getResultsPane();
-                resultsPane.setResultsTextPane();
-                ResultsPane.ResultsTextPane resultsTextPane = resultsPane.getResultsTextPane();
-                setPurchaseViewPaneMouseListeners();
+                String resultsText = db.getAllPurchases().values().stream().filter(p -> p.getReceiptID() == receiptID)
+                        .map(Purchase::toString).collect(Collectors.joining("\n"));
 
-                String resultsText = "";
-                for (Purchase purchase : db.getAllPurchases().values()) {
-                    if (purchase.getReceiptID() == receiptID)
-                        resultsText = purchase.toString();
-                }
-
-                showResultsPane(resultsText, resultsPane, resultsTextPane);
+                showResults(purchaseViewPane, resultsText);
             }
         });
 
@@ -662,22 +551,17 @@ public class Program {
     }
 
     /*============================== MUTATORS  ==============================*/
-    // Takes some arguments to create and display a ResultsPane to the right for results output
-    private void showResultsPane(String text, ResultsPane resultsPane,
-                                   ResultsPane.ResultsTextPane resultsTextPane) {
-        resultsTextPane.setText(text);
+    private void showResults(JPanel viewPane, String resultsText) {
+        ResultsPane resultsPane = new ResultsPane.ResultsPaneBuilder(resultsText).build();
+        viewPane.add(resultsPane, BorderLayout.EAST);
         resultsPane.setVisible(true);
-        resultsPane.setScrollPane(resultsTextPane);
-        resultsPane.add(resultsPane.getScrollPane());
-        resultsPane.getResultsTextPane().grabFocus();
-        resultsPane.getResultsTextPane().setCaretPosition(0);
     }
 
     /*==================== REMOVING FORMS METHODS ====================*/
     // These methods all remove forms from their respective panes when they're not needed anymore
     private void removeCardForms() {
         for (Component comp : cardViewPane.getComponents()) {
-            if (comp instanceof CardForm || comp instanceof DeleteCardForm || comp instanceof SearchForm) {
+            if (comp instanceof FormFactory || comp instanceof ResultsPane) {
                 comp.setVisible(false);
                 if (cardViewPane.getCardForm() != null)
                     cardViewPane.getCardForm().remove(cardViewPane.getCardForm().getBaseCreateCardForm());
@@ -706,48 +590,7 @@ public class Program {
         }
     }
 
-    private void removeResultsPane(ResultsPane resultsPane) {
-        if (resultsPane.getScrollPane() != null && resultsPane.getResultsTextPane() != null) {
-            resultsPane.remove(resultsPane.getResultsTextPane());
-            resultsPane.remove(resultsPane.getScrollPane());
-        }
-    }
-
-    /*=============== SETTING MOUSE LISTENERS METHODS ===============*/
-    // These methods add a mouse listener to the JTable whenever a ResultsPane is added to the right
-    private void setCardViewMouseListeners() {
-        //SET UP A MOUSE LISTENER TO CLOSE PANEL WHEN CLICKING ON TABLE OR OUTER PANEL
-        // Only add a new MouseListener if there are less than 3 in the MouseListener[]
-        // Unknown reasons why there are already 2 other ones in a JTable
-        if (cardViewPane.getCardTablePane().getMouseListeners().length < 3) {
-            cardViewPane.getCardTablePane().addMouseListener(new MouseAdapter() {
-                public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
-                cardViewPane.getResultsPane().setVisible(false);
-                removeCardForms();
-                removeResultsPane(cardViewPane.getResultsPane());
-                }
-            });
-        }
-    }
-
-    private void setPurchaseViewPaneMouseListeners() {
-         // SET UP A MOUSE LISTENER TO CLOSE PANEL WHEN CLICKING ON TABLE OR OUTER PANEL
-        // Only add a new MouseListener if there are less than 3 in the MouseListener[]
-        // Unknown reasons why there are already 2 other ones in a JTable
-        if (purchaseViewPane.getPurchaseTablePane().getMouseListeners().length < 3) {
-            purchaseViewPane.getPurchaseTablePane().addMouseListener(new MouseAdapter() {
-                public void mouseClicked(MouseEvent e) {
-                    super.mouseClicked(e);
-                    purchaseViewPane.getResultsPane().setVisible(false);
-                    removePurchaseForms();
-                    removeResultsPane(purchaseViewPane.getResultsPane());
-                }
-            });
-        }
-    }
-
-    /*=============== ADDITIONAL CREATING PURCHASES METHODS ===============*/
+    /*============ ADDITIONAL CREATING PURCHASES METHODS ============*/
     // Validates each category field of the form
     private boolean validateCatValueFields(HashMap<JLabel[], FormFormattedTextField> rawCategories) {
         boolean proceed = true;
@@ -828,5 +671,14 @@ public class Program {
             }
         }
         return null;
+    }
+
+    /*============================== ACCESSORS ==============================*/
+    private String printCard(String cardID, String title) {
+        String cText = db.getCard(cardID).toString();
+        String pText = db.getAllPurchases().values().stream()
+                .filter(p -> p.getCardID() != null && p.getCardID().equals(cardID))
+                .map(Purchase::toString).collect(Collectors.joining("\n"));
+        return String.format("%s%n%s%n%s%n%s", title, cText,"PURCHASE(S)", pText);
     }
 }

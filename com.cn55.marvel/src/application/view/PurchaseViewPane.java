@@ -4,7 +4,10 @@ import application.model.DataObservable;
 import application.model.DataObserver;
 import application.model.PurchaseModel.Purchase;
 import application.model.PurchaseModel.SortPurchaseType;
-import application.view.CustomComponents.*;
+import application.view.CustomComponents.Style;
+import application.view.CustomComponents.Toolbar;
+import application.view.CustomComponents.ToolbarButton;
+import application.view.CustomComponents.ToolbarButtonListener;
 import application.view.FormFactory.PurchaseForm;
 
 import javax.swing.*;
@@ -26,7 +29,6 @@ public class PurchaseViewPane extends JPanel implements DataObserver {
     private final PurchaseTableModel purchaseTableModel;
     private final JTable purchaseTablePane;
     private PurchaseForm createPurchaseForm;
-    private final ResultsPane resultsPane;
 
     private ToolbarButtonListener createPurchaseListener;
     //private ToolbarButtonListener deletePurchaseListener;
@@ -46,8 +48,6 @@ public class PurchaseViewPane extends JPanel implements DataObserver {
         purchaseTableModel = new PurchaseTableModel();
         purchaseTablePane = new JTable();
         JScrollPane tableScrollPane = new JScrollPane(purchaseTablePane);
-
-        resultsPane = new ResultsPane("PurchaseViewResultsPane");
 
         JPopupMenu tablePopup = new JPopupMenu();
         JMenuItem removePurchase = new JMenuItem("Delete Purchase");
@@ -75,7 +75,6 @@ public class PurchaseViewPane extends JPanel implements DataObserver {
         tablePopup.add(removePurchase);
 
         add(tableScrollPane, BorderLayout.CENTER);
-        add(resultsPane, BorderLayout.EAST);
 
         /* REGISTRATION OF TOOLBAR BUTTON LISTENERS */
         ToolbarListener handler = new ToolbarListener();
@@ -144,10 +143,7 @@ public class PurchaseViewPane extends JPanel implements DataObserver {
     }
 
     /*============================== ACCESSORS ==============================*/
-    public PurchaseForm getCreatePurchaseForm() {
-        if (createPurchaseForm != null) return createPurchaseForm;
-        else return null;
-    }
+    public PurchaseForm getCreatePurchaseForm() { return createPurchaseForm; }
 
     public JComboBox<String> getSortPurchaseCombo() {
         return sortPurchaseCombo;
@@ -155,10 +151,6 @@ public class PurchaseViewPane extends JPanel implements DataObserver {
 
     public JTable getPurchaseTablePane() {
         return purchaseTablePane;
-    }
-
-    public ResultsPane getResultsPane() {
-        return resultsPane;
     }
 
     /*=========================================================================*/

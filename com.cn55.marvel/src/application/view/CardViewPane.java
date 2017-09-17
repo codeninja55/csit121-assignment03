@@ -3,7 +3,10 @@ package application.view;
 import application.model.CardModel.*;
 import application.model.DataObservable;
 import application.model.DataObserver;
-import application.view.CustomComponents.*;
+import application.view.CustomComponents.Style;
+import application.view.CustomComponents.Toolbar;
+import application.view.CustomComponents.ToolbarButton;
+import application.view.CustomComponents.ToolbarButtonListener;
 import application.view.FormFactory.CardForm;
 import application.view.FormFactory.DeleteCardForm;
 import application.view.FormFactory.SearchForm;
@@ -25,7 +28,6 @@ public class CardViewPane extends JPanel implements DataObserver {
     private CardTableModel cardTableModel;
     private JComboBox<String> sortedCombo;
     private JTable cardTablePane;
-    private ResultsPane resultsPane;
 
     private SearchForm searchForm;
     private CardForm cardForm;
@@ -49,7 +51,7 @@ public class CardViewPane extends JPanel implements DataObserver {
         JScrollPane tableScrollPane = new JScrollPane(cardTablePane);
         tableScrollPane.setName("CardsViewTableScrollPane");
 
-        resultsPane = new ResultsPane("CardViewResultsPane");
+        //resultsPane = new ResultsPane("CardViewResultsPane");
 
         setName("CardsViewPane");
         setLayout(new BorderLayout());
@@ -75,7 +77,7 @@ public class CardViewPane extends JPanel implements DataObserver {
 
         add(tableScrollPane, BorderLayout.CENTER);
 
-        add(resultsPane, BorderLayout.EAST);
+        //add(resultsPane, BorderLayout.EAST);
 
         /* REGISTRATION OF TOOLBAR BUTTON LISTENERS */
         ToolbarListener handler = new ToolbarListener();
@@ -180,10 +182,6 @@ public class CardViewPane extends JPanel implements DataObserver {
 
     public JTable getCardTablePane() {
         return cardTablePane;
-    }
-
-    public ResultsPane getResultsPane() {
-        return resultsPane;
     }
 
     /*=========================================================================*/
