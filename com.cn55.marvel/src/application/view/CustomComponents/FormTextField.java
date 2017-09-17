@@ -17,7 +17,7 @@ public class FormTextField extends JTextField {
             if (!isEnabled() || !isEditable()) {
                 setBackground(Style.blueGrey500());
                 setForeground(Style.grey50());
-                setDisabledTextColor(Style.grey700());
+                setDisabledTextColor(Style.grey600());
             } else {
                 setBackground(Color.WHITE);
                 setForeground(Color.BLACK);

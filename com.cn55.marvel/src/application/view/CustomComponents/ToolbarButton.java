@@ -12,9 +12,9 @@ public class ToolbarButton extends JButton {
 
         setIcon(icon);
         setFont(Style.toolbarButtonFont());
-        setBackground(Style.red500());
+        setBackground(Style.redA700());
         setForeground(Style.btnTextColor());
-        Dimension dim = new Dimension(280,50);
+        Dimension dim = new Dimension(280,60);
         setPreferredSize(dim);
         setMinimumSize(getPreferredSize());
         setVisible(true);
@@ -26,7 +26,7 @@ public class ToolbarButton extends JButton {
             }
             public void mouseExited(MouseEvent e) {
                 super.mouseExited(e);
-                if (isEnabled()) setBackground(Style.red500());
+                if (isEnabled()) setBackground(Style.redA700());
             }
         });
     }

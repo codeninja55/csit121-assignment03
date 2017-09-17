@@ -11,11 +11,11 @@ public class FormButton extends JButton {
         super(text);
         setIcon(icon);
         setFont(Style.buttonFont());
-        setBackground(Style.red500());
+        setBackground(Style.redA700());
         setForeground(Style.btnTextColor());
         Dimension dim = getPreferredSize();
-        dim.height = 50;
-        dim.width = 200;
+        dim.height = 60;
+        dim.width = 100;
         setPreferredSize(dim);
         setMinimumSize(dim);
         setVisible(false);
@@ -27,7 +27,7 @@ public class FormButton extends JButton {
             }
             public void mouseExited(MouseEvent e) {
                 super.mouseExited(e);
-                if (isEnabled()) setBackground(Style.red500());
+                if (isEnabled()) setBackground(Style.redA700());
             }
         });
     }

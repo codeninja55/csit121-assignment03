@@ -12,22 +12,29 @@ public class CancelButton extends JButton{
 
         setIcon(Style.cancelIcon());
         setFont(Style.buttonFont());
-        setForeground(Style.grey50());
-        setBackground(Style.red500());
+        setForeground(Style.red50());
+        setBackground(Style.redA700());
         Dimension dim = getPreferredSize();
         dim.height = 60;
         setPreferredSize(dim);
         setMinimumSize(dim);
 
         this.addMouseListener(new MouseAdapter() {
-            @Override
             public void mouseEntered(MouseEvent e) {
                 super.mouseEntered(e);
-                if (isEnabled()) setBackground(Style.blueGrey500());
+                if (isEnabled()) {
+                    setIcon(Style.cancelIconDisabled());
+                    setForeground(Style.blueGrey700());
+                    setBackground(Style.red300());
+                }
             }
             public void mouseExited(MouseEvent e) {
                 super.mouseExited(e);
-                if (isEnabled()) setBackground(Style.red500());
+                if (isEnabled()) {
+                    setForeground(Style.red50());
+                    setIcon(Style.cancelIcon());
+                    setBackground(Style.redA700());
+                }
             }
         });
     }
