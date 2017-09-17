@@ -15,7 +15,7 @@ public class CancelButton extends JButton{
         setForeground(Style.grey50());
         setBackground(Style.red500());
         Dimension dim = getPreferredSize();
-        dim.height = 70;
+        dim.height = 60;
         setPreferredSize(dim);
         setMinimumSize(dim);
 
