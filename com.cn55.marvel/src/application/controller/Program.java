@@ -25,7 +25,9 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ItemEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -72,7 +74,7 @@ public class Program {
             public void windowClosing(WindowEvent e) {
                 super.windowClosing(e);
 
-                int confirmSave = JOptionPane.showConfirmDialog(mainFrame,"Would you like to save your session data?",
+                int confirmSave = JOptionPane.showConfirmDialog(mainFrame,"\n\nWould you like to save your session data?\n\n",
                         "Save on Exit", JOptionPane.OK_CANCEL_OPTION,JOptionPane.WARNING_MESSAGE);
 
                 if (confirmSave == JOptionPane.OK_OPTION) {
@@ -90,19 +92,11 @@ public class Program {
         tabPane.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent e) {
                 // DESELECTED LISTENERS
-                if (tabPane.getSelectedComponent() != purchaseViewPane) {
-                    //purchaseViewPane.getResultsPane().setVisible(false);
-                    removePurchaseForms();
-                }
+                if (tabPane.getSelectedComponent() != purchaseViewPane) removePurchaseForms();
 
-                if (tabPane.getSelectedComponent() != cardViewPane) {
-                    //cardViewPane.getResultsPane().setVisible(false);
-                    removeCardForms();
-                }
+                if (tabPane.getSelectedComponent() != cardViewPane) removeCardForms();
 
-                if (tabPane.getSelectedComponent() != categoriesViewPane) {
-                    removeCategoryForms();
-                }
+                if (tabPane.getSelectedComponent() != categoriesViewPane) removeCategoryForms();
             }
         });
 
@@ -472,7 +466,7 @@ public class Program {
             //ADD A DELETE BUTTON LISTENER AFTER CREATING FORM
             form.setDeleteListener(e -> {
                 String categoryIDStr = e.getIdTextField().getText();
-                int categoryID = Integer.parseInt(categoryIDStr);
+                final int categoryID = Integer.parseInt(categoryIDStr);
                 //SETUP VALIDATOR FOR CATEGORY ID
                 FormValidData input = new FormValidData();
                 input.setCategoryID(categoryIDStr);
@@ -531,9 +525,7 @@ public class Program {
                         e.getDeleteErrorLabel().setVisible(true);
                     }
                 }
-
             });
-
         });
     }
 
@@ -569,12 +561,8 @@ public class Program {
     }
 
     private void removeCategoryForms() {
-        for (Component comp : categoriesViewPane.getComponents()) {
-            if (comp instanceof FormFactory) {
-                comp.setVisible(false);
-                categoriesViewPane.remove(comp);
-            }
-        }
+        Arrays.stream(categoriesViewPane.getComponents()).filter(c -> c instanceof FormFactory)
+                .forEach(c -> {c.setVisible(false); categoriesViewPane.remove(c);});
     }
 
     /*============ ADDITIONAL CREATING PURCHASES METHODS ============*/
