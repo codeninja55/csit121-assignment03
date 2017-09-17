@@ -2,24 +2,15 @@ package application.controller;
 
 import application.controller.Validator.*;
 import application.model.CardModel.*;
-import application.model.CategoryModel.CategoriesReadImpl;
-import application.model.CategoryModel.Category;
+import application.model.CategoryModel.*;
 import application.model.*;
-import application.model.DataStoreWriters.CardsWriteOut;
-import application.model.DataStoreWriters.CategoriesWriteOut;
-import application.model.DataStoreWriters.PurchasesWriteOut;
-import application.model.PurchaseModel.Purchase;
-import application.model.PurchaseModel.PurchaseType;
-import application.model.PurchaseModel.PurchasesReadImpl;
-import application.model.PurchaseModel.SortPurchaseType;
-import application.view.CardViewPane;
-import application.view.CategoriesViewPane;
+import application.model.DataStoreWriters.*;
+import application.model.PurchaseModel.*;
+import application.view.*;
 import application.view.CustomComponents.FormFormattedTextField;
 import application.view.CustomComponents.ResultsPane;
 import application.view.CustomComponents.Style;
 import application.view.FormFactory.*;
-import application.view.MainFrame;
-import application.view.PurchaseViewPane;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -36,7 +27,6 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class Program {
-
     private final Shop shop;
     private final DataDAO db;
     private final MainFrame mainFrame;
@@ -44,7 +34,6 @@ public class Program {
     private final CardViewPane cardViewPane;
     private final PurchaseViewPane purchaseViewPane;
     private final CategoriesViewPane categoriesViewPane;
-
     private final WriteCSV writeCategories, writeCards, writePurchases;
 
     public Program() {
@@ -93,9 +82,7 @@ public class Program {
             public void stateChanged(ChangeEvent e) {
                 // DESELECTED LISTENERS
                 if (tabPane.getSelectedComponent() != purchaseViewPane) removePurchaseForms();
-
                 if (tabPane.getSelectedComponent() != cardViewPane) removeCardForms();
-
                 if (tabPane.getSelectedComponent() != categoriesViewPane) removeCategoryForms();
             }
         });

@@ -7,10 +7,7 @@ class SummaryViewPane extends JPanel {
 
     public SummaryViewPane() {
         summaryPanel = new JPanel();
-
         setLayout(new BorderLayout());
-
         add(summaryPanel, BorderLayout.CENTER);
-
     }
 }

@@ -45,7 +45,6 @@ public class CategoriesForm extends JPanel implements FormFactory {
         gc.anchor = GridBagConstraints.PAGE_END;
         gc.insets = new Insets(20,0,0,0);
         createCategoriesForm.add(categoryIDLabel, gc);
-
         /*========== NEW ROW ==========*/
         gc.gridy++;
         gc.anchor = GridBagConstraints.PAGE_START;
@@ -56,24 +55,20 @@ public class CategoriesForm extends JPanel implements FormFactory {
         categoryIDTextField.setMinimumSize(textFieldDim);
         categoryIDTextField.setHorizontalAlignment(SwingConstants.CENTER);
         createCategoriesForm.add(categoryIDTextField, gc);
-
         /*========== NEW ROW ==========*/
         gc.gridy++;
         gc.anchor = GridBagConstraints.PAGE_START;
         createCategoriesForm.add(categoryNameLabel, gc);
-
         /*========== NEW ROW ==========*/
         gc.gridy++;
         gc.anchor = GridBagConstraints.PAGE_START;
         categoryNameTextField.setPreferredSize(textFieldDim);
         categoryNameTextField.setMinimumSize(textFieldDim);
         createCategoriesForm.add(categoryNameTextField, gc);
-
         /*========== NEW ROW ==========*/
         gc.gridy++;
         gc.anchor = GridBagConstraints.PAGE_START;
         createCategoriesForm.add(categoryDescLabel, gc);
-
         /*========== NEW ROW ==========*/
         gc.gridy++;
         gc.anchor = GridBagConstraints.PAGE_START;
@@ -86,7 +81,6 @@ public class CategoriesForm extends JPanel implements FormFactory {
         categoryDescTextField.setFont(Style.textAreaFont());
         createCategoriesForm.add(categoryDescTextField, gc);
         categoryDescTextField.setVisible(true);
-
         /*========== BUTTON ROW ==========*/
         gc.gridy++; gc.gridx = 0; gc.weightx = 0.5; gc.weighty = 3; gc.gridwidth = 1;
         gc.fill = GridBagConstraints.HORIZONTAL;
@@ -100,7 +94,6 @@ public class CategoriesForm extends JPanel implements FormFactory {
         createCategoriesForm.add(clearBtn, gc);
 
         add(createCategoriesForm, BorderLayout.CENTER);
-
         add(cancelBtn, BorderLayout.SOUTH);
 
         /* SET FORM CUSTOM COMPONENTS VISIBLE */
@@ -123,9 +116,7 @@ public class CategoriesForm extends JPanel implements FormFactory {
         clearBtn.addActionListener((ActionEvent e) -> {
             for (Component c : createCategoriesForm.getComponents()) {
                 if (c instanceof JTextField && ((JTextField) c).isEditable()) ((JTextField) c).setText("");
-
                 if (c instanceof JTextArea) ((JTextArea) c).setText("");
-
                 if (c instanceof FormLabel) c.setForeground(Color.BLACK);
             }
         });
@@ -142,5 +133,4 @@ public class CategoriesForm extends JPanel implements FormFactory {
     }
 
     /*============================== ACCESSORS  ==============================*/
-
 }

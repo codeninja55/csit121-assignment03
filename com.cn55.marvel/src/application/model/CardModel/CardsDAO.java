@@ -7,5 +7,4 @@ public interface CardsDAO {
     Card getCard(String id);
     HashMap<String, Card> getAllCards();
     void deleteCard(String id);
-
 }

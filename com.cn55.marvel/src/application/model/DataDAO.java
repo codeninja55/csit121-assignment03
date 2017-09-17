@@ -36,12 +36,10 @@ public class DataDAO implements DataObservable, CardsDAO, PurchaseDAO, CategoryD
         categories.put(category.getId(), category);
         notifyObservers();
     }
-
     public void createCard(Card card) {
         cards.put(card.getID(), card);
         notifyObservers();
     }
-
     public void createPurchase(Purchase purchase) {
         updateCategoryTotalAmount(purchase.getCategories());
         purchases.put(purchase.getReceiptID(), purchase);
@@ -52,10 +50,7 @@ public class DataDAO implements DataObservable, CardsDAO, PurchaseDAO, CategoryD
     public HashMap<String,Card> getAllCards() {
         return cards;
     }
-
-    public Card getCard(String cardID) {
-        return cards.getOrDefault(cardID, null);
-    }
+    public Card getCard(String cardID) { return cards.getOrDefault(cardID, null); }
 
     public DefaultComboBoxModel<String> getCardModel() {
         DefaultComboBoxModel<String> cardModel = new DefaultComboBoxModel<>();
@@ -70,15 +65,12 @@ public class DataDAO implements DataObservable, CardsDAO, PurchaseDAO, CategoryD
     public HashMap<Integer,Purchase> getAllPurchases() {
         return purchases;
     }
-
     public Purchase getPurchase(int receiptID) {
         return purchases.getOrDefault(receiptID, null);
     }
-
     public HashMap<Integer, Category> getAllCategories() {
         return categories;
     }
-
     public Category getCategory(int categoryID) {
         return categories.getOrDefault(categoryID, null);
     }
@@ -93,11 +85,9 @@ public class DataDAO implements DataObservable, CardsDAO, PurchaseDAO, CategoryD
         cards.remove(cardID);
         notifyObservers();
     }
-
     public void deletePurchase() {
         System.out.println("NOT YET IMPLEMENTED");
     }
-
     public void deleteCategory(int id) {
         categories.remove(id);
         notifyObservers();
@@ -108,24 +98,16 @@ public class DataDAO implements DataObservable, CardsDAO, PurchaseDAO, CategoryD
     public void register(DataObserver obj) {
         dataObservers.add(obj);
     }
-
     public void unregister(DataObserver obj) {
         dataObservers.remove(obj);
     }
-
     public void notifyObservers() {
         dataObservers.forEach(DataObserver::update);
     }
-
-    public TreeMap<String,Card> getCardsUpdate(DataObserver who) {
-        // Returning a TreeMap so it is sorted by keys
-        return new TreeMap<>(cards);
-    }
-
+    public TreeMap<String,Card> getCardsUpdate(DataObserver who) { return new TreeMap<>(cards); }
     public TreeMap<Integer,Purchase> getPurchaseUpdate(DataObserver who) {
         return new TreeMap<>(purchases);
     }
-
     public TreeMap<Integer, Category> getCategoriesUpdate(DataObserver who) {
         return new TreeMap<>(categories);
     }
