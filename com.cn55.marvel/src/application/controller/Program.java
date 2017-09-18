@@ -2,15 +2,24 @@ package application.controller;
 
 import application.controller.Validator.*;
 import application.model.CardModel.*;
-import application.model.CategoryModel.*;
+import application.model.CategoryModel.CategoriesReadImpl;
+import application.model.CategoryModel.Category;
 import application.model.*;
-import application.model.DataStoreWriters.*;
-import application.model.PurchaseModel.*;
-import application.view.*;
+import application.model.DataStoreWriters.CardsWriteOut;
+import application.model.DataStoreWriters.CategoriesWriteOut;
+import application.model.DataStoreWriters.PurchasesWriteOut;
+import application.model.PurchaseModel.Purchase;
+import application.model.PurchaseModel.PurchaseType;
+import application.model.PurchaseModel.PurchasesReadImpl;
+import application.model.PurchaseModel.SortPurchaseType;
+import application.view.CardViewPane;
+import application.view.CategoriesViewPane;
 import application.view.CustomComponents.FormFormattedTextField;
 import application.view.CustomComponents.ResultsPane;
 import application.view.CustomComponents.Style;
 import application.view.FormFactory.*;
+import application.view.MainFrame;
+import application.view.PurchaseViewPane;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -304,29 +313,19 @@ public class Program {
         /*TOOLBAR | CREATE BUTTON*/
         purchaseViewPane.setCreatePurchaseListener(() -> {
             removePurchaseForms();
-            PurchaseForm form = FormFactory.createPurchaseForm();
+            PurchaseForm form = new PurchaseForm.PurchaseFormBuilder(Generator.setReceiptID())
+                    .existingCardModel(new ArrayList<>(db.getAllCards().values()))
+                    .categoriesList(new ArrayList<>(db.getAllCategories().values()))
+                    .build();
+
             purchaseViewPane.setCreatePurchaseForm(form);
-
-            form.getPurchaseTypeCombo().setSelectedIndex(0);
-            form.setGeneratedReceiptID(Generator.setReceiptID());
-            form.setCardModel(db.getCardModel());
-            form.setCategoriesList(new ArrayList<>(db.getAllCategories().values()));
-            form.createBasePurchaseForm();
-
-            // FORM CANCEL BUTTON
-            form.setCancelPurchaseListener(() -> {
-                form.setVisible(false);
-                removePurchaseForms();
-            });
 
             // FORM CREATE BUTTON
             form.setCreatePurchaseListener(event -> {
-                JComboBox<String> type = event.getPurchaseTypeCombo();
-
+                final JComboBox<String> type = event.getPurchaseTypeCombo();
                 String receiptIDStr = event.getReceiptIDTextField().getText();
-                int receiptID = Integer.parseInt(receiptIDStr);
-
-                String cardID = getPurchaseFormCardID(event);
+                final int receiptID = Integer.parseInt(receiptIDStr);
+                final String cardID = getPurchaseFormCardID(event);
                 HashMap<Integer, Category> categories = getPurchaseFormCategories(event);
                 String resultsText = "";
 
@@ -362,8 +361,8 @@ public class Program {
                         shop.makePurchase(cardID, receiptID, categories);
                         resultsText = db.getPurchase(receiptID).toString();
                     }
-                    showResults(purchaseViewPane, resultsText);
                     removePurchaseForms();
+                    showResults(purchaseViewPane, resultsText);
                 } else {
                     event.getPurchaseErrorLabel().setVisible(true);
                 }
@@ -525,6 +524,8 @@ public class Program {
 
     /*==================== REMOVING FORMS METHODS ====================*/
     // These methods all remove forms from their respective panes when they're not needed anymore
+    // NOTE: All forms have a Component Listener that removes itself from the Parent if
+    // the component is set to hidden.
     private void removeCardForms() {
         for (Component comp : cardViewPane.getComponents()) {
             if (comp instanceof FormFactory || comp instanceof ResultsPane) {
@@ -537,14 +538,8 @@ public class Program {
     }
 
     private void removePurchaseForms() {
-        for (Component comp : purchaseViewPane.getComponents()) {
-            if (comp instanceof FormFactory || comp instanceof ResultsPane) {
-                comp.setVisible(false);
-                if (purchaseViewPane.getCreatePurchaseForm() != null)
-                    purchaseViewPane.getCreatePurchaseForm().remove(purchaseViewPane.getCreatePurchaseForm().getBaseCreatePurchaseForm());
-                purchaseViewPane.remove(comp);
-            }
-        }
+        Arrays.stream(purchaseViewPane.getComponents()).filter(c -> c instanceof FormFactory || c instanceof ResultsPane)
+                .forEach(c -> c.setVisible(false));
     }
 
     private void removeCategoryForms() {

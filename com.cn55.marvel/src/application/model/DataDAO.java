@@ -51,17 +51,6 @@ public class DataDAO implements DataObservable, CardsDAO, PurchaseDAO, CategoryD
         return cards;
     }
     public Card getCard(String cardID) { return cards.getOrDefault(cardID, null); }
-
-    public DefaultComboBoxModel<String> getCardModel() {
-        DefaultComboBoxModel<String> cardModel = new DefaultComboBoxModel<>();
-        ArrayList<Card> cardsClone = new ArrayList<>();
-        cardsClone.addAll(cards.values());
-        cardsClone.sort(Comparator.comparing(Card::getID));
-        cardModel.addElement("Please Select");
-        cardsClone.forEach((card)->cardModel.addElement(card.getID()));
-        return cardModel;
-    }
-
     public HashMap<Integer,Purchase> getAllPurchases() {
         return purchases;
     }
