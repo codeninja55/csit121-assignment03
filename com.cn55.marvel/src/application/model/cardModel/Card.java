@@ -2,12 +2,11 @@ package application.model.cardModel;
 
 import application.model.Generator;
 
-@SuppressWarnings("ALL")
 public abstract class Card implements Comparable<Card> {
 
-    String id;
-    double points;
-    String cardType;
+    private String id;
+    private double points;
+    private String cardType;
 
     /*============================== CONSTRUCTORS  ==============================*/
     // Default constructor
@@ -24,7 +23,7 @@ public abstract class Card implements Comparable<Card> {
     }
 
     /*============================== MUTATORS  ==============================*/
-    public void setPoints(double points) {
+    void setPoints(double points) {
         this.points = points;
     }
 
