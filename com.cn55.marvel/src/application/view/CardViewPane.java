@@ -1,15 +1,15 @@
 package application.view;
 
-import application.model.CardModel.*;
+import application.model.cardModel.*;
 import application.model.DataObservable;
 import application.model.DataObserver;
-import application.view.CustomComponents.Style;
-import application.view.CustomComponents.Toolbar;
-import application.view.CustomComponents.ToolbarButton;
-import application.view.CustomComponents.ToolbarButtonListener;
-import application.view.FormFactory.CardForm;
-import application.view.FormFactory.DeleteCardForm;
-import application.view.FormFactory.SearchForm;
+import application.view.customComponents.Style;
+import application.view.customComponents.Toolbar;
+import application.view.customComponents.ToolbarButton;
+import application.view.customComponents.ToolbarButtonListener;
+import application.view.builderFactory.CardForm;
+import application.view.builderFactory.DeleteCardForm;
+import application.view.builderFactory.SearchForm;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;

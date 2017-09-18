@@ -1,24 +1,20 @@
 package application.view;
 
-import application.model.CategoryModel.Category;
+import application.model.categoryModel.Category;
 import application.model.DataObservable;
 import application.model.DataObserver;
-import application.view.CustomComponents.Style;
-import application.view.CustomComponents.Toolbar;
-import application.view.CustomComponents.ToolbarButton;
-import application.view.CustomComponents.ToolbarButtonListener;
-import application.view.FormFactory.CategoriesForm;
-import application.view.FormFactory.DeleteCategoryForm;
-import application.view.FormFactory.FormFactory;
+import application.view.customComponents.Style;
+import application.view.customComponents.Toolbar;
+import application.view.customComponents.ToolbarButton;
+import application.view.customComponents.ToolbarButtonListener;
+import application.view.builderFactory.CategoriesForm;
+import application.view.builderFactory.DeleteCategoryForm;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 

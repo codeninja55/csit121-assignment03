@@ -1,16 +1,15 @@
 package application.model;
 
-import application.model.CardModel.Card;
-import application.model.CardModel.CardsDAO;
-import application.model.CardModel.CardsReadImpl;
-import application.model.CategoryModel.CategoriesReadImpl;
-import application.model.CategoryModel.Category;
-import application.model.CategoryModel.CategoryDAO;
-import application.model.PurchaseModel.Purchase;
-import application.model.PurchaseModel.PurchaseDAO;
-import application.model.PurchaseModel.PurchasesReadImpl;
+import application.model.cardModel.Card;
+import application.model.cardModel.CardsDAO;
+import application.model.cardModel.CardsReadImpl;
+import application.model.categoryModel.CategoriesReadImpl;
+import application.model.categoryModel.Category;
+import application.model.categoryModel.CategoryDAO;
+import application.model.purchaseModel.Purchase;
+import application.model.purchaseModel.PurchaseDAO;
+import application.model.purchaseModel.PurchasesReadImpl;
 
-import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
@@ -18,7 +17,6 @@ import java.io.FileReader;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.TreeMap;
 
@@ -102,9 +100,9 @@ public class DataDAO implements DataObservable, CardsDAO, PurchaseDAO, CategoryD
     }
 
     public void readData() {
-        Path categoriesStoragePath = Paths.get("com.cn55.marvel/src/PersistentData/CategoriesStorage.csv");
-        Path cardsStoragePath = Paths.get("com.cn55.marvel/src/PersistentData/CardsStorage.csv");
-        Path purchaseStoragePath = Paths.get("com.cn55.marvel/src/PersistentData/PurchaseStorage.csv");
+        Path categoriesStoragePath = Paths.get("com.cn55.marvel/src/persistentData/CategoriesStorage.csv");
+        Path cardsStoragePath = Paths.get("com.cn55.marvel/src/persistentData/CardsStorage.csv");
+        Path purchaseStoragePath = Paths.get("com.cn55.marvel/src/persistentData/PurchaseStorage.csv");
 
         // Do something
         /* Strategy Design Pattern - Implementation of writing and reading buried in concrete classes */

@@ -1,7 +1,7 @@
 package application;
 
 import application.controller.Program;
-import application.view.CustomComponents.Style;
+import application.view.customComponents.Style;
 
 import javax.swing.*;
 import java.awt.*;

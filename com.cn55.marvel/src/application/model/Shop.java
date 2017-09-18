@@ -1,8 +1,8 @@
 package application.model;
 
-import application.model.CardModel.*;
-import application.model.CategoryModel.Category;
-import application.model.PurchaseModel.Purchase;
+import application.model.cardModel.*;
+import application.model.categoryModel.Category;
+import application.model.purchaseModel.Purchase;
 
 import java.util.HashMap;
 

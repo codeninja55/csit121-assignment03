@@ -1,6 +1,6 @@
 package application.view;
 
-import application.view.CustomComponents.Style;
+import application.view.customComponents.Style;
 
 import javax.swing.*;
 import java.awt.*;
