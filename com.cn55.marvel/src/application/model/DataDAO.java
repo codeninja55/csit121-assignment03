@@ -42,6 +42,7 @@ public class DataDAO implements DataObservable, CardsDAO, PurchaseDAO, CategoryD
     }
     public void createPurchase(Purchase purchase) {
         updateCategoryTotalAmount(purchase.getCategories());
+        Generator.addReceiptID(purchase.getReceiptID());
         purchases.put(purchase.getReceiptID(), purchase);
         notifyObservers();
     }
