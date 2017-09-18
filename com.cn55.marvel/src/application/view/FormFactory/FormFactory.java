@@ -11,10 +11,6 @@ public interface FormFactory {
         return new DeleteCategoryForm();
     }
 
-    static PurchaseForm createPurchaseForm() {
-        return new PurchaseForm();
-    }
-
     static CardForm createCardForm() {
         return new CardForm();
     }
@@ -26,4 +22,6 @@ public interface FormFactory {
     static DeleteCardForm deleteCardForm() {
         return new DeleteCardForm();
     }
+
+
 }
