@@ -102,6 +102,7 @@ public class DataDAO implements DataObservable, CardsDAO, PurchaseDAO, CategoryD
     }
 
     public void readData() {
+        Path categoriesStoragePath = Paths.get("com.cn55.marvel/src/PersistentData/CategoriesStorage.csv");
         Path cardsStoragePath = Paths.get("com.cn55.marvel/src/PersistentData/CardsStorage.csv");
         Path purchaseStoragePath = Paths.get("com.cn55.marvel/src/PersistentData/PurchaseStorage.csv");
 
@@ -111,9 +112,9 @@ public class DataDAO implements DataObservable, CardsDAO, PurchaseDAO, CategoryD
         ReadCSV readPurchaseCSV = new PurchasesReadImpl();
         ReadCSV readCardsCSV = new CardsReadImpl();
 
-        readCategoriesCSV.read(openReadFile(cardsStoragePath));
+        readCategoriesCSV.read(openReadFile(categoriesStoragePath));
         readPurchaseCSV.read(openReadFile(purchaseStoragePath));
-        //readCardsCSV.read();
+        readCardsCSV.read(openReadFile(cardsStoragePath));
     }
 
     private BufferedWriter openWriteFile(Path path) {

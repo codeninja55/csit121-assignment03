@@ -106,11 +106,13 @@ public class Program {
         categoriesViewPane.update();
         categoriesViewPane.setCategoriesTableModel();
 
-        setupViewListeners();
+        setupCardViewHandlers();
+        setupPurchaseViewHandlers();
+        setupCategoriesViewHandlers();
     }
 
     /*============================== REGISTER AND HANDLE EVENTS ==============================*/
-    private void setupViewListeners() {
+    private void setupCardViewHandlers() {
         /*============================== CARD VIEW HANDLERS ==============================*/
         /*TOOLBAR | CREATE CARD BUTTON*/
         cardViewPane.setCreateCardListener(() -> {
@@ -287,7 +289,9 @@ public class Program {
                 }
             }
         });
+    }
 
+    private void setupPurchaseViewHandlers() {
         /*============================== PURCHASE VIEW HANDLERS ==============================*/
         /*TOOLBAR | CREATE BUTTON*/
         purchaseViewPane.setCreatePurchaseListener(() -> {
@@ -393,7 +397,9 @@ public class Program {
                 }
             }
         });
-
+    }
+    
+    private void setupCategoriesViewHandlers() {
         /*=========================== CATEGORIES VIEW HANDLERS ===========================*/
         /*TOOLBAR | CREATE CATEGORY BUTTON*/
         categoriesViewPane.setCreateCategoryListener(() -> {
