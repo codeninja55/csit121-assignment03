@@ -5,23 +5,15 @@ import java.util.Random;
 import java.util.Set;
 
 public class Generator {
-    public static int cardIDCounter = 10000;
+    private static int cardIDCounter = 10000;
     private static int categoryIDCounter = 100;
     private static final Set<Integer> receiptSet = new HashSet<>();
 
     /*============================== MUTATORS  ==============================*/
     public static int setReceiptID() {
         Random randomObj = new Random();
-
-        int receiptID;
-        receiptID = randomObj.ints(10000000,99999999).findFirst().getAsInt();
-
-        if (receiptSet.contains(receiptID)) {
-            return setReceiptID();
-        } else {
-            addReceiptID(receiptID);
-            return receiptID;
-        }
+        int receiptID = randomObj.ints(100000,999999).findAny().orElse(0);
+        return (receiptSet.contains(receiptID)) ? setReceiptID() : receiptID;
     }
 
     public static String setCardID() {
