@@ -41,7 +41,6 @@ public abstract class Card implements Comparable<Card> {
     public boolean equals(Card other) {
         return this.id.equals(other.id);
     }
-
     public int compareTo(Card o) {
         return this.id.compareTo(o.getID());
     }
