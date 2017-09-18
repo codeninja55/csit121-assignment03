@@ -71,7 +71,6 @@ public class Program {
         mainFrame.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
                 super.windowClosing(e);
-
                 int confirmSave = JOptionPane.showConfirmDialog(mainFrame,"\n\nWould you like to save your session data?\n\n",
                         "Save on Exit", JOptionPane.OK_CANCEL_OPTION,JOptionPane.WARNING_MESSAGE);
 
@@ -133,7 +132,7 @@ public class Program {
 
             // ADD A CREATE BUTTON LISTENER AFTER CREATING FORM
             form.setCardListener(e -> {
-                String type = (String)e.getCardTypeCombo().getSelectedItem();
+                final String type = (String)e.getCardTypeCombo().getSelectedItem();
                 HashMap<String, String> newCard = new HashMap<>();
                 String name = e.getCardNameTextField().getText();
                 String email = e.getCardEmailTextField().getText();
@@ -155,10 +154,9 @@ public class Program {
                     newCard.put("cardType", CardType.BasicCard.getName());
                     shop.makeCard(newCard);
                 }
-
                 final String cardID = e.getCardIDTextField().getText();
-                showResults(cardViewPane, printCard(cardID, "CARD ADDED"));
                 removeCardForms();
+                showResults(cardViewPane, printCard(cardID, "CARD ADDED"));
             });
         });
 
@@ -186,9 +184,8 @@ public class Program {
                     showResults(cardViewPane, printCard(cardID, "DELETE CARD?"));
 
                     String[] btnOptions = {"Yes","Cancel"};
-                    String message = "Are you sure you want to DELETE card: " + cardID +
-                            "\nThis cannot be undone." +
-                            "\n\nAll purchases for this card will be changed to CASH status.\n\n";
+                    String message = "Are you sure you want to DELETE card: " + cardID + "\nThis cannot be undone."
+                            + "\n\nAll purchases for this card will be changed to CASH status.\n\n";
 
                     int confirm = JOptionPane.showOptionDialog(mainFrame, // frame, can be null
                             message, // message
@@ -217,7 +214,6 @@ public class Program {
                         e.getRuleErrLabel().setVisible(false);
                         e.getErrorLabel().setVisible(true);
                     }
-
                     e.getDeleteErrorLabel().setVisible(true);
                     e.getIdTextField().setForeground(Style.redA700());
                     e.getIdLabel().setForeground(Style.redA700());
@@ -232,10 +228,7 @@ public class Program {
             cardViewPane.setSearchForm(form);
 
             // ADD A CANCEL BUTTON LISTENER AFTER CREATING FORM
-            form.setCancelListener(() -> {
-                cardViewPane.getSearchForm().setVisible(false);
-                removeCardForms();
-            });
+            form.setCancelListener(this::removeCardForms);
 
             // ADD A CANCEL BUTTON LISTENER AFTER CREATING FORM
             form.setSearchListener(e -> {
@@ -279,7 +272,6 @@ public class Program {
             if (e.getStateChange() == ItemEvent.SELECTED) {
                 ArrayList<Card> sortedCardsList = new ArrayList<>();
                 sortedCardsList.addAll(db.getAllCards().values());
-
                 if (e.getItem().equals("Sort..") || e.getItem().equals(SortCardType.CreatedOrder.getName())) {
                     // Lambda version of sorting with Comparator comparing method
                     sortedCardsList.sort(Comparator.comparing(Card::getID));
@@ -289,20 +281,16 @@ public class Program {
                     sortedCardsList.sort((Card c1, Card c2) -> c2.getID().compareTo(c1.getID()));
                     cardViewPane.updateTableData(sortedCardsList);
                 } else if (e.getItem().equals(SortCardType.Name.getName())) {
-                    // Lambda version of sorting with Comparator
                     sortedCardsList.sort(((c1, c2) -> {
                         if (c1 instanceof AdvancedCard && c2 instanceof AdvancedCard)
                             return ((AdvancedCard) c1).getName().compareTo(((AdvancedCard) c2).getName());
 
-                        if (c1 instanceof AnonCard && c2 instanceof AdvancedCard)
-                            return -1;
-                        else
-                            return 1;
+                        return (c1 instanceof AnonCard && c2 instanceof AdvancedCard) ? -1 : 1;
                     }));
                     cardViewPane.updateTableData(sortedCardsList);
                 } else if (e.getItem().equals(SortCardType.Points.getName())) {
                     // Lambda version of sorting with Comparator comparingDouble method
-                    sortedCardsList.sort(Comparator.comparingDouble(Card::getPoints));
+                    sortedCardsList.sort(Comparator.comparingDouble(Card::getPoints).reversed());
                     cardViewPane.updateTableData(sortedCardsList);
                 }
             }
@@ -314,9 +302,7 @@ public class Program {
             removePurchaseForms();
             PurchaseForm form = new PurchaseForm.PurchaseFormBuilder(Generator.setReceiptID())
                     .existingCardModel(new ArrayList<>(db.getAllCards().values()))
-                    .categoriesList(new ArrayList<>(db.getAllCategories().values()))
-                    .build();
-
+                    .categoriesList(new ArrayList<>(db.getAllCategories().values())).build();
             purchaseViewPane.setCreatePurchaseForm(form);
 
             // FORM CREATE BUTTON
@@ -334,7 +320,6 @@ public class Program {
                         resultsText = db.getPurchase(receiptID).toString();
                     } else if (type.getSelectedItem().equals(PurchaseType.NewCardPurchase.getName())) {
                         String cardType = null, name = null, email = null;
-
                         if (event.getAnonCardRB().isSelected()) {
                             cardType = CardType.AnonCard.getName();
                         } else if (event.getBasicCardRB().isSelected()) {
@@ -370,16 +355,12 @@ public class Program {
 
         /*TOOLBAR | SUMMARY BUTTON*/
         purchaseViewPane.setSummaryListener(() -> {
-            Predicate<Purchase> cashPurchases = e ->
-                    (e.getCardType().equals(CardType.Cash.getName()));
+            Predicate<Purchase> cashPurchases = e -> (e.getCardType().equals(CardType.Cash.getName()));
 
             double cashTotal = db.getAllPurchases().values().stream().filter(cashPurchases)
                     .mapToDouble(Purchase::getCategoriesTotal).sum();
-
-
             double cardTotal = db.getAllPurchases().values().stream().filter(p -> !p.getCardType().equals(CardType.Cash.getName()))
                     .mapToDouble(Purchase::getCategoriesTotal).sum();
-
             double allTotal = db.getAllPurchases().values().stream().mapToDouble(Purchase::getCategoriesTotal).sum();
 
             String resultsText = String.format("%n%s%n%n%s: $%.2f%n%n%s: $%.2f%n%n%s: $%.2f", "SUMMARY OF PURCHASES",
@@ -394,7 +375,7 @@ public class Program {
         purchaseViewPane.setViewPurchaseListener(() -> {
             if (purchaseViewPane.getPurchaseTablePane().getSelectedRow() >= 0) {
                 int selectedRow = purchaseViewPane.getPurchaseTablePane().getSelectedRow();
-                int receiptID = (Integer)purchaseViewPane.getPurchaseTablePane().getValueAt(selectedRow, 0);
+                final int receiptID = (Integer)purchaseViewPane.getPurchaseTablePane().getValueAt(selectedRow, 0);
 
                 String resultsText = db.getAllPurchases().values().stream().filter(p -> p.getReceiptID() == receiptID)
                         .map(Purchase::toString).collect(Collectors.joining("\n"));
@@ -406,21 +387,17 @@ public class Program {
         /*TOOLBAR | SORT COMBOBOX*/
         purchaseViewPane.getSortPurchaseCombo().addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
-                ArrayList<Purchase> tempPurchases = new ArrayList<>();
+                ArrayList<Purchase> purchasesList = new ArrayList<>(db.getAllPurchases().values());
                 if (e.getItem().equals(SortPurchaseType.All.getName())) {
                     purchaseViewPane.update();
                 } else if (e.getItem().equals(SortPurchaseType.Card.getName())) {
-                    // NEGATIVE CASH VALIDATION
-                    for (Purchase item : db.getAllPurchases().values())
-                        if (!item.getCardType().equals(CardType.Cash.getName()))
-                            tempPurchases.add(item);
-                    purchaseViewPane.sortPurchaseTableMode(tempPurchases);
+                    purchaseViewPane.sortPurchaseTableMode(purchasesList.stream()
+                            .filter(c -> c.getCardType().equals(CardType.Cash.getName()))
+                            .collect(Collectors.toCollection(ArrayList::new))); // Negative cash validation
                 } else if (e.getItem().equals(SortPurchaseType.Cash.getName())) {
-                    // POSITIVE CASH Validation
-                    for (Purchase item : db.getAllPurchases().values())
-                        if (item.getCardType().equals(CardType.Cash.getName()))
-                            tempPurchases.add(item);
-                    purchaseViewPane.sortPurchaseTableMode(tempPurchases);
+                    purchaseViewPane.sortPurchaseTableMode(purchasesList.stream()
+                            .filter(c -> c.getCardType().equals(CardType.Cash.getName()))
+                            .collect(Collectors.toCollection(ArrayList::new))); // Positive cash validation
                 }
             }
         });
@@ -478,9 +455,8 @@ public class Program {
                         e.getDeleteErrorLabel().setVisible(false);
 
                         String[] btnOptions = {"Yes","Cancel"};
-                        String message = "Are you sure you want to DELETE Category: " + categoryIDStr +
-                                "\nThis cannot be undone." +
-                                "\n\nAll purchases for this category will be moved to Other category.\n\n";
+                        String message = "Are you sure you want to DELETE Category: " + categoryIDStr + "\nThis cannot be undone."
+                                + "\n\nAll purchases for this category will be moved to Other category.\n\n";
 
                         int confirm = JOptionPane.showOptionDialog(mainFrame, // frame, can be null
                                 message, // message
@@ -577,19 +553,17 @@ public class Program {
         HashMap<Integer, Category> purchaseCategories = new HashMap<>();
 
         if (validateCatValueFields(e.getCategoriesMap())) {
-            for (HashMap.Entry<JLabel[], FormFormattedTextField> item : e.getCategoriesMap().entrySet()) {
-                String labelStr = item.getKey()[0].getText();
+            e.getCategoriesMap().forEach((k,v) -> {
+                String labelStr = k[0].getText();
                 String catName = labelStr.substring(0, labelStr.indexOf(":"));
-                Double catValue = ((Number)item.getValue().getValue()).doubleValue();
+                Double catValue = ((Number)v.getValue()).doubleValue();
 
-                defaultCategories.forEach((cat) -> {
-                    if (cat.getName().equals(catName)) {
-                        Category cloneCategory = new Category(cat);
-                        cloneCategory.setAmount(catValue);
-                        purchaseCategories.put(cat.getId(), cloneCategory);
-                    }
+                defaultCategories.stream().filter(c -> c.getName().equals(catName)).forEach(c -> {
+                    Category cloneCategory = new Category(c);
+                    cloneCategory.setAmount(catValue);
+                    purchaseCategories.put(c.getId(), cloneCategory);
                 });
-            }
+            });
 
             double checkTotal = purchaseCategories.values().stream().mapToDouble(Category::getAmount).sum();
             return (checkTotal <= 0) ? null : purchaseCategories;
@@ -602,7 +576,6 @@ public class Program {
     // from the form and sends it back to the button handler
     private String getPurchaseFormCardID(PurchaseEvent event) {
         JComboBox<String> type = event.getPurchaseTypeCombo();
-
         if (type.getSelectedItem() != null) {
             if (type.getSelectedItem().equals(PurchaseType.ExistingCardPurchase.getName())) {
                 return (String)event.getExistingCardCombo().getSelectedItem();
@@ -632,8 +605,7 @@ public class Program {
     /*============================== ACCESSORS ==============================*/
     private String printCard(String cardID, String title) {
         String cText = db.getCard(cardID).toString();
-        String pText = db.getAllPurchases().values().stream()
-                .filter(p -> p.getCardID() != null && p.getCardID().equals(cardID))
+        String pText = db.getAllPurchases().values().stream().filter(p -> p.getCardID() != null && p.getCardID().equals(cardID))
                 .map(Purchase::toString).collect(Collectors.joining("\n"));
         return String.format("%s%n%s%n%s%n%s", title, cText,"PURCHASE(S)", pText);
     }
