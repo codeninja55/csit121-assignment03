@@ -5,26 +5,20 @@ import application.model.ReadCSV;
 import application.model.Shop;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 public class CardsReadImpl implements ReadCSV {
     private static final String DEFAULT_SEPARATOR = ",";
     private BufferedReader input;
 
-    public void read() {
-        Path cardsStoragePath = Paths.get("com.cn55.marvel/src/PersistentData/CardsStorage.csv");
+    public void read(BufferedReader reader) {
+        this.input = reader;
         String line;
-        openFile(cardsStoragePath);
 
         try {
             while((line = input.readLine()) != null) {
                 String[] readLine = line.split(DEFAULT_SEPARATOR);
-
                 // readLine[0] = ID | [1] = cardType | [2] = name | [3] = email | readLine[4] = balance | [5] = points
-
                 Card importCard = null;
 
                 if (readLine[1].equals(CardType.AnonCard.getName()))
@@ -42,14 +36,6 @@ public class CardsReadImpl implements ReadCSV {
                 Generator.updateCardIDCounter();
                 Shop.getShopInstance().getDataStore().createCard(importCard);
             }
-        } catch (IOException e) {
-            System.err.println("IOException: " + e.getMessage());
-        }
-    }
-
-    public void openFile(Path path) {
-        try {
-            input = new BufferedReader(new FileReader(path.toString()));
         } catch (IOException e) {
             System.err.println("IOException: " + e.getMessage());
         }

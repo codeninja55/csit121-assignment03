@@ -35,6 +35,7 @@ import java.util.HashMap;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+// TODO - Change form to disable submit based on field listeners
 public class Program {
     private final Shop shop;
     private final DataDAO db;
@@ -49,17 +50,8 @@ public class Program {
         /* Singleton Design Pattern - Only one instance of Shop available */
         shop = Shop.getShopInstance();
         db = shop.getDataStore();
-
-        // TODO - Move connection, writing, and reading methods into DataDAO
-        /* Strategy Design Pattern - Implementation of writing and reading buried in concrete classes */
-        ReadCSV readCategoriesCSV = new CategoriesReadImpl();
-        ReadCSV readCardsCSV = new CardsReadImpl();
-        ReadCSV readPurchaseCSV = new PurchasesReadImpl();
-
-        readCategoriesCSV.read();
-        //new TestCode(shop);
-        readCardsCSV.read();
-        readPurchaseCSV.read();
+        // TODO - maybe have something alert an error if Data is missing
+        db.readData();
 
         writeCategories = new CategoriesWriteOut();
         writeCards = new CardsWriteOut();

@@ -1,9 +1,6 @@
 package application.model;
-
-import java.nio.file.Path;
-
+import java.io.BufferedReader;
 public interface ReadCSV {
-    void read();
-    void openFile(Path path);
+    void read(BufferedReader reader);
     void closeFile();
 }
