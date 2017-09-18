@@ -248,9 +248,8 @@ public class Program {
                 if (!cardID.isEmpty() && db.getAllCards().containsKey(cardID)) {
                     e.getErrorLabel().setVisible(false);
                     e.getRuleErrLabel().setVisible(false);
-
-                    showResults(cardViewPane, printCard(cardID,"CARD FOUND"));
                     e.getSearchIDTextField().setText(null);
+                    showResults(cardViewPane, printCard(cardID,"CARD FOUND"));
                 } else { // If card does not exists, it will be a negative number so invoked below
                     if (!cardIDRule.validate(input)) {
                         e.getRuleErrLabel().setVisible(true);
