@@ -98,9 +98,7 @@ public class CategoriesForm extends JPanel implements FormFactory {
 
         /* SET FORM CUSTOM COMPONENTS VISIBLE */
         Arrays.stream(createCategoriesForm.getComponents())
-                .filter(c -> c instanceof FormLabel)
-                .filter(c -> c instanceof FormTextField)
-                .filter(c -> c instanceof FormButton)
+                .filter(c -> c instanceof FormLabel || c instanceof FormTextField || c instanceof FormButton)
                 .forEach(c -> c.setVisible(true));
 
         categoryIDTextField.setText(Integer.toString(Generator.getNextCategoryID()));
@@ -109,8 +107,7 @@ public class CategoriesForm extends JPanel implements FormFactory {
         createBtn.addActionListener((ActionEvent e) -> {
             CategoryEvent event = new CategoryEvent(this, categoryNameTextField, categoryDescTextField);
 
-            if (createCategoryListener != null)
-                createCategoryListener.createCategoryEventOccurred(event);
+            if (createCategoryListener != null) createCategoryListener.createCategoryEventOccurred(event);
         });
 
         clearBtn.addActionListener((ActionEvent e) -> {
