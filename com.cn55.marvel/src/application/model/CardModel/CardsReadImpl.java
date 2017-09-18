@@ -39,6 +39,8 @@ public class CardsReadImpl implements ReadCSV {
         } catch (IOException e) {
             System.err.println("IOException: " + e.getMessage());
         }
+
+        closeFile();
     }
 
     public void closeFile() {
