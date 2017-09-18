@@ -6,7 +6,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class FormButton extends JButton {
-
     public FormButton(String text, ImageIcon icon) {
         super(text);
         setIcon(icon);
@@ -15,8 +14,6 @@ public class FormButton extends JButton {
         setForeground(Style.btnTextColor());
         Dimension dim = getPreferredSize();
         dim.height = 60;
-        dim.width = 100;
-        setPreferredSize(dim);
         setMinimumSize(dim);
         setVisible(false);
 

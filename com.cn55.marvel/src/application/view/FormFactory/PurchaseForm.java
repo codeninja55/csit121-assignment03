@@ -156,13 +156,11 @@ public class PurchaseForm extends JPanel implements FormFactory {
         gc.gridy = 0; gc.gridx = 0; gc.weightx = 1; gc.weighty = 0.1;
         gc.anchor = GridBagConstraints.FIRST_LINE_END;
         gc.insets = new Insets(20,0,0,10);
-
         baseCreatePurchaseForm.add(receiptIDLabel, gc);
 
         gc.gridx = 1;
         gc.anchor = GridBagConstraints.FIRST_LINE_START;
         gc.insets = new Insets(20,0,0,10);
-
         receiptIDTextField.setEditable(false);
         receiptIDTextField.setText(Integer.toString(generatedReceiptID));
         baseCreatePurchaseForm.add(receiptIDTextField, gc);
@@ -264,15 +262,15 @@ public class PurchaseForm extends JPanel implements FormFactory {
         baseCreatePurchaseForm.add(purchaseErrorLabel, gc);
 
         /*========== BUTTON ROW ==========*/
-        gc.gridy++; gc.gridx = 0; gc.weightx = 0.4; gc.weighty = 3; gc.gridwidth = 1;
+        gc.gridy++; gc.gridx = 0; gc.weightx = 0.5; gc.weighty = 3; gc.gridwidth = 1;
         gc.fill = GridBagConstraints.HORIZONTAL;
         gc.anchor = GridBagConstraints.FIRST_LINE_END;
-        gc.insets = new Insets(20,0,0,10);
+        gc.insets = new Insets(20,0,0,1);
         baseCreatePurchaseForm.add(createBtn, gc);
 
-        gc.gridx = 1; gc.weightx = 0.4;
+        gc.gridx = 1; gc.gridwidth = 1; gc.weightx = 0.5; gc.gridwidth = 1;
         gc.anchor = GridBagConstraints.FIRST_LINE_START;
-        gc.insets = new Insets(20,10,0,0);
+        gc.insets = new Insets(20,1,0,0);
         baseCreatePurchaseForm.add(clearBtn, gc);
 
         /* BY DEFAULT CLEAR ALL TEXT FIELDS */
@@ -282,7 +280,7 @@ public class PurchaseForm extends JPanel implements FormFactory {
 
         baseCreatePurchaseForm.setVisible(true);
         JScrollPane formScrollPane = new JScrollPane(baseCreatePurchaseForm);
-        formScrollPane.setViewportBorder(BorderFactory.createEmptyBorder(2,2,2,2));
+        formScrollPane.setViewportBorder(BorderFactory.createEmptyBorder(5,5,5,5));
         this.add(formScrollPane, BorderLayout.CENTER);
     }
 
