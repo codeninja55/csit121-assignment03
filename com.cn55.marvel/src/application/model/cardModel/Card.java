@@ -4,9 +4,9 @@ import application.model.Generator;
 
 public abstract class Card implements Comparable<Card> {
 
-    private String id;
-    private double points;
-    private String cardType;
+    protected String id;
+    double points;
+    String cardType;
 
     /*============================== CONSTRUCTORS  ==============================*/
     // Default constructor
