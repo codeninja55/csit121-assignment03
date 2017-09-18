@@ -2,13 +2,13 @@ package application.view;
 
 import application.model.DataObservable;
 import application.model.DataObserver;
-import application.model.PurchaseModel.Purchase;
-import application.model.PurchaseModel.SortPurchaseType;
-import application.view.CustomComponents.Style;
-import application.view.CustomComponents.Toolbar;
-import application.view.CustomComponents.ToolbarButton;
-import application.view.CustomComponents.ToolbarButtonListener;
-import application.view.FormFactory.PurchaseForm;
+import application.model.purchaseModel.Purchase;
+import application.model.purchaseModel.SortPurchaseType;
+import application.view.customComponents.Style;
+import application.view.customComponents.Toolbar;
+import application.view.customComponents.ToolbarButton;
+import application.view.customComponents.ToolbarButtonListener;
+import application.view.builderFactory.PurchaseForm;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;

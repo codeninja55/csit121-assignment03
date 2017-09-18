@@ -1,9 +1,9 @@
 package application.model;
 
-import application.model.CardModel.AnonCard;
-import application.model.CardModel.BasicCard;
-import application.model.CardModel.PremiumCard;
-import application.model.CategoryModel.Category;
+import application.model.cardModel.AnonCard;
+import application.model.cardModel.BasicCard;
+import application.model.cardModel.PremiumCard;
+import application.model.categoryModel.Category;
 
 import java.util.ArrayList;
 import java.util.HashMap;

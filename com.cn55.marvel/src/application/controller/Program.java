@@ -1,24 +1,24 @@
 package application.controller;
 
-import application.controller.Validator.*;
-import application.model.CardModel.*;
-import application.model.CategoryModel.Category;
+import application.controller.validator.*;
+import application.model.cardModel.*;
+import application.model.categoryModel.Category;
 import application.model.DataDAO;
-import application.model.DataStoreWriters.CardsWriteOut;
-import application.model.DataStoreWriters.CategoriesWriteOut;
-import application.model.DataStoreWriters.PurchasesWriteOut;
+import application.model.cardModel.CardsWriteOut;
+import application.model.categoryModel.CategoriesWriteOut;
+import application.model.purchaseModel.PurchasesWriteOut;
 import application.model.Generator;
-import application.model.PurchaseModel.Purchase;
-import application.model.PurchaseModel.PurchaseType;
-import application.model.PurchaseModel.SortPurchaseType;
+import application.model.purchaseModel.Purchase;
+import application.model.purchaseModel.PurchaseType;
+import application.model.purchaseModel.SortPurchaseType;
 import application.model.Shop;
 import application.model.WriteCSV;
 import application.view.CardViewPane;
 import application.view.CategoriesViewPane;
-import application.view.CustomComponents.FormFormattedTextField;
-import application.view.CustomComponents.ResultsPane;
-import application.view.CustomComponents.Style;
-import application.view.FormFactory.*;
+import application.view.customComponents.FormFormattedTextField;
+import application.view.customComponents.ResultsPane;
+import application.view.customComponents.Style;
+import application.view.builderFactory.*;
 import application.view.MainFrame;
 import application.view.PurchaseViewPane;
 
