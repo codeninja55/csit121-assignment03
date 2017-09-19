@@ -75,10 +75,7 @@ public class DeleteCategoryForm extends JPanel {
 
         deleteBtn.addActionListener((ActionEvent e) -> {
             if (deleteListener != null) {
-                DeleteEvent event = new DeleteEvent(this, categoryIDLabel, categoryIDTextField,
-                        categoryNameLabel, categoryNameTextField, errLabel,
-                        idRuleErrLabel, othersDeleteErrLabel, deleteErrorLabel);
-                deleteListener.deleteEventOccurred(event);
+                //deleteListener.formSubmitted(event);
             }
         });
 

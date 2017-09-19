@@ -4,15 +4,10 @@ import application.controller.validator.*;
 import application.model.cardModel.*;
 import application.model.categoryModel.Category;
 import application.model.DataDAO;
-import application.model.cardModel.CardsExport;
-import application.model.categoryModel.CategoriesExport;
-import application.model.purchaseModel.PurchasesExport;
-import application.model.Generator;
 import application.model.purchaseModel.Purchase;
 import application.model.purchaseModel.PurchaseType;
 import application.model.purchaseModel.SortPurchaseType;
 import application.model.Shop;
-import application.model.ExportToCSV;
 import application.view.CardViewPane;
 import application.view.CategoriesViewPane;
 import application.view.customComponents.FormFormattedTextField;
@@ -36,7 +31,6 @@ import java.util.HashMap;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-// TODO - Change form to disable submit based on field listeners
 public class Program {
     private final Shop shop;
     private final DataDAO db;
@@ -125,19 +119,15 @@ public class Program {
                     newCard.put("name", null);
                     newCard.put("email", null);
                     newCard.put("cardType", CardType.AnonCard.getName());
-                    shop.makeCard(newCard);
-                } else if (type.equals(CardType.BasicCard.getName())) {
+                } else {
                     newCard.put("name", name);
                     newCard.put("email", email);
-                    newCard.put("cardType", CardType.BasicCard.getName());
-                    shop.makeCard(newCard);
-                } else if (type.equals(CardType.PremiumCard.getName())) {
-                    newCard.put("name", name);
-                    newCard.put("email", email);
-                    newCard.put("cardType", CardType.BasicCard.getName());
-                    shop.makeCard(newCard);
+                    if (type.equals(CardType.BasicCard.getName()))
+                        newCard.put("cardType", CardType.BasicCard.getName());
+                    else if (type.equals(CardType.PremiumCard.getName()))
+                        newCard.put("cardType", CardType.PremiumCard.getName());
                 }
-
+                shop.makeCard(newCard);
                 removeCardForms();
                 showResults(cardViewPane, printCard(cardID, "CARD ADDED"));
             });
@@ -149,57 +139,31 @@ public class Program {
             DeleteCardForm form = FormFactory.deleteCardForm();
             cardViewPane.setDeleteForm(form);
 
-            // REGISTER A CANCEL BUTTON LISTENER AFTER CREATING FORM
-            form.setCancelListener(() -> {
-                cardViewPane.getDeleteForm().setVisible(false);
-                removeCardForms();
-            });
-
             // REGISTER A DELETE BUTTON LISTENER AFTER CREATING FORM
             form.setDeleteListener(e -> {
-                final String cardID = e.getIdTextField().getText().toUpperCase();
+                final String cardID = e.getID();
+                String[] btnOptions = {"Yes","No"};
+                String message = "Are you sure you want to DELETE card: " + cardID + "\nThis cannot be undone."
+                        + "\n\nAll purchases for this card will be changed to CASH status.\n\n";
 
-                if (!cardID.isEmpty() && db.getAllCards().containsKey(cardID)) {
-                    e.getErrorLabel().setVisible(false);
-                    e.getRuleErrLabel().setVisible(false);
-                    e.getDeleteErrorLabel().setVisible(false);
+                showResults(cardViewPane, printCard(cardID, "DELETE CARD?"));
+                int confirm = JOptionPane.showOptionDialog(mainFrame, // frame, can be null
+                        message, // message
+                        "Confirm Delete?", // title
+                        JOptionPane.OK_CANCEL_OPTION, // button options
+                        JOptionPane.WARNING_MESSAGE, // icon
+                        null, // do not use custom icon
+                        btnOptions, // title of buttons
+                        btnOptions[1] // default button title
+                );
 
-                    showResults(cardViewPane, printCard(cardID, "DELETE CARD?"));
-
-                    String[] btnOptions = {"Yes","Cancel"};
-                    String message = "Are you sure you want to DELETE card: " + cardID + "\nThis cannot be undone."
-                            + "\n\nAll purchases for this card will be changed to CASH status.\n\n";
-
-                    int confirm = JOptionPane.showOptionDialog(mainFrame, // frame, can be null
-                            message, // message
-                            "Confirm Delete?", // title
-                            JOptionPane.OK_CANCEL_OPTION, // button options
-                            JOptionPane.WARNING_MESSAGE, // icon
-                            null, // do not use custom icon
-                            btnOptions, // title of buttons
-                            btnOptions[1] // default button title
-                    );
-
-                    if (confirm == JOptionPane.OK_OPTION) {
-                        shop.deleteCard(cardID);
-                        // Purchases by this card will be changed to cash
-                        shop.convertPurchase(cardID);
-                        removeCardForms();
-                    } else {
-                        e.getIdTextField().setText(null);
-                        e.getDeleteErrorLabel().setVisible(true);
-                    }
+                if (confirm == JOptionPane.OK_OPTION) {
+                    shop.deleteCard(cardID);
+                    // Purchases by this card will be changed to cash
+                    shop.convertPurchase(cardID);
+                    removeCardForms();
                 } else {
-                    if (!db.getAllCards().containsKey(cardID)){
-                        e.getErrorLabel().setVisible(false);
-                        e.getRuleErrLabel().setVisible(true);
-                    } else {
-                        e.getRuleErrLabel().setVisible(false);
-                        e.getErrorLabel().setVisible(true);
-                    }
-                    e.getDeleteErrorLabel().setVisible(true);
-                    e.getIdTextField().setForeground(Style.redA700());
-                    e.getIdLabel().setForeground(Style.redA700());
+                    removeCardForms();
                 }
             });
         });
@@ -207,36 +171,13 @@ public class Program {
         /*TOOLBAR | SEARCH BUTTON*/
         cardViewPane.setSearchCardListener(() -> {
             removeCardForms();
-            SearchForm form = FormFactory.searchCardForm();
-            cardViewPane.setSearchForm(form);
-
-            // ADD A CANCEL BUTTON LISTENER AFTER CREATING FORM
-            form.setCancelListener(this::removeCardForms);
+            SearchCardForm form = FormFactory.searchCardForm();
+            cardViewPane.setSearchCardForm(form);
 
             // ADD A CANCEL BUTTON LISTENER AFTER CREATING FORM
             form.setSearchListener(e -> {
-                final String cardID = e.getSearchIDTextField().getText().toUpperCase();
-                // SETUP VALIDATOR FOR CARD ID
-                FormValidData input = new FormValidData();
-                input.setCardID(cardID);
-                FormRule cardIDRule = new CardIDRule();
-
-                if (!cardID.isEmpty() && db.getAllCards().containsKey(cardID)) {
-                    e.getErrorLabel().setVisible(false);
-                    e.getRuleErrLabel().setVisible(false);
-                    e.getSearchIDTextField().setText(null);
-                    showResults(cardViewPane, printCard(cardID,"CARD FOUND"));
-                } else { // If card does not exists, it will be a negative number so invoked below
-                    if (!cardIDRule.validate(input)) {
-                        e.getRuleErrLabel().setVisible(true);
-                        e.getErrorLabel().setVisible(false);
-                    } else {
-                        e.getErrorLabel().setVisible(true);
-                        e.getRuleErrLabel().setVisible(false);
-                    }
-                    e.getSearchIDTextField().setForeground(Style.redA700());
-                    e.getSearchIDLabel().setForeground(Style.redA700());
-                }
+                final String cardID = e.getID();
+                showResults(cardViewPane, printCard(cardID,"CARD FOUND"));
             });
         });
 
@@ -410,7 +351,7 @@ public class Program {
             categoriesViewPane.setDeleteCategoryForm(form);
 
             //ADD A DELETE BUTTON LISTENER AFTER CREATING FORM
-            form.setDeleteListener(e -> {
+            /*form.setDeleteListener(e -> {
                 String categoryIDStr = e.getIdTextField().getText();
                 final int categoryID = Integer.parseInt(categoryIDStr);
                 //SETUP VALIDATOR FOR CATEGORY ID
@@ -470,7 +411,7 @@ public class Program {
                         e.getDeleteErrorLabel().setVisible(true);
                     }
                 }
-            });
+            });*/
         });
     }
 

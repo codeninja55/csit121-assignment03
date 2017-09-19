@@ -1,36 +1,29 @@
 package application.view.builderFactory;
 
+import application.controller.validator.*;
 import application.view.customComponents.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.util.Arrays;
 
-public class DeleteCardForm extends JPanel implements FormFactory {
-
-    private FormLabel cardIDLabel;
+public class DeleteCardForm extends JPanel implements FormFactory, DeleteFormView {
+    private JPanel deleteForm;
     private FormTextField cardIDTextField;
-    private ErrorLabel errorLabel;
-    private ErrorLabel ruleErrLabel;
-    private ErrorLabel deleteErrorLabel;
-    @SuppressWarnings("FieldCanBeLocal")
-    private FormButton deleteBtn;
-
-    private ButtonListener cancelListener;
     private DeleteListener deleteListener;
 
     /*============================== CONSTRUCTORS ==============================*/
     DeleteCardForm() {
-
-        JPanel deleteForm = new JPanel(new GridBagLayout());
+        deleteForm = new JPanel(new GridBagLayout());
         CancelButton cancelBtn = new CancelButton("Cancel Card Delete");
-        cardIDLabel = new FormLabel("Delete by Card ID");
+        FormLabel cardIDLabel = new FormLabel("Delete by Card ID");
         cardIDTextField = new FormTextField(20);
-        errorLabel = new ErrorLabel("CARD DOES NOT EXIST");
-        ruleErrLabel = new ErrorLabel("INVALID CARD ID NUMBER");
-        deleteErrorLabel = new ErrorLabel("CARD NOT DELETED");
-        deleteBtn = new FormButton("Delete Card", Style.deleteActionIcon());
+        ErrorLabel existsErrorLabel = new ErrorLabel("CARD DOES NOT EXIST");
+        ErrorLabel ruleErrLabel = new ErrorLabel("INVALID CARD ID NUMBER");
+        ErrorLabel deleteErrorLabel = new ErrorLabel("CARD NOT DELETED");
+        FormButton deleteBtn = new FormButton("Delete Card", Style.deleteActionIcon());
 
         setLayout(new BorderLayout());
         Dimension dim = getPreferredSize();
@@ -38,9 +31,9 @@ public class DeleteCardForm extends JPanel implements FormFactory {
         setPreferredSize(dim);
         setMinimumSize(getPreferredSize());
         setBorder(Style.formBorder("Delete Card"));
+        setVisible(false);
 
         GridBagConstraints gc = new GridBagConstraints();
-
         /*========== FIRST ROW ==========*/
         gc.fill = GridBagConstraints.NONE;
         gc.gridx = 0; gc.gridy = 0; gc.weightx = 1; gc.weighty = 0.2;
@@ -62,7 +55,7 @@ public class DeleteCardForm extends JPanel implements FormFactory {
         gc.gridy++; gc.gridx = 0; gc.weightx = 1; gc.weighty = 0.1;
         gc.anchor = GridBagConstraints.PAGE_START;
         gc.insets = new Insets(0,0,0,0);
-        deleteForm.add(errorLabel, gc);
+        deleteForm.add(existsErrorLabel, gc);
 
         /*========== NEW ROW - ERROR LABEL ==========*/
         gc.gridy++; gc.gridx = 0; gc.weightx = 1; gc.weighty = 0.1;
@@ -88,29 +81,40 @@ public class DeleteCardForm extends JPanel implements FormFactory {
         gc.insets = new Insets(10,0,10,0);
         deleteForm.add(deleteBtn, gc);
 
-        deleteBtn.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                DeleteEvent event = new DeleteEvent(this,
-                        cardIDLabel, cardIDTextField, errorLabel, ruleErrLabel, deleteErrorLabel);
+        /* SET FORM CUSTOM COMPONENTS VISIBLE */
+        Arrays.stream(deleteForm.getComponents()).filter(c -> c instanceof FormLabel || c instanceof FormTextField || c instanceof FormButton)
+                .forEach(c -> c.setVisible(true));
 
-                if (deleteListener != null) deleteListener.deleteEventOccurred(event);
+        deleteBtn.addActionListener(e -> {
+            hideErrorLabels();
+            boolean proceed = true;
+            FormValidData validData = new FormValidData();
+            validData.setCardID(getID());
+            ExistsRule cardExists = new CardExistsRule();
+            FormRule cardIDRule = new CardIDRule();
+
+            if (!cardIDRule.validate(validData)) {
+                ruleErrLabel.setVisible(true);
+                proceed = false;
+            } else if (!cardExists.existsValidating(validData)) {
+                existsErrorLabel.setVisible(true);
+                proceed = false;
             }
+
+            if (proceed && deleteListener != null) deleteListener.formSubmitted(DeleteCardForm.this);
+            else deleteErrorLabel.setVisible(true);
         });
 
         add(deleteForm, BorderLayout.CENTER);
         add(cancelBtn, BorderLayout.SOUTH);
+        cancelBtn.addActionListener(e -> setVisible(false));
 
-        cancelBtn.addActionListener(e -> {
-            if (cancelListener != null) cancelListener.buttonActionOccurred();
-        });
-
-        /* SET FORM CUSTOM COMPONENTS VISIBLE */
-        for (Component c : deleteForm.getComponents()) {
-            if (c instanceof FormLabel || c instanceof FormTextField || c instanceof FormButton) {
-                c.setVisible(true);
+        this.addComponentListener(new ComponentAdapter() {
+            public void componentHidden(ComponentEvent e) {
+                super.componentHidden(e);
+                getParent().remove(DeleteCardForm.this);
             }
-        }
-        setVisible(false);
+        });
     }
 
     /*============================== MUTATORS ==============================*/
@@ -118,10 +122,10 @@ public class DeleteCardForm extends JPanel implements FormFactory {
         this.deleteListener = listener;
     }
 
-    public void setCancelListener(ButtonListener listener) {
-        this.cancelListener = listener;
+    private void hideErrorLabels() {
+        Arrays.stream(deleteForm.getComponents()).filter(c -> c instanceof ErrorLabel).forEach(c -> c.setVisible(false));
     }
 
-    /*============================== ACCESSORS ==============================*/
-
+    /*============================== VIEW ONLY IMPLEMENTATIONS ==============================*/
+    public String getID() { return cardIDTextField.getText().toUpperCase(); }
 }

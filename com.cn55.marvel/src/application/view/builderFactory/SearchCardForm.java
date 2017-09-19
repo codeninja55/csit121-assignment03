@@ -1,46 +1,37 @@
 package application.view.builderFactory;
 
+import application.controller.validator.*;
 import application.view.customComponents.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.util.Arrays;
 
-public class SearchForm extends JPanel implements FormFactory {
-
+public class SearchCardForm extends JPanel implements FormFactory, SearchFormView {
     private JPanel searchForm;
-    private FormLabel searchLabel;
     private FormTextField searchIDTextField;
-    private ErrorLabel errorLabel;
-    private ErrorLabel ruleErrLabel;
-    private FormButton searchBtn;
     private SearchListener searchListener;
-    private ButtonListener cancelListener;
 
-    SearchForm() {
-        /* NOTE: searchForm is the form Container within*/
+    SearchCardForm() {
         searchForm = new JPanel(new GridBagLayout());
         CancelButton cancelBtn = new CancelButton("Cancel Search");
-        searchLabel = new FormLabel("Search by Card ID");
-        searchLabel.setVisible(true);
+        FormLabel searchLabel = new FormLabel("Search by Card ID");
         searchIDTextField = new FormTextField(20);
-        searchIDTextField.setVisible(true);
-        errorLabel = new ErrorLabel("CARD DOES NOT EXIST");
-        ruleErrLabel = new ErrorLabel("INVALID CARD ID NUMBER");
-        searchBtn = new FormButton("Search", Style.searchIcon());
-        searchBtn.setVisible(true);
+        ErrorLabel errorLabel = new ErrorLabel("CARD DOES NOT EXIST");
+        ErrorLabel ruleErrLabel = new ErrorLabel("INVALID CARD ID NUMBER");
+        FormButton searchBtn = new FormButton("Search", Style.searchIcon());
 
-        setName("SearchForm");
         setLayout(new BorderLayout());
         Dimension dim = getPreferredSize();
         dim.width = 800;
         setPreferredSize(dim);
         setMinimumSize(getPreferredSize());
         setBorder(Style.formBorder("Search Cards"));
+        setVisible(false);
 
         GridBagConstraints gc = new GridBagConstraints();
-
         gc.fill = GridBagConstraints.NONE;
         gc.gridx = 0; gc.gridy = 0; gc.weightx = 1; gc.weighty = 0.2;
         gc.anchor = GridBagConstraints.PAGE_END;
@@ -72,36 +63,50 @@ public class SearchForm extends JPanel implements FormFactory {
         gc.insets = new Insets(10,0,10,0);
         searchForm.add(searchBtn, gc);
 
-        /* Register listener, handle the event, and raise an Event object
-        * to pass the source to that SearchEvent object that then passes
-        *  that event to Program controller to handle */
-        searchBtn.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                SearchEvent event = new SearchEvent(this, searchLabel, searchIDTextField,
-                        errorLabel, ruleErrLabel);
+        /* Set Components Visible */
+        Arrays.stream(searchForm.getComponents())
+                .filter(c -> c instanceof FormButton || c instanceof FormTextField || c instanceof FormLabel)
+                .forEach(c -> c.setVisible(true));
 
-                if (searchListener != null)
-                    searchListener.searchEventOccurred(event);
+        searchBtn.addActionListener(e -> {
+            hideErrorLabel();
+            boolean proceed = true;
+            FormValidData validData = new FormValidData();
+            validData.setCardID(getID());
+            ExistsRule cardExists = new CardExistsRule();
+            FormRule cardIDRule = new CardIDRule();
+
+            if (!cardExists.existsValidating(validData)) {
+                errorLabel.setVisible(true);
+                proceed = false;
+            } else if (!cardIDRule.validate(validData)) {
+                ruleErrLabel.setVisible(true);
+                proceed = false;
             }
+
+            if (proceed && searchListener != null)
+                searchListener.searchFormSubmitted(SearchCardForm.this);
         });
 
         add(searchForm, BorderLayout.CENTER);
         add(cancelBtn, BorderLayout.SOUTH);
+        cancelBtn.addActionListener(e -> this.setVisible(false));
 
-        cancelBtn.addActionListener(e -> {
-            if (cancelListener != null) {
-                cancelListener.buttonActionOccurred();
+        this.addComponentListener(new ComponentAdapter() {
+            public void componentHidden(ComponentEvent e) {
+                super.componentHidden(e);
+                getParent().remove(SearchCardForm.this);
             }
         });
-
-        setVisible(false);
     }
 
     /*============================== MUTATORS ==============================*/
     public void setSearchListener(SearchListener listener) { this.searchListener = listener; }
 
-    public void setCancelListener(ButtonListener cancelListener) {
-        this.cancelListener = cancelListener;
+    private void hideErrorLabel() {
+        Arrays.stream(searchForm.getComponents()).filter(c -> c instanceof ErrorLabel).forEach(c -> c.setVisible(false));
     }
 
+    /*============================== VIEW ONLY IMPLEMENTATIONS ==============================*/
+    public String getID() { return searchIDTextField.getText().toUpperCase(); }
 }
