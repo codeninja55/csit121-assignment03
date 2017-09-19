@@ -9,7 +9,7 @@ import application.view.customComponents.ToolbarButton;
 import application.view.customComponents.ToolbarButtonListener;
 import application.view.builderFactory.CardForm;
 import application.view.builderFactory.DeleteCardForm;
-import application.view.builderFactory.SearchForm;
+import application.view.builderFactory.SearchCardForm;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
@@ -29,10 +29,6 @@ public class CardViewPane extends JPanel implements DataObserver {
     private JComboBox<String> sortedCombo;
     private JTable cardTablePane;
 
-    private SearchForm searchForm;
-    private CardForm cardForm;
-    private DeleteCardForm deleteForm;
-
     private ToolbarButtonListener createCardListener;
     private ToolbarButtonListener searchCardListener;
     private ToolbarButtonListener deleteCardListener;
@@ -50,10 +46,6 @@ public class CardViewPane extends JPanel implements DataObserver {
         cardTablePane = new JTable();
         JScrollPane tableScrollPane = new JScrollPane(cardTablePane);
         tableScrollPane.setName("CardsViewTableScrollPane");
-
-        //resultsPane = new ResultsPane("CardViewResultsPane");
-
-        setName("CardsViewPane");
         setLayout(new BorderLayout());
 
         /* SORTED COMBO BOX */
@@ -76,8 +68,6 @@ public class CardViewPane extends JPanel implements DataObserver {
         add(toolbar, BorderLayout.NORTH);
 
         add(tableScrollPane, BorderLayout.CENTER);
-
-        //add(resultsPane, BorderLayout.EAST);
 
         /* REGISTRATION OF TOOLBAR BUTTON LISTENERS */
         ToolbarListener handler = new ToolbarListener();
@@ -107,21 +97,18 @@ public class CardViewPane extends JPanel implements DataObserver {
     }
 
     public void setCardForm(CardForm cardForm) {
-        this.cardForm = cardForm;
         this.add(cardForm, BorderLayout.WEST);
         cardForm.setVisible(true);
     }
 
-    public void setDeleteForm(DeleteCardForm deleteForm) {
-        this.deleteForm = deleteForm;
-        this.add(deleteForm, BorderLayout.WEST);
-        deleteForm.setVisible(true);
+    public void setDeleteForm(DeleteCardForm deleteCardForm) {
+        this.add(deleteCardForm, BorderLayout.WEST);
+        deleteCardForm.setVisible(true);
     }
 
-    public void setSearchForm(SearchForm searchForm) {
-        this.searchForm = searchForm;
-        this.add(searchForm, BorderLayout.WEST);
-        searchForm.setVisible(true);
+    public void setSearchCardForm(SearchCardForm form) {
+        this.add(form, BorderLayout.WEST);
+        form.setVisible(true);
     }
 
     private void cardTableFormatter() {
@@ -168,25 +155,11 @@ public class CardViewPane extends JPanel implements DataObserver {
         return sortedCombo;
     }
 
-    public SearchForm getSearchForm() {
-        return searchForm;
-    }
-
-    public CardForm getCardForm() {
-        return cardForm;
-    }
-
-    public DeleteCardForm getDeleteForm() {
-        return deleteForm;
-    }
-
     public JTable getCardTablePane() {
         return cardTablePane;
     }
 
-    /*=========================================================================*/
     /*============================== INNER CLASS ==============================*/
-    /*=========================================================================*/
 
     /*============================ TOOLBAR LISTENER ===========================*/
     public class ToolbarListener extends MouseAdapter implements ActionListener {

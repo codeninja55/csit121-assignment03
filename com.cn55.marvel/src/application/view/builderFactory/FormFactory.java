@@ -21,8 +21,8 @@ public interface FormFactory {
         return new CardForm();
     }
 
-    static SearchForm searchCardForm() {
-        return new SearchForm();
+    static SearchCardForm searchCardForm() {
+        return new SearchCardForm();
     }
 
     static DeleteCardForm deleteCardForm() {
