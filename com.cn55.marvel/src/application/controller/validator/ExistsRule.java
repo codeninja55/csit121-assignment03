@@ -1,5 +1,5 @@
 package application.controller.validator;
 
 public interface ExistsRule {
-    int existsValidating(FormValidData validData);
+    boolean existsValidating(FormValidData validData);
 }
