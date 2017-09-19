@@ -54,6 +54,7 @@ public class PurchaseForm extends JPanel implements FormFactory {
         baseCreatePurchaseForm = new JPanel(new GridBagLayout());
         purchaseTypeCombo = new JComboBox<>();
         options = new DefaultComboBoxModel<>();
+        categoriesMap = new HashMap<>();
         CancelButton cancelBtn = new CancelButton("Cancel New Purchase");
 
         /* NOTE: All FormLabels and FormTextField are hidden by default */
@@ -81,7 +82,7 @@ public class PurchaseForm extends JPanel implements FormFactory {
 
         createBtn = new FormButton("Add Purchase", Style.addIcon());
         clearBtn = new FormButton("Clear", Style.clearIcon());
-        purchaseErrorLabel = new ErrorLabel("PURCHASE NOT ADDED");
+        purchaseErrorLabel = new ErrorLabel("PURCHASE NOT CREATED");
 
         /* INITIALIZE THIS PANEL */
         setLayout(new BorderLayout());
@@ -237,14 +238,10 @@ public class PurchaseForm extends JPanel implements FormFactory {
         categoriesMap.forEach((key,value) -> {
             labelGridConstraints(gc);
             baseCreatePurchaseForm.add(key[0], gc);
-
-            value.setFont(Style.textFieldFont());
             textFieldGridConstraints(gc);
             baseCreatePurchaseForm.add(value, gc);
-
             labelGridConstraints(gc);
             baseCreatePurchaseForm.add(new JLabel(""), gc);
-
             textFieldGridConstraints(gc);
             baseCreatePurchaseForm.add(key[1], gc);
         });
@@ -261,7 +258,6 @@ public class PurchaseForm extends JPanel implements FormFactory {
 
         /*========== BUTTON ROW ==========*/
         gc.gridy++; gc.gridx = 0; gc.weightx = 0.5; gc.weighty = 3; gc.gridwidth = 1;
-        gc.fill = GridBagConstraints.HORIZONTAL;
         gc.anchor = GridBagConstraints.FIRST_LINE_END;
         gc.insets = new Insets(20,0,0,1);
         baseCreatePurchaseForm.add(createBtn, gc);
@@ -272,8 +268,7 @@ public class PurchaseForm extends JPanel implements FormFactory {
         baseCreatePurchaseForm.add(clearBtn, gc);
 
         /* BY DEFAULT CLEAR ALL TEXT FIELDS */
-        Arrays.stream(baseCreatePurchaseForm.getComponents()).filter(c -> c instanceof FormTextField)
-                .filter(c -> ((FormTextField)c).isEditable())
+        Arrays.stream(baseCreatePurchaseForm.getComponents()).filter(c -> c instanceof FormTextField || ((FormTextField)c).isEditable())
                 .forEach((Component comp) -> ((FormTextField) comp).setText(null));
 
         baseCreatePurchaseForm.setVisible(true);
@@ -355,8 +350,7 @@ public class PurchaseForm extends JPanel implements FormFactory {
         // This method extracts each category from the default list and places them
         // into a HashMap with an Array of FormLabel and ErrorLabel with the FormFormattedTextField.
         // It also adds a PropertyChangeListener and MouseClicked listener to each.
-        HashMap<JLabel[], FormFormattedTextField> categoriesMap = new HashMap<>();
-        categoriesList.forEach((cat) -> {
+        categoriesList.forEach((Category cat) -> {
             JLabel[] labelArr = new JLabel[2];
             String categoryStr = cat.getName() + ": $";
             labelArr[0] = new FormLabel(categoryStr);
@@ -390,9 +384,8 @@ public class PurchaseForm extends JPanel implements FormFactory {
                     catValueTextField.setForeground(Color.BLACK);
                 }
             });
-            categoriesMap.put(labelArr, catValueTextField);
+            this.categoriesMap.put(labelArr, catValueTextField);
         });
-        this.categoriesMap = categoriesMap;
     }
 
     private void setCategoriesVisible(boolean isVisible) {
@@ -438,7 +431,7 @@ public class PurchaseForm extends JPanel implements FormFactory {
 
     /*============================== INNER CLASS ==============================*/
     /*============================== BUILDER ==============================*/
-    public static class PurchaseFormBuilder {
+    static class PurchaseFormBuilder {
         private int generatedReceiptID;
         private DefaultComboBoxModel<String> existingCardModel;
         private ArrayList<Category> categoriesList;
@@ -478,12 +471,12 @@ public class PurchaseForm extends JPanel implements FormFactory {
 
                 if (createPurchaseListener != null) createPurchaseListener.formActionOccurred(event);
             } else if (e.getSource() == clearBtn) {
-                for (Component c : baseCreatePurchaseForm.getComponents()) {
+                Arrays.stream(baseCreatePurchaseForm.getComponents()).forEach(c -> {
                     if (c instanceof JTextField && ((JTextField) c).isEditable()) ((JTextField) c).setText("");
                     else if (c instanceof FormFormattedTextField) ((FormFormattedTextField) c).setValue(0.00D);
                     else if (c instanceof ErrorLabel) c.setVisible(false);
                     else if (c instanceof FormLabel) c.setForeground(Color.BLACK);
-                }
+                });
             } else if (e.getSource() == anonCardRB) {
                 enableNameAndEmail(false);
             } else if (e.getSource() == basicCardRB) {
