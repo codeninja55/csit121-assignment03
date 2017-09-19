@@ -7,20 +7,26 @@ import application.view.customComponents.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
+import java.util.Arrays;
 
-public class CardForm extends JPanel implements FormFactory {
-    private JComboBox<String> cardTypeCombo;
+public class CardForm extends JPanel implements FormFactory, CardFormView {
     private DefaultComboBoxModel<String> options;
-
+    private JComboBox<String> cardTypeCombo;
     private JPanel baseCreateCardForm;
     private FormLabel cardIDLabel;
     private FormTextField cardIDTextField;
     private FormLabel cardNameLabel;
     private FormTextField cardNameTextField;
+    private ErrorLabel nameErrorLabel;
     private FormLabel cardEmailLabel;
     private FormTextField cardEmailTextField;
+    private ErrorLabel emailErrorLabel;
 
     private CardListener cardListener;
+    private ErrorLabel createCardErrorLabel;
     private FormButton createBtn;
     private FormButton clearBtn;
 
@@ -37,15 +43,22 @@ public class CardForm extends JPanel implements FormFactory {
         cardIDTextField = new FormTextField(20);
         cardNameLabel = new FormLabel("Name: ");
         cardNameTextField = new FormTextField(20);
+        nameErrorLabel = new ErrorLabel("Name Must Not Be Blank");
         cardEmailLabel = new FormLabel("Email: ");
         cardEmailTextField = new FormTextField(20);
-
+        emailErrorLabel = new ErrorLabel("Email Must Not Be Blank");
+        createCardErrorLabel = new ErrorLabel("CARD NOT CREATED");
         createBtn = new FormButton("Add Card", Style.addIcon());
         clearBtn = new FormButton("Clear", Style.clearIcon());
 
+        /* REGISTRATION OF LISTENERS */
+        FormListener handler = new FormListener();
+        cardTypeCombo.addItemListener(handler);
+        createBtn.addActionListener(handler);
+        clearBtn.addActionListener(handler);
+
         /* INITIALIZE THIS PANEL */
         setLayout(new BorderLayout());
-        /* SIZING - Make sure the form is at least always 800 pixels */
         Dimension dim = getPreferredSize();
         dim.width = 800;
         setPreferredSize(dim);
@@ -68,12 +81,6 @@ public class CardForm extends JPanel implements FormFactory {
         add(cancelBtn, BorderLayout.SOUTH);
         cancelBtn.addActionListener(e -> setVisible(false) );
 
-        /* REGISTRATION OF LISTENERS AND CALLBACKS */
-        FormListener handler = new FormListener();
-        cardTypeCombo.addItemListener(handler);
-        createBtn.addActionListener(handler);
-        clearBtn.addActionListener(handler);
-
         this.addComponentListener(new ComponentAdapter() {
             public void componentShown(ComponentEvent e) {
                 super.componentShown(e);
@@ -94,7 +101,6 @@ public class CardForm extends JPanel implements FormFactory {
     /*============================== BASE CREATE CARD FORM ==============================*/
     private void createBaseCreateCardForm() {
         this.add(baseCreateCardForm, BorderLayout.CENTER);
-
         GridBagConstraints gc = new GridBagConstraints();
 
         /*========== FIRST ROW - CARD ID ==========*/
@@ -118,6 +124,13 @@ public class CardForm extends JPanel implements FormFactory {
         textFieldGridConstraints(gc);
         baseCreateCardForm.add(cardNameTextField, gc);
 
+        /*========== NEW ROW - NAME ERROR LABEL ==========*/
+        labelGridConstraints(gc);
+        baseCreateCardForm.add(new JLabel(""), gc);
+
+        textFieldGridConstraints(gc);
+        baseCreateCardForm.add(nameErrorLabel, gc);
+
         /*========== NEW ROW ==========*/
         labelGridConstraints(gc);
         baseCreateCardForm.add(cardEmailLabel,gc);
@@ -125,12 +138,27 @@ public class CardForm extends JPanel implements FormFactory {
         /*========== NEW ROW ==========*/
         textFieldGridConstraints(gc);
         gc.gridwidth = 1;
-        cardEmailTextField.setEditable(false);
         baseCreateCardForm.add(cardEmailTextField,gc);
+
+        /*========== NEW ROW - EMAIL ERROR LABEL ==========*/
+        labelGridConstraints(gc);
+        baseCreateCardForm.add(new JLabel(""), gc);
+
+        textFieldGridConstraints(gc);
+        baseCreateCardForm.add(emailErrorLabel, gc);
+
+        /*========== NEW ROW - CARD ERROR LABEL ==========*/
+        gc.gridy++; gc.gridx = 0; gc.weightx = 1; gc.weighty = 0.1; gc.gridwidth = 2;
+        gc.fill = GridBagConstraints.HORIZONTAL;
+        gc.anchor = GridBagConstraints.CENTER;
+        gc.insets = new Insets(20,0,20,0);
+        createCardErrorLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        createCardErrorLabel.setFont(new Font("Product Sans", Font.BOLD, 32));
+        createCardErrorLabel.setBorder(Style.formBorder(""));
+        baseCreateCardForm.add(createCardErrorLabel, gc);
 
         /*========== BUTTON ROW ==========*/
         gc.gridy++; gc.gridx = 0; gc.weightx = 0.5; gc.weighty = 2; gc.gridwidth = 1;
-        gc.fill = GridBagConstraints.HORIZONTAL;
         gc.anchor = GridBagConstraints.FIRST_LINE_END;
         gc.insets = new Insets(20,0,0,10);
         baseCreateCardForm.add(createBtn, gc);
@@ -140,32 +168,31 @@ public class CardForm extends JPanel implements FormFactory {
         gc.insets = new Insets(20,10,0,0);
         baseCreateCardForm.add(clearBtn, gc);
 
-        /* BY DEFAULT CLEAR ALL TEXT FIELDS */
-        for (Component item : baseCreateCardForm.getComponents())
-            if (item instanceof FormTextField) ((FormTextField) item).setText("");
+        /* By Default Clear All Text Fields */
+        Arrays.stream(baseCreateCardForm.getComponents()).filter(c -> c instanceof FormTextField)
+                .forEach(c -> ((FormTextField)c).setText(null));
 
         cardIDTextField.setText(Generator.getNextCardID());
     }
 
     private void baseCardForm() {
-        hideErrorLabels();
         hideAllFormComponents(false);
+        hideErrorLabels();
     }
 
     private void anonCardForm() {
-        hideErrorLabels();
         hideAllFormComponents(true);
+        hideErrorLabels();
         enableNameAndEmail(false);
     }
 
     private void advancedCardForm() {
-        hideErrorLabels();
         hideAllFormComponents(true);
+        hideErrorLabels();
         enableNameAndEmail(true);
     }
 
     /*============================== LISTENER CALLBACKS ==============================*/
-
     public void setCardListener(CardListener cardListener) {
         this.cardListener = cardListener;
     }
@@ -185,8 +212,7 @@ public class CardForm extends JPanel implements FormFactory {
     }
 
     private void hideAllFormComponents(boolean isVisible) {
-        for (Component item : baseCreateCardForm.getComponents())
-            item.setVisible(isVisible);
+        Arrays.stream(baseCreateCardForm.getComponents()).forEach(c -> c.setVisible(isVisible));
     }
 
     private void enableNameAndEmail (boolean isEnabled) {
@@ -199,57 +225,52 @@ public class CardForm extends JPanel implements FormFactory {
     }
 
     private void hideErrorLabels() {
-        for (Component comp : baseCreateCardForm.getComponents()) {
-            if (comp instanceof ErrorLabel)
-                comp.setVisible(false);
-        }
+            Arrays.stream(baseCreateCardForm.getComponents()).filter(c -> c instanceof ErrorLabel)
+                    .forEach(c -> c.setVisible(false));
     }
 
-    /*============================== ACCESSORS  ==============================*/
-
-    public JPanel getBaseCreateCardForm() {
-        return baseCreateCardForm;
-    }
+    /*============================== VIEW ONLY IMPLEMENTATIONS ==============================*/
+    public String getCardType() { return options.getElementAt(cardTypeCombo.getSelectedIndex()); }
+    public String getCardID() { return cardIDTextField.getText(); }
+    public String getCardName() { return cardNameTextField.getText().trim(); }
+    public String getCardEmail() { return cardEmailTextField.getText().trim(); }
 
     /*============================== INNER CLASS ==============================*/
-    /*=========================== LISTENER HANDLER ============================*/
     private class FormListener implements ActionListener, ItemListener {
         public void actionPerformed(ActionEvent e) {
-            if ( e.getSource() == createBtn) {
-                CardEvent event = new CardEvent(this);
-                event.setCardTypeCombo(cardTypeCombo);
-                event.setCardIDLabel(cardIDLabel);
-                event.setCardIDTextField(cardIDTextField);
-                event.setCardNameLabel(cardNameLabel);
-                event.setCardNameTextField(cardNameTextField);
-                event.setCardEmailLabel(cardEmailLabel);
-                event.setCardEmailTextField(cardEmailTextField);
+            if (e.getSource() == createBtn) {
+                hideErrorLabels();
+                boolean valid = true;
 
-                if (cardListener != null)
-                    cardListener.formActionOccurred(event);
-            } else if (e.getSource() == clearBtn) {
-                for (Component c : baseCreateCardForm.getComponents()) {
-                    if (c instanceof JTextField && ((JTextField) c).isEditable())
-                        ((JTextField) c).setText(null);
-                    if (c instanceof ErrorLabel)
-                        c.setVisible(false);
-                    if (c instanceof FormLabel)
-                        c.setForeground(Color.BLACK);
+                if (cardTypeCombo.getSelectedIndex() != 1) {
+                    if (cardNameTextField.getText() == null || cardNameTextField.getText().isEmpty()) {
+                        nameErrorLabel.setVisible(true);
+                        valid = false;
+                    }
+
+                    if (cardEmailTextField.getText() == null || cardEmailTextField.getText().isEmpty()) {
+                        emailErrorLabel.setVisible(true);
+                        valid = false;
+                    }
                 }
+
+                if (valid && cardListener != null) cardListener.formActionOccurred(CardForm.this);
+                else createCardErrorLabel.setVisible(true);
+            } else if (e.getSource() == clearBtn) {
+                Component[] formComponents = baseCreateCardForm.getComponents();
+                Arrays.stream(formComponents).filter(c -> c instanceof JTextField && ((JTextField)c).isEditable())
+                        .forEach(c -> ((JTextField)c).setText(null));
+                Arrays.stream(formComponents).filter(c -> c instanceof ErrorLabel).forEach(c->c.setVisible(false));
+                Arrays.stream(formComponents).filter(c -> c instanceof FormLabel).forEach(c->c.setForeground(Color.BLACK));
             }
         }
 
         public void itemStateChanged(ItemEvent e) {
             if (e.getStateChange() == ItemEvent.SELECTED) {
-                if (e.getItem().equals(options.getElementAt(0))) {
-                    baseCardForm();
-                } else if (e.getItem().equals(options.getElementAt(1))) {
-                    anonCardForm();
-                } else if (e.getItem().equals(options.getElementAt(2))) {
-                    advancedCardForm();
-                } else if (e.getItem().equals(options.getElementAt(3))) {
-                    advancedCardForm();
-                }
+                if (e.getItem().equals(options.getElementAt(0))) baseCardForm();
+                else if (e.getItem().equals(options.getElementAt(1))) anonCardForm();
+                else if (e.getItem().equals(options.getElementAt(2))) advancedCardForm();
+                else if (e.getItem().equals(options.getElementAt(3))) advancedCardForm();
             }
         }
     }
