@@ -9,7 +9,6 @@ import java.awt.event.ActionListener;
 
 public class DeleteCardForm extends JPanel implements FormFactory {
 
-    private JPanel deleteForm;
     private FormLabel cardIDLabel;
     private FormTextField cardIDTextField;
     private ErrorLabel errorLabel;
@@ -22,9 +21,9 @@ public class DeleteCardForm extends JPanel implements FormFactory {
     private DeleteListener deleteListener;
 
     /*============================== CONSTRUCTORS ==============================*/
-    public DeleteCardForm() {
+    DeleteCardForm() {
 
-        deleteForm = new JPanel(new GridBagLayout());
+        JPanel deleteForm = new JPanel(new GridBagLayout());
         CancelButton cancelBtn = new CancelButton("Cancel Card Delete");
         cardIDLabel = new FormLabel("Delete by Card ID");
         cardIDTextField = new FormTextField(20);
@@ -94,9 +93,7 @@ public class DeleteCardForm extends JPanel implements FormFactory {
                 DeleteEvent event = new DeleteEvent(this,
                         cardIDLabel, cardIDTextField, errorLabel, ruleErrLabel, deleteErrorLabel);
 
-                if (deleteListener != null) {
-                    deleteListener.deleteEventOccurred(event);
-                }
+                if (deleteListener != null) deleteListener.deleteEventOccurred(event);
             }
         });
 
@@ -104,8 +101,7 @@ public class DeleteCardForm extends JPanel implements FormFactory {
         add(cancelBtn, BorderLayout.SOUTH);
 
         cancelBtn.addActionListener(e -> {
-            if (cancelListener != null)
-                cancelListener.buttonActionOccurred();
+            if (cancelListener != null) cancelListener.buttonActionOccurred();
         });
 
         /* SET FORM CUSTOM COMPONENTS VISIBLE */

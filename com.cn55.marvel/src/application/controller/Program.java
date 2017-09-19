@@ -114,15 +114,16 @@ public class Program {
 
             // ADD A CREATE BUTTON LISTENER AFTER CREATING FORM
             form.setCardListener(e -> {
-                final String type = (String)e.getCardTypeCombo().getSelectedItem();
+                final String cardID = e.getCardID();
+                final String type = e.getCardType();
+                final String name = e.getCardName();
+                final String email = e.getCardEmail();
                 HashMap<String, String> newCard = new HashMap<>();
-                String name = e.getCardNameTextField().getText();
-                String email = e.getCardEmailTextField().getText();
 
                 assert type != null;
                 if (type.equals(CardType.AnonCard.getName())) {
-                    newCard.put("name", "");
-                    newCard.put("email", "");
+                    newCard.put("name", null);
+                    newCard.put("email", null);
                     newCard.put("cardType", CardType.AnonCard.getName());
                     shop.makeCard(newCard);
                 } else if (type.equals(CardType.BasicCard.getName())) {

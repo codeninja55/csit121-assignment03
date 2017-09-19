@@ -1,7 +1,5 @@
 package application.view.builderFactory;
-
 import java.util.EventListener;
-
 public interface CardListener extends EventListener {
-    void formActionOccurred(CardEvent e);
+    void formActionOccurred(CardFormView e);
 }
