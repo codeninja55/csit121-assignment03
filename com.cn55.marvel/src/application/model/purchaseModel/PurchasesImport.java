@@ -1,9 +1,9 @@
 package application.model.purchaseModel;
 
-import application.model.categoryModel.Category;
 import application.model.Generator;
-import application.model.ReadCSV;
+import application.model.ImportFromCSV;
 import application.model.Shop;
+import application.model.categoryModel.Category;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,15 +11,14 @@ import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class PurchasesReadImpl implements ReadCSV {
+public class PurchasesImport implements ImportFromCSV {
     private static final String DEFAULT_SEPARATOR = ",";
     private Pattern categoryRegex = Pattern.compile("\\[(.*?)\\]");
     private BufferedReader input;
 
-    public void read(BufferedReader reader) {
+    public void importData(BufferedReader reader) {
         this.input = reader;
         String line;
-
         try {
             while((line = input.readLine()) != null) {
                 HashMap<Integer, Category> categories = new HashMap<>();

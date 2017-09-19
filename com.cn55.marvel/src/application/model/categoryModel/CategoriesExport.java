@@ -1,24 +1,22 @@
 package application.model.categoryModel;
 
+import application.model.ExportToCSV;
 import application.model.Shop;
-import application.model.WriteCSV;
 
 import java.io.BufferedWriter;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
-public class CategoriesWriteOut implements WriteCSV {
-
+public class CategoriesExport implements ExportToCSV {
     private static final char DEFAULT_SEPARATOR = ',';
     private BufferedWriter output;
 
-    @Override
-    public void writeOut() {
-        Path categoriesStoragePath = Paths.get("com.cn55.marvel/src/persistentData/CategoriesStorage.csv");
-        openFile(categoriesStoragePath);
-
+    public void exportData(BufferedWriter writer) {
+        this.output = writer;
+//        ArrayList<Category> categoriesList = categories.stream().collect(Collectors.toList());
         try{
             for (Category c : Shop.getShopInstance().getDataStore().getAllCategories().values()) {
                 output.append(Integer.toString(c.getId())).append(DEFAULT_SEPARATOR);
@@ -33,16 +31,6 @@ public class CategoriesWriteOut implements WriteCSV {
         closeFile();
     }
 
-    @Override
-    public void openFile(Path path) {
-        try {
-            output = new BufferedWriter(new FileWriter(path.toString()));
-        } catch (IOException e) {
-            System.err.println("IOException: " + e.getMessage());
-        }
-    }
-
-    @Override
     public void closeFile() {
         try {
             output.flush();

@@ -1,26 +1,18 @@
 package application.model.cardModel;
 
 import application.model.Shop;
-import application.model.WriteCSV;
+import application.model.ExportToCSV;
 
 import java.io.BufferedWriter;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
-public class CardsWriteOut implements WriteCSV {
-
+public class CardsExport implements ExportToCSV {
     private static final char DEFAULT_SEPARATOR = ',';
     private BufferedWriter output;
 
-    @Override
-    public void writeOut() {
-        Path cardsStoragePath = Paths.get("com.cn55.marvel/src/persistentData/CardsStorage.csv");
-        openFile(cardsStoragePath);
-
+    public void exportData(BufferedWriter writer) {
+        this.output = writer;
         try{
-
             for (Card card : Shop.getShopInstance().getDataStore().getAllCards().values()) {
                 output.append(card.getID())
                         .append(DEFAULT_SEPARATOR)
@@ -41,16 +33,6 @@ public class CardsWriteOut implements WriteCSV {
         closeFile();
     }
 
-    @Override
-    public void openFile(Path path) {
-        try {
-            output = new BufferedWriter(new FileWriter(path.toString()));
-        } catch (IOException e) {
-            System.err.println("IOException: " + e.getMessage());
-        }
-    }
-
-    @Override
     public void closeFile() {
         try {
             output.flush();

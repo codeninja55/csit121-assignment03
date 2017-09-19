@@ -2,23 +2,25 @@ package application.model;
 
 import application.model.cardModel.Card;
 import application.model.cardModel.CardsDAO;
-import application.model.cardModel.CardsReadImpl;
-import application.model.categoryModel.CategoriesReadImpl;
+import application.model.cardModel.CardsExport;
+import application.model.cardModel.CardsImport;
+import application.model.categoryModel.CategoriesExport;
+import application.model.categoryModel.CategoriesImport;
 import application.model.categoryModel.Category;
 import application.model.categoryModel.CategoryDAO;
 import application.model.purchaseModel.Purchase;
 import application.model.purchaseModel.PurchaseDAO;
-import application.model.purchaseModel.PurchasesReadImpl;
+import application.model.purchaseModel.PurchasesExport;
+import application.model.purchaseModel.PurchasesImport;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 /* Data Access Object (DAO) Implementation Layer */
 @SuppressWarnings("ConstantConditions")
@@ -27,6 +29,10 @@ public class DataDAO implements DataObservable, CardsDAO, PurchaseDAO, CategoryD
     private final HashMap<String,Card> cards;
     private final HashMap<Integer,Purchase> purchases;
     private final HashMap<Integer,Category> categories;
+
+    private Path categoriesStoragePath = Paths.get("com.cn55.marvel/src/persistentData/CategoriesStorage.csv");
+    private Path cardsStoragePath = Paths.get("com.cn55.marvel/src/persistentData/CardsStorage.csv");
+    private Path purchaseStoragePath = Paths.get("com.cn55.marvel/src/persistentData/PurchaseStorage.csv");
 
     /*============================== CONSTRUCTORS  ==============================*/
     // Private modifier prevents any other class from instantiating
@@ -94,34 +100,40 @@ public class DataDAO implements DataObservable, CardsDAO, PurchaseDAO, CategoryD
         try {
             return new BufferedReader(new FileReader(path.toString()));
         } catch (FileNotFoundException e) {
-            System.err.println("IOException: " + e.getMessage());
+            System.err.println("FileNotFoundException: " + e.getMessage());
             return null;
         }
     }
 
     public void readData() {
-        Path categoriesStoragePath = Paths.get("com.cn55.marvel/src/persistentData/CategoriesStorage.csv");
-        Path cardsStoragePath = Paths.get("com.cn55.marvel/src/persistentData/CardsStorage.csv");
-        Path purchaseStoragePath = Paths.get("com.cn55.marvel/src/persistentData/PurchaseStorage.csv");
-
-        // Do something
         /* Strategy Design Pattern - Implementation of writing and reading buried in concrete classes */
-        ReadCSV readCategoriesCSV = new CategoriesReadImpl();
-        ReadCSV readPurchaseCSV = new PurchasesReadImpl();
-        ReadCSV readCardsCSV = new CardsReadImpl();
+        ImportFromCSV categoriesImporter = new CategoriesImport();
+        ImportFromCSV cardsImporter = new CardsImport();
+        ImportFromCSV purchasesImporter = new PurchasesImport();
 
-        readCategoriesCSV.read(openReadFile(categoriesStoragePath));
-        readPurchaseCSV.read(openReadFile(purchaseStoragePath));
-        readCardsCSV.read(openReadFile(cardsStoragePath));
+        categoriesImporter.importData(openReadFile(categoriesStoragePath));
+        cardsImporter.importData(openReadFile(cardsStoragePath));
+        purchasesImporter.importData(openReadFile(purchaseStoragePath));
     }
 
     private BufferedWriter openWriteFile(Path path) {
-        // Do something
-        return null;
+        try {
+            return new BufferedWriter(new FileWriter(path.toString()));
+        } catch (IOException e) {
+            System.err.println("IOException: " + e.getMessage());
+            return null;
+        }
     }
 
     public void writeData() {
-        // Do something
+        ExportToCSV categoriesExport = new CategoriesExport();
+        ExportToCSV cardsExport = new CardsExport();
+        ExportToCSV purchasesExport = new PurchasesExport();
+
+        //categories.values().stream().collect(Collectors.toCollection());
+        categoriesExport.exportData(openWriteFile(categoriesStoragePath));
+        cardsExport.exportData(openWriteFile(cardsStoragePath));
+        purchasesExport.exportData(openWriteFile(purchaseStoragePath));
     }
 
 

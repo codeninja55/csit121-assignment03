@@ -4,15 +4,15 @@ import application.controller.validator.*;
 import application.model.cardModel.*;
 import application.model.categoryModel.Category;
 import application.model.DataDAO;
-import application.model.cardModel.CardsWriteOut;
-import application.model.categoryModel.CategoriesWriteOut;
-import application.model.purchaseModel.PurchasesWriteOut;
+import application.model.cardModel.CardsExport;
+import application.model.categoryModel.CategoriesExport;
+import application.model.purchaseModel.PurchasesExport;
 import application.model.Generator;
 import application.model.purchaseModel.Purchase;
 import application.model.purchaseModel.PurchaseType;
 import application.model.purchaseModel.SortPurchaseType;
 import application.model.Shop;
-import application.model.WriteCSV;
+import application.model.ExportToCSV;
 import application.view.CardViewPane;
 import application.view.CategoriesViewPane;
 import application.view.customComponents.FormFormattedTextField;
@@ -45,7 +45,7 @@ public class Program {
     private final CardViewPane cardViewPane;
     private final PurchaseViewPane purchaseViewPane;
     private final CategoriesViewPane categoriesViewPane;
-    private final WriteCSV writeCategories, writeCards, writePurchases;
+    private final ExportToCSV writeCategories, writeCards, writePurchases;
 
     public Program() {
         /* Singleton Design Pattern - Only one instance of Shop available */
@@ -54,9 +54,9 @@ public class Program {
         // TODO - maybe have something alert an error if Data is missing
         db.readData();
 
-        writeCategories = new CategoriesWriteOut();
-        writeCards = new CardsWriteOut();
-        writePurchases = new PurchasesWriteOut();
+        writeCategories = new CategoriesExport();
+        writeCards = new CardsExport();
+        writePurchases = new PurchasesExport();
 
         this.mainFrame = new MainFrame();
 
@@ -68,11 +68,8 @@ public class Program {
                         "Save on Exit", JOptionPane.OK_CANCEL_OPTION,JOptionPane.WARNING_MESSAGE);
 
                 if (confirmSave == JOptionPane.OK_OPTION) {
-                    writeCategories.writeOut();
-                    writeCards.writeOut();
-                    writePurchases.writeOut();
+                    db.writeData();
                 }
-
                 System.gc(); // Garbage collector
                 mainFrame.dispose();
             }

@@ -1,17 +1,17 @@
 package application.model.cardModel;
 
 import application.model.Generator;
-import application.model.ReadCSV;
+import application.model.ImportFromCSV;
 import application.model.Shop;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 
-public class CardsReadImpl implements ReadCSV {
+public class CardsImport implements ImportFromCSV {
     private static final String DEFAULT_SEPARATOR = ",";
     private BufferedReader input;
 
-    public void read(BufferedReader reader) {
+    public void importData(BufferedReader reader) {
         this.input = reader;
         String line;
 
