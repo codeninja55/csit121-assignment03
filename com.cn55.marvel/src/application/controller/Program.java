@@ -104,8 +104,8 @@ public class Program {
     }
 
     /*============================== REGISTER AND HANDLE EVENTS ==============================*/
+    /*============================== CARD VIEW HANDLERS ==============================*/
     private void setupCardViewHandlers() {
-        /*============================== CARD VIEW HANDLERS ==============================*/
         /*TOOLBAR | CREATE CARD BUTTON*/
         cardViewPane.setCreateCardListener(() -> {
             removeCardForms();
@@ -136,7 +136,7 @@ public class Program {
                     newCard.put("cardType", CardType.BasicCard.getName());
                     shop.makeCard(newCard);
                 }
-                final String cardID = e.getCardIDTextField().getText();
+
                 removeCardForms();
                 showResults(cardViewPane, printCard(cardID, "CARD ADDED"));
             });
@@ -279,8 +279,8 @@ public class Program {
         });
     }
 
+    /*============================== PURCHASE VIEW HANDLERS ==============================*/
     private void setupPurchaseViewHandlers() {
-        /*============================== PURCHASE VIEW HANDLERS ==============================*/
         /*TOOLBAR | CREATE BUTTON*/
         purchaseViewPane.setCreatePurchaseListener(() -> {
             removePurchaseForms();
@@ -347,9 +347,7 @@ public class Program {
             double allTotal = db.getAllPurchases().values().stream().mapToDouble(Purchase::getCategoriesTotal).sum();
 
             String resultsText = String.format("%n%s%n%n%s: $%.2f%n%n%s: $%.2f%n%n%s: $%.2f", "SUMMARY OF PURCHASES",
-                    "Card Purchase Total", cardTotal,
-                    "Cash Purchase Total", cashTotal,
-                    "Total for All Purchases", allTotal);
+                    "Card Purchase Total", cardTotal, "Cash Purchase Total", cashTotal, "Total for All Purchases", allTotal);
 
             showResults(purchaseViewPane, resultsText);
         });
@@ -385,9 +383,9 @@ public class Program {
             }
         });
     }
-    
+
+    /*=========================== CATEGORIES VIEW HANDLERS ===========================*/
     private void setupCategoriesViewHandlers() {
-        /*=========================== CATEGORIES VIEW HANDLERS ===========================*/
         /*TOOLBAR | CREATE CATEGORY BUTTON*/
         categoriesViewPane.setCreateCategoryListener(() -> {
             removeCategoryForms();
