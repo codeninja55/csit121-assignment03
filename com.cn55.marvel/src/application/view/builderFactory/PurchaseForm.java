@@ -22,11 +22,8 @@ public class PurchaseForm extends JPanel implements FormFactory {
     private DefaultComboBoxModel<String> existingCardModel;
     private ArrayList<Category> categoriesList;
     private HashMap<JLabel[], FormFormattedTextField> categoriesMap;
-
     private JComboBox<String> purchaseTypeCombo;
     private DefaultComboBoxModel<String> options;
-    private CancelButton cancelBtn;
-
     private JPanel baseCreatePurchaseForm;
     private FormLabel receiptIDLabel;
     private FormTextField receiptIDTextField;
@@ -57,7 +54,7 @@ public class PurchaseForm extends JPanel implements FormFactory {
         baseCreatePurchaseForm = new JPanel(new GridBagLayout());
         purchaseTypeCombo = new JComboBox<>();
         options = new DefaultComboBoxModel<>();
-        cancelBtn = new CancelButton("Cancel New Purchase");
+        CancelButton cancelBtn = new CancelButton("Cancel New Purchase");
 
         /* NOTE: All FormLabels and FormTextField are hidden by default */
         receiptIDLabel = new FormLabel("Receipt ID: ");
@@ -115,6 +112,7 @@ public class PurchaseForm extends JPanel implements FormFactory {
         add(purchaseTypeCombo, BorderLayout.NORTH);
 
         add(cancelBtn, BorderLayout.SOUTH);
+        cancelBtn.addActionListener(e -> setVisible(false));
 
         /* REGISTRATION OF LISTENERS */
         FormListener handler = new FormListener();
@@ -473,10 +471,7 @@ public class PurchaseForm extends JPanel implements FormFactory {
     /*============================== CALLBACK HANDLER ==============================*/
     private class FormListener implements ActionListener, ItemListener {
         public void actionPerformed(ActionEvent e) {
-            if (e.getSource() == cancelBtn) {
-                setVisible(false);
-                getParent().remove(PurchaseForm.this);
-            } else if (e.getSource() == createBtn) {
+            if (e.getSource() == createBtn) {
                 PurchaseEvent event = new PurchaseEvent(this, purchaseTypeCombo, categoriesMap, receiptIDTextField,
                         cardIDLabel, cardIDTextField, cardIDErrorLabel, existingCardCombo, anonCardRB, basicCardRB,
                         premiumCardRB, cardNameLabel, cardNameTextField, cardEmailLabel, cardEmailTextField, purchaseErrorLabel);
