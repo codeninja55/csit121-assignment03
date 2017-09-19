@@ -45,33 +45,27 @@ public class Program {
     private final CardViewPane cardViewPane;
     private final PurchaseViewPane purchaseViewPane;
     private final CategoriesViewPane categoriesViewPane;
-    private final ExportToCSV writeCategories, writeCards, writePurchases;
 
     public Program() {
         /* Singleton Design Pattern - Only one instance of Shop available */
         shop = Shop.getShopInstance();
         db = shop.getDataStore();
-        // TODO - maybe have something alert an error if Data is missing
         db.readData();
-
-        writeCategories = new CategoriesExport();
-        writeCards = new CardsExport();
-        writePurchases = new PurchasesExport();
 
         this.mainFrame = new MainFrame();
 
         /* Windows Closing Listener */
         mainFrame.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
-                super.windowClosing(e);
-                int confirmSave = JOptionPane.showConfirmDialog(mainFrame,"\n\nWould you like to save your session data?\n\n",
-                        "Save on Exit", JOptionPane.OK_CANCEL_OPTION,JOptionPane.WARNING_MESSAGE);
+            super.windowClosing(e);
+            int confirmSave = JOptionPane.showConfirmDialog(mainFrame,"\n\nWould you like to save your session data?\n\n",
+                    "Save on Exit", JOptionPane.OK_CANCEL_OPTION,JOptionPane.WARNING_MESSAGE);
 
-                if (confirmSave == JOptionPane.OK_OPTION) {
-                    db.writeData();
-                }
-                System.gc(); // Garbage collector
-                mainFrame.dispose();
+            if (confirmSave == JOptionPane.OK_OPTION) {
+                db.writeData();
+            }
+            System.gc(); // Garbage collector
+            mainFrame.dispose();
             }
         });
 
@@ -117,10 +111,6 @@ public class Program {
             removeCardForms();
             CardForm form = FormFactory.createCardForm();
             cardViewPane.setCardForm(form);
-            form.createBaseCreateCardForm();
-
-            // ADD A CANCEL BUTTON LISTENER AFTER CREATING FORM
-            form.setCancelListener(this::removeCardForms);
 
             // ADD A CREATE BUTTON LISTENER AFTER CREATING FORM
             form.setCardListener(e -> {
@@ -294,9 +284,8 @@ public class Program {
         /*TOOLBAR | CREATE BUTTON*/
         purchaseViewPane.setCreatePurchaseListener(() -> {
             removePurchaseForms();
-            PurchaseForm form = new PurchaseForm.PurchaseFormBuilder(Generator.setReceiptID())
-                    .existingCardModel(new ArrayList<>(db.getAllCards().values()))
-                    .categoriesList(new ArrayList<>(db.getAllCategories().values())).build();
+            PurchaseForm form = FormFactory.createPurchaseForm(new ArrayList<>(db.getAllCards().values()),
+                    new ArrayList<>(db.getAllCategories().values()));
             purchaseViewPane.setCreatePurchaseForm(form);
 
             // FORM CREATE BUTTON
@@ -498,14 +487,8 @@ public class Program {
     // NOTE: All forms have a Component Listener that removes itself from the Parent if
     // the component is set to hidden.
     private void removeCardForms() {
-        for (Component comp : cardViewPane.getComponents()) {
-            if (comp instanceof FormFactory || comp instanceof ResultsPane) {
-                comp.setVisible(false);
-                if (cardViewPane.getCardForm() != null)
-                    cardViewPane.getCardForm().remove(cardViewPane.getCardForm().getBaseCreateCardForm());
-                cardViewPane.remove(comp);
-            }
-        }
+        Arrays.stream(cardViewPane.getComponents()).filter(c -> c instanceof FormFactory || c instanceof ResultsPane)
+                .forEach(c -> c.setVisible(false));
     }
 
     private void removePurchaseForms() {
