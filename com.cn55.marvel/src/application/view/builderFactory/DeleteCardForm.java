@@ -12,7 +12,7 @@ import java.util.Arrays;
 public class DeleteCardForm extends JPanel implements FormFactory, DeleteFormView {
     private JPanel deleteForm;
     private FormTextField cardIDTextField;
-    private DeleteListener deleteListener;
+    private DeleteCardListener deleteCardListener;
 
     /*============================== CONSTRUCTORS ==============================*/
     DeleteCardForm() {
@@ -101,7 +101,7 @@ public class DeleteCardForm extends JPanel implements FormFactory, DeleteFormVie
                 proceed = false;
             }
 
-            if (proceed && deleteListener != null) deleteListener.formSubmitted(DeleteCardForm.this);
+            if (proceed && deleteCardListener != null) deleteCardListener.formSubmitted(DeleteCardForm.this);
             else deleteErrorLabel.setVisible(true);
         });
 
@@ -118,8 +118,8 @@ public class DeleteCardForm extends JPanel implements FormFactory, DeleteFormVie
     }
 
     /*============================== MUTATORS ==============================*/
-    public void setDeleteListener(DeleteListener listener) {
-        this.deleteListener = listener;
+    public void setDeleteCardListener(DeleteCardListener listener) {
+        this.deleteCardListener = listener;
     }
 
     private void hideErrorLabels() {

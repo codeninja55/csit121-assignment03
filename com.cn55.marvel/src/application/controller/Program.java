@@ -140,7 +140,7 @@ public class Program {
             cardViewPane.setDeleteForm(form);
 
             // REGISTER A DELETE BUTTON LISTENER AFTER CREATING FORM
-            form.setDeleteListener(e -> {
+            form.setDeleteCardListener(e -> {
                 final String cardID = e.getID();
                 String[] btnOptions = {"Yes","No"};
                 String message = "Are you sure you want to DELETE card: " + cardID + "\nThis cannot be undone."
@@ -336,10 +336,7 @@ public class Program {
 
             // ADD A CREATE BUTTON LISTENER AFTER CREATING FORM
             form.setCreateCategoryListener(e -> {
-                shop.makeCategory(new Category(e.getCategoryNameTextField().getText(),
-                        e.getCategoryDescTextField().getText()));
-
-                form.setVisible(false);
+                shop.makeCategory(new Category(e.getCategoryName(), e.getDescription()));
                 removeCategoryForms();
             });
         });
@@ -351,67 +348,26 @@ public class Program {
             categoriesViewPane.setDeleteCategoryForm(form);
 
             //ADD A DELETE BUTTON LISTENER AFTER CREATING FORM
-            /*form.setDeleteListener(e -> {
-                String categoryIDStr = e.getIdTextField().getText();
-                final int categoryID = Integer.parseInt(categoryIDStr);
-                //SETUP VALIDATOR FOR CATEGORY ID
-                FormValidData input = new FormValidData();
-                input.setCategoryID(categoryIDStr);
-                FormRule validIDRule = new CategoryIDRule();
+            form.setDeleteCardListener(e -> {
+                final int categoryID = Integer.parseInt(e.getID());
 
-                if (!validIDRule.validate(input)) {
-                    e.getErrorLabel().setVisible(false);
-                    e.getOthersDeleteErrLabel().setVisible(false);
-                    e.getRuleErrLabel().setVisible(true);
-                    e.getIdLabel().setForeground(Style.redA700());
-                    e.getIdTextField().setForeground(Style.redA700());
-                    e.getDeleteErrorLabel().setVisible(true);
-                } else {
-                    if (Integer.parseInt(categoryIDStr) == 100) {
-                        // Do NOT allow user to delete category Others
-                        e.getErrorLabel().setVisible(false);
-                        e.getRuleErrLabel().setVisible(false);
-                        e.getOthersDeleteErrLabel().setVisible(true);
-                        e.getDeleteErrorLabel().setVisible(true);
-                    } else if (db.getAllCategories().containsKey(categoryID)) {
-                        e.getErrorLabel().setVisible(false);
-                        e.getRuleErrLabel().setVisible(false);
-                        e.getOthersDeleteErrLabel().setVisible(false);
-                        e.getDeleteErrorLabel().setVisible(false);
+                String[] btnOptions = {"Yes","Cancel"};
+                String message = "Are you sure you want to DELETE Category: " + e.getID() + "\nThis cannot be undone."
+                        + "\n\nAll purchases for this category will be moved to Other category.\n\n";
 
-                        String[] btnOptions = {"Yes","Cancel"};
-                        String message = "Are you sure you want to DELETE Category: " + categoryIDStr + "\nThis cannot be undone."
-                                + "\n\nAll purchases for this category will be moved to Other category.\n\n";
+                int confirm = JOptionPane.showOptionDialog(mainFrame, // frame, can be null
+                        message, // message
+                        "Confirm Delete?", // title
+                        JOptionPane.OK_CANCEL_OPTION, // button options
+                        JOptionPane.WARNING_MESSAGE, // icon
+                        null, // do not use custom icon
+                        btnOptions, // title of buttons
+                        btnOptions[1] // default button title
+                );
 
-                        int confirm = JOptionPane.showOptionDialog(mainFrame, // frame, can be null
-                                message, // message
-                                "Confirm Delete?", // title
-                                JOptionPane.OK_CANCEL_OPTION, // button options
-                                JOptionPane.WARNING_MESSAGE, // icon
-                                null, // do not use custom icon
-                                btnOptions, // title of buttons
-                                btnOptions[1] // default button title
-                        );
-
-                        if (confirm == JOptionPane.OK_OPTION) {
-                            shop.deleteCategory(categoryID);
-                            form.setVisible(false);
-                            removeCategoryForms();
-                        } else {
-                            e.getIdLabel().setForeground(Color.BLACK);
-                            e.getIdTextField().setForeground(Color.BLACK);
-                            e.getDeleteErrorLabel().setVisible(true);
-                        }
-                    } else {
-                        e.getRuleErrLabel().setVisible(false);
-                        e.getOthersDeleteErrLabel().setVisible(false);
-                        e.getErrorLabel().setVisible(true);
-                        e.getIdLabel().setForeground(Style.redA700());
-                        e.getIdTextField().setForeground(Style.redA700());
-                        e.getDeleteErrorLabel().setVisible(true);
-                    }
-                }
-            });*/
+                if (confirm == JOptionPane.OK_OPTION) { shop.deleteCategory(categoryID); }
+                removeCategoryForms();
+            });
         });
     }
 

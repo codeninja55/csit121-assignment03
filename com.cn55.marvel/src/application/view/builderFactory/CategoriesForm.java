@@ -8,18 +8,18 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.Arrays;
 
-public class CategoriesForm extends JPanel implements FormFactory {
+public class CategoriesForm extends JPanel implements FormFactory, CategoryFormView {
     private final JPanel createCategoriesForm;
+    private final FormTextField categoryIDTextField;
     private final FormTextField categoryNameTextField;
     private final JTextArea categoryDescTextField;
-
     private CategoryListener createCategoryListener;
 
     CategoriesForm() {
         /* INITIALIZE ALL COMPONENTS */
         createCategoriesForm = new JPanel(new GridBagLayout());
         FormLabel categoryIDLabel = new FormLabel("Category ID");
-        FormTextField categoryIDTextField = new FormTextField(20);
+        categoryIDTextField = new FormTextField(20);
         FormLabel categoryNameLabel = new FormLabel("Category Name");
         categoryNameTextField = new FormTextField(35);
         FormLabel categoryDescLabel = new FormLabel("Category Description");
@@ -38,7 +38,6 @@ public class CategoriesForm extends JPanel implements FormFactory {
 
         /* FORM AREA */
         GridBagConstraints gc = new GridBagConstraints();
-
         /*========== FIRST ROW ==========*/
         gc.fill = GridBagConstraints.NONE;
         gc.gridx = 0; gc.gridy = 0; gc.weightx = 1; gc.weighty = 0.1; gc.gridwidth = 2;
@@ -95,33 +94,26 @@ public class CategoriesForm extends JPanel implements FormFactory {
 
         add(createCategoriesForm, BorderLayout.CENTER);
         add(cancelBtn, BorderLayout.SOUTH);
+        cancelBtn.addActionListener((ActionEvent e) -> setVisible(false));
 
         /* SET FORM CUSTOM COMPONENTS VISIBLE */
         Arrays.stream(createCategoriesForm.getComponents())
-                .filter(c -> c instanceof FormLabel || c instanceof FormTextField || c instanceof FormButton)
-                .forEach(c -> c.setVisible(true));
+            .filter(c -> c instanceof FormLabel || c instanceof FormTextField || c instanceof FormButton)
+            .forEach(c -> c.setVisible(true));
 
         categoryIDTextField.setText(Integer.toString(Generator.getNextCategoryID()));
 
-        /* BUTTON REGISTRATION AND CALLBACKS */
         createBtn.addActionListener((ActionEvent e) -> {
-            CategoryEvent event = new CategoryEvent(this, categoryNameTextField, categoryDescTextField);
-
-            if (createCategoryListener != null) createCategoryListener.createCategoryEventOccurred(event);
+            if (createCategoryListener != null)
+                createCategoryListener.createCategoryEventOccurred(CategoriesForm.this);
         });
 
-        clearBtn.addActionListener((ActionEvent e) -> {
-            for (Component c : createCategoriesForm.getComponents()) {
-                if (c instanceof JTextField && ((JTextField) c).isEditable()) ((JTextField) c).setText("");
-                if (c instanceof JTextArea) ((JTextArea) c).setText("");
-                if (c instanceof FormLabel) c.setForeground(Color.BLACK);
-            }
-        });
+        clearBtn.addActionListener((ActionEvent e) -> Arrays.stream(createCategoriesForm.getComponents()).forEach(c -> {
+            if (c instanceof JTextField && ((JTextField) c).isEditable()) ((JTextField) c).setText("");
+            if (c instanceof JTextArea) ((JTextArea) c).setText("");
+            if (c instanceof FormLabel) c.setForeground(Color.BLACK);
+        }));
 
-        cancelBtn.addActionListener((ActionEvent e) -> {
-            setVisible(false);
-            getParent().remove(CategoriesForm.this);
-        });
     }
 
     /*============================== MUTATORS  ==============================*/
@@ -129,5 +121,7 @@ public class CategoriesForm extends JPanel implements FormFactory {
         this.createCategoryListener = listener;
     }
 
-    /*============================== ACCESSORS  ==============================*/
+    /*============================== VIEW ONLY IMPLEMENTATIONS ==============================*/
+    public String getCategoryName() { return categoryNameTextField.getText().trim(); }
+    public String getDescription() { return categoryDescTextField.getText().trim(); }
 }

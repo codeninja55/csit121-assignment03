@@ -1,7 +1,5 @@
 package application.view.builderFactory;
-
 import java.util.EventListener;
-
 public interface CategoryListener extends EventListener {
-    void createCategoryEventOccurred(CategoryEvent e);
+    void createCategoryEventOccurred(CategoryFormView e);
 }

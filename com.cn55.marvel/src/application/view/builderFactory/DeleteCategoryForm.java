@@ -1,13 +1,16 @@
 package application.view.builderFactory;
 
+import application.controller.validator.*;
 import application.view.customComponents.*;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.util.Arrays;
 
-public class DeleteCategoryForm extends JPanel {
+public class DeleteCategoryForm extends JPanel implements FormFactory, DeleteFormView{
     private JPanel deleteCategoryForm;
     private FormLabel categoryIDLabel;
     private FormTextField categoryIDTextField;
@@ -19,12 +22,11 @@ public class DeleteCategoryForm extends JPanel {
     private ErrorLabel deleteErrorLabel;
     private FormButton deleteBtn;
 
-    private DeleteListener deleteListener;
+    private DeleteCardListener deleteCardListener;
 
     /*============================== CONSTRUCTORS  ==============================*/
     DeleteCategoryForm() {
         CancelButton cancelBtn = new CancelButton("Cancel Category Delete");
-
         JPanel rbSubPane = new JPanel(new GridLayout(1, 3));
         ButtonGroup categoryRBGroup = new ButtonGroup();
         FormLabel deleteTypeLabel = new FormLabel("Delete By: ");
@@ -48,6 +50,7 @@ public class DeleteCategoryForm extends JPanel {
         setPreferredSize(dim);
         setMinimumSize(getPreferredSize());
         setBorder(Style.formBorder("Delete Category"));
+        setVisible(false);
 
         /* RADIO BUTTONS SUB PANE */
         categoryRBGroup.add(idRB);
@@ -64,30 +67,51 @@ public class DeleteCategoryForm extends JPanel {
         add(rbSubPane, BorderLayout.NORTH);
 
         add(cancelBtn, BorderLayout.SOUTH);
-
-        setVisible(false);
-
-        /* REGISTRATION OF LISTENERS AND CALLBACKS */
-        cancelBtn.addActionListener((ActionEvent e) -> {
-            setVisible(false);
-            getParent().remove(DeleteCategoryForm.this);
-        });
+        cancelBtn.addActionListener(e -> setVisible(false));
+        cancelBtn.addActionListener((ActionEvent e) -> setVisible(false));
 
         deleteBtn.addActionListener((ActionEvent e) -> {
-            if (deleteListener != null) {
-                //deleteListener.formSubmitted(event);
+            hideErrorLabels();
+            boolean proceed;
+            FormValidData validData = new FormValidData();
+            validData.setCategoryIDStr(getID());
+            FormRule categoryIDRule = new CategoryIDRule();
+            ExistsRule categoryExistsRule = new CategoryExistsRule();
+
+            if (!categoryIDRule.validate(validData)) {
+                idRuleErrLabel.setVisible(true);
+                proceed = false;
+            } else {
+                validData.setCategoryID(Integer.parseInt(getID()));
+                if (getID().equals("100")) {
+                    othersDeleteErrLabel.setVisible(true);
+                    proceed = false;
+                } else if (!categoryExistsRule.existsValidating(validData)) {
+                    errLabel.setVisible(true);
+                    proceed = false;
+                } else {
+                    proceed = true;
+                }
             }
+
+            if (proceed && deleteCardListener != null) deleteCardListener.formSubmitted(DeleteCategoryForm.this);
+            else deleteErrorLabel.setVisible(true);
         });
 
-        idRB.addActionListener((ActionEvent e) -> {
-            deleteByIDForm();
-        });
+        idRB.addActionListener((ActionEvent e) -> deleteByIDForm());
 
         nameRB.addActionListener((ActionEvent e) -> {
             deleteByNameForm();
             /* TEST CODE */
             System.err.println("NAME Radio Button NOT IMPL");
             System.out.println("NAME RADIO BUTTON SEL");
+        });
+
+        this.addComponentListener(new ComponentAdapter() {
+            public void componentHidden(ComponentEvent e) {
+                super.componentHidden(e);
+                getParent().remove(DeleteCategoryForm.this);
+            }
         });
 
         baseForm();
@@ -98,7 +122,6 @@ public class DeleteCategoryForm extends JPanel {
         deleteCategoryForm = new JPanel(new GridBagLayout());
 
         GridBagConstraints gc = new GridBagConstraints();
-
         /*========== FIRST ROW ==========*/
         gc.fill = GridBagConstraints.NONE;
         gc.gridx = 0; gc.gridy = 0; gc.weightx = 1; gc.weighty = 0.1;
@@ -134,13 +157,9 @@ public class DeleteCategoryForm extends JPanel {
         deleteCategoryForm.add(categoryNameTextField, gc);
 
         /*========== NEW ROW - ERROR LABEL ==========*/
-        gc.gridy++;
-        gc.anchor = GridBagConstraints.PAGE_START;
         deleteCategoryForm.add(errLabel, gc);
 
         /*========== NEW ROW - DELETE OTHERS ERROR LABEL ==========*/
-        gc.gridy++;
-        gc.anchor = GridBagConstraints.PAGE_START;
         deleteCategoryForm.add(othersDeleteErrLabel, gc);
 
         /*========== NEW ROW - DELETE ERROR LABEL ==========*/
@@ -175,8 +194,8 @@ public class DeleteCategoryForm extends JPanel {
     }
 
     /*============================== MUTATORS  ==============================*/
-    public void setDeleteListener(DeleteListener listener) {
-        this.deleteListener = listener;
+    public void setDeleteCardListener(DeleteCardListener listener) {
+        this.deleteCardListener = listener;
     }
 
     private void switchIDAndNameFields(boolean isVisible) {
@@ -190,4 +209,7 @@ public class DeleteCategoryForm extends JPanel {
         Arrays.stream(deleteCategoryForm.getComponents()).filter(c -> c instanceof ErrorLabel)
                 .forEach(c -> c.setVisible(false));
     }
+
+    /*============================== VIEW ONLY IMPLEMENTATIONS ==============================*/
+    public String getID() { return categoryIDTextField.getText().trim(); }
 }
