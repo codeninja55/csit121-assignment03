@@ -18,9 +18,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.TreeMap;
-import java.util.stream.Collectors;
 
 /* Data Access Object (DAO) Implementation Layer */
 @SuppressWarnings("ConstantConditions")
@@ -96,13 +94,8 @@ public class DataDAO implements DataObservable, CardsDAO, PurchaseDAO, CategoryD
     }
 
     /*============================== FILE CONNECTOR ==============================*/
-    private BufferedReader openReadFile(Path path) {
-        try {
-            return new BufferedReader(new FileReader(path.toString()));
-        } catch (FileNotFoundException e) {
-            System.err.println("FileNotFoundException: " + e.getMessage());
-            return null;
-        }
+    private BufferedReader openReadFile(Path path) throws FileNotFoundException {
+        return new BufferedReader(new FileReader(path.toString()));
     }
 
     public void readData() {
@@ -111,18 +104,17 @@ public class DataDAO implements DataObservable, CardsDAO, PurchaseDAO, CategoryD
         ImportFromCSV cardsImporter = new CardsImport();
         ImportFromCSV purchasesImporter = new PurchasesImport();
 
-        categoriesImporter.importData(openReadFile(categoriesStoragePath));
-        cardsImporter.importData(openReadFile(cardsStoragePath));
-        purchasesImporter.importData(openReadFile(purchaseStoragePath));
+        try {
+            categoriesImporter.importData(openReadFile(categoriesStoragePath));
+            cardsImporter.importData(openReadFile(cardsStoragePath));
+            purchasesImporter.importData(openReadFile(purchaseStoragePath));
+        } catch (FileNotFoundException e) {
+            System.out.println("FileNotFoundException: " + e.getMessage());
+        }
     }
 
-    private BufferedWriter openWriteFile(Path path) {
-        try {
-            return new BufferedWriter(new FileWriter(path.toString()));
-        } catch (IOException e) {
-            System.err.println("IOException: " + e.getMessage());
-            return null;
-        }
+    private BufferedWriter openWriteFile(Path path) throws IOException {
+        return new BufferedWriter(new FileWriter(path.toString()));
     }
 
     public void writeData() {
@@ -130,12 +122,14 @@ public class DataDAO implements DataObservable, CardsDAO, PurchaseDAO, CategoryD
         ExportToCSV cardsExport = new CardsExport();
         ExportToCSV purchasesExport = new PurchasesExport();
 
-        //categories.values().stream().collect(Collectors.toCollection());
-        categoriesExport.exportData(openWriteFile(categoriesStoragePath));
-        cardsExport.exportData(openWriteFile(cardsStoragePath));
-        purchasesExport.exportData(openWriteFile(purchaseStoragePath));
+        try {
+            categoriesExport.exportData(openWriteFile(categoriesStoragePath));
+            cardsExport.exportData(openWriteFile(cardsStoragePath));
+            purchasesExport.exportData(openWriteFile(purchaseStoragePath));
+        } catch (IOException e) {
+            System.err.println("IOException: " + e.getMessage());
+        }
     }
-
 
     /*============================== OBSERVER DESIGN PATTERN ==============================*/
     /* Implement DataObservable interface making this object instance a DataObservable */

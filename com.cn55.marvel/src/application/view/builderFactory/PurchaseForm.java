@@ -84,6 +84,17 @@ public class PurchaseForm extends JPanel implements FormFactory {
         clearBtn = new FormButton("Clear", Style.clearIcon());
         purchaseErrorLabel = new ErrorLabel("PURCHASE NOT CREATED");
 
+        /* REGISTRATION OF LISTENERS */
+        FormListener handler = new FormListener();
+        purchaseTypeCombo.addItemListener(handler);
+        cancelBtn.addActionListener(handler);
+        createBtn.addActionListener(handler);
+        clearBtn.addActionListener(handler);
+        existingCardCombo.addItemListener(handler);
+        anonCardRB.addActionListener(handler);
+        basicCardRB.addActionListener(handler);
+        premiumCardRB.addActionListener(handler);
+
         /* INITIALIZE THIS PANEL */
         setLayout(new BorderLayout());
         /* SIZING - Make sure the form is at least always 800 pixels */
@@ -114,17 +125,6 @@ public class PurchaseForm extends JPanel implements FormFactory {
 
         add(cancelBtn, BorderLayout.SOUTH);
         cancelBtn.addActionListener(e -> setVisible(false));
-
-        /* REGISTRATION OF LISTENERS */
-        FormListener handler = new FormListener();
-        purchaseTypeCombo.addItemListener(handler);
-        cancelBtn.addActionListener(handler);
-        createBtn.addActionListener(handler);
-        clearBtn.addActionListener(handler);
-        existingCardCombo.addItemListener(handler);
-        anonCardRB.addActionListener(handler);
-        basicCardRB.addActionListener(handler);
-        premiumCardRB.addActionListener(handler);
 
         this.addComponentListener(new ComponentAdapter() {
             public void componentShown(ComponentEvent e) {
@@ -469,7 +469,8 @@ public class PurchaseForm extends JPanel implements FormFactory {
                         cardIDLabel, cardIDTextField, cardIDErrorLabel, existingCardCombo, anonCardRB, basicCardRB,
                         premiumCardRB, cardNameLabel, cardNameTextField, cardEmailLabel, cardEmailTextField, purchaseErrorLabel);
 
-                if (createPurchaseListener != null) createPurchaseListener.formActionOccurred(event);
+                if (createPurchaseListener != null)
+                    createPurchaseListener.formActionOccurred(event);
             } else if (e.getSource() == clearBtn) {
                 Arrays.stream(baseCreatePurchaseForm.getComponents()).forEach(c -> {
                     if (c instanceof JTextField && ((JTextField) c).isEditable()) ((JTextField) c).setText("");

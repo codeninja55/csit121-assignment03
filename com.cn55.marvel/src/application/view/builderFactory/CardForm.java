@@ -1,15 +1,12 @@
 package application.view.builderFactory;
 
-import application.model.cardModel.CardType;
 import application.model.Generator;
+import application.model.cardModel.CardType;
 import application.view.customComponents.*;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
 import java.util.Arrays;
 
 public class CardForm extends JPanel implements FormFactory, CardFormView {
