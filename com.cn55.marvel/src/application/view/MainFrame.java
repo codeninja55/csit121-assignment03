@@ -20,6 +20,7 @@ public class MainFrame extends JFrame {
 
         setLayout(new BorderLayout());
         setExtendedState(JFrame.MAXIMIZED_BOTH);
+        setMinimumSize(new Dimension(1080, 720));
         setUndecorated(false);
         setVisible(true);
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
