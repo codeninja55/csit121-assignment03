@@ -1,21 +1,18 @@
 package application.controller;
 
-import application.controller.validator.*;
+import application.model.DataDAO;
+import application.model.Shop;
 import application.model.cardModel.*;
 import application.model.categoryModel.Category;
-import application.model.DataDAO;
 import application.model.purchaseModel.Purchase;
 import application.model.purchaseModel.PurchaseType;
 import application.model.purchaseModel.SortPurchaseType;
-import application.model.Shop;
 import application.view.CardViewPane;
 import application.view.CategoriesViewPane;
-import application.view.customComponents.FormFormattedTextField;
-import application.view.customComponents.ResultsPane;
-import application.view.customComponents.Style;
-import application.view.builderFactory.*;
 import application.view.MainFrame;
 import application.view.PurchaseViewPane;
+import application.view.builderFactory.*;
+import application.view.customComponents.ResultsPane;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -231,50 +228,36 @@ public class Program {
             purchaseViewPane.setCreatePurchaseForm(form);
 
             // FORM CREATE BUTTON
-            form.setCreatePurchaseListener(event -> {
-                final JComboBox<String> type = event.getPurchaseTypeCombo();
-                String receiptIDStr = event.getReceiptIDTextField().getText();
-                final int receiptID = Integer.parseInt(receiptIDStr);
-                final String cardID = getPurchaseFormCardID(event);
-                HashMap<Integer, Category> categories = getPurchaseFormCategories(event);
+            form.setCreatePurchaseListener(v -> {
+                final CardType cardType = v.getCardType();
+                final String purchaseType = v.getPurchaseType();
+                final int receiptID = v.getReceiptID();
+                String cardID = (v.getCardID() == null || v.getCardID().isEmpty()) ? v.getExistingCardID() : v.getCardID() ;
+                HashMap<Integer, Category> categories = new HashMap<>(v.getCategories());
                 String resultsText = "";
 
-                if (type.getSelectedItem() != null && cardID != null && categories != null) {
-                    if (type.getSelectedItem().equals(PurchaseType.ExistingCardPurchase.getName())) {
-                        shop.makePurchase(cardID, receiptID, categories);
-                        resultsText = db.getPurchase(receiptID).toString();
-                    } else if (type.getSelectedItem().equals(PurchaseType.NewCardPurchase.getName())) {
-                        String cardType = null, name = null, email = null;
-                        if (event.getAnonCardRB().isSelected()) {
-                            cardType = CardType.AnonCard.getName();
-                        } else if (event.getBasicCardRB().isSelected()) {
-                            cardType = CardType.BasicCard.getName();
-                            name = event.getCardNameTextField().getText();
-                            email = event.getCardEmailTextField().getText();
-                        } else if (event.getPremiumCardRB().isSelected()) {
-                            cardType = CardType.PremiumCard.getName();
-                            name = event.getCardNameTextField().getText();
-                            email = event.getCardEmailTextField().getText();
-                        }
+                if (purchaseType.equals(PurchaseType.ExistingCardPurchase.getName())) {
+                    shop.makePurchase(cardID, receiptID, categories);
+                    resultsText = db.getCard(cardID).toString() + db.getPurchase(receiptID).toString();
+                } else if (purchaseType.equals(PurchaseType.CashPurchase.getName())) {
+                    shop.makePurchase(cardID, receiptID, categories);
+                    resultsText = db.getPurchase(receiptID).toString();
+                } else if (purchaseType.equals(PurchaseType.NewCardPurchase.getName())) {
+                    String name = (!cardType.equals(CardType.AnonCard)) ? v.getCardName() : null;
+                    String email = (!cardType.equals(CardType.AnonCard)) ? v.getCardEmail() : null;
 
-                        HashMap<String, String> newCard = new HashMap<>();
-                        newCard.put("name", name);
-                        newCard.put("email", email);
-                        newCard.put("cardType", cardType);
-                        newCard.put("cardID", cardID);
+                    HashMap<String, String> newCard = new HashMap<>();
+                    newCard.put("name", name);
+                    newCard.put("email", email);
+                    newCard.put("cardType", cardType.getName());
+                    newCard.put("cardID", cardID);
 
-                        shop.makeCard(newCard);
-                        shop.makePurchase(cardID, receiptID, categories);
-                        resultsText = db.getCard(cardID).toString() + db.getPurchase(receiptID).toString();
-                    } else if (type.getSelectedItem().equals(PurchaseType.CashPurchase.getName())) {
-                        shop.makePurchase(cardID, receiptID, categories);
-                        resultsText = db.getPurchase(receiptID).toString();
-                    }
-                    removePurchaseForms();
-                    showResults(purchaseViewPane, resultsText);
-                } else {
-                    event.getPurchaseErrorLabel().setVisible(true);
+                    shop.makeCard(newCard);
+                    shop.makePurchase(cardID, receiptID, categories);
+                    resultsText = db.getCard(cardID).toString() + db.getPurchase(receiptID).toString();
                 }
+                removePurchaseForms();
+                showResults(purchaseViewPane, resultsText);
             });
         });
 
@@ -315,7 +298,7 @@ public class Program {
                     purchaseViewPane.update();
                 } else if (e.getItem().equals(SortPurchaseType.Card.getName())) {
                     purchaseViewPane.sortPurchaseTableMode(purchasesList.stream()
-                            .filter(c -> c.getCardType().equals(CardType.Cash.getName()))
+                            .filter(c -> !c.getCardType().equals(CardType.Cash.getName()))
                             .collect(Collectors.toCollection(ArrayList::new))); // Negative cash validation
                 } else if (e.getItem().equals(SortPurchaseType.Cash.getName())) {
                     purchaseViewPane.sortPurchaseTableMode(purchasesList.stream()
@@ -395,86 +378,6 @@ public class Program {
     private void removeCategoryForms() {
         Arrays.stream(categoriesViewPane.getComponents()).filter(c -> c instanceof FormFactory)
                 .forEach(c -> {c.setVisible(false); categoriesViewPane.remove(c);});
-    }
-
-    /*============ ADDITIONAL CREATING PURCHASES METHODS ============*/
-    // Validates each category field of the form
-    private boolean validateCatValueFields(HashMap<JLabel[], FormFormattedTextField> rawCategories) {
-        boolean proceed = true;
-        // SETUP VALIDATOR FOR CATEGORY AMOUNT
-        FormValidData input = new FormValidData();
-        FormRule catAmountRule = new CategoryAmountRule();
-
-        for (HashMap.Entry<JLabel[], FormFormattedTextField> item : rawCategories.entrySet()) {
-            input.setCatValueStr(item.getValue().getText());
-            if (!catAmountRule.validate(input)) {
-                item.getKey()[0].setForeground(Style.redA700());
-                item.getKey()[1].setVisible(true);
-                item.getValue().setForeground(Style.redA700());
-                proceed = false;
-            } else {
-                item.getKey()[0].setForeground(Color.BLACK);
-                item.getKey()[1].setVisible(false);
-                item.getValue().setForeground(Color.BLACK);
-            }
-        }
-        return proceed;
-    }
-
-    // If validation is successful, this method makes a clone of categories ready to be passed
-    // to the makePurchase method in Shop
-    private HashMap<Integer, Category> getPurchaseFormCategories(PurchaseEvent e) {
-        ArrayList<Category> defaultCategories = new ArrayList<>(db.getAllCategories().values());
-        HashMap<Integer, Category> purchaseCategories = new HashMap<>();
-
-        if (validateCatValueFields(e.getCategoriesMap())) {
-            e.getCategoriesMap().forEach((k,v) -> {
-                String labelStr = k[0].getText();
-                String catName = labelStr.substring(0, labelStr.indexOf(":"));
-                Double catValue = ((Number)v.getValue()).doubleValue();
-
-                defaultCategories.stream().filter(c -> c.getName().equals(catName)).forEach(c -> {
-                    Category cloneCategory = new Category(c);
-                    cloneCategory.setAmount(catValue);
-                    purchaseCategories.put(c.getId(), cloneCategory);
-                });
-            });
-
-            double checkTotal = purchaseCategories.values().stream().mapToDouble(Category::getAmount).sum();
-            return (checkTotal <= 0) ? null : purchaseCategories;
-        } else {
-            return null;
-        }
-    }
-
-    // If a new card is created with a purchase, this method validates and gets the Card ID
-    // from the form and sends it back to the button handler
-    private String getPurchaseFormCardID(PurchaseEvent event) {
-        JComboBox<String> type = event.getPurchaseTypeCombo();
-        if (type.getSelectedItem() != null) {
-            if (type.getSelectedItem().equals(PurchaseType.ExistingCardPurchase.getName())) {
-                return (String)event.getExistingCardCombo().getSelectedItem();
-            } else if (type.getSelectedItem().equals(PurchaseType.NewCardPurchase.getName())) {
-                String newCardID = event.getCardIDTextField().getText();
-
-                //SETUP VALIDATOR FOR CARD ID
-                FormValidData input = new FormValidData();
-                FormRule cardIDRule = new CardIDRule();
-                input.setCardID(newCardID);
-
-                if (!cardIDRule.validate(input)) {
-                    event.getCardIDTextField().setForeground(Style.redA700());
-                    event.getCardIDLabel().setForeground(Style.redA700());
-                    event.getCardIDErrorLabel().setVisible(true);
-                    return null;
-                } else {
-                    return newCardID;
-                }
-            } else if (type.getSelectedItem().equals(PurchaseType.CashPurchase.getName())) {
-                return CardType.Cash.getName();
-            }
-        }
-        return null;
     }
 
     /*============================== ACCESSORS ==============================*/
