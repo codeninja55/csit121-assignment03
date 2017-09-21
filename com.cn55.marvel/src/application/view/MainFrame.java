@@ -8,7 +8,6 @@ import java.net.URL;
 
 @SuppressWarnings("Convert2Lambda")
 public class MainFrame extends JFrame {
-
     private final JTabbedPane tabPane;
     private final CardViewPane cardViewPane;
     private final PurchaseViewPane purchaseViewPane;
@@ -17,7 +16,6 @@ public class MainFrame extends JFrame {
 
     public MainFrame() {
         super("Marvel Rewards Cards");
-
         setLayout(new BorderLayout());
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setMinimumSize(new Dimension(1080, 720));

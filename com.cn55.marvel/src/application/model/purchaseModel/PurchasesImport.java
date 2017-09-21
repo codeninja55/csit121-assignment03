@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 
 public class PurchasesImport implements ImportFromCSV {
     private static final String DEFAULT_SEPARATOR = ",";
-    private Pattern categoryRegex = Pattern.compile("\\[(.*?)\\]");
+    private final Pattern categoryRegex = Pattern.compile("\\[(.*?)]");
     private BufferedReader input;
 
     public void importData(BufferedReader reader) {

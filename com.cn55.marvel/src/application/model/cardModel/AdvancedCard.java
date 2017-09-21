@@ -2,8 +2,8 @@ package application.model.cardModel;
 
 @SuppressWarnings("unused")
 public abstract class AdvancedCard extends Card {
-    String name;
-    String email;
+    final String name;
+    final String email;
     double balance;
 
     AdvancedCard (String name, String email) {

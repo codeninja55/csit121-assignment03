@@ -4,8 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 
 public class Toolbar extends JPanel {
-    private JPanel leftToolbar;
-    private JPanel rightToolbar;
+    private final JPanel leftToolbar;
+    private final JPanel rightToolbar;
 
     public Toolbar() {
         leftToolbar = new JPanel(new FlowLayout(FlowLayout.LEFT, 20,20));

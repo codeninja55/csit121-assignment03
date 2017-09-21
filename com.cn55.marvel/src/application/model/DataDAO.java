@@ -28,9 +28,9 @@ public class DataDAO implements DataObservable, CardsDAO, PurchaseDAO, CategoryD
     private final HashMap<Integer,Purchase> purchases;
     private final HashMap<Integer,Category> categories;
 
-    private Path categoriesStoragePath = Paths.get("com.cn55.marvel/src/persistentData/CategoriesStorage.csv");
-    private Path cardsStoragePath = Paths.get("com.cn55.marvel/src/persistentData/CardsStorage.csv");
-    private Path purchaseStoragePath = Paths.get("com.cn55.marvel/src/persistentData/PurchaseStorage.csv");
+    private final Path categoriesStoragePath = Paths.get("com.cn55.marvel/src/persistentData/CategoriesStorage.csv");
+    private final Path cardsStoragePath = Paths.get("com.cn55.marvel/src/persistentData/CardsStorage.csv");
+    private final Path purchaseStoragePath = Paths.get("com.cn55.marvel/src/persistentData/PurchaseStorage.csv");
 
     /*============================== CONSTRUCTORS  ==============================*/
     // Private modifier prevents any other class from instantiating

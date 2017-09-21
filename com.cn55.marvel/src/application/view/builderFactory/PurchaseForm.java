@@ -9,59 +9,60 @@ import application.model.cardModel.CardType;
 import application.model.categoryModel.Category;
 import application.model.purchaseModel.PurchaseType;
 import application.view.customComponents.*;
-import com.sun.istack.internal.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.text.DecimalFormat;
-import java.text.Normalizer;
 import java.text.NumberFormat;
-import java.util.*;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.HashMap;
 
-public class PurchaseForm extends JPanel implements FormFactory, PurchaseFormView {
-    private int generatedReceiptID;
-    private DefaultComboBoxModel<String> existingCardModel;
-    private ArrayList<Category> categoriesList;
-    private HashMap<JLabel[], FormFormattedTextField> purchaseCategoriesMap;
-    private JComboBox<String> purchaseTypeCombo;
-    private DefaultComboBoxModel<String> options;
-    private JPanel baseCreatePurchaseForm;
-    private FormLabel receiptIDLabel;
-    private FormTextField receiptIDTextField;
-    private FormLabel cardIDLabel;
-    private FormTextField cardIDTextField;
-    private FormLabel existingCardLabel;
-    private JComboBox<String> existingCardCombo;
+public class PurchaseForm extends BaseForm implements FormFactory, PurchaseFormView {
+    private final int generatedReceiptID;
+    private final DefaultComboBoxModel<String> existingCardModel;
+    private final ArrayList<Category> categoriesList;
+    private final HashMap<JLabel[], FormFormattedTextField> purchaseCategoriesMap;
+    private final JComboBox<String> purchaseTypeCombo;
+    private final DefaultComboBoxModel<String> options;
+    private final JPanel baseCreatePurchaseForm;
+    private final FormLabel receiptIDLabel;
+    private final FormTextField receiptIDTextField;
+    private final FormLabel cardIDLabel;
+    private final FormTextField cardIDTextField;
+    private final FormLabel existingCardLabel;
+    private final JComboBox<String> existingCardCombo;
 
-    private FormLabel cardTypeLabel;
-    private FormRadioButton anonCardRB;
-    private FormRadioButton basicCardRB;
-    private FormRadioButton premiumCardRB;
+    private final FormLabel cardTypeLabel;
+    private final FormRadioButton anonCardRB;
+    private final FormRadioButton basicCardRB;
+    private final FormRadioButton premiumCardRB;
 
-    private FormLabel cardNameLabel;
-    private FormTextField cardNameTextField;
-    private ErrorLabel nameErrLabel;
-    private FormLabel cardEmailLabel;
-    private FormTextField cardEmailTextField;
-    private ErrorLabel emailErrLabel;
-    private ErrorLabel categoryEmptyErrLabel;
+    private final FormLabel cardNameLabel;
+    private final FormTextField cardNameTextField;
+    private final ErrorLabel nameErrLabel;
+    private final FormLabel cardEmailLabel;
+    private final FormTextField cardEmailTextField;
+    private final ErrorLabel emailErrLabel;
+    private final ErrorLabel categoryEmptyErrLabel;
 
     private PurchaseListener createPurchaseListener;
-    private FormButton createBtn;
-    private FormButton clearBtn;
-    private ErrorLabel purchaseErrorLabel;
+    private final FormButton createBtn;
+    private final FormButton clearBtn;
+    private final ErrorLabel purchaseErrorLabel;
 
     /*============================== CONSTRUCTORS ==============================*/
     private PurchaseForm(PurchaseFormBuilder builder) {
-        /* INITIALIZE ALL COMPONENTS */
+        super();
+        super.setBorder("New Purchase");
+        super.setCancelBtn("Cancel Create Purchase");
+
         baseCreatePurchaseForm = new JPanel(new GridBagLayout());
         purchaseTypeCombo = new JComboBox<>();
         options = new DefaultComboBoxModel<>();
         purchaseCategoriesMap = new HashMap<>();
-        CancelButton cancelBtn = new CancelButton("Cancel New Purchase");
 
         /* NOTE: All FormLabels and FormTextField are hidden by default */
         receiptIDLabel = new FormLabel("Receipt ID: ");
@@ -103,16 +104,6 @@ public class PurchaseForm extends JPanel implements FormFactory, PurchaseFormVie
         basicCardRB.addActionListener(handler);
         premiumCardRB.addActionListener(handler);
 
-        /* INITIALIZE THIS PANEL */
-        setLayout(new BorderLayout());
-        /* SIZING - Make sure the form is at least always 800 pixels */
-        Dimension dim = getPreferredSize();
-        dim.width = 800;
-        setPreferredSize(dim);
-        setMinimumSize(getPreferredSize());
-        setBorder(Style.formBorder("New Purchase"));
-        setVisible(false);
-
         /* SET UP CARD TYPE GROUP */
         cardTypeRBGroup.add(anonCardRB);
         cardTypeRBGroup.add(basicCardRB);
@@ -131,9 +122,6 @@ public class PurchaseForm extends JPanel implements FormFactory, PurchaseFormVie
         purchaseTypeCombo.setFont(Style.comboboxFont());
         add(purchaseTypeCombo, BorderLayout.NORTH);
 
-        add(cancelBtn, BorderLayout.SOUTH);
-        cancelBtn.addActionListener(e -> setVisible(false));
-
         this.addComponentListener(new ComponentAdapter() {
             public void componentShown(ComponentEvent e) {
                 super.componentShown(e);
@@ -146,7 +134,6 @@ public class PurchaseForm extends JPanel implements FormFactory, PurchaseFormVie
                 super.componentHidden(e);
                 baseCreatePurchaseForm.setVisible(false);
                 PurchaseForm.super.remove(baseCreatePurchaseForm);
-                getParent().remove(PurchaseForm.this);
             }
         });
     }
@@ -505,7 +492,7 @@ public class PurchaseForm extends JPanel implements FormFactory, PurchaseFormVie
     /*============================== INNER CLASS ==============================*/
     /*============================== BUILDER ==============================*/
     static class PurchaseFormBuilder {
-        private int generatedReceiptID;
+        private final int generatedReceiptID;
         private DefaultComboBoxModel<String> existingCardModel;
         private ArrayList<Category> categoriesList;
 

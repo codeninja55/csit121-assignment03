@@ -21,13 +21,13 @@ import java.util.ArrayList;
 
 public class CardViewPane extends JPanel implements DataObserver {
     private DataObservable dataDAO;
-    private ToolbarButton createCardBtn;
-    private ToolbarButton deleteCardBtn;
-    private ToolbarButton searchBtn;
-    private ToolbarButton viewBtn;
-    private CardTableModel cardTableModel;
-    private JComboBox<String> sortedCombo;
-    private JTable cardTablePane;
+    private final ToolbarButton createCardBtn;
+    private final ToolbarButton deleteCardBtn;
+    private final ToolbarButton searchBtn;
+    private final ToolbarButton viewBtn;
+    private final CardTableModel cardTableModel;
+    private final JComboBox<String> sortedCombo;
+    private final JTable cardTablePane;
 
     private ToolbarButtonListener createCardListener;
     private ToolbarButtonListener searchCardListener;
@@ -179,7 +179,7 @@ public class CardViewPane extends JPanel implements DataObserver {
     /*============================= CardTableModel ============================*/
     class CardTableModel extends AbstractTableModel {
         private ArrayList<Card> cards;
-        private String[] cardHeaders = {"Card ID", "Card Type", "Name", "Email", "Balance", "Points"};
+        private final String[] cardHeaders = {"Card ID", "Card Type", "Name", "Email", "Balance", "Points"};
 
         void setData(ArrayList<Card> cards) {
             this.cards = cards;

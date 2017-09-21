@@ -5,10 +5,6 @@ import application.model.Shop;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
 public class CategoriesExport implements ExportToCSV {
     private static final char DEFAULT_SEPARATOR = ',';
@@ -31,6 +27,7 @@ public class CategoriesExport implements ExportToCSV {
         closeFile();
     }
 
+    @Override
     public void closeFile() {
         try {
             output.flush();

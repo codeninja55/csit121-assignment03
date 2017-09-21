@@ -1,5 +1,6 @@
 package application.model;
 
+@SuppressWarnings("ALL")
 public interface DataObserver {
     // Method to getCategoriesUpdate the observer, used by the observable object
     void update();

@@ -5,33 +5,26 @@ import application.view.customComponents.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 import java.util.Arrays;
 
-public class DeleteCardForm extends JPanel implements FormFactory, DeleteFormView {
-    private JPanel deleteForm;
-    private FormTextField cardIDTextField;
+public class DeleteCardForm extends BaseForm implements FormFactory, DeleteFormView {
+    private final JPanel deleteForm;
+    private final FormTextField cardIDTextField;
     private DeleteCardListener deleteCardListener;
 
     /*============================== CONSTRUCTORS ==============================*/
     DeleteCardForm() {
+        super();
+        super.setCancelBtn("Cancel Card Delete");
+        super.setBorder("Delete Card");
+
         deleteForm = new JPanel(new GridBagLayout());
-        CancelButton cancelBtn = new CancelButton("Cancel Card Delete");
         FormLabel cardIDLabel = new FormLabel("Delete by Card ID");
         cardIDTextField = new FormTextField(20);
         ErrorLabel existsErrorLabel = new ErrorLabel("CARD DOES NOT EXIST");
         ErrorLabel ruleErrLabel = new ErrorLabel("INVALID CARD ID NUMBER");
         ErrorLabel deleteErrorLabel = new ErrorLabel("CARD NOT DELETED");
         FormButton deleteBtn = new FormButton("Delete Card", Style.deleteActionIcon());
-
-        setLayout(new BorderLayout());
-        Dimension dim = getPreferredSize();
-        dim.width = 800;
-        setPreferredSize(dim);
-        setMinimumSize(getPreferredSize());
-        setBorder(Style.formBorder("Delete Card"));
-        setVisible(false);
 
         GridBagConstraints gc = new GridBagConstraints();
         /*========== FIRST ROW ==========*/
@@ -106,15 +99,6 @@ public class DeleteCardForm extends JPanel implements FormFactory, DeleteFormVie
         });
 
         add(deleteForm, BorderLayout.CENTER);
-        add(cancelBtn, BorderLayout.SOUTH);
-        cancelBtn.addActionListener(e -> setVisible(false));
-
-        this.addComponentListener(new ComponentAdapter() {
-            public void componentHidden(ComponentEvent e) {
-                super.componentHidden(e);
-                getParent().remove(DeleteCardForm.this);
-            }
-        });
     }
 
     /*============================== MUTATORS ==============================*/

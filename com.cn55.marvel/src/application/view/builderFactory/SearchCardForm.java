@@ -5,31 +5,24 @@ import application.view.customComponents.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 import java.util.Arrays;
 
-public class SearchCardForm extends JPanel implements FormFactory, SearchFormView {
-    private JPanel searchForm;
-    private FormTextField searchIDTextField;
+public class SearchCardForm extends BaseForm implements FormFactory, SearchFormView {
+    private final JPanel searchForm;
+    private final FormTextField searchIDTextField;
     private SearchListener searchListener;
 
     SearchCardForm() {
+        super();
+        super.setCancelBtn("Cancel Card Search");
+        super.setBorder("Search Cards");
+
         searchForm = new JPanel(new GridBagLayout());
-        CancelButton cancelBtn = new CancelButton("Cancel Search");
         FormLabel searchLabel = new FormLabel("Search by Card ID");
         searchIDTextField = new FormTextField(20);
         ErrorLabel errorLabel = new ErrorLabel("CARD DOES NOT EXIST");
         ErrorLabel ruleErrLabel = new ErrorLabel("INVALID CARD ID NUMBER");
         FormButton searchBtn = new FormButton("Search", Style.searchIcon());
-
-        setLayout(new BorderLayout());
-        Dimension dim = getPreferredSize();
-        dim.width = 800;
-        setPreferredSize(dim);
-        setMinimumSize(getPreferredSize());
-        setBorder(Style.formBorder("Search Cards"));
-        setVisible(false);
 
         GridBagConstraints gc = new GridBagConstraints();
         gc.fill = GridBagConstraints.NONE;
@@ -89,15 +82,6 @@ public class SearchCardForm extends JPanel implements FormFactory, SearchFormVie
         });
 
         add(searchForm, BorderLayout.CENTER);
-        add(cancelBtn, BorderLayout.SOUTH);
-        cancelBtn.addActionListener(e -> this.setVisible(false));
-
-        this.addComponentListener(new ComponentAdapter() {
-            public void componentHidden(ComponentEvent e) {
-                super.componentHidden(e);
-                getParent().remove(SearchCardForm.this);
-            }
-        });
     }
 
     /*============================== MUTATORS ==============================*/

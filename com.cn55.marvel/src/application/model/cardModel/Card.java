@@ -3,8 +3,7 @@ package application.model.cardModel;
 import application.model.Generator;
 
 public abstract class Card implements Comparable<Card> {
-
-    protected String id;
+    final String id;
     double points;
     String cardType;
 
@@ -37,9 +36,8 @@ public abstract class Card implements Comparable<Card> {
     public String getID() { return id; }
     public double getPoints() { return points; }
     public abstract String toString();
-    public boolean equals(Card other) {
-        return this.id.equals(other.id);
-    }
+    @SuppressWarnings("unused")
+    public boolean equals(Card other) { return this.id.equals(other.id); }
     public int compareTo(Card o) {
         return this.id.compareTo(o.getID());
     }

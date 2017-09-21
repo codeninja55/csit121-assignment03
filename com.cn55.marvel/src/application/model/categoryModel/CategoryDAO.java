@@ -2,6 +2,7 @@ package application.model.categoryModel;
 
 import java.util.HashMap;
 
+@SuppressWarnings("All")
 public interface CategoryDAO {
     void createCategory(Category category);
     HashMap<Integer, Category> getAllCategories();

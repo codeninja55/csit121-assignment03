@@ -18,6 +18,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.util.ArrayList;
 
+@SuppressWarnings("UnnecessaryLocalVariable")
 public class PurchaseViewPane extends JPanel implements DataObserver {
     private DataObservable dataDAO;
     private final ToolbarButton createPurchaseBtn;
@@ -28,7 +29,6 @@ public class PurchaseViewPane extends JPanel implements DataObserver {
 
     private final PurchaseTableModel purchaseTableModel;
     private final JTable purchaseTablePane;
-    private PurchaseForm createPurchaseForm;
 
     private ToolbarButtonListener createPurchaseListener;
     //private ToolbarButtonListener deletePurchaseListener;
@@ -102,7 +102,6 @@ public class PurchaseViewPane extends JPanel implements DataObserver {
     }
 
     public void setCreatePurchaseForm(PurchaseForm createPurchaseForm) {
-        this.createPurchaseForm = createPurchaseForm;
         this.add(createPurchaseForm, BorderLayout.WEST);
         createPurchaseForm.setVisible(true);
     }
@@ -142,8 +141,6 @@ public class PurchaseViewPane extends JPanel implements DataObserver {
     }
 
     /*============================== ACCESSORS ==============================*/
-    public PurchaseForm getCreatePurchaseForm() { return createPurchaseForm; }
-
     public JComboBox<String> getSortPurchaseCombo() {
         return sortPurchaseCombo;
     }

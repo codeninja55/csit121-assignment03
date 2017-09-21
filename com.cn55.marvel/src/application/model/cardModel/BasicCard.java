@@ -1,5 +1,6 @@
 package application.model.cardModel;
 
+@SuppressWarnings("FieldCanBeLocal")
 public class BasicCard extends AdvancedCard {
     private final double POINTS_RATE = 0.015;
 
@@ -10,6 +11,7 @@ public class BasicCard extends AdvancedCard {
     }
 
     // Constructor with for new cards without purchase
+    @SuppressWarnings("unused")
     public BasicCard(String name, String email, double totalAmount) {
         super(name, email);
         super.cardType = CardType.BasicCard.getName();

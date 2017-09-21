@@ -11,7 +11,7 @@ import java.util.Arrays;
 /* BUILDER DESIGN PATTERN - Build a text pane with the appropriate sequential order */
 
 public class ResultsPane extends JPanel {
-    private ResultsTextPane resultsTextPane; // required
+    private final ResultsTextPane resultsTextPane; // required
     private JScrollPane scrollPane; // required but only initialized after this pane is shown
 
     private ResultsPane(ResultsPaneBuilder builder) {
@@ -61,7 +61,7 @@ public class ResultsPane extends JPanel {
 
     /*============================== BUILDER CLASS ==============================*/
     public static class ResultsPaneBuilder {
-        private ResultsTextPane resultsTextPane;
+        private final ResultsTextPane resultsTextPane;
 
         public ResultsPaneBuilder(String resultsText) {
             this.resultsTextPane = new ResultsTextPane(resultsText);

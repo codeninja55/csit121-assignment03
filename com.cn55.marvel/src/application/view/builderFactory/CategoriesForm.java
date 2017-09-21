@@ -8,33 +8,26 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.Arrays;
 
-public class CategoriesForm extends JPanel implements FormFactory, CategoryFormView {
+public class CategoriesForm extends BaseForm implements FormFactory, CategoryFormView {
     private final JPanel createCategoriesForm;
-    private final FormTextField categoryIDTextField;
     private final FormTextField categoryNameTextField;
     private final JTextArea categoryDescTextField;
     private CategoryListener createCategoryListener;
 
     CategoriesForm() {
-        /* INITIALIZE ALL COMPONENTS */
+        super();
+        super.setBorder("New Category");
+        super.setCancelBtn("Cancel Create Category");
+
         createCategoriesForm = new JPanel(new GridBagLayout());
         FormLabel categoryIDLabel = new FormLabel("Category ID");
-        categoryIDTextField = new FormTextField(20);
+        FormTextField categoryIDTextField = new FormTextField(20);
         FormLabel categoryNameLabel = new FormLabel("Category Name");
         categoryNameTextField = new FormTextField(35);
         FormLabel categoryDescLabel = new FormLabel("Category Description");
         categoryDescTextField = new JTextArea(15,35);
         FormButton createBtn = new FormButton("Create Category", Style.addIcon());
         FormButton clearBtn = new FormButton("Clear", Style.clearIcon());
-        CancelButton cancelBtn = new CancelButton("Cancel New Category");
-
-        setLayout(new BorderLayout());
-        Dimension dim = getPreferredSize();
-        dim.width = 800;
-        setPreferredSize(dim);
-        setMinimumSize(getPreferredSize());
-        setBorder(Style.formBorder("New Category"));
-        setVisible(false);
 
         /* FORM AREA */
         GridBagConstraints gc = new GridBagConstraints();
@@ -91,10 +84,7 @@ public class CategoriesForm extends JPanel implements FormFactory, CategoryFormV
         gc.anchor = GridBagConstraints.FIRST_LINE_START;
         gc.insets = new Insets(20,10,0,0);
         createCategoriesForm.add(clearBtn, gc);
-
         add(createCategoriesForm, BorderLayout.CENTER);
-        add(cancelBtn, BorderLayout.SOUTH);
-        cancelBtn.addActionListener((ActionEvent e) -> setVisible(false));
 
         /* SET FORM CUSTOM COMPONENTS VISIBLE */
         Arrays.stream(createCategoriesForm.getComponents())
@@ -113,7 +103,6 @@ public class CategoriesForm extends JPanel implements FormFactory, CategoryFormV
             if (c instanceof JTextArea) ((JTextArea) c).setText("");
             if (c instanceof FormLabel) c.setForeground(Color.BLACK);
         }));
-
     }
 
     /*============================== MUTATORS  ==============================*/

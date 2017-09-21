@@ -6,27 +6,28 @@ import application.view.customComponents.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 import java.util.Arrays;
 
-public class DeleteCategoryForm extends JPanel implements FormFactory, DeleteFormView{
+public class DeleteCategoryForm extends BaseForm implements FormFactory, DeleteFormView{
     private JPanel deleteCategoryForm;
-    private FormLabel categoryIDLabel;
-    private FormTextField categoryIDTextField;
-    private FormLabel categoryNameLabel;
-    private FormTextField categoryNameTextField;
-    private ErrorLabel errLabel;
-    private ErrorLabel idRuleErrLabel;
-    private ErrorLabel othersDeleteErrLabel;
-    private ErrorLabel deleteErrorLabel;
-    private FormButton deleteBtn;
+    private final FormLabel categoryIDLabel;
+    private final FormTextField categoryIDTextField;
+    private final FormLabel categoryNameLabel;
+    private final FormTextField categoryNameTextField;
+    private final ErrorLabel errLabel;
+    private final ErrorLabel idRuleErrLabel;
+    private final ErrorLabel othersDeleteErrLabel;
+    private final ErrorLabel deleteErrorLabel;
+    private final FormButton deleteBtn;
 
     private DeleteCardListener deleteCardListener;
 
     /*============================== CONSTRUCTORS  ==============================*/
     DeleteCategoryForm() {
-        CancelButton cancelBtn = new CancelButton("Cancel Category Delete");
+        super();
+        super.setCancelBtn("Cancel Category Delete");
+        super.setBorder("Delete Category");
+
         JPanel rbSubPane = new JPanel(new GridLayout(1, 3));
         ButtonGroup categoryRBGroup = new ButtonGroup();
         FormLabel deleteTypeLabel = new FormLabel("Delete By: ");
@@ -44,14 +45,6 @@ public class DeleteCategoryForm extends JPanel implements FormFactory, DeleteFor
         deleteErrorLabel = new ErrorLabel("CATEGORY NOT DELETED");
         deleteBtn = new FormButton("Delete Category", Style.deleteActionIcon());
 
-        setLayout(new BorderLayout());
-        Dimension dim = getPreferredSize();
-        dim.width = 800;
-        setPreferredSize(dim);
-        setMinimumSize(getPreferredSize());
-        setBorder(Style.formBorder("Delete Category"));
-        setVisible(false);
-
         /* RADIO BUTTONS SUB PANE */
         categoryRBGroup.add(idRB);
         categoryRBGroup.add(nameRB);
@@ -65,10 +58,6 @@ public class DeleteCategoryForm extends JPanel implements FormFactory, DeleteFor
         rbSubPane.add(nameRB);
         rbSubPane.setMinimumSize(rbSubPane.getPreferredSize());
         add(rbSubPane, BorderLayout.NORTH);
-
-        add(cancelBtn, BorderLayout.SOUTH);
-        cancelBtn.addActionListener(e -> setVisible(false));
-        cancelBtn.addActionListener((ActionEvent e) -> setVisible(false));
 
         deleteBtn.addActionListener((ActionEvent e) -> {
             hideErrorLabels();
@@ -105,13 +94,6 @@ public class DeleteCategoryForm extends JPanel implements FormFactory, DeleteFor
             /* TEST CODE */
             System.err.println("NAME Radio Button NOT IMPL");
             System.out.println("NAME RADIO BUTTON SEL");
-        });
-
-        this.addComponentListener(new ComponentAdapter() {
-            public void componentHidden(ComponentEvent e) {
-                super.componentHidden(e);
-                getParent().remove(DeleteCategoryForm.this);
-            }
         });
 
         baseForm();

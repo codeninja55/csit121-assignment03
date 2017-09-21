@@ -9,31 +9,34 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.Arrays;
 
-public class CardForm extends JPanel implements FormFactory, CardFormView {
-    private DefaultComboBoxModel<String> options;
-    private JComboBox<String> cardTypeCombo;
-    private JPanel baseCreateCardForm;
-    private FormLabel cardIDLabel;
-    private FormTextField cardIDTextField;
-    private FormLabel cardNameLabel;
-    private FormTextField cardNameTextField;
-    private ErrorLabel nameErrorLabel;
-    private FormLabel cardEmailLabel;
-    private FormTextField cardEmailTextField;
-    private ErrorLabel emailErrorLabel;
+public class CardForm extends BaseForm implements FormFactory, CardFormView {
+    private final DefaultComboBoxModel<String> options;
+    private final JComboBox<String> cardTypeCombo;
+    private final JPanel baseCreateCardForm;
+    private final FormLabel cardIDLabel;
+    private final FormTextField cardIDTextField;
+    private final FormLabel cardNameLabel;
+    private final FormTextField cardNameTextField;
+    private final ErrorLabel nameErrorLabel;
+    private final FormLabel cardEmailLabel;
+    private final FormTextField cardEmailTextField;
+    private final ErrorLabel emailErrorLabel;
 
     private CardListener cardListener;
-    private ErrorLabel createCardErrorLabel;
-    private FormButton createBtn;
-    private FormButton clearBtn;
+    private final ErrorLabel createCardErrorLabel;
+    private final FormButton createBtn;
+    private final FormButton clearBtn;
 
     /*====================  CONSTRUCTOR for Creating Cards ====================*/
     CardForm() {
+        super();
+        super.setCancelBtn("Cancel New Card");
+        super.setBorder("New Card");
+
         /* INITIALIZE ALL COMPONENTS */
         baseCreateCardForm = new JPanel(new GridBagLayout());
         cardTypeCombo = new JComboBox<>();
         options = new DefaultComboBoxModel<>();
-        CancelButton cancelBtn = new CancelButton("Cancel New Card");
 
         /* NOTE: All FormLabels and FormTextFields are hidden by default */
         cardIDLabel = new FormLabel("Card ID: ");
@@ -54,15 +57,6 @@ public class CardForm extends JPanel implements FormFactory, CardFormView {
         createBtn.addActionListener(handler);
         clearBtn.addActionListener(handler);
 
-        /* INITIALIZE THIS PANEL */
-        setLayout(new BorderLayout());
-        Dimension dim = getPreferredSize();
-        dim.width = 800;
-        setPreferredSize(dim);
-        setMinimumSize(getPreferredSize());
-        setBorder(Style.formBorder("New Card"));
-        setVisible(false);
-
         /* CARD TYPE COMBO BOX - Create the model and the combobox */
         options.addElement("Please Choose Card Type Below");
         options.addElement(CardType.AnonCard.getName());
@@ -74,9 +68,6 @@ public class CardForm extends JPanel implements FormFactory, CardFormView {
         cardTypeCombo.setEditable(false);
         cardTypeCombo.setFont(Style.comboboxFont());
         add(cardTypeCombo, BorderLayout.NORTH);
-
-        add(cancelBtn, BorderLayout.SOUTH);
-        cancelBtn.addActionListener(e -> setVisible(false) );
 
         this.addComponentListener(new ComponentAdapter() {
             public void componentShown(ComponentEvent e) {
@@ -90,7 +81,6 @@ public class CardForm extends JPanel implements FormFactory, CardFormView {
                 super.componentHidden(e);
                 baseCreateCardForm.setVisible(false);
                 CardForm.super.remove(baseCreateCardForm);
-                getParent().remove(CardForm.this);
             }
         });
     }

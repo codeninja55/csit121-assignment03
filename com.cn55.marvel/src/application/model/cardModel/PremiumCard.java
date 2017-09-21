@@ -1,5 +1,6 @@
 package application.model.cardModel;
 
+@SuppressWarnings("FieldCanBeLocal")
 public class PremiumCard extends AdvancedCard {
     private final double POINTS_RATE_LOW = 0.025;
     private final double POINTS_RATE_HIGH = 0.03;
@@ -13,6 +14,7 @@ public class PremiumCard extends AdvancedCard {
     }
 
     // constructor with details
+    @SuppressWarnings("unused")
     public PremiumCard(String name, String email, double totalAmount) {
         super(name, email);
         super.cardType = CardType.PremiumCard.getName();

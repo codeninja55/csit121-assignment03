@@ -8,17 +8,13 @@ public enum SortCardType {
     Points(4, "Sort by Points")
     ;
 
-    // Instance Variables
-    private final int id;
     private final String name;
+    @SuppressWarnings({"FieldCanBeLocal", "unused"})
+    private final int id;
 
     SortCardType(int id, String name) {
         this.name = name;
         this.id = id;
-    }
-
-    public int getId() {
-        return id;
     }
 
     public String getName() {

@@ -2,8 +2,9 @@ package application.view;
 import javax.swing.*;
 import java.awt.*;
 
+@SuppressWarnings("ALL")
 class SummaryViewPane extends JPanel {
-    private JPanel summaryPanel;
+    private final JPanel summaryPanel;
 
     public SummaryViewPane() {
         summaryPanel = new JPanel();

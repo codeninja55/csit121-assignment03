@@ -6,6 +6,7 @@ import application.model.purchaseModel.Purchase;
 
 import java.util.TreeMap;
 
+@SuppressWarnings("All")
 public interface DataObservable {
     // Methods to register and unregister observers
     void register(DataObserver obj);

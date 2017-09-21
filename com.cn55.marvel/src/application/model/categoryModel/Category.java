@@ -4,21 +4,13 @@ import application.model.Generator;
 
 public class Category implements Comparable<Category> {
 
-    private int id;
-    private String name;
-    private String description;
+    private final int id;
+    private final String name;
+    private final String description;
     private double amount;
     private double totalAmount;
 
     /*============================== CONSTRUCTORS  ==============================*/
-    public Category(String name) {
-        this.id = Generator.setCategoryID();
-        this.name = name;
-        this.description = "";
-        this.amount = 0;
-        this.totalAmount = 0;
-    }
-
     public Category(String name, String description) {
         this.id = Generator.setCategoryID();
         this.name = name;
@@ -38,17 +30,6 @@ public class Category implements Comparable<Category> {
     /*============================== COPY CONSTRUCTOR ==============================*/
     public Category(Category other) {
         this(other.getId(), other.getName(), other.getDescription(), other.getAmount());
-    }
-
-// --Commented out by Inspection START (6/09/17 12:12 PM):
-//    void setId(int id) { this.id = id; }
-// --Commented out by Inspection STOP (6/09/17 12:12 PM)
-
-    /*============================== MUTATORS ==============================*/
-    void setName(String name) { this.name = name; }
-
-    void setDescription(String description) {
-        this.description = description;
     }
 
     public void setAmount(double amount) { this.amount = amount; }

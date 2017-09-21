@@ -46,6 +46,7 @@ public class PurchasesExport implements ExportToCSV {
         closeFile();
     }
 
+    @Override
     public void closeFile() {
         try {
             output.flush();

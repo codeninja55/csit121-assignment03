@@ -21,8 +21,8 @@ import java.util.Comparator;
 public class CategoriesViewPane extends JPanel implements DataObserver {
     private DataObservable dataDAO;
 
-    private CategoriesTableModel categoriesTableModel;
-    private JTable categoriesTablePane;
+    private final CategoriesTableModel categoriesTableModel;
+    private final JTable categoriesTablePane;
 
     private ToolbarButtonListener createCategoryListener;
     private ToolbarButtonListener deleteCategoryListener;
@@ -115,7 +115,7 @@ public class CategoriesViewPane extends JPanel implements DataObserver {
     /*========================== CategoriesTableModel =========================*/
     public class CategoriesTableModel extends AbstractTableModel {
         private ArrayList<Category> categories;
-        private String[] tableHeaders = {"ID", "Name", "Description", "Total Amount"};
+        private final String[] tableHeaders = {"ID", "Name", "Description", "Total Amount"};
 
         void setData(ArrayList<Category> categories) {
             Collections.sort(categories);
