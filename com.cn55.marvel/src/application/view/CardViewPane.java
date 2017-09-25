@@ -45,8 +45,6 @@ public class CardViewPane extends JPanel implements DataObserver {
 
         cardTableModel = new CardTableModel();
         cardTablePane = new JTable();
-        JScrollPane tableScrollPane = new JScrollPane(cardTablePane);
-        tableScrollPane.setName("CardsViewTableScrollPane");
         setLayout(new BorderLayout());
 
         /* SORTED COMBO BOX */
@@ -68,7 +66,7 @@ public class CardViewPane extends JPanel implements DataObserver {
         toolbar.getRightToolbar().add(sortedCombo);
         add(toolbar, BorderLayout.NORTH);
 
-        add(tableScrollPane, BorderLayout.CENTER);
+        add(new JScrollPane(cardTablePane), BorderLayout.CENTER);
 
         /* REGISTRATION OF TOOLBAR BUTTON LISTENERS */
         ToolbarListener handler = new ToolbarListener();
@@ -114,7 +112,6 @@ public class CardViewPane extends JPanel implements DataObserver {
 
     public void setCardTableModel() {
         cardTablePane.setModel(cardTableModel);
-        cardTablePane.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         Style.cardTableFormatter(cardTablePane);
         this.revalidate();
         this.repaint();

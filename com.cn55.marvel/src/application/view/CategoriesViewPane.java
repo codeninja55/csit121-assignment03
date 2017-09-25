@@ -33,7 +33,6 @@ public class CategoriesViewPane extends JPanel implements DataObserver {
 
         categoriesTableModel = new CategoriesTableModel();
         categoriesTablePane = new JTable();
-        JScrollPane tableScrollPane = new JScrollPane(categoriesTablePane);
 
         setLayout(new BorderLayout());
 
@@ -42,7 +41,7 @@ public class CategoriesViewPane extends JPanel implements DataObserver {
         toolbar.getLeftToolbar().add(deleteCategoryBtn);
         add(toolbar, BorderLayout.NORTH);
 
-        add(tableScrollPane, BorderLayout.CENTER);
+        add(new JScrollPane(categoriesTablePane), BorderLayout.CENTER);
 
         /* REGISTRATION OF TOOLBAR BUTTON LISTENERS */
         createCategoryBtn.addActionListener((ActionEvent e) -> {
@@ -67,7 +66,6 @@ public class CategoriesViewPane extends JPanel implements DataObserver {
 
     public void setCategoriesTableModel() {
         categoriesTablePane.setModel(categoriesTableModel);
-        categoriesTablePane.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         Style.categoriesTableFormatter(categoriesTablePane);
         this.revalidate();
         this.repaint();

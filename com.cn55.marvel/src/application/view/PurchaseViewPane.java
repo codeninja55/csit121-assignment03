@@ -45,7 +45,6 @@ public class PurchaseViewPane extends JPanel implements DataObserver {
 
         purchaseTableModel = new PurchaseTableModel();
         purchaseTablePane = new JTable();
-        JScrollPane tableScrollPane = new JScrollPane(purchaseTablePane);
 
         JPopupMenu tablePopup = new JPopupMenu();
         JMenuItem removePurchase = new JMenuItem("Delete Purchase");
@@ -72,7 +71,7 @@ public class PurchaseViewPane extends JPanel implements DataObserver {
 
         tablePopup.add(removePurchase);
 
-        add(tableScrollPane, BorderLayout.CENTER);
+        add(new JScrollPane(purchaseTablePane), BorderLayout.CENTER);
 
         /* REGISTRATION OF TOOLBAR BUTTON LISTENERS */
         ToolbarListener handler = new ToolbarListener();
@@ -106,7 +105,6 @@ public class PurchaseViewPane extends JPanel implements DataObserver {
 
     public void setPurchaseTableModel() {
         purchaseTablePane.setModel(purchaseTableModel);
-        purchaseTablePane.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         Style.purchasesTableFormatter(purchaseTablePane);
         this.revalidate();
         this.repaint();
