@@ -6,13 +6,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.net.URL;
 
-@SuppressWarnings("Convert2Lambda")
 public class MainFrame extends JFrame {
     private final JTabbedPane tabPane;
     private final CardViewPane cardViewPane;
     private final PurchaseViewPane purchaseViewPane;
     private final CategoriesViewPane categoriesViewPane;
-    //private SummaryViewPane summaryPanel;
+    private final SummaryViewPane summaryViewPane;
 
     public MainFrame() {
         super("Marvel Rewards Cards");
@@ -62,6 +61,7 @@ public class MainFrame extends JFrame {
         this.cardViewPane = new CardViewPane();
         this.purchaseViewPane = new PurchaseViewPane();
         this.categoriesViewPane = new CategoriesViewPane();
+        this.summaryViewPane = new SummaryViewPane();
 
         // Add panels, toolbars, and panes to main Frame
         tabPane.setBackground(Style.blueGrey500());
@@ -75,9 +75,10 @@ public class MainFrame extends JFrame {
         tabPane.addTab(" Cards ", Style.cardIcon(),cardViewPane);
         tabPane.addTab(" Purchases ", Style.purchaseIcon(), purchaseViewPane);
         tabPane.addTab(" Categories ", Style.categoryIcon(), categoriesViewPane);
+        tabPane.addTab(" Summary ", Style.summaryViewPaneIcon(), summaryViewPane);
 
         // DEFAULT PANE BEGIN AT
-        tabPane.setSelectedIndex(0);
+        tabPane.setSelectedIndex(4);
     }
 
     /*============================== ACCESSORS  ==============================*/
@@ -90,4 +91,6 @@ public class MainFrame extends JFrame {
     public CategoriesViewPane getCategoriesViewPane() {
         return categoriesViewPane;
     }
+
+    public SummaryViewPane getSummaryViewPane() { return summaryViewPane; }
 }

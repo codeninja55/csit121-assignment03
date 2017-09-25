@@ -7,10 +7,7 @@ import application.model.categoryModel.Category;
 import application.model.purchaseModel.Purchase;
 import application.model.purchaseModel.PurchaseType;
 import application.model.purchaseModel.SortPurchaseType;
-import application.view.CardViewPane;
-import application.view.CategoriesViewPane;
-import application.view.MainFrame;
-import application.view.PurchaseViewPane;
+import application.view.*;
 import application.view.builderFactory.*;
 import application.view.customComponents.ResultsPane;
 
@@ -36,6 +33,7 @@ public class Program {
     private final CardViewPane cardViewPane;
     private final PurchaseViewPane purchaseViewPane;
     private final CategoriesViewPane categoriesViewPane;
+    private final SummaryViewPane summaryViewPane;
 
     public Program() {
         /* Singleton Design Pattern - Only one instance of Shop available */
@@ -80,14 +78,21 @@ public class Program {
         this.purchaseViewPane = mainFrame.getPurchaseViewPane();
         db.register(purchaseViewPane);
         purchaseViewPane.setSubject(db);
-        purchaseViewPane.update();
         purchaseViewPane.setPurchaseTableModel();
+        purchaseViewPane.update();
 
         this.categoriesViewPane = mainFrame.getCategoriesViewPane();
         db.register(categoriesViewPane);
         categoriesViewPane.setSubject(db);
-        categoriesViewPane.update();
         categoriesViewPane.setCategoriesTableModel();
+        categoriesViewPane.update();
+
+        this.summaryViewPane = mainFrame.getSummaryViewPane();
+        db.register(summaryViewPane);
+        summaryViewPane.setSubject(db);
+//        summaryViewPane.setCategoriesTableModel();
+//        summaryViewPane.setPurchasesTableModel();
+        summaryViewPane.update();
 
         setupCardViewHandlers();
         setupPurchaseViewHandlers();
