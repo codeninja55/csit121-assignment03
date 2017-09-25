@@ -74,7 +74,7 @@ class Assignment2 {
         UIManager.put("Slider.background", Style.blueGrey200());
         UIManager.put("Slider.altTrackColor", Style.red500());
         UIManager.put("Slider.focus", Style.red300());
-//        UIManager.put("Slider.horizontalThumbIcon", Style.);
+        UIManager.put("Slider.horizontalThumbIcon", new ImageIcon("com.cn55.marvel/src/img/slider_red500_24-custom.png"));
 
         UIManager.put("TabbedPane.selected", Style.red500());
         UIManager.put("TabbedPane.selectedForeground", Style.blueGrey500());
