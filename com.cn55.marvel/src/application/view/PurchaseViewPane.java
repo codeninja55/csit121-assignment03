@@ -4,14 +4,14 @@ import application.model.DataObservable;
 import application.model.DataObserver;
 import application.model.purchaseModel.Purchase;
 import application.model.purchaseModel.SortPurchaseType;
+import application.view.builderFactory.PurchaseForm;
 import application.view.customComponents.Style;
 import application.view.customComponents.Toolbar;
 import application.view.customComponents.ToolbarButton;
 import application.view.customComponents.ToolbarButtonListener;
-import application.view.builderFactory.PurchaseForm;
+import application.view.jtableModels.PurchaseTableModel;
 
 import javax.swing.*;
-import javax.swing.table.AbstractTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -26,10 +26,8 @@ public class PurchaseViewPane extends JPanel implements DataObserver {
     private final ToolbarButton summaryBtn;
     private final JComboBox<String> sortPurchaseCombo;
     private final ToolbarButton viewPurchaseBtn;
-
     private final PurchaseTableModel purchaseTableModel;
-    private final JTable purchaseTablePane;
-
+    private final JTable purchasesTable;
     private ToolbarButtonListener createPurchaseListener;
     //private ToolbarButtonListener deletePurchaseListener;
     private ToolbarButtonListener summaryListener;
@@ -46,8 +44,8 @@ public class PurchaseViewPane extends JPanel implements DataObserver {
         DefaultComboBoxModel<String> options = new DefaultComboBoxModel<>();
 
         purchaseTableModel = new PurchaseTableModel();
-        purchaseTablePane = new JTable();
-        JScrollPane tableScrollPane = new JScrollPane(purchaseTablePane);
+        purchasesTable = new JTable(purchaseTableModel);
+        Style.purchasesTableFormatter(purchasesTable);
 
         JPopupMenu tablePopup = new JPopupMenu();
         JMenuItem removePurchase = new JMenuItem("Delete Purchase");
@@ -74,7 +72,7 @@ public class PurchaseViewPane extends JPanel implements DataObserver {
 
         tablePopup.add(removePurchase);
 
-        add(tableScrollPane, BorderLayout.CENTER);
+        add(new JScrollPane(purchasesTable), BorderLayout.CENTER);
 
         /* REGISTRATION OF TOOLBAR BUTTON LISTENERS */
         ToolbarListener handler = new ToolbarListener();
@@ -106,24 +104,6 @@ public class PurchaseViewPane extends JPanel implements DataObserver {
         createPurchaseForm.setVisible(true);
     }
 
-    private void purchasesTableFormatter() {
-        // Formatting for the table where it renders the text.
-        purchaseTablePane.setRowHeight(45);
-        purchaseTablePane.getColumnModel().getColumn(0).setCellRenderer(Style.centerRenderer());
-        purchaseTablePane.getColumnModel().getColumn(1).setCellRenderer(Style.centerRenderer());
-        purchaseTablePane.getColumnModel().getColumn(2).setCellRenderer(Style.centerRenderer());
-        purchaseTablePane.getColumnModel().getColumn(3).setCellRenderer(Style.rightRenderer());
-        purchaseTablePane.getColumnModel().getColumn(4).setCellRenderer(Style.centerRenderer());
-    }
-
-    public void setPurchaseTableModel() {
-        purchaseTablePane.setModel(purchaseTableModel);
-        purchaseTablePane.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        purchasesTableFormatter();
-        this.revalidate();
-        this.repaint();
-    }
-
     public void sortPurchaseTableMode(ArrayList<Purchase> purchases) {
         purchaseTableModel.setData(purchases);
         purchaseTableModel.fireTableDataChanged();
@@ -145,13 +125,11 @@ public class PurchaseViewPane extends JPanel implements DataObserver {
         return sortPurchaseCombo;
     }
 
-    public JTable getPurchaseTablePane() {
-        return purchaseTablePane;
+    public JTable getPurchasesTable() {
+        return purchasesTable;
     }
 
-    /*=========================================================================*/
     /*============================== INNER CLASS ==============================*/
-    /*=========================================================================*/
     /*============================ TOOLBAR LISTENER ===========================*/
     public class ToolbarListener extends MouseAdapter implements ActionListener {
         public void actionPerformed(ActionEvent e) {
@@ -168,41 +146,6 @@ public class PurchaseViewPane extends JPanel implements DataObserver {
             } else if (e.getSource() == summaryBtn)
                 if (summaryListener != null)
                     summaryListener.toolbarButtonEventOccurred();
-        }
-    }
-
-    /*============================= CardTableModel ============================*/
-    public class PurchaseTableModel extends AbstractTableModel {
-
-        private ArrayList<Purchase> purchases;
-        private final String[] tableHeaders = {"Receipt ID","Card ID", "Card Type",
-                "Total Amount","Purchase Time"};
-
-        void setData (ArrayList<Purchase> purchases) { this.purchases = purchases; }
-
-        public String getColumnName(int column) {
-            return tableHeaders[column];
-        }
-
-        public int getRowCount() { return purchases.size(); }
-
-        public int getColumnCount() { return tableHeaders.length; }
-
-        public Object getValueAt(int rowIndex, int columnIndex) {
-            Purchase purchase = purchases.get(rowIndex);
-            switch (columnIndex) {
-                case 0:
-                    return purchase.getReceiptID();
-                case 1:
-                    return purchase.getCardID();
-                case 2:
-                    return purchase.getCardType();
-                case 3:
-                    return Style.currencyFormat().format(purchase.getCategoriesTotal());
-                case 4:
-                    return purchase.getPurchaseTime();
-            }
-            return null;
         }
     }
 }

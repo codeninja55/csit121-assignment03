@@ -1,28 +1,26 @@
 package application.view;
 
-import application.model.categoryModel.Category;
 import application.model.DataObservable;
 import application.model.DataObserver;
+import application.model.categoryModel.Category;
+import application.view.builderFactory.CategoriesForm;
+import application.view.builderFactory.DeleteCategoryForm;
 import application.view.customComponents.Style;
 import application.view.customComponents.Toolbar;
 import application.view.customComponents.ToolbarButton;
 import application.view.customComponents.ToolbarButtonListener;
-import application.view.builderFactory.CategoriesForm;
-import application.view.builderFactory.DeleteCategoryForm;
+import application.view.jtableModels.CategoriesTableModel;
 
 import javax.swing.*;
-import javax.swing.table.AbstractTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 
 public class CategoriesViewPane extends JPanel implements DataObserver {
     private DataObservable dataDAO;
 
     private final CategoriesTableModel categoriesTableModel;
-    private final JTable categoriesTablePane;
+    private final JTable categoriesTable;
 
     private ToolbarButtonListener createCategoryListener;
     private ToolbarButtonListener deleteCategoryListener;
@@ -34,8 +32,8 @@ public class CategoriesViewPane extends JPanel implements DataObserver {
         ToolbarButton deleteCategoryBtn = new ToolbarButton("Delete", Style.deleteIcon());
 
         categoriesTableModel = new CategoriesTableModel();
-        categoriesTablePane = new JTable();
-        JScrollPane tableScrollPane = new JScrollPane(categoriesTablePane);
+        categoriesTable = new JTable(categoriesTableModel);
+        Style.categoriesTableFormatter(categoriesTable);
 
         setLayout(new BorderLayout());
 
@@ -44,7 +42,7 @@ public class CategoriesViewPane extends JPanel implements DataObserver {
         toolbar.getLeftToolbar().add(deleteCategoryBtn);
         add(toolbar, BorderLayout.NORTH);
 
-        add(tableScrollPane, BorderLayout.CENTER);
+        add(new JScrollPane(categoriesTable), BorderLayout.CENTER);
 
         /* REGISTRATION OF TOOLBAR BUTTON LISTENERS */
         createCategoryBtn.addActionListener((ActionEvent e) -> {
@@ -65,23 +63,6 @@ public class CategoriesViewPane extends JPanel implements DataObserver {
 
     public void setDeleteCategoryListener(ToolbarButtonListener listener) {
         this.deleteCategoryListener = listener;
-    }
-
-    private void categoriesTableFormatter() {
-        // Formatting for the table where it renders the text.
-        categoriesTablePane.setRowHeight(45);
-        categoriesTablePane.getColumnModel().getColumn(0).setCellRenderer(Style.centerRenderer());
-        categoriesTablePane.getColumnModel().getColumn(1).setCellRenderer(Style.centerRenderer());
-        categoriesTablePane.getColumnModel().getColumn(2).setCellRenderer(Style.leftRenderer());
-        categoriesTablePane.getColumnModel().getColumn(3).setCellRenderer(Style.rightRenderer());
-    }
-
-    public void setCategoriesTableModel() {
-        categoriesTablePane.setModel(categoriesTableModel);
-        categoriesTablePane.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        categoriesTableFormatter();
-        this.revalidate();
-        this.repaint();
     }
 
     public void setCreateCategoryForm(CategoriesForm createCategoryForm) {
@@ -107,46 +88,4 @@ public class CategoriesViewPane extends JPanel implements DataObserver {
     }
 
     /*============================== ACCESSORS  ==============================*/
-
-    /*=========================================================================*/
-    /*============================== INNER CLASS ==============================*/
-    /*=========================================================================*/
-
-    /*========================== CategoriesTableModel =========================*/
-    public class CategoriesTableModel extends AbstractTableModel {
-        private ArrayList<Category> categories;
-        private final String[] tableHeaders = {"ID", "Name", "Description", "Total Amount"};
-
-        void setData(ArrayList<Category> categories) {
-            Collections.sort(categories);
-            categories.sort(Comparator.comparingInt(Category::getId));
-            this.categories = categories;
-        }
-
-        public String getColumnName(int column) { return tableHeaders[column]; }
-
-        public int getRowCount() {
-            return categories.size();
-        }
-
-        public int getColumnCount() {
-            return tableHeaders.length;
-        }
-
-        public Object getValueAt(int rowIndex, int columnIndex) {
-            Category category = categories.get(rowIndex);
-            switch (columnIndex) {
-                case 0:
-                    return category.getId();
-                case 1:
-                    return category.getName();
-                case 2:
-                    return category.getDescription();
-                case 3:
-                    return Style.currencyFormat().format(category.getTotalAmount());
-            }
-            return null;
-        }
-    }
-
 }

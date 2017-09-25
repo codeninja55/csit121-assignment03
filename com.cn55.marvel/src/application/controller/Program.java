@@ -7,10 +7,7 @@ import application.model.categoryModel.Category;
 import application.model.purchaseModel.Purchase;
 import application.model.purchaseModel.PurchaseType;
 import application.model.purchaseModel.SortPurchaseType;
-import application.view.CardViewPane;
-import application.view.CategoriesViewPane;
-import application.view.MainFrame;
-import application.view.PurchaseViewPane;
+import application.view.*;
 import application.view.builderFactory.*;
 import application.view.customComponents.ResultsPane;
 
@@ -36,6 +33,7 @@ public class Program {
     private final CardViewPane cardViewPane;
     private final PurchaseViewPane purchaseViewPane;
     private final CategoriesViewPane categoriesViewPane;
+    private final SummaryViewPane summaryViewPane;
 
     public Program() {
         /* Singleton Design Pattern - Only one instance of Shop available */
@@ -75,19 +73,23 @@ public class Program {
         db.register(cardViewPane);
         cardViewPane.setSubject(db);
         cardViewPane.update();
-        cardViewPane.setCardTableModel();
 
         this.purchaseViewPane = mainFrame.getPurchaseViewPane();
         db.register(purchaseViewPane);
         purchaseViewPane.setSubject(db);
         purchaseViewPane.update();
-        purchaseViewPane.setPurchaseTableModel();
 
         this.categoriesViewPane = mainFrame.getCategoriesViewPane();
         db.register(categoriesViewPane);
         categoriesViewPane.setSubject(db);
         categoriesViewPane.update();
-        categoriesViewPane.setCategoriesTableModel();
+
+        this.summaryViewPane = mainFrame.getSummaryViewPane();
+        db.register(summaryViewPane);
+        summaryViewPane.setSubject(db);
+//        summaryViewPane.setCategoriesTableModel();
+//        summaryViewPane.setPurchasesTableModel();
+        summaryViewPane.update();
 
         setupCardViewHandlers();
         setupPurchaseViewHandlers();
@@ -180,10 +182,10 @@ public class Program {
 
         /*TOOLBAR | VIEW BUTTON*/
         cardViewPane.setViewCardListener(() -> {
-            if (cardViewPane.getCardTablePane().getSelectedRow() >= 0) {
+            if (cardViewPane.getCardsTable().getSelectedRow() >= 0) {
                 removeCardForms();
-                int selectedRow = cardViewPane.getCardTablePane().getSelectedRow();
-                final String cardID = (String)cardViewPane.getCardTablePane().getValueAt(selectedRow, 0);
+                int selectedRow = cardViewPane.getCardsTable().getSelectedRow();
+                final String cardID = (String)cardViewPane.getCardsTable().getValueAt(selectedRow, 0);
                 showResults(cardViewPane, printCard(cardID,"CARD"));
             }
         });
@@ -279,9 +281,9 @@ public class Program {
 
         /*TOOLBAR | VIEW  BUTTON*/
         purchaseViewPane.setViewPurchaseListener(() -> {
-            if (purchaseViewPane.getPurchaseTablePane().getSelectedRow() >= 0) {
-                int selectedRow = purchaseViewPane.getPurchaseTablePane().getSelectedRow();
-                final int receiptID = (Integer)purchaseViewPane.getPurchaseTablePane().getValueAt(selectedRow, 0);
+            if (purchaseViewPane.getPurchasesTable().getSelectedRow() >= 0) {
+                int selectedRow = purchaseViewPane.getPurchasesTable().getSelectedRow();
+                final int receiptID = (Integer)purchaseViewPane.getPurchasesTable().getValueAt(selectedRow, 0);
 
                 String resultsText = db.getAllPurchases().values().stream().filter(p -> p.getReceiptID() == receiptID)
                         .map(Purchase::toString).collect(Collectors.joining("\n"));
