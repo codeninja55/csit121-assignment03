@@ -1,22 +1,20 @@
 package application.view;
 
-import application.model.categoryModel.Category;
 import application.model.DataObservable;
 import application.model.DataObserver;
+import application.model.categoryModel.Category;
+import application.view.builderFactory.CategoriesForm;
+import application.view.builderFactory.DeleteCategoryForm;
 import application.view.customComponents.Style;
 import application.view.customComponents.Toolbar;
 import application.view.customComponents.ToolbarButton;
 import application.view.customComponents.ToolbarButtonListener;
-import application.view.builderFactory.CategoriesForm;
-import application.view.builderFactory.DeleteCategoryForm;
+import application.view.jtableModels.CategoriesTableModel;
 
 import javax.swing.*;
-import javax.swing.table.AbstractTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 
 public class CategoriesViewPane extends JPanel implements DataObserver {
     private DataObservable dataDAO;
@@ -107,46 +105,4 @@ public class CategoriesViewPane extends JPanel implements DataObserver {
     }
 
     /*============================== ACCESSORS  ==============================*/
-
-    /*=========================================================================*/
-    /*============================== INNER CLASS ==============================*/
-    /*=========================================================================*/
-
-    /*========================== CategoriesTableModel =========================*/
-    public class CategoriesTableModel extends AbstractTableModel {
-        private ArrayList<Category> categories;
-        private final String[] tableHeaders = {"ID", "Name", "Description", "Total Amount"};
-
-        void setData(ArrayList<Category> categories) {
-            Collections.sort(categories);
-            categories.sort(Comparator.comparingInt(Category::getId));
-            this.categories = categories;
-        }
-
-        public String getColumnName(int column) { return tableHeaders[column]; }
-
-        public int getRowCount() {
-            return categories.size();
-        }
-
-        public int getColumnCount() {
-            return tableHeaders.length;
-        }
-
-        public Object getValueAt(int rowIndex, int columnIndex) {
-            Category category = categories.get(rowIndex);
-            switch (columnIndex) {
-                case 0:
-                    return category.getId();
-                case 1:
-                    return category.getName();
-                case 2:
-                    return category.getDescription();
-                case 3:
-                    return Style.currencyFormat().format(category.getTotalAmount());
-            }
-            return null;
-        }
-    }
-
 }
