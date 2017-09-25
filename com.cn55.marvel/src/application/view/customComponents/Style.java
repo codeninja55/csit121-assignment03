@@ -127,6 +127,7 @@ public class Style {
     }
 
     public static void cardTableFormatter(JTable table) {
+        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         table.setRowHeight(45);
         table.getColumnModel().getColumn(0).setCellRenderer(Style.centerRenderer());
         table.getColumnModel().getColumn(0).setPreferredWidth(1);
@@ -141,6 +142,7 @@ public class Style {
     }
 
     public static void purchasesTableFormatter(JTable table) {
+        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         table.setRowHeight(45);
         table.getColumnModel().getColumn(0).setCellRenderer(Style.centerRenderer());
         table.getColumnModel().getColumn(1).setCellRenderer(Style.centerRenderer());
@@ -150,6 +152,7 @@ public class Style {
     }
 
     public static void categoriesTableFormatter(JTable table) {
+        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         table.setRowHeight(45);
         table.getColumnModel().getColumn(0).setCellRenderer(Style.centerRenderer());
         table.getColumnModel().getColumn(1).setCellRenderer(Style.centerRenderer());
