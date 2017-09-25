@@ -20,7 +20,6 @@ public class CategoriesViewPane extends JPanel implements DataObserver {
     private DataObservable dataDAO;
 
     private final CategoriesTableModel categoriesTableModel;
-    private final JTable categoriesTable;
 
     private ToolbarButtonListener createCategoryListener;
     private ToolbarButtonListener deleteCategoryListener;
@@ -32,7 +31,7 @@ public class CategoriesViewPane extends JPanel implements DataObserver {
         ToolbarButton deleteCategoryBtn = new ToolbarButton("Delete", Style.deleteIcon());
 
         categoriesTableModel = new CategoriesTableModel();
-        categoriesTable = new JTable(categoriesTableModel);
+        JTable categoriesTable = new JTable(categoriesTableModel);
         Style.categoriesTableFormatter(categoriesTable);
 
         setLayout(new BorderLayout());
