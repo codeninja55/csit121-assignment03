@@ -31,8 +31,8 @@ public class DeleteCategoryForm extends BaseForm implements FormFactory, DeleteF
         JPanel rbSubPane = new JPanel(new GridLayout(1, 3));
         ButtonGroup categoryRBGroup = new ButtonGroup();
         FormLabel deleteTypeLabel = new FormLabel("Delete By: ");
-        FormRadioButton idRB = new FormRadioButton("Category ID");
-        FormRadioButton nameRB = new FormRadioButton("Category Name");
+        MaterialRadioButton idRB = new MaterialRadioButton("Category ID");
+        MaterialRadioButton nameRB = new MaterialRadioButton("Category Name");
 
         categoryIDLabel = new FormLabel("Category ID");
         categoryIDTextField = new FormTextField(20);

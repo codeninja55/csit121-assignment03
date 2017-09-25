@@ -36,9 +36,9 @@ public class PurchaseForm extends BaseForm implements FormFactory, PurchaseFormV
     private final JComboBox<String> existingCardCombo;
 
     private final FormLabel cardTypeLabel;
-    private final FormRadioButton anonCardRB;
-    private final FormRadioButton basicCardRB;
-    private final FormRadioButton premiumCardRB;
+    private final MaterialRadioButton anonCardRB;
+    private final MaterialRadioButton basicCardRB;
+    private final MaterialRadioButton premiumCardRB;
 
     private final FormLabel cardNameLabel;
     private final FormTextField cardNameTextField;
@@ -78,9 +78,9 @@ public class PurchaseForm extends BaseForm implements FormFactory, PurchaseFormV
 
         cardTypeLabel = new FormLabel("Card Type: ");
         ButtonGroup cardTypeRBGroup = new ButtonGroup();
-        anonCardRB = new FormRadioButton(CardType.AnonCard.getName());
-        basicCardRB = new FormRadioButton(CardType.BasicCard.getName());
-        premiumCardRB = new FormRadioButton(CardType.PremiumCard.getName());
+        anonCardRB = new MaterialRadioButton(CardType.AnonCard.getName());
+        basicCardRB = new MaterialRadioButton(CardType.BasicCard.getName());
+        premiumCardRB = new MaterialRadioButton(CardType.PremiumCard.getName());
 
         cardNameLabel = new FormLabel("Customer Name: ");
         cardNameTextField = new FormTextField(20);
