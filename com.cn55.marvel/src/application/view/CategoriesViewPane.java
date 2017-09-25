@@ -65,19 +65,10 @@ public class CategoriesViewPane extends JPanel implements DataObserver {
         this.deleteCategoryListener = listener;
     }
 
-    private void categoriesTableFormatter() {
-        // Formatting for the table where it renders the text.
-        categoriesTablePane.setRowHeight(45);
-        categoriesTablePane.getColumnModel().getColumn(0).setCellRenderer(Style.centerRenderer());
-        categoriesTablePane.getColumnModel().getColumn(1).setCellRenderer(Style.centerRenderer());
-        categoriesTablePane.getColumnModel().getColumn(2).setCellRenderer(Style.leftRenderer());
-        categoriesTablePane.getColumnModel().getColumn(3).setCellRenderer(Style.rightRenderer());
-    }
-
     public void setCategoriesTableModel() {
         categoriesTablePane.setModel(categoriesTableModel);
         categoriesTablePane.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        categoriesTableFormatter();
+        Style.categoriesTableFormatter(categoriesTablePane);
         this.revalidate();
         this.repaint();
     }

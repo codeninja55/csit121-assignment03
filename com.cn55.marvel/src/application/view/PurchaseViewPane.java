@@ -26,10 +26,8 @@ public class PurchaseViewPane extends JPanel implements DataObserver {
     private final ToolbarButton summaryBtn;
     private final JComboBox<String> sortPurchaseCombo;
     private final ToolbarButton viewPurchaseBtn;
-
     private final PurchaseTableModel purchaseTableModel;
     private final JTable purchaseTablePane;
-
     private ToolbarButtonListener createPurchaseListener;
     //private ToolbarButtonListener deletePurchaseListener;
     private ToolbarButtonListener summaryListener;
@@ -106,20 +104,10 @@ public class PurchaseViewPane extends JPanel implements DataObserver {
         createPurchaseForm.setVisible(true);
     }
 
-    private void purchasesTableFormatter() {
-        // Formatting for the table where it renders the text.
-        purchaseTablePane.setRowHeight(45);
-        purchaseTablePane.getColumnModel().getColumn(0).setCellRenderer(Style.centerRenderer());
-        purchaseTablePane.getColumnModel().getColumn(1).setCellRenderer(Style.centerRenderer());
-        purchaseTablePane.getColumnModel().getColumn(2).setCellRenderer(Style.centerRenderer());
-        purchaseTablePane.getColumnModel().getColumn(3).setCellRenderer(Style.rightRenderer());
-        purchaseTablePane.getColumnModel().getColumn(4).setCellRenderer(Style.centerRenderer());
-    }
-
     public void setPurchaseTableModel() {
         purchaseTablePane.setModel(purchaseTableModel);
         purchaseTablePane.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        purchasesTableFormatter();
+        Style.purchasesTableFormatter(purchaseTablePane);
         this.revalidate();
         this.repaint();
     }

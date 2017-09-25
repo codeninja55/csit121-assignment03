@@ -126,12 +126,45 @@ public class Style {
         return formatter;
     }
 
+    public static void cardTableFormatter(JTable table) {
+        table.setRowHeight(45);
+        table.getColumnModel().getColumn(0).setCellRenderer(Style.centerRenderer());
+        table.getColumnModel().getColumn(0).setPreferredWidth(1);
+        table.getColumnModel().getColumn(1).setCellRenderer(Style.centerRenderer());
+        table.getColumnModel().getColumn(1).setPreferredWidth(5);
+        table.getColumnModel().getColumn(2).setCellRenderer(Style.centerRenderer());
+        table.getColumnModel().getColumn(3).setCellRenderer(Style.centerRenderer());
+        table.getColumnModel().getColumn(4).setCellRenderer(Style.rightRenderer());
+        table.getColumnModel().getColumn(4).setPreferredWidth(5);
+        table.getColumnModel().getColumn(5).setCellRenderer(Style.rightRenderer());
+        table.getColumnModel().getColumn(5).setPreferredWidth(5);
+    }
+
+    public static void purchasesTableFormatter(JTable table) {
+        table.setRowHeight(45);
+        table.getColumnModel().getColumn(0).setCellRenderer(Style.centerRenderer());
+        table.getColumnModel().getColumn(1).setCellRenderer(Style.centerRenderer());
+        table.getColumnModel().getColumn(2).setCellRenderer(Style.centerRenderer());
+        table.getColumnModel().getColumn(3).setCellRenderer(Style.rightRenderer());
+        table.getColumnModel().getColumn(4).setCellRenderer(Style.centerRenderer());
+    }
+
+    public static void categoriesTableFormatter(JTable table) {
+        table.setRowHeight(45);
+        table.getColumnModel().getColumn(0).setCellRenderer(Style.centerRenderer());
+        table.getColumnModel().getColumn(1).setCellRenderer(Style.centerRenderer());
+        table.getColumnModel().getColumn(2).setCellRenderer(Style.leftRenderer());
+        table.getColumnModel().getColumn(3).setCellRenderer(Style.rightRenderer());
+    }
+
     public static ImageIcon homeIcon() { return new ImageIcon("com.cn55.marvel/src/img/home_white_48.png"); }
     public static ImageIcon cardIcon() {
         return new ImageIcon("com.cn55.marvel/src/img/card_membership_white_48.png");
     }
     public static ImageIcon purchaseIcon() { return new ImageIcon("com.cn55.marvel/src/img/shopping_cart_white_48.png"); }
     public static ImageIcon categoryIcon() { return new ImageIcon("com.cn55.marvel/src/img/view_list_white_48.png"); }
+    public static ImageIcon summaryViewPaneIcon() { return new ImageIcon("com.cn55.marvel/src/img/assessment_white_48.png"); }
+    public static ImageIcon refreshIcon() { return new ImageIcon("com.cn55.marvel/src/img/refresh_white_48.png"); }
     public static ImageIcon createIcon() { return new ImageIcon("com.cn55.marvel/src/img/add_circle_white_36.png"); }
     public static ImageIcon deleteIcon() { return new ImageIcon("com.cn55.marvel/src/img/remove_circle_white_36.png"); }
     public static ImageIcon deleteActionIcon() { return new ImageIcon("com.cn55.marvel/src/img/delete_white_36.png"); }

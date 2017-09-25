@@ -112,25 +112,10 @@ public class CardViewPane extends JPanel implements DataObserver {
         form.setVisible(true);
     }
 
-    private void cardTableFormatter() {
-        // Formatting for the table where it renders the text.
-        cardTablePane.setRowHeight(45);
-        cardTablePane.getColumnModel().getColumn(0).setCellRenderer(Style.centerRenderer());
-        cardTablePane.getColumnModel().getColumn(0).setPreferredWidth(1);
-        cardTablePane.getColumnModel().getColumn(1).setCellRenderer(Style.centerRenderer());
-        cardTablePane.getColumnModel().getColumn(1).setPreferredWidth(5);
-        cardTablePane.getColumnModel().getColumn(2).setCellRenderer(Style.centerRenderer());
-        cardTablePane.getColumnModel().getColumn(3).setCellRenderer(Style.centerRenderer());
-        cardTablePane.getColumnModel().getColumn(4).setCellRenderer(Style.rightRenderer());
-        cardTablePane.getColumnModel().getColumn(4).setPreferredWidth(5);
-        cardTablePane.getColumnModel().getColumn(5).setCellRenderer(Style.rightRenderer());
-        cardTablePane.getColumnModel().getColumn(5).setPreferredWidth(5);
-    }
-
     public void setCardTableModel() {
         cardTablePane.setModel(cardTableModel);
         cardTablePane.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        cardTableFormatter();
+        Style.cardTableFormatter(cardTablePane);
         this.revalidate();
         this.repaint();
     }
