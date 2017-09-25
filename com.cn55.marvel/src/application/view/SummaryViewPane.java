@@ -2,6 +2,7 @@ package application.view;
 import application.model.DataObservable;
 import application.model.DataObserver;
 import application.model.categoryModel.Category;
+import application.view.customComponents.MaterialSlider;
 import application.view.customComponents.Style;
 import application.view.customComponents.Toolbar;
 import application.view.customComponents.ToolbarButton;
@@ -14,6 +15,7 @@ import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Hashtable;
 
 public class SummaryViewPane extends JPanel implements DataObserver {
     private DataObservable dataDAO;
@@ -51,7 +53,24 @@ public class SummaryViewPane extends JPanel implements DataObserver {
         // Date Picker FROM
         // Date Picker TO
         // Days Slider
+        MaterialSlider daysSlider = new MaterialSlider(JSlider.HORIZONTAL, 0, 6, 0);
+
+        Hashtable<Integer, JComponent> daysSliderValues = new Hashtable<>();
+        daysSliderValues.put(1, new JLabel("Monday"));
+        daysSliderValues.put(2, new JLabel("Tuesday"));
+        daysSliderValues.put(3, new JLabel("Wednesday"));
+        daysSliderValues.put(4, new JLabel("Thursday"));
+        daysSliderValues.put(5, new JLabel("Friday"));
+        daysSliderValues.put(6, new JLabel("Saturday"));
+        daysSliderValues.put(7, new JLabel("Sunday"));
+        daysSliderValues.put(0, new JLabel("Any Day"));
+        daysSlider.setLabelTable(daysSliderValues);
+
         // Time of day slider
+
+
+        toolbar.getLeftToolbar().add(daysSlider);
+
         toolbar.getRightToolbar().add(refreshTableBtn);
         toolbar.getRightToolbar().add(tableViewCombo);
         add(toolbar, BorderLayout.NORTH);
