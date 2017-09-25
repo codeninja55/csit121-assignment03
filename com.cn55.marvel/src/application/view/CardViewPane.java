@@ -28,7 +28,7 @@ public class CardViewPane extends JPanel implements DataObserver {
     private final ToolbarButton viewBtn;
     private final CardTableModel cardTableModel;
     private final JComboBox<String> sortedCombo;
-    private final JTable cardTablePane;
+    private final JTable cardsTable;
 
     private ToolbarButtonListener createCardListener;
     private ToolbarButtonListener searchCardListener;
@@ -44,7 +44,8 @@ public class CardViewPane extends JPanel implements DataObserver {
         viewBtn = new ToolbarButton("View", Style.viewIcon());
 
         cardTableModel = new CardTableModel();
-        cardTablePane = new JTable();
+        cardsTable = new JTable(cardTableModel);
+        Style.cardTableFormatter(cardsTable);
         setLayout(new BorderLayout());
 
         /* SORTED COMBO BOX */
@@ -66,7 +67,7 @@ public class CardViewPane extends JPanel implements DataObserver {
         toolbar.getRightToolbar().add(sortedCombo);
         add(toolbar, BorderLayout.NORTH);
 
-        add(new JScrollPane(cardTablePane), BorderLayout.CENTER);
+        add(new JScrollPane(cardsTable), BorderLayout.CENTER);
 
         /* REGISTRATION OF TOOLBAR BUTTON LISTENERS */
         ToolbarListener handler = new ToolbarListener();
@@ -110,13 +111,6 @@ public class CardViewPane extends JPanel implements DataObserver {
         form.setVisible(true);
     }
 
-    public void setCardTableModel() {
-        cardTablePane.setModel(cardTableModel);
-        Style.cardTableFormatter(cardTablePane);
-        this.revalidate();
-        this.repaint();
-    }
-
     public void updateTableData(ArrayList<Card> allCards) {
         cardTableModel.setData(allCards);
         cardTableModel.fireTableDataChanged();
@@ -138,8 +132,8 @@ public class CardViewPane extends JPanel implements DataObserver {
         return sortedCombo;
     }
 
-    public JTable getCardTablePane() {
-        return cardTablePane;
+    public JTable getCardsTable() {
+        return cardsTable;
     }
 
     /*============================== INNER CLASS ==============================*/

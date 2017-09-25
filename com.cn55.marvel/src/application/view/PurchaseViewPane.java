@@ -27,7 +27,7 @@ public class PurchaseViewPane extends JPanel implements DataObserver {
     private final JComboBox<String> sortPurchaseCombo;
     private final ToolbarButton viewPurchaseBtn;
     private final PurchaseTableModel purchaseTableModel;
-    private final JTable purchaseTablePane;
+    private final JTable purchasesTable;
     private ToolbarButtonListener createPurchaseListener;
     //private ToolbarButtonListener deletePurchaseListener;
     private ToolbarButtonListener summaryListener;
@@ -44,7 +44,8 @@ public class PurchaseViewPane extends JPanel implements DataObserver {
         DefaultComboBoxModel<String> options = new DefaultComboBoxModel<>();
 
         purchaseTableModel = new PurchaseTableModel();
-        purchaseTablePane = new JTable();
+        purchasesTable = new JTable(purchaseTableModel);
+        Style.purchasesTableFormatter(purchasesTable);
 
         JPopupMenu tablePopup = new JPopupMenu();
         JMenuItem removePurchase = new JMenuItem("Delete Purchase");
@@ -71,7 +72,7 @@ public class PurchaseViewPane extends JPanel implements DataObserver {
 
         tablePopup.add(removePurchase);
 
-        add(new JScrollPane(purchaseTablePane), BorderLayout.CENTER);
+        add(new JScrollPane(purchasesTable), BorderLayout.CENTER);
 
         /* REGISTRATION OF TOOLBAR BUTTON LISTENERS */
         ToolbarListener handler = new ToolbarListener();
@@ -103,13 +104,6 @@ public class PurchaseViewPane extends JPanel implements DataObserver {
         createPurchaseForm.setVisible(true);
     }
 
-    public void setPurchaseTableModel() {
-        purchaseTablePane.setModel(purchaseTableModel);
-        Style.purchasesTableFormatter(purchaseTablePane);
-        this.revalidate();
-        this.repaint();
-    }
-
     public void sortPurchaseTableMode(ArrayList<Purchase> purchases) {
         purchaseTableModel.setData(purchases);
         purchaseTableModel.fireTableDataChanged();
@@ -131,8 +125,8 @@ public class PurchaseViewPane extends JPanel implements DataObserver {
         return sortPurchaseCombo;
     }
 
-    public JTable getPurchaseTablePane() {
-        return purchaseTablePane;
+    public JTable getPurchasesTable() {
+        return purchasesTable;
     }
 
     /*============================== INNER CLASS ==============================*/

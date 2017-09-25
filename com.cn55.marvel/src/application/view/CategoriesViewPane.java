@@ -20,7 +20,7 @@ public class CategoriesViewPane extends JPanel implements DataObserver {
     private DataObservable dataDAO;
 
     private final CategoriesTableModel categoriesTableModel;
-    private final JTable categoriesTablePane;
+    private final JTable categoriesTable;
 
     private ToolbarButtonListener createCategoryListener;
     private ToolbarButtonListener deleteCategoryListener;
@@ -32,7 +32,8 @@ public class CategoriesViewPane extends JPanel implements DataObserver {
         ToolbarButton deleteCategoryBtn = new ToolbarButton("Delete", Style.deleteIcon());
 
         categoriesTableModel = new CategoriesTableModel();
-        categoriesTablePane = new JTable();
+        categoriesTable = new JTable(categoriesTableModel);
+        Style.categoriesTableFormatter(categoriesTable);
 
         setLayout(new BorderLayout());
 
@@ -41,7 +42,7 @@ public class CategoriesViewPane extends JPanel implements DataObserver {
         toolbar.getLeftToolbar().add(deleteCategoryBtn);
         add(toolbar, BorderLayout.NORTH);
 
-        add(new JScrollPane(categoriesTablePane), BorderLayout.CENTER);
+        add(new JScrollPane(categoriesTable), BorderLayout.CENTER);
 
         /* REGISTRATION OF TOOLBAR BUTTON LISTENERS */
         createCategoryBtn.addActionListener((ActionEvent e) -> {
@@ -62,13 +63,6 @@ public class CategoriesViewPane extends JPanel implements DataObserver {
 
     public void setDeleteCategoryListener(ToolbarButtonListener listener) {
         this.deleteCategoryListener = listener;
-    }
-
-    public void setCategoriesTableModel() {
-        categoriesTablePane.setModel(categoriesTableModel);
-        Style.categoriesTableFormatter(categoriesTablePane);
-        this.revalidate();
-        this.repaint();
     }
 
     public void setCreateCategoryForm(CategoriesForm createCategoryForm) {
