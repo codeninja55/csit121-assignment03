@@ -97,7 +97,6 @@ public class DataDAO implements DataObservable, CardsDAO, PurchaseDAO, CategoryD
     private BufferedReader openReadFile(Path path) throws FileNotFoundException {
         return new BufferedReader(new FileReader(path.toString()));
     }
-
     public void readData() {
         /* Strategy Design Pattern - Implementation of writing and reading buried in concrete classes */
         ImportFromCSV categoriesImporter = new CategoriesImport();
@@ -112,11 +111,9 @@ public class DataDAO implements DataObservable, CardsDAO, PurchaseDAO, CategoryD
             System.out.println("FileNotFoundException: " + e.getMessage());
         }
     }
-
     private BufferedWriter openWriteFile(Path path) throws IOException {
         return new BufferedWriter(new FileWriter(path.toString()));
     }
-
     public void writeData() {
         ExportToCSV categoriesExport = new CategoriesExport();
         ExportToCSV cardsExport = new CardsExport();
@@ -142,8 +139,8 @@ public class DataDAO implements DataObservable, CardsDAO, PurchaseDAO, CategoryD
     public void notifyObservers() {
         dataObservers.forEach(DataObserver::update);
     }
-    public TreeMap<String,Card> getCardsUpdate(DataObserver who) { return new TreeMap<>(cards); }
-    public TreeMap<Integer,Purchase> getPurchaseUpdate(DataObserver who) {
+    public TreeMap<String, Card> getCardsUpdate(DataObserver who) { return new TreeMap<>(cards); }
+    public TreeMap<Integer, Purchase> getPurchaseUpdate(DataObserver who) {
         return new TreeMap<>(purchases);
     }
     public TreeMap<Integer, Category> getCategoriesUpdate(DataObserver who) {
