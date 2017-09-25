@@ -2,10 +2,7 @@ package application.view;
 import application.model.DataObservable;
 import application.model.DataObserver;
 import application.model.categoryModel.Category;
-import application.view.customComponents.MaterialSlider;
-import application.view.customComponents.Style;
-import application.view.customComponents.Toolbar;
-import application.view.customComponents.ToolbarButton;
+import application.view.customComponents.*;
 import application.view.jtableModels.CardTableModel;
 import application.view.jtableModels.CategoriesTableModel;
 import application.view.jtableModels.PurchaseTableModel;
@@ -53,17 +50,18 @@ public class SummaryViewPane extends JPanel implements DataObserver {
         // Date Picker FROM
         // Date Picker TO
         // Days Slider
-        MaterialSlider daysSlider = new MaterialSlider(JSlider.HORIZONTAL, 0, 6, 0);
+        MaterialSlider daysSlider = new MaterialSlider(JSlider.HORIZONTAL, 0, 7, 7);
 
         Hashtable<Integer, JComponent> daysSliderValues = new Hashtable<>();
-        daysSliderValues.put(1, new JLabel("Monday"));
-        daysSliderValues.put(2, new JLabel("Tuesday"));
-        daysSliderValues.put(3, new JLabel("Wednesday"));
-        daysSliderValues.put(4, new JLabel("Thursday"));
-        daysSliderValues.put(5, new JLabel("Friday"));
-        daysSliderValues.put(6, new JLabel("Saturday"));
-        daysSliderValues.put(7, new JLabel("Sunday"));
-        daysSliderValues.put(0, new JLabel("Any Day"));
+        daysSliderValues.put(1, new FormLabel("Monday", Style.grey50()));
+        daysSliderValues.put(2, new FormLabel("Tuesday", Style.grey50()));
+        daysSliderValues.put(3, new FormLabel("Wednesday", Style.grey50()));
+        daysSliderValues.put(4, new FormLabel("Thursday", Style.grey50()));
+        daysSliderValues.put(5, new FormLabel("Friday", Style.grey50()));
+        daysSliderValues.put(6, new FormLabel("Saturday", Style.grey50()));
+        daysSliderValues.put(0, new FormLabel("Sunday", Style.grey50()));
+        daysSliderValues.put(7, new FormLabel("Any Day", Style.grey50()));
+
         daysSlider.setLabelTable(daysSliderValues);
 
         // Time of day slider

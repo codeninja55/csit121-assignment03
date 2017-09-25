@@ -70,11 +70,12 @@ class Assignment2 {
         UIManager.put("ScrollBar.foreground", Style.red500());
         UIManager.put("ScrollBar.track", Style.red500());
 
-        UIManager.put("Slider.foreground", Style.red500());
-        UIManager.put("Slider.background", Style.blueGrey200());
         UIManager.put("Slider.altTrackColor", Style.red500());
-        UIManager.put("Slider.focus", Style.red300());
+        UIManager.put("Slider.focus", Style.grey500());
         UIManager.put("Slider.horizontalThumbIcon", new ImageIcon("com.cn55.marvel/src/img/slider_red500_24-custom.png"));
+        UIManager.put("Slider.tickColour", Style.red500());
+        UIManager.put("Slider.trackWidth", 500);
+
 
         UIManager.put("TabbedPane.selected", Style.red500());
         UIManager.put("TabbedPane.selectedForeground", Style.blueGrey500());
