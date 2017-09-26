@@ -17,7 +17,7 @@ public class MaterialSlider extends JSlider {
         setPaintTrack(true);
 
         Dimension dim = getPreferredSize();
-        dim.width = 900;
+        dim.width = 850;
         dim.height = 100;
         setMinimumSize(dim);
         setPreferredSize(dim);
