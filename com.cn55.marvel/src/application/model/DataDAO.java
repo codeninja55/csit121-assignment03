@@ -146,4 +146,6 @@ public class DataDAO implements DataObservable, CardsDAO, PurchaseDAO, CategoryD
     public TreeMap<Integer, Category> getCategoriesUpdate(DataObserver who) {
         return new TreeMap<>(categories);
     }
+    public LocalDateTime getFirstPurchaseDate(DataObserver who) { return firstPurchaseDate; }
+    public LocalDateTime getLastPurchaseDate(DataObserver who) { return lastPurchaseDate; }
 }
