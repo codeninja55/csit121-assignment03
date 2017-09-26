@@ -94,6 +94,7 @@ public class Program {
         setupCardViewHandlers();
         setupPurchaseViewHandlers();
         setupCategoriesViewHandlers();
+        setupSummaryViewHandlers();
     }
 
     /*============================== REGISTER AND HANDLE EVENTS ==============================*/
@@ -353,6 +354,27 @@ public class Program {
                 if (confirm == JOptionPane.OK_OPTION) { shop.deleteCategory(categoryID); }
                 removeCategoryForms();
             });
+        });
+    }
+
+    /*============================== SUMMARY VIEW HANDLERS ==============================*/
+    private void setupSummaryViewHandlers() {
+        summaryViewPane.setRefreshListener((SummaryView e) -> {
+            if (e.getTableOption().equals("Categories")) {
+                ArrayList<Category> clonedCategories = db.getAllCategories().values().stream().map(Category::new)
+                        .collect(Collectors.toCollection(ArrayList::new));
+
+                clonedCategories.forEach((Category c) -> {
+                    double newTotal = db.getAllPurchases().values().stream()
+                            .filter(p -> p.getPurchaseTime().getDayOfWeek().getValue() == e.getDaysOption())
+                            .mapToDouble(p -> p.getCategories().get(c.getId()).getAmount()).sum();
+                    c.updateTotalAmount(newTotal);
+                });
+
+                summaryViewPane.getCategoryTableModel().setData(clonedCategories);
+                summaryViewPane.revalidate();
+                summaryViewPane.repaint();
+            }
         });
     }
 

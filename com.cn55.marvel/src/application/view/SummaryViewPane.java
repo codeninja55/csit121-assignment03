@@ -1,7 +1,9 @@
 package application.view;
+
 import application.model.DataObservable;
 import application.model.DataObserver;
-import application.model.categoryModel.Category;
+import application.view.builderFactory.SummaryListener;
+import application.view.builderFactory.SummaryView;
 import application.view.customComponents.*;
 import application.view.jtableModels.CardTableModel;
 import application.view.jtableModels.CategoriesTableModel;
@@ -10,19 +12,25 @@ import application.view.jtableModels.PurchaseTableModel;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ItemEvent;
+import java.time.DayOfWeek;
+import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Hashtable;
+import java.util.Locale;
 
-public class SummaryViewPane extends JPanel implements DataObserver {
+public class SummaryViewPane extends JPanel implements DataObserver, SummaryView {
     private DataObservable dataDAO;
 
+    private JComboBox<String> tableViewCombo;
     private CategoriesTableModel categoriesTableModel;
     private JTable categoriesTable;
     private PurchaseTableModel purchasesTableModel;
     private JTable purchasesTable;
     private CardTableModel cardsTableModel;
     private JTable cardsTable;
+    private MaterialSlider daysSlider;
+    private SummaryListener refreshListener;
 
     SummaryViewPane() {
         setLayout(new BorderLayout());
@@ -41,7 +49,7 @@ public class SummaryViewPane extends JPanel implements DataObserver {
 
         /* TABLE VIEW COMBO BOX */
         String[] tableOptions = {"Categories", "Purchases", "Cards"};
-        JComboBox<String> tableViewCombo = new JComboBox<>(tableOptions);
+        tableViewCombo = new JComboBox<>(tableOptions);
         tableViewCombo.setPreferredSize(refreshTableBtn.getPreferredSize());
         tableViewCombo.setBorder(BorderFactory.createMatteBorder(2,2,2,2, Style.blueGrey500()));
         tableViewCombo.setSelectedIndex(0);
@@ -71,6 +79,13 @@ public class SummaryViewPane extends JPanel implements DataObserver {
 
         add(new JScrollPane(categoriesTable), BorderLayout.CENTER);
 
+        daysSlider.addChangeListener(e -> {
+            JSlider source = (JSlider)e.getSource();
+            if (!daysSlider.getValueIsAdjusting()) {
+
+            }
+        });
+
         tableViewCombo.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
                 Arrays.stream(super.getComponents()).filter(c -> c instanceof JScrollPane).forEach(this::remove);
@@ -85,9 +100,17 @@ public class SummaryViewPane extends JPanel implements DataObserver {
                 super.repaint();
             }
         });
+
+        refreshTableBtn.addActionListener(e -> {
+            if (refreshListener != null) refreshListener.refreshActionPerformed(SummaryViewPane.this);
+        });
     }
 
     /*============================== MUTATORS ==============================*/
+    public void setRefreshListener(SummaryListener refreshListener) {
+        this.refreshListener = refreshListener;
+    }
+
     public void update() {
         categoriesTableModel.setData(new ArrayList<>(dataDAO.getCategoriesUpdate(this).values()));
         categoriesTableModel.fireTableDataChanged();
@@ -98,4 +121,17 @@ public class SummaryViewPane extends JPanel implements DataObserver {
     }
 
     public void setSubject(DataObservable dataObservable) { this.dataDAO = dataObservable; }
+
+    /*============================== ACCESSORS ==============================*/
+    public CategoriesTableModel getCategoryTableModel() {
+        return categoriesTableModel;
+    }
+
+    public int getDaysOption() {
+        return daysSlider.getValue();
+    }
+
+    public String getTableOption() {
+        return (String)tableViewCombo.getSelectedItem();
+    }
 }
