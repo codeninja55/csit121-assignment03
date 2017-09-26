@@ -1,9 +1,9 @@
 package application.view.jtableModels;
 
-import application.model.cardModel.AdvancedCard;
-import application.model.cardModel.BasicCard;
-import application.model.cardModel.Card;
-import application.model.cardModel.PremiumCard;
+import application.model.card.AdvancedCard;
+import application.model.card.BasicCard;
+import application.model.card.Card;
+import application.model.card.PremiumCard;
 import application.view.customComponents.Style;
 
 import javax.swing.table.AbstractTableModel;

@@ -2,7 +2,7 @@ package application.view;
 
 import application.model.DataObservable;
 import application.model.DataObserver;
-import application.model.categoryModel.Category;
+import application.model.category.Category;
 import application.view.builderFactory.CategoriesForm;
 import application.view.builderFactory.DeleteCategoryForm;
 import application.view.customComponents.Style;

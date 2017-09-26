@@ -2,8 +2,8 @@ package application.view;
 
 import application.model.DataObservable;
 import application.model.DataObserver;
-import application.model.purchaseModel.Purchase;
-import application.model.purchaseModel.SortPurchaseType;
+import application.model.purchase.Purchase;
+import application.model.purchase.SortPurchaseType;
 import application.view.builderFactory.PurchaseForm;
 import application.view.customComponents.Style;
 import application.view.customComponents.Toolbar;

@@ -3,8 +3,8 @@ package application.view.builderFactory;
 /* FACTORY DESIGN PATTERN */
 
 import application.model.Generator;
-import application.model.cardModel.Card;
-import application.model.categoryModel.Category;
+import application.model.card.Card;
+import application.model.category.Category;
 
 import java.util.ArrayList;
 

@@ -2,8 +2,8 @@ package application.view;
 
 import application.model.DataObservable;
 import application.model.DataObserver;
-import application.model.cardModel.Card;
-import application.model.cardModel.SortCardType;
+import application.model.card.Card;
+import application.model.card.SortCardType;
 import application.view.builderFactory.CardForm;
 import application.view.builderFactory.DeleteCardForm;
 import application.view.builderFactory.SearchCardForm;

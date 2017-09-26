@@ -2,11 +2,11 @@ package application.controller;
 
 import application.model.DataDAO;
 import application.model.Shop;
-import application.model.cardModel.*;
-import application.model.categoryModel.Category;
-import application.model.purchaseModel.Purchase;
-import application.model.purchaseModel.PurchaseType;
-import application.model.purchaseModel.SortPurchaseType;
+import application.model.card.*;
+import application.model.category.Category;
+import application.model.purchase.Purchase;
+import application.model.purchase.PurchaseType;
+import application.model.purchase.SortPurchaseType;
 import application.view.*;
 import application.view.builderFactory.*;
 import application.view.customComponents.ResultsPane;

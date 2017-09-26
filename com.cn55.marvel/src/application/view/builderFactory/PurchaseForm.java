@@ -4,10 +4,10 @@ import application.controller.validator.CategoryAmountRule;
 import application.controller.validator.FormRule;
 import application.controller.validator.FormValidData;
 import application.model.Generator;
-import application.model.cardModel.Card;
-import application.model.cardModel.CardType;
-import application.model.categoryModel.Category;
-import application.model.purchaseModel.PurchaseType;
+import application.model.card.Card;
+import application.model.card.CardType;
+import application.model.category.Category;
+import application.model.purchase.PurchaseType;
 import application.view.customComponents.*;
 
 import javax.swing.*;
