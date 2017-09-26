@@ -8,14 +8,14 @@ public class MaterialSlider extends JSlider {
         super(orientation, min, max, start);
         setForeground(Style.red500());
         setBackground(Style.blueGrey200());
+        setMinorTickSpacing(20);
+        setMajorTickSpacing(max * 5);
         setPaintLabels(true);
         setPaintTicks(true);
-        setMinorTickSpacing(1);
-        setMajorTickSpacing(max);
         setPaintTrack(true);
 
         Dimension dim = getPreferredSize();
-        dim.width = 1000;
+        dim.width = 900;
         dim.height = 100;
         setMinimumSize(dim);
         setPreferredSize(dim);
