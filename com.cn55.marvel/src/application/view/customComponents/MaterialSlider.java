@@ -18,7 +18,7 @@ public class MaterialSlider extends JSlider {
 
         Dimension dim = getPreferredSize();
         dim.width = 850;
-        dim.height = 100;
+        dim.height = 70;
         setMinimumSize(dim);
         setPreferredSize(dim);
     }
