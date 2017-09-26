@@ -50,17 +50,13 @@ public class SummaryViewPane extends JPanel implements DataObserver {
         // Date Picker FROM
         // Date Picker TO
         // Days Slider
-        MaterialSlider daysSlider = new MaterialSlider(JSlider.HORIZONTAL, 0, 7, 7);
+        daysSlider = new MaterialSlider(JSlider.HORIZONTAL, 0, 7, 0);
 
         Hashtable<Integer, JComponent> daysSliderValues = new Hashtable<>();
-        daysSliderValues.put(1, new FormLabel("Monday", Style.grey50()));
-        daysSliderValues.put(2, new FormLabel("Tuesday", Style.grey50()));
-        daysSliderValues.put(3, new FormLabel("Wednesday", Style.grey50()));
-        daysSliderValues.put(4, new FormLabel("Thursday", Style.grey50()));
-        daysSliderValues.put(5, new FormLabel("Friday", Style.grey50()));
-        daysSliderValues.put(6, new FormLabel("Saturday", Style.grey50()));
-        daysSliderValues.put(0, new FormLabel("Sunday", Style.grey50()));
-        daysSliderValues.put(7, new FormLabel("Any Day", Style.grey50()));
+        daysSliderValues.put(0, new FormLabel("Any Day", Style.grey50()));
+        for (DayOfWeek day : DayOfWeek.values()) {
+            daysSliderValues.put(day.getValue(), new FormLabel(day.getDisplayName(TextStyle.SHORT, Locale.ENGLISH), Style.grey50()));
+        }
 
         daysSlider.setLabelTable(daysSliderValues);
 
