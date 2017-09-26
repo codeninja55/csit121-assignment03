@@ -10,8 +10,9 @@ public class FormLabel extends JLabel {
         setVisible(false);
     }
 
-    public FormLabel (String text, Color foreground) {
+    public FormLabel (String text, Color foreground, Font font) {
         this(text);
+        setFont(font);
         setForeground(foreground);
         setVisible(true);
     }
