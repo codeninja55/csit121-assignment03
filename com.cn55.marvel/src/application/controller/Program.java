@@ -85,8 +85,6 @@ public class Program {
         this.summaryViewPane = mainFrame.getSummaryViewPane();
         db.register(summaryViewPane);
         summaryViewPane.setSubject(db);
-//        summaryViewPane.setCategoriesTableModel();
-//        summaryViewPane.setPurchasesTableModel();
         summaryViewPane.update();
 
         setupCardViewHandlers();
@@ -361,16 +359,8 @@ public class Program {
             ArrayList<Category> clonedCategories = db.getAllCategories().values().stream().map(Category::new)
                     .collect(Collectors.toCollection(ArrayList::new));
 
-            final ArrayList<Purchase> clonedPurchases = db.getAllPurchases().values().stream().map(Purchase::new)
-                    .collect(Collectors.toCollection(ArrayList::new));
-
             Predicate<Purchase> hoursPredicate = p -> (p.getPurchaseTime().getHour() == e.getHoursOption());
             Predicate<Purchase> daysPredicate = p -> (p.getPurchaseTime().getDayOfWeek().getValue() == e.getDaysOption());
-
-            LocalDateTime firstDate = clonedPurchases.stream().sorted(Comparator.comparing(Purchase::getPurchaseTime))
-                        .map(Purchase::getPurchaseTime).findFirst().orElse(LocalDateTime.of(1970,1,1,0,0));
-            LocalDateTime lastDate = clonedPurchases.stream().sorted(Comparator.comparing(Purchase::getPurchaseTime).reversed())
-                        .map(Purchase::getPurchaseTime).findFirst().orElse(LocalDateTime.now());
 
             if (e.getTableOption().equals("Categories")) {
                 if (e.getDaysOption() != 0 && e.getHoursOption() < 24) {
