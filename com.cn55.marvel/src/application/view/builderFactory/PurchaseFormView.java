@@ -1,6 +1,6 @@
 package application.view.builderFactory;
-import application.model.cardModel.CardType;
-import application.model.categoryModel.Category;
+import application.model.card.CardType;
+import application.model.category.Category;
 import java.util.Map;
 public interface PurchaseFormView {
     String getCardID();

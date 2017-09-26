@@ -1,4 +1,4 @@
-package application.model.purchaseModel;
+package application.model.purchase;
 
 @SuppressWarnings("FieldCanBeLocal")
 public enum SortPurchaseType {

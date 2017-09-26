@@ -1,4 +1,4 @@
-package application.model.cardModel;
+package application.model.card;
 
 @SuppressWarnings("FieldCanBeLocal")
 public class PremiumCard extends AdvancedCard {

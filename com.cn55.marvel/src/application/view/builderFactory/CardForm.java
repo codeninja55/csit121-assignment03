@@ -1,7 +1,7 @@
 package application.view.builderFactory;
 
 import application.model.Generator;
-import application.model.cardModel.CardType;
+import application.model.card.CardType;
 import application.view.customComponents.*;
 
 import javax.swing.*;

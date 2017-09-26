@@ -1,4 +1,4 @@
-package application.model.cardModel;
+package application.model.card;
 
 public class AnonCard extends Card {
     private static final double POINTS_RATE = 0.01;

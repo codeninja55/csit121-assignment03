@@ -1,9 +1,9 @@
-package application.model.purchaseModel;
+package application.model.purchase;
 
 import application.model.Shop;
 import application.model.ExportToCSV;
-import application.model.cardModel.CardType;
-import application.model.categoryModel.Category;
+import application.model.card.CardType;
+import application.model.category.Category;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -17,7 +17,7 @@ public class PurchasesExport implements ExportToCSV {
         try{
             for (Purchase p : Shop.getShopInstance().getDataStore().getAllPurchases().values()) {
                 int lastLine = 1;
-                output.append(p.getPurchaseTime()).append(DEFAULT_SEPARATOR)
+                output.append(p.getPurchaseTimeStr()).append(DEFAULT_SEPARATOR)
                         .append(Integer.toString(p.getReceiptID())).append(DEFAULT_SEPARATOR)
                         .append(p.getCardType()).append(DEFAULT_SEPARATOR);
 

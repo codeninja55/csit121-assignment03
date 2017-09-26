@@ -1,4 +1,4 @@
-package application.model.purchaseModel;
+package application.model.purchase;
 
 public enum PurchaseType {
     ExistingCardPurchase(1, "Purchase with Existing Card"),

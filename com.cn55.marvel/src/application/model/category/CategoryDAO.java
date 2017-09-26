@@ -1,4 +1,4 @@
-package application.model.categoryModel;
+package application.model.category;
 
 import java.util.HashMap;
 

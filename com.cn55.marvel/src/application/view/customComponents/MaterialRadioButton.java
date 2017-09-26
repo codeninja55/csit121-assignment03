@@ -3,9 +3,9 @@ package application.view.customComponents;
 import javax.swing.*;
 import java.awt.event.ItemEvent;
 
-public class FormRadioButton extends JRadioButton{
+public class MaterialRadioButton extends JRadioButton{
 
-    public FormRadioButton(String text) {
+    public MaterialRadioButton(String text) {
         ImageIcon defaultIcon = new ImageIcon(
                 "com.cn55.marvel/src/img/radio_button_off_red500_24-custom.png");
         ImageIcon selectedIcon = new ImageIcon(

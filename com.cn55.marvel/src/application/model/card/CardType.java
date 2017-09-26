@@ -1,4 +1,4 @@
-package application.model.cardModel;
+package application.model.card;
 
 public enum CardType {
     Cash("Cash", 0),

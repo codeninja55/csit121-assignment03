@@ -1,4 +1,4 @@
-package application.model.cardModel;
+package application.model.card;
 
 import application.model.Shop;
 import application.model.ExportToCSV;

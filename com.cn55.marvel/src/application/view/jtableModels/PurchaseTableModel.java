@@ -1,6 +1,6 @@
 package application.view.jtableModels;
 
-import application.model.purchaseModel.Purchase;
+import application.model.purchase.Purchase;
 import application.view.customComponents.Style;
 
 import javax.swing.table.AbstractTableModel;
@@ -34,7 +34,7 @@ public class PurchaseTableModel extends AbstractTableModel {
             case 3:
                 return Style.currencyFormat().format(purchase.getCategoriesTotal());
             case 4:
-                return purchase.getPurchaseTime();
+                return purchase.getPurchaseTimeStr();
         }
         return null;
     }

@@ -1,4 +1,4 @@
-package application.model.categoryModel;
+package application.model.category;
 
 import application.model.ExportToCSV;
 import application.model.Shop;

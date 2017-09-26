@@ -1,7 +1,7 @@
-package application.model.purchaseModel;
+package application.model.purchase;
 
-import application.model.cardModel.CardType;
-import application.model.categoryModel.Category;
+import application.model.card.CardType;
+import application.model.category.Category;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -9,10 +9,11 @@ import java.util.HashMap;
 
 @SuppressWarnings("SameParameterValue")
 public class Purchase {
+    private static final DateTimeFormatter DATE_TIME_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    private final LocalDateTime purchaseTime;
     private final int receiptID;
     private String cardID;
     private String cardType;
-    private final String purchaseTime;
     private final HashMap<Integer, Category> categories;
 
     /*============================== CONSTRUCTORS ==============================*/
@@ -35,23 +36,32 @@ public class Purchase {
     }
 
     // Constructor for importing cards
-    public Purchase(String purchaseTime, int receiptID, String cardType, String cardID, HashMap<Integer, Category> categories) {
+    public Purchase(String purchaseTimeStr, int receiptID, String cardType, String cardID, HashMap<Integer, Category> categories) {
         this.receiptID = receiptID;
         this.cardID = cardID;
         this.cardType = cardType;
-        this.purchaseTime = purchaseTime;
+        this.purchaseTime = LocalDateTime.parse(purchaseTimeStr, DATE_TIME_FORMAT);
         this.categories = categories;
+    }
+
+    // Clone constructor
+    public Purchase(Purchase o) {
+        this.receiptID = o.getReceiptID();
+        this.cardID = o.getCardID();
+        this.cardType = o.getCardType();
+        this.purchaseTime = o.getPurchaseTime();
+        this.categories = o.getCategories();
     }
 
     /*============================== MUTATORS  ==============================*/
 
-    private String setPurchaseTime() {
+    private LocalDateTime setPurchaseTime() {
         // REF: https://stackoverflow.com/questions/1459656/how-to-get-the-current-time-in-yyyy-mm-dd-hhmisec-millisecond-format-in-java
         // REF: https://docs.oracle.com/javase/tutorial/datetime/overview/design.html
         // REF: https://docs.oracle.com/javase/8/docs/api/java/time/package-summary.html
         // REF: https://docs.oracle.com/javase/8/docs/api/java/time/LocalDateTime.html
         // REF: https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html
-        return LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        return LocalDateTime.now();
     }
 
     public void convertPurchase() {
@@ -70,12 +80,12 @@ public class Purchase {
         return categories;
     }
 
-    public String getPurchaseTime() { return purchaseTime; }
+    public LocalDateTime getPurchaseTime() { return purchaseTime; }
+
+    public String getPurchaseTimeStr() { return purchaseTime.format(DATE_TIME_FORMAT); }
 
     public double getCategoriesTotal() {
-        return categories.values().stream()
-                .mapToDouble(Category::getAmount)
-                .sum();
+        return categories.values().stream().mapToDouble(Category::getAmount).sum();
     }
 
     public String toString() {
@@ -84,7 +94,7 @@ public class Purchase {
                 "Receipt ID: ", receiptID,
                 "Card Type: ", cardType,
                 "Card ID: ", cardID,
-                "Purchase Time: ", purchaseTime);
+                "Purchase Time: ", getPurchaseTimeStr());
 
         categories.forEach((k, v) -> secondOutput.append(String.format("%n%s$%.2f", (v.getName() + ": "), v.getAmount())));
         return firstOutput + secondOutput;

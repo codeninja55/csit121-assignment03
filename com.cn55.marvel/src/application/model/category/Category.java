@@ -1,4 +1,4 @@
-package application.model.categoryModel;
+package application.model.category;
 
 import application.model.Generator;
 

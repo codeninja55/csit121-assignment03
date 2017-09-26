@@ -1,6 +1,6 @@
 package application.view.jtableModels;
 
-import application.model.categoryModel.Category;
+import application.model.category.Category;
 import application.view.customComponents.Style;
 
 import javax.swing.table.AbstractTableModel;

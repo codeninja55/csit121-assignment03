@@ -1,4 +1,4 @@
-package application.model.cardModel;
+package application.model.card;
 
 @SuppressWarnings("unused")
 public abstract class AdvancedCard extends Card {

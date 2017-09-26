@@ -1,9 +1,9 @@
-package application.model.purchaseModel;
+package application.model.purchase;
 
 import application.model.Generator;
 import application.model.ImportFromCSV;
 import application.model.Shop;
-import application.model.categoryModel.Category;
+import application.model.category.Category;
 
 import java.io.BufferedReader;
 import java.io.IOException;

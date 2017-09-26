@@ -1,17 +1,17 @@
 package application.model;
 
-import application.model.cardModel.Card;
-import application.model.cardModel.CardsDAO;
-import application.model.cardModel.CardsExport;
-import application.model.cardModel.CardsImport;
-import application.model.categoryModel.CategoriesExport;
-import application.model.categoryModel.CategoriesImport;
-import application.model.categoryModel.Category;
-import application.model.categoryModel.CategoryDAO;
-import application.model.purchaseModel.Purchase;
-import application.model.purchaseModel.PurchaseDAO;
-import application.model.purchaseModel.PurchasesExport;
-import application.model.purchaseModel.PurchasesImport;
+import application.model.card.Card;
+import application.model.card.CardsDAO;
+import application.model.card.CardsExport;
+import application.model.card.CardsImport;
+import application.model.category.CategoriesExport;
+import application.model.category.CategoriesImport;
+import application.model.category.Category;
+import application.model.category.CategoryDAO;
+import application.model.purchase.Purchase;
+import application.model.purchase.PurchaseDAO;
+import application.model.purchase.PurchasesExport;
+import application.model.purchase.PurchasesImport;
 
 import java.io.*;
 import java.nio.file.Path;
