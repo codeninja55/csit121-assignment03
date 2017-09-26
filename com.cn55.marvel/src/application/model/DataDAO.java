@@ -16,7 +16,9 @@ import application.model.purchase.PurchasesImport;
 import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.TreeMap;
 
@@ -28,9 +30,12 @@ public class DataDAO implements DataObservable, CardsDAO, PurchaseDAO, CategoryD
     private final HashMap<Integer,Purchase> purchases;
     private final HashMap<Integer,Category> categories;
 
-    private final Path categoriesStoragePath = Paths.get("com.cn55.marvel/src/persistentData/CategoriesStorage.csv");
-    private final Path cardsStoragePath = Paths.get("com.cn55.marvel/src/persistentData/CardsStorage.csv");
-    private final Path purchaseStoragePath = Paths.get("com.cn55.marvel/src/persistentData/PurchaseStorage.csv");
+    private final Path CATEGORIES_LOG_PATH = Paths.get("com.cn55.marvel/src/persistentData/CategoriesStorage.csv");
+    private final Path CARDS_LOG_PATH = Paths.get("com.cn55.marvel/src/persistentData/CardsStorage.csv");
+    private final Path PURCHASES_LOG_PATH = Paths.get("com.cn55.marvel/src/persistentData/PurchaseStorage.csv");
+
+    public LocalDateTime firstPurchaseDate;
+    public LocalDateTime lastPurchaseDate;
 
     /*============================== CONSTRUCTORS  ==============================*/
     // Private modifier prevents any other class from instantiating
@@ -54,6 +59,7 @@ public class DataDAO implements DataObservable, CardsDAO, PurchaseDAO, CategoryD
         updateCategoryTotalAmount(purchase.getCategories());
         Generator.addReceiptID(purchase.getReceiptID());
         purchases.put(purchase.getReceiptID(), purchase);
+        updatePurchaseDateBounds();
         notifyObservers();
     }
 
@@ -79,10 +85,19 @@ public class DataDAO implements DataObservable, CardsDAO, PurchaseDAO, CategoryD
     public void updateCategoryTotalAmount(HashMap<Integer,Category> purchaseCategoriesMap) {
         categories.values().forEach((c) -> c.updateTotalAmount(purchaseCategoriesMap.get(c.getId()).getAmount()));
     }
+    private void updatePurchaseDateBounds() {
+        firstPurchaseDate = purchases.values().stream()
+                .sorted(Comparator.comparing(Purchase::getPurchaseTime))
+                .map(Purchase::getPurchaseTime).findFirst().orElse(LocalDateTime.of(1970,1,1,0,0));
+        lastPurchaseDate = purchases.values().stream()
+                .sorted(Comparator.comparing(Purchase::getPurchaseTime).reversed())
+                .map(Purchase::getPurchaseTime).findFirst().orElse(LocalDateTime.now());
+    }
 
     /*============================== DELETE ==============================*/
     public void deleteCard(String cardID) {
         cards.remove(cardID);
+        updatePurchaseDateBounds();
         notifyObservers();
     }
     public void deletePurchase() {
@@ -104,9 +119,9 @@ public class DataDAO implements DataObservable, CardsDAO, PurchaseDAO, CategoryD
         ImportFromCSV purchasesImporter = new PurchasesImport();
 
         try {
-            categoriesImporter.importData(openReadFile(categoriesStoragePath));
-            cardsImporter.importData(openReadFile(cardsStoragePath));
-            purchasesImporter.importData(openReadFile(purchaseStoragePath));
+            categoriesImporter.importData(openReadFile(CATEGORIES_LOG_PATH));
+            cardsImporter.importData(openReadFile(CARDS_LOG_PATH));
+            purchasesImporter.importData(openReadFile(PURCHASES_LOG_PATH));
         } catch (FileNotFoundException e) {
             System.out.println("FileNotFoundException: " + e.getMessage());
         }
@@ -120,9 +135,9 @@ public class DataDAO implements DataObservable, CardsDAO, PurchaseDAO, CategoryD
         ExportToCSV purchasesExport = new PurchasesExport();
 
         try {
-            categoriesExport.exportData(openWriteFile(categoriesStoragePath));
-            cardsExport.exportData(openWriteFile(cardsStoragePath));
-            purchasesExport.exportData(openWriteFile(purchaseStoragePath));
+            categoriesExport.exportData(openWriteFile(CATEGORIES_LOG_PATH));
+            cardsExport.exportData(openWriteFile(CARDS_LOG_PATH));
+            purchasesExport.exportData(openWriteFile(PURCHASES_LOG_PATH));
         } catch (IOException e) {
             System.err.println("IOException: " + e.getMessage());
         }
