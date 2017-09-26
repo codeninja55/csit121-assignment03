@@ -44,6 +44,15 @@ public class Purchase {
         this.categories = categories;
     }
 
+    // Clone constructor
+    public Purchase(Purchase o) {
+        this.receiptID = o.getReceiptID();
+        this.cardID = o.getCardID();
+        this.cardType = o.getCardType();
+        this.purchaseTime = o.getPurchaseTime();
+        this.categories = o.getCategories();
+    }
+
     /*============================== MUTATORS  ==============================*/
 
     private LocalDateTime setPurchaseTime() {
