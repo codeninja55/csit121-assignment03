@@ -2,6 +2,7 @@ package application.view.builderFactory;
 
 import application.controller.validator.*;
 import application.view.customComponents.*;
+import styles.IconFactory;
 
 import javax.swing.*;
 import java.awt.*;
@@ -22,7 +23,7 @@ public class SearchCardForm extends BaseForm implements FormFactory, SearchFormV
         searchIDTextField = new FormTextField(20);
         ErrorLabel errorLabel = new ErrorLabel("CARD DOES NOT EXIST");
         ErrorLabel ruleErrLabel = new ErrorLabel("INVALID CARD ID NUMBER");
-        FormButton searchBtn = new FormButton("Search", Style.searchIcon());
+        FormButton searchBtn = new FormButton("Search", IconFactory.searchIcon());
 
         GridBagConstraints gc = new GridBagConstraints();
         gc.fill = GridBagConstraints.NONE;

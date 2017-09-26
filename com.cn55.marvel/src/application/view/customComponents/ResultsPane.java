@@ -1,5 +1,9 @@
 package application.view.customComponents;
 
+import styles.ColorFactory;
+import styles.CustomBorderFactory;
+import styles.FontFactory;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
@@ -79,10 +83,10 @@ public class ResultsPane extends JPanel {
             textPaneDim.width = 800;
             setPreferredSize(textPaneDim);
             setMinimumSize(getPreferredSize());
-            setBorder(Style.resultsPaneBorder());
-            setFont(Style.textPaneFont());
-            setBackground(Style.blueGrey400());
-            setForeground(Style.grey50());
+            setBorder(CustomBorderFactory.resultsPaneBorder());
+            setFont(FontFactory.textPaneFont());
+            setBackground(ColorFactory.blueGrey400());
+            setForeground(ColorFactory.grey50());
             setVisible(true);
             setText(resultsText);
         }

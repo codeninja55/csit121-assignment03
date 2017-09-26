@@ -1,10 +1,13 @@
 package application.view.customComponents;
+import styles.ColorFactory;
+import styles.FontFactory;
+
 import javax.swing.*;
 public class ErrorLabel extends JLabel {
     public ErrorLabel(String text) {
         super(text);
-        setFont(Style.errorFont());
-        setForeground(Style.redA700());
+        setFont(FontFactory.errorFont());
+        setForeground(ColorFactory.redA700());
         setVisible(false);
     }
 }

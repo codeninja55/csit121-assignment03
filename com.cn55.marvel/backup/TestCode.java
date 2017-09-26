@@ -144,9 +144,9 @@ public class TestCode {
         db.createCard(new BasicCard("Logan", "wolverine@xmen.com", 0));
     }
 
-    private void createTooManyCategories() {
+    /*private void createTooManyCategories() {
         for (int i = 0; i < 35; i++)
             db.createCategory(new Category(String.format("%s%d","Testing", i)));
-    }
+    }*/
 
 }

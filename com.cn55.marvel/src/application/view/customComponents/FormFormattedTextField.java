@@ -1,5 +1,7 @@
 package application.view.customComponents;
 
+import styles.FontFactory;
+
 import javax.swing.*;
 import java.text.Format;
 
@@ -9,7 +11,7 @@ public class FormFormattedTextField extends JFormattedTextField {
         setValue(0.00D);
         setColumns(20);
         setMinimumSize(getPreferredSize());
-        setFont(Style.textFieldFont());
+        setFont(FontFactory.textFieldFont());
         setVisible(false);
     }
 }

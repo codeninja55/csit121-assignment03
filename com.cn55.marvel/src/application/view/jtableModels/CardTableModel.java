@@ -4,7 +4,7 @@ import application.model.card.AdvancedCard;
 import application.model.card.BasicCard;
 import application.model.card.Card;
 import application.model.card.PremiumCard;
-import application.view.customComponents.Style;
+import styles.Style;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;

@@ -5,7 +5,8 @@ import application.model.DataObserver;
 import application.model.category.Category;
 import application.view.builderFactory.CategoriesForm;
 import application.view.builderFactory.DeleteCategoryForm;
-import application.view.customComponents.Style;
+import styles.IconFactory;
+import styles.Style;
 import application.view.customComponents.Toolbar;
 import application.view.customComponents.ToolbarButton;
 import application.view.customComponents.ToolbarButtonListener;
@@ -27,8 +28,8 @@ public class CategoriesViewPane extends JPanel implements DataObserver {
     /*============================== CONSTRUCTORS  ==============================*/
     CategoriesViewPane() {
         Toolbar toolbar = new Toolbar();
-        ToolbarButton createCategoryBtn = new ToolbarButton("Create", Style.createIcon());
-        ToolbarButton deleteCategoryBtn = new ToolbarButton("Delete", Style.deleteIcon());
+        ToolbarButton createCategoryBtn = new ToolbarButton("Create", IconFactory.createIcon());
+        ToolbarButton deleteCategoryBtn = new ToolbarButton("Delete", IconFactory.deleteIcon());
 
         categoriesTableModel = new CategoriesTableModel();
         JTable categoriesTable = new JTable(categoriesTableModel);

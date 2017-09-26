@@ -1,5 +1,7 @@
 package application.view.customComponents;
 
+import styles.CustomBorderFactory;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
@@ -31,6 +33,6 @@ public class BaseForm extends JPanel {
     }
 
     protected void setBorder(String title) {
-        this.setBorder(Style.formBorder(title));
+        this.setBorder(CustomBorderFactory.formBorder(title));
     }
 }

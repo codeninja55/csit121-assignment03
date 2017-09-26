@@ -8,17 +8,21 @@ import application.view.customComponents.*;
 import application.view.jtableModels.CardTableModel;
 import application.view.jtableModels.CategoriesTableModel;
 import application.view.jtableModels.PurchaseTableModel;
+import styles.ColorFactory;
+import styles.FontFactory;
+import styles.IconFactory;
+import styles.Style;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.Locale;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class SummaryViewPane extends JPanel implements DataObserver, SummaryView {
@@ -33,12 +37,16 @@ public class SummaryViewPane extends JPanel implements DataObserver, SummaryView
     private JTable cardsTable;
     private MaterialSlider daysSlider;
     private MaterialSlider hoursSlider;
+    private MaterialDatePicker dateBeginPicker;
+    private MaterialDatePicker dateEndPicker;
+    private LocalDate firstPurchaseDate;
+    private LocalDate lastPurchaseDate;
     private SummaryListener refreshListener;
 
     SummaryViewPane() {
         setLayout(new BorderLayout());
         Toolbar toolbar = new Toolbar();
-        ToolbarButton refreshTableBtn = new ToolbarButton("Refresh", Style.refreshIcon());
+        ToolbarButton refreshTableBtn = new ToolbarButton("Refresh", IconFactory.refreshIcon());
 
         categoriesTableModel = new CategoriesTableModel();
         categoriesTable = new JTable(categoriesTableModel);
@@ -54,19 +62,17 @@ public class SummaryViewPane extends JPanel implements DataObserver, SummaryView
         String[] tableOptions = {"Categories", "Purchases", "Cards"};
         tableViewCombo = new JComboBox<>(tableOptions);
         tableViewCombo.setPreferredSize(refreshTableBtn.getPreferredSize());
-        tableViewCombo.setBorder(BorderFactory.createMatteBorder(2,2,2,2, Style.blueGrey500()));
+        tableViewCombo.setBorder(BorderFactory.createMatteBorder(2,2,2,2, ColorFactory.blueGrey500()));
         tableViewCombo.setSelectedIndex(0);
 
         /* TOOLBAR */
-        // Date Picker FROM
-        // Date Picker TO
         // Days Slider
         daysSlider = new MaterialSlider(JSlider.HORIZONTAL, 0, 7, 0);
 
         Hashtable<Integer, JComponent> daysSliderValues = new Hashtable<>();
-        daysSliderValues.put(0, new FormLabel("Any", Style.grey50(), Style.sliderFont()));
+        daysSliderValues.put(0, new FormLabel("Any", ColorFactory.grey50(), FontFactory.sliderFont()));
         Arrays.stream(DayOfWeek.values()).forEach(d ->
-            daysSliderValues.put(d.getValue(), new FormLabel(d.getDisplayName(TextStyle.SHORT, Locale.ENGLISH), Style.grey50(), Style.sliderFont()))
+            daysSliderValues.put(d.getValue(), new FormLabel(d.getDisplayName(TextStyle.SHORT, Locale.ENGLISH), ColorFactory.grey50(), FontFactory.sliderFont()))
         );
 
         daysSlider.setPreferredSize(new Dimension(550, 100));
@@ -76,13 +82,31 @@ public class SummaryViewPane extends JPanel implements DataObserver, SummaryView
         // Time of day slider
         hoursSlider = new MaterialSlider(JSlider.HORIZONTAL, 0, 24, 24);
         Hashtable<Integer, JComponent> hoursSliderValues = new Hashtable<>();
-        hoursSliderValues.put(24, new FormLabel("Any", Style.grey50(), Style.sliderFont()));
-        IntStream.range(0,24).forEachOrdered(i -> hoursSliderValues.put(i, new FormLabel(Integer.toString(i), Style.grey50(), Style.sliderFont())));
+        hoursSliderValues.put(24, new FormLabel("Any", ColorFactory.grey50(), FontFactory.sliderFont()));
+        IntStream.range(0,24).forEachOrdered(i -> hoursSliderValues.put(i, new FormLabel(Integer.toString(i), ColorFactory.grey50(), FontFactory.sliderFont())));
         hoursSlider.setLabelTable(hoursSliderValues);
+
+        // Date Picker FROM
+        FormLabel dateBeginLabel = new FormLabel("Filter From:");
+        dateBeginLabel.setVisible(true);
+        dateBeginPicker = new MaterialDatePicker();
+        dateBeginPicker.setPreferredSize(refreshTableBtn.getPreferredSize());
+        //dateBeginPicker.setDate(dataDAO.getFirstPurchaseDate(this).toLocalDate());
+
+        // Date Picker TO
+        FormLabel dateEndLabel = new FormLabel("To:");
+        dateEndLabel.setVisible(true);
+        dateEndPicker = new MaterialDatePicker();
+        dateEndPicker.setPreferredSize(refreshTableBtn.getPreferredSize());
+        //dateEndPicker.setDate(dataDAO.getLastPurchaseDate(this).toLocalDate());
 
         toolbar.getLeftToolbar().add(daysSlider);
         toolbar.getLeftToolbar().add(hoursSlider);
 
+        toolbar.getRightToolbar().add(dateBeginLabel);
+        toolbar.getRightToolbar().add(dateBeginPicker);
+        toolbar.getRightToolbar().add(dateEndLabel);
+        toolbar.getRightToolbar().add(dateEndPicker);
         toolbar.getRightToolbar().add(refreshTableBtn);
         toolbar.getRightToolbar().add(tableViewCombo);
         add(toolbar, BorderLayout.NORTH);
@@ -128,6 +152,10 @@ public class SummaryViewPane extends JPanel implements DataObserver, SummaryView
         purchasesTableModel.fireTableDataChanged();
         cardsTableModel.setData(new ArrayList<>(dataDAO.getCardsUpdate(this).values()));
         cardsTableModel.fireTableDataChanged();
+        this.firstPurchaseDate = dataDAO.getFirstPurchaseDate(this).toLocalDate();
+        dateBeginPicker.setDate(firstPurchaseDate);
+        this.lastPurchaseDate = dataDAO.getLastPurchaseDate(this).toLocalDate();
+        dateEndPicker.setDate(lastPurchaseDate);
     }
 
     public void setSubject(DataObservable dataObservable) { this.dataDAO = dataObservable; }
@@ -146,4 +174,9 @@ public class SummaryViewPane extends JPanel implements DataObserver, SummaryView
     public String getTableOption() {
         return (String)tableViewCombo.getSelectedItem();
     }
+
+    public LocalDate getDateFromOption() { return dateBeginPicker.getDate(); }
+
+    public LocalDate getDateToOption() { return dateEndPicker.getDate(); }
+
 }

@@ -1,7 +1,7 @@
 package application.view.jtableModels;
 
 import application.model.purchase.Purchase;
-import application.view.customComponents.Style;
+import styles.Style;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;

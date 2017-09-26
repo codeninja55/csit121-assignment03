@@ -9,6 +9,7 @@ import application.model.card.CardType;
 import application.model.category.Category;
 import application.model.purchase.PurchaseType;
 import application.view.customComponents.*;
+import styles.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -89,8 +90,8 @@ public class PurchaseForm extends BaseForm implements FormFactory, PurchaseFormV
         cardEmailTextField = new FormTextField(20);
         emailErrLabel = new ErrorLabel("Email must not be blank.");
 
-        createBtn = new FormButton("Add Purchase", Style.addIcon());
-        clearBtn = new FormButton("Clear", Style.clearIcon());
+        createBtn = new FormButton("Add Purchase", IconFactory.addIcon());
+        clearBtn = new FormButton("Clear", IconFactory.clearIcon());
         categoryEmptyErrLabel = new ErrorLabel("You must enter some values for at least one category.");
         purchaseErrorLabel = new ErrorLabel("PURCHASE NOT CREATED");
 
@@ -119,7 +120,7 @@ public class PurchaseForm extends BaseForm implements FormFactory, PurchaseFormV
         purchaseTypeCombo.setModel(options);
         purchaseTypeCombo.setSelectedIndex(0);
         purchaseTypeCombo.setEditable(false);
-        purchaseTypeCombo.setFont(Style.comboboxFont());
+        purchaseTypeCombo.setFont(FontFactory.comboboxFont());
         add(purchaseTypeCombo, BorderLayout.NORTH);
 
         this.addComponentListener(new ComponentAdapter() {
@@ -170,7 +171,7 @@ public class PurchaseForm extends BaseForm implements FormFactory, PurchaseFormV
         labelGridConstraints(gc);
         baseCreatePurchaseForm.add(existingCardLabel, gc);
         textFieldGridConstraints(gc);
-        existingCardCombo.setFont(Style.textFieldFont());
+        existingCardCombo.setFont(FontFactory.textFieldFont());
         existingCardCombo.setEditable(false);
         existingCardCombo.setPreferredSize(receiptIDTextField.getPreferredSize());
         existingCardCombo.setMinimumSize(existingCardCombo.getPreferredSize());
@@ -257,7 +258,7 @@ public class PurchaseForm extends BaseForm implements FormFactory, PurchaseFormV
         gc.insets = new Insets(20,0,20,0);
         purchaseErrorLabel.setHorizontalAlignment(SwingConstants.CENTER);
         purchaseErrorLabel.setFont(new Font("Product Sans", Font.BOLD, 32));
-        purchaseErrorLabel.setBorder(Style.formBorder(""));
+        purchaseErrorLabel.setBorder(CustomBorderFactory.formBorder(""));
         baseCreatePurchaseForm.add(purchaseErrorLabel, gc);
 
         /*========== BUTTON ROW ==========*/
@@ -370,9 +371,9 @@ public class PurchaseForm extends BaseForm implements FormFactory, PurchaseFormV
 
             catValueTextField.addPropertyChangeListener(evt -> {
                 if (!catValueTextField.isEditValid()) {
-                    labelArr[0].setForeground(Style.redA700());
+                    labelArr[0].setForeground(ColorFactory.redA700());
                     labelArr[1].setVisible(true);
-                    catValueTextField.setForeground(Style.redA700());
+                    catValueTextField.setForeground(ColorFactory.redA700());
                     createBtn.setEnabled(false);
                 } else {
                     labelArr[0].setForeground(Color.BLACK);
@@ -444,9 +445,9 @@ public class PurchaseForm extends BaseForm implements FormFactory, PurchaseFormV
         for (HashMap.Entry<JLabel[], FormFormattedTextField> item : rawCategories.entrySet()) {
             input.setCatValueStr(item.getValue().getText());
             if (!catAmountRule.validate(input)) {
-                item.getKey()[0].setForeground(Style.redA700());
+                item.getKey()[0].setForeground(ColorFactory.redA700());
                 item.getKey()[1].setVisible(true);
-                item.getValue().setForeground(Style.redA700());
+                item.getValue().setForeground(ColorFactory.redA700());
                 proceed = false;
             } else {
                 item.getKey()[0].setForeground(Color.BLACK);

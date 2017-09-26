@@ -1,7 +1,8 @@
 package application;
 
 import application.controller.Program;
-import application.view.customComponents.Style;
+import styles.ColorFactory;
+import styles.FontFactory;
 
 import javax.swing.*;
 import java.awt.*;
@@ -39,55 +40,55 @@ class Assignment2 {
         }*/
 
         // Change some of the Default Look and Feel
-        UIManager.put("Panel.background", Style.blueGrey200());
-        UIManager.put("Viewport.background", Style.blueGrey200());
+        UIManager.put("Panel.background", ColorFactory.blueGrey200());
+        UIManager.put("Viewport.background", ColorFactory.blueGrey200());
 
-        UIManager.put("Button.background", Style.red900());
-        UIManager.put("Button.foreground", Style.grey50());
-        UIManager.put("Button.font", Style.buttonFont());
-        UIManager.put("Button.disabledText", Style.grey500());
+        UIManager.put("Button.background", ColorFactory.red900());
+        UIManager.put("Button.foreground", ColorFactory.grey50());
+        UIManager.put("Button.font", FontFactory.buttonFont());
+        UIManager.put("Button.disabledText", ColorFactory.grey500());
 
-        UIManager.put("ComboBox.buttonBackground", Style.red500());
-        UIManager.put("ComboBox.buttonHighlight", Style.grey50());
-        UIManager.put("ComboBox.font", Style.toolbarButtonFont());
-        UIManager.put("ComboBox.foreground", Style.grey50());
-        UIManager.put("ComboBox.background", Style.blueGrey500());
-        UIManager.put("ComboBox.selectionBackground", Style.red500());
-        UIManager.put("ComboBox.selectionForeground", Style.grey50());
+        UIManager.put("ComboBox.buttonBackground", ColorFactory.red500());
+        UIManager.put("ComboBox.buttonHighlight", ColorFactory.grey50());
+        UIManager.put("ComboBox.font", FontFactory.toolbarButtonFont());
+        UIManager.put("ComboBox.foreground", ColorFactory.grey50());
+        UIManager.put("ComboBox.background", ColorFactory.blueGrey500());
+        UIManager.put("ComboBox.selectionBackground", ColorFactory.red500());
+        UIManager.put("ComboBox.selectionForeground", ColorFactory.grey50());
 
-        UIManager.put("OptionPane.background", Style.blueGrey200());
-        UIManager.put("OptionPane.buttonFont", Style.buttonFont());
-        UIManager.put("OptionPane.messageFont", Style.textPaneFont());
-        UIManager.put("OptionPane.font", Style.textPaneFont());
-        UIManager.put("OptionPane.foreground", Style.red900());
-        UIManager.put("OptionPane.messageForeground", Style.red900());
-        UIManager.put("OptionPane.titleText", Style.labelFont());
+        UIManager.put("OptionPane.background", ColorFactory.blueGrey200());
+        UIManager.put("OptionPane.buttonFont", FontFactory.buttonFont());
+        UIManager.put("OptionPane.messageFont", FontFactory.textPaneFont());
+        UIManager.put("OptionPane.font", FontFactory.textPaneFont());
+        UIManager.put("OptionPane.foreground", ColorFactory.red900());
+        UIManager.put("OptionPane.messageForeground", ColorFactory.red900());
+        UIManager.put("OptionPane.titleText", FontFactory.labelFont());
 
-        UIManager.put("RadioButton.font", Style.labelFont());
-        UIManager.put("RadioButton.background", Style.blueGrey200());
+        UIManager.put("RadioButton.font", FontFactory.labelFont());
+        UIManager.put("RadioButton.background", ColorFactory.blueGrey200());
 
-        UIManager.put("ScrollBar.background", Style.red500());
-        UIManager.put("ScrollBar.foreground", Style.red500());
-        UIManager.put("ScrollBar.track", Style.red500());
+        UIManager.put("ScrollBar.background", ColorFactory.red500());
+        UIManager.put("ScrollBar.foreground", ColorFactory.red500());
+        UIManager.put("ScrollBar.track", ColorFactory.red500());
 
-        UIManager.put("Slider.altTrackColor", Style.red500());
-        UIManager.put("Slider.focus", Style.grey500());
+        UIManager.put("Slider.altTrackColor", ColorFactory.red500());
+        UIManager.put("Slider.focus", ColorFactory.grey500());
         UIManager.put("Slider.horizontalThumbIcon", new ImageIcon("com.cn55.marvel/src/img/slider_red500_24-custom.png"));
-        UIManager.put("Slider.tickColour", Style.red500());
+        UIManager.put("Slider.tickColour", ColorFactory.red500());
         UIManager.put("Slider.trackWidth", 500);
 
 
-        UIManager.put("TabbedPane.selected", Style.red500());
-        UIManager.put("TabbedPane.selectedForeground", Style.blueGrey500());
+        UIManager.put("TabbedPane.selected", ColorFactory.red500());
+        UIManager.put("TabbedPane.selectedForeground", ColorFactory.blueGrey500());
 
-        UIManager.put("Table.selectionBackground", Style.red300());
-        UIManager.put("Table.font", Style.tableDataFont());
-        UIManager.put("TableHeader.font", Style.toolbarButtonFont());
-        UIManager.put("TableHeader.background", Style.red500());
-        UIManager.put("TableHeader.foreground", Style.grey50());
+        UIManager.put("Table.selectionBackground", ColorFactory.red300());
+        UIManager.put("Table.font", FontFactory.tableDataFont());
+        UIManager.put("TableHeader.font", FontFactory.toolbarButtonFont());
+        UIManager.put("TableHeader.background", ColorFactory.red500());
+        UIManager.put("TableHeader.foreground", ColorFactory.grey50());
 
-        UIManager.put("TextField.font", Style.textFieldFont());
-        UIManager.put("TextField.caretForeground", Style.red500());
+        UIManager.put("TextField.font", FontFactory.textFieldFont());
+        UIManager.put("TextField.caretForeground", ColorFactory.red500());
 
         /* Create and display the Program the safe Java way */
         java.awt.EventQueue.invokeLater(Program::new);

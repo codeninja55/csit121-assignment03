@@ -85,8 +85,6 @@ public class Program {
         this.summaryViewPane = mainFrame.getSummaryViewPane();
         db.register(summaryViewPane);
         summaryViewPane.setSubject(db);
-//        summaryViewPane.setCategoriesTableModel();
-//        summaryViewPane.setPurchasesTableModel();
         summaryViewPane.update();
 
         setupCardViewHandlers();
@@ -358,33 +356,19 @@ public class Program {
     /*============================== SUMMARY VIEW HANDLERS ==============================*/
     private void setupSummaryViewHandlers() {
         summaryViewPane.setRefreshListener((SummaryView e) -> {
+            ArrayList<Category> clonedCategories = db.getAllCategories().values().stream().map(Category::new)
+                    .collect(Collectors.toCollection(ArrayList::new));
+
+            Predicate<Purchase> hoursPredicate = p -> (p.getPurchaseTime().getHour() == e.getHoursOption());
+            Predicate<Purchase> daysPredicate = p -> (p.getPurchaseTime().getDayOfWeek().getValue() == e.getDaysOption());
+
             if (e.getTableOption().equals("Categories")) {
-                ArrayList<Category> clonedCategories = db.getAllCategories().values().stream().map(Category::new)
-                        .collect(Collectors.toCollection(ArrayList::new));
-
-                final ArrayList<Purchase> clonedPurchases = db.getAllPurchases().values().stream().map(Purchase::new)
-                        .collect(Collectors.toCollection(ArrayList::new));
-
-                LocalDateTime firstDate = clonedPurchases.stream().sorted(Comparator.comparing(Purchase::getPurchaseTime))
-                        .map(Purchase::getPurchaseTime).findFirst().orElse(LocalDateTime.of(1970,01,01,0,0));
-
-                LocalDateTime lastDate = clonedPurchases.stream().sorted(Comparator.comparing(Purchase::getPurchaseTime).reversed())
-                        .map(Purchase::getPurchaseTime).findFirst().orElse(LocalDateTime.now());
-
-                // If any day, then use !daysPredicate
-                Predicate<Purchase> daysPredicate = p -> (p.getPurchaseTime().getDayOfWeek().getValue() == e.getDaysOption());
-                // If any hour, then use !hoursPredicate
-                Predicate<Purchase> hoursPredicate = p -> (p.getPurchaseTime().getHour() == e.getHoursOption());
-
-
                 if (e.getDaysOption() != 0 && e.getHoursOption() < 24) {
-                    clonedCategories.forEach((Category c) -> {
-                        double newTotal = clonedPurchases.stream()
-                                .filter(daysPredicate.and(hoursPredicate))
-                                .mapToDouble(p -> p.getCategories().get(c.getId()).getAmount()).sum();
-                        c.updateTotalAmount(newTotal);
-                    });
-                    summaryViewPane.getCategoryTableModel().setData(clonedCategories);
+                    summaryViewPane.getCategoryTableModel().setData(summaryByDayAndHour(clonedCategories, daysPredicate, hoursPredicate));
+                } else if (e.getDaysOption() != 0 && e.getHoursOption() == 24) {
+                    summaryViewPane.getCategoryTableModel().setData(summaryByDay(clonedCategories, daysPredicate));
+                } else if (e.getDaysOption() == 0 && e.getHoursOption() < 24) {
+                    summaryViewPane.getCategoryTableModel().setData(summaryByHours(clonedCategories, hoursPredicate));
                 } else {
                     // default option
                     summaryViewPane.getCategoryTableModel().setData(new ArrayList<>(db.getAllCategories().values()));
@@ -429,4 +413,37 @@ public class Program {
                 .map(Purchase::toString).collect(Collectors.joining("\n"));
         return String.format("%s%n%s%n%s%n%s", title, cText,"PURCHASE(S)", pText);
     }
+
+    /*============================== SUMMARY FILTER METHODS ==============================*/
+    private ArrayList<Category> summaryByDay(ArrayList<Category> categories, Predicate<Purchase> daysPredicate) {
+        categories.forEach((Category c) -> {
+            double newTotal = db.getAllPurchases().values().stream().filter(daysPredicate)
+                    .mapToDouble(p -> p.getCategories().get(c.getId()).getAmount()).sum();
+            c.updateTotalAmount(newTotal);
+        });
+
+        return categories;
+    }
+
+    private ArrayList<Category> summaryByHours(ArrayList<Category> categories, Predicate<Purchase> hoursPredicate) {
+        categories.forEach(c -> {
+            double newTotal = db.getAllPurchases().values().stream().filter(hoursPredicate)
+                    .mapToDouble(p -> p.getCategories().get(c.getId()).getAmount()).sum();
+            c.updateTotalAmount(newTotal);
+        });
+
+        return categories;
+    }
+
+    private ArrayList<Category> summaryByDayAndHour(ArrayList<Category> categories, Predicate<Purchase> daysPredicate,
+                                                    Predicate<Purchase> hoursPredicate) {
+        categories.forEach(c -> {
+            double newTotal = db.getAllPurchases().values().stream().filter(daysPredicate.and(hoursPredicate))
+                    .mapToDouble(p -> p.getCategories().get(c.getId()).getAmount()).sum();
+            c.updateTotalAmount(newTotal);
+        });
+
+        return categories;
+    }
+
 }

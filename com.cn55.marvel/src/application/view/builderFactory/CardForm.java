@@ -3,6 +3,9 @@ package application.view.builderFactory;
 import application.model.Generator;
 import application.model.card.CardType;
 import application.view.customComponents.*;
+import styles.CustomBorderFactory;
+import styles.FontFactory;
+import styles.IconFactory;
 
 import javax.swing.*;
 import java.awt.*;
@@ -48,8 +51,8 @@ public class CardForm extends BaseForm implements FormFactory, CardFormView {
         cardEmailTextField = new FormTextField(20);
         emailErrorLabel = new ErrorLabel("Email Must Not Be Blank");
         createCardErrorLabel = new ErrorLabel("CARD NOT CREATED");
-        createBtn = new FormButton("Add Card", Style.addIcon());
-        clearBtn = new FormButton("Clear", Style.clearIcon());
+        createBtn = new FormButton("Add Card", IconFactory.addIcon());
+        clearBtn = new FormButton("Clear", IconFactory.clearIcon());
 
         /* REGISTRATION OF LISTENERS */
         FormListener handler = new FormListener();
@@ -66,7 +69,7 @@ public class CardForm extends BaseForm implements FormFactory, CardFormView {
         cardTypeCombo.setModel(options);
         cardTypeCombo.setSelectedIndex(0);
         cardTypeCombo.setEditable(false);
-        cardTypeCombo.setFont(Style.comboboxFont());
+        cardTypeCombo.setFont(FontFactory.comboboxFont());
         add(cardTypeCombo, BorderLayout.NORTH);
 
         this.addComponentListener(new ComponentAdapter() {
@@ -141,7 +144,7 @@ public class CardForm extends BaseForm implements FormFactory, CardFormView {
         gc.insets = new Insets(20,0,20,0);
         createCardErrorLabel.setHorizontalAlignment(SwingConstants.CENTER);
         createCardErrorLabel.setFont(new Font("Product Sans", Font.BOLD, 32));
-        createCardErrorLabel.setBorder(Style.formBorder(""));
+        createCardErrorLabel.setBorder(CustomBorderFactory.formBorder(""));
         baseCreateCardForm.add(createCardErrorLabel, gc);
 
         /*========== BUTTON ROW ==========*/
