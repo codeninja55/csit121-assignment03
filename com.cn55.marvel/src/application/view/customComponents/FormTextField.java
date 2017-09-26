@@ -1,5 +1,8 @@
 package application.view.customComponents;
 
+import styles.ColorFactory;
+import styles.FontFactory;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -10,14 +13,14 @@ public class FormTextField extends JTextField {
     public FormTextField(int columns) {
         super(columns);
         setMinimumSize(getPreferredSize());
-        setFont(Style.textFieldFont());
+        setFont(FontFactory.textFieldFont());
         setVisible(false);
 
         this.addPropertyChangeListener(evt -> {
             if (!isEnabled() || !isEditable()) {
-                setBackground(Style.blueGrey500());
-                setForeground(Style.grey50());
-                setDisabledTextColor(Style.grey600());
+                setBackground(ColorFactory.blueGrey500());
+                setForeground(ColorFactory.grey50());
+                setDisabledTextColor(ColorFactory.grey600());
             } else {
                 setBackground(Color.WHITE);
                 setForeground(Color.BLACK);
@@ -27,7 +30,7 @@ public class FormTextField extends JTextField {
         this.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                setBackground(Style.blueGrey100());
+                setBackground(ColorFactory.blueGrey100());
             }
         });
     }

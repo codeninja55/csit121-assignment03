@@ -1,6 +1,8 @@
 package application.view;
 
-import application.view.customComponents.Style;
+import styles.ColorFactory;
+import styles.FontFactory;
+import styles.IconFactory;
 
 import javax.swing.*;
 import java.awt.*;
@@ -37,9 +39,9 @@ public class MainFrame extends JFrame {
         JLabel imageLabel = new JLabel("", marvelImage, SwingConstants.CENTER);
         JLabel rewardsCardLabel = new JLabel("REWARDS CARDS", SwingConstants.CENTER);
         welcomeLabel.setFont(new Font("Product Sans", Font.BOLD,80));
-        welcomeLabel.setForeground(Style.red500());
+        welcomeLabel.setForeground(ColorFactory.red500());
         rewardsCardLabel.setFont(new Font("Product Sans", Font.BOLD,72));
-        rewardsCardLabel.setForeground(Style.red500());
+        rewardsCardLabel.setForeground(ColorFactory.red500());
 
         GridBagConstraints gc = new GridBagConstraints();
         gc.fill = GridBagConstraints.NONE;
@@ -64,18 +66,18 @@ public class MainFrame extends JFrame {
         this.summaryViewPane = new SummaryViewPane();
 
         // Add panels, toolbars, and panes to main Frame
-        tabPane.setBackground(Style.blueGrey500());
-        tabPane.setForeground(Style.btnTextColor());
-        tabPane.setFont(Style.tabPaneFont());
+        tabPane.setBackground(ColorFactory.blueGrey500());
+        tabPane.setForeground(ColorFactory.btnTextColor());
+        tabPane.setFont(FontFactory.tabPaneFont());
 
         add(tabPane, BorderLayout.CENTER);
 
         // Add tabs to tabPane group
-        tabPane.addTab(" Start ", Style.homeIcon(), welcomePane);
-        tabPane.addTab(" Cards ", Style.cardIcon(),cardViewPane);
-        tabPane.addTab(" Purchases ", Style.purchaseIcon(), purchaseViewPane);
-        tabPane.addTab(" Categories ", Style.categoryIcon(), categoriesViewPane);
-        tabPane.addTab(" Summary ", Style.summaryViewPaneIcon(), summaryViewPane);
+        tabPane.addTab(" Start ", IconFactory.homeIcon(), welcomePane);
+        tabPane.addTab(" Cards ", IconFactory.cardIcon(),cardViewPane);
+        tabPane.addTab(" Purchases ", IconFactory.purchaseIcon(), purchaseViewPane);
+        tabPane.addTab(" Categories ", IconFactory.categoryIcon(), categoriesViewPane);
+        tabPane.addTab(" Summary ", IconFactory.summaryViewPaneIcon(), summaryViewPane);
 
         // DEFAULT PANE BEGIN AT
         tabPane.setSelectedIndex(4);

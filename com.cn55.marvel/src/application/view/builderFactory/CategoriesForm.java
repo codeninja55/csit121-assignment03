@@ -2,6 +2,8 @@ package application.view.builderFactory;
 
 import application.model.Generator;
 import application.view.customComponents.*;
+import styles.FontFactory;
+import styles.IconFactory;
 
 import javax.swing.*;
 import java.awt.*;
@@ -26,8 +28,8 @@ public class CategoriesForm extends BaseForm implements FormFactory, CategoryFor
         categoryNameTextField = new FormTextField(35);
         FormLabel categoryDescLabel = new FormLabel("Category Description");
         categoryDescTextField = new JTextArea(15,35);
-        FormButton createBtn = new FormButton("Create Category", Style.addIcon());
-        FormButton clearBtn = new FormButton("Clear", Style.clearIcon());
+        FormButton createBtn = new FormButton("Create Category", IconFactory.addIcon());
+        FormButton clearBtn = new FormButton("Clear", IconFactory.clearIcon());
 
         /* FORM AREA */
         GridBagConstraints gc = new GridBagConstraints();
@@ -70,7 +72,7 @@ public class CategoriesForm extends BaseForm implements FormFactory, CategoryFor
         descTextFieldDim.height = 250;
         categoryDescTextField.setPreferredSize(descTextFieldDim);
         categoryDescTextField.setMinimumSize(descTextFieldDim);
-        categoryDescTextField.setFont(Style.textAreaFont());
+        categoryDescTextField.setFont(FontFactory.textAreaFont());
         createCategoriesForm.add(categoryDescTextField, gc);
         categoryDescTextField.setVisible(true);
         /*========== BUTTON ROW ==========*/

@@ -1,5 +1,8 @@
 package application.view.customComponents;
 
+import styles.ColorFactory;
+import styles.FontFactory;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -11,9 +14,9 @@ public class ToolbarButton extends JButton {
         super(" "+text);
 
         setIcon(icon);
-        setFont(Style.toolbarButtonFont());
-        setBackground(Style.redA700());
-        setForeground(Style.btnTextColor());
+        setFont(FontFactory.toolbarButtonFont());
+        setBackground(ColorFactory.redA700());
+        setForeground(ColorFactory.btnTextColor());
         Dimension dim = new Dimension(280,60);
         setPreferredSize(dim);
         setMinimumSize(getPreferredSize());
@@ -22,11 +25,11 @@ public class ToolbarButton extends JButton {
         this.addMouseListener(new MouseAdapter() {
             public void mouseEntered(MouseEvent e) {
                 super.mouseEntered(e);
-                if (isEnabled()) setBackground(Style.blueGrey500());
+                if (isEnabled()) setBackground(ColorFactory.blueGrey500());
             }
             public void mouseExited(MouseEvent e) {
                 super.mouseExited(e);
-                if (isEnabled()) setBackground(Style.redA700());
+                if (isEnabled()) setBackground(ColorFactory.redA700());
             }
         });
     }

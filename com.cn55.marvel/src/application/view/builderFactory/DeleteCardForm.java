@@ -2,6 +2,8 @@ package application.view.builderFactory;
 
 import application.controller.validator.*;
 import application.view.customComponents.*;
+import styles.CustomBorderFactory;
+import styles.IconFactory;
 
 import javax.swing.*;
 import java.awt.*;
@@ -24,7 +26,7 @@ public class DeleteCardForm extends BaseForm implements FormFactory, DeleteFormV
         ErrorLabel existsErrorLabel = new ErrorLabel("CARD DOES NOT EXIST");
         ErrorLabel ruleErrLabel = new ErrorLabel("INVALID CARD ID NUMBER");
         ErrorLabel deleteErrorLabel = new ErrorLabel("CARD NOT DELETED");
-        FormButton deleteBtn = new FormButton("Delete Card", Style.deleteActionIcon());
+        FormButton deleteBtn = new FormButton("Delete Card", IconFactory.deleteActionIcon());
 
         GridBagConstraints gc = new GridBagConstraints();
         /*========== FIRST ROW ==========*/
@@ -63,7 +65,7 @@ public class DeleteCardForm extends BaseForm implements FormFactory, DeleteFormV
         gc.insets = new Insets(20,0,20,0);
         deleteErrorLabel.setHorizontalAlignment(SwingConstants.CENTER);
         deleteErrorLabel.setFont(new Font("Product Sans", Font.BOLD, 32));
-        deleteErrorLabel.setBorder(Style.formBorder(""));
+        deleteErrorLabel.setBorder(CustomBorderFactory.formBorder(""));
         deleteForm.add(deleteErrorLabel, gc);
 
         /*========== BUTTON ROW ==========*/

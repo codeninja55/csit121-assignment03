@@ -8,6 +8,10 @@ import application.view.customComponents.*;
 import application.view.jtableModels.CardTableModel;
 import application.view.jtableModels.CategoriesTableModel;
 import application.view.jtableModels.PurchaseTableModel;
+import styles.ColorFactory;
+import styles.FontFactory;
+import styles.IconFactory;
+import styles.Style;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,7 +22,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.Locale;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class SummaryViewPane extends JPanel implements DataObserver, SummaryView {
@@ -38,7 +41,7 @@ public class SummaryViewPane extends JPanel implements DataObserver, SummaryView
     SummaryViewPane() {
         setLayout(new BorderLayout());
         Toolbar toolbar = new Toolbar();
-        ToolbarButton refreshTableBtn = new ToolbarButton("Refresh", Style.refreshIcon());
+        ToolbarButton refreshTableBtn = new ToolbarButton("Refresh", IconFactory.refreshIcon());
 
         categoriesTableModel = new CategoriesTableModel();
         categoriesTable = new JTable(categoriesTableModel);
@@ -54,7 +57,7 @@ public class SummaryViewPane extends JPanel implements DataObserver, SummaryView
         String[] tableOptions = {"Categories", "Purchases", "Cards"};
         tableViewCombo = new JComboBox<>(tableOptions);
         tableViewCombo.setPreferredSize(refreshTableBtn.getPreferredSize());
-        tableViewCombo.setBorder(BorderFactory.createMatteBorder(2,2,2,2, Style.blueGrey500()));
+        tableViewCombo.setBorder(BorderFactory.createMatteBorder(2,2,2,2, ColorFactory.blueGrey500()));
         tableViewCombo.setSelectedIndex(0);
 
         /* TOOLBAR */
@@ -64,9 +67,9 @@ public class SummaryViewPane extends JPanel implements DataObserver, SummaryView
         daysSlider = new MaterialSlider(JSlider.HORIZONTAL, 0, 7, 0);
 
         Hashtable<Integer, JComponent> daysSliderValues = new Hashtable<>();
-        daysSliderValues.put(0, new FormLabel("Any", Style.grey50(), Style.sliderFont()));
+        daysSliderValues.put(0, new FormLabel("Any", ColorFactory.grey50(), FontFactory.sliderFont()));
         Arrays.stream(DayOfWeek.values()).forEach(d ->
-            daysSliderValues.put(d.getValue(), new FormLabel(d.getDisplayName(TextStyle.SHORT, Locale.ENGLISH), Style.grey50(), Style.sliderFont()))
+            daysSliderValues.put(d.getValue(), new FormLabel(d.getDisplayName(TextStyle.SHORT, Locale.ENGLISH), ColorFactory.grey50(), FontFactory.sliderFont()))
         );
 
         daysSlider.setPreferredSize(new Dimension(550, 100));
@@ -76,8 +79,8 @@ public class SummaryViewPane extends JPanel implements DataObserver, SummaryView
         // Time of day slider
         hoursSlider = new MaterialSlider(JSlider.HORIZONTAL, 0, 24, 24);
         Hashtable<Integer, JComponent> hoursSliderValues = new Hashtable<>();
-        hoursSliderValues.put(24, new FormLabel("Any", Style.grey50(), Style.sliderFont()));
-        IntStream.range(0,24).forEachOrdered(i -> hoursSliderValues.put(i, new FormLabel(Integer.toString(i), Style.grey50(), Style.sliderFont())));
+        hoursSliderValues.put(24, new FormLabel("Any", ColorFactory.grey50(), FontFactory.sliderFont()));
+        IntStream.range(0,24).forEachOrdered(i -> hoursSliderValues.put(i, new FormLabel(Integer.toString(i), ColorFactory.grey50(), FontFactory.sliderFont())));
         hoursSlider.setLabelTable(hoursSliderValues);
 
         toolbar.getLeftToolbar().add(daysSlider);

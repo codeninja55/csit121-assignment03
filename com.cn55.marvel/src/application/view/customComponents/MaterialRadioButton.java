@@ -1,5 +1,7 @@
 package application.view.customComponents;
 
+import styles.FontFactory;
+
 import javax.swing.*;
 import java.awt.event.ItemEvent;
 
@@ -12,7 +14,7 @@ public class MaterialRadioButton extends JRadioButton{
                 "com.cn55.marvel/src/img/radio_button_on_red500_24-custom.png");
 
         setText(text);
-        setFont(Style.labelFont());
+        setFont(FontFactory.labelFont());
         setVisible(true);
         setIcon(defaultIcon);
 

@@ -5,7 +5,9 @@ import application.model.DataObserver;
 import application.model.purchase.Purchase;
 import application.model.purchase.SortPurchaseType;
 import application.view.builderFactory.PurchaseForm;
-import application.view.customComponents.Style;
+import styles.ColorFactory;
+import styles.IconFactory;
+import styles.Style;
 import application.view.customComponents.Toolbar;
 import application.view.customComponents.ToolbarButton;
 import application.view.customComponents.ToolbarButtonListener;
@@ -36,10 +38,10 @@ public class PurchaseViewPane extends JPanel implements DataObserver {
     /*============================== CONSTRUCTORS ==============================*/
     PurchaseViewPane() {
         Toolbar toolbar = new Toolbar();
-        createPurchaseBtn = new ToolbarButton("Create", Style.createIcon());
-        deletePurchaseBtn = new ToolbarButton("Delete", Style.deleteIconDisabled());
-        summaryBtn = new ToolbarButton("Summary", Style.summaryIcon());
-        viewPurchaseBtn = new ToolbarButton("View", Style.viewIcon());
+        createPurchaseBtn = new ToolbarButton("Create", IconFactory.createIcon());
+        deletePurchaseBtn = new ToolbarButton("Delete", IconFactory.deleteIconDisabled());
+        summaryBtn = new ToolbarButton("Summary", IconFactory.summaryIcon());
+        viewPurchaseBtn = new ToolbarButton("View", IconFactory.viewIcon());
         sortPurchaseCombo = new JComboBox<>();
         DefaultComboBoxModel<String> options = new DefaultComboBoxModel<>();
 
@@ -57,14 +59,14 @@ public class PurchaseViewPane extends JPanel implements DataObserver {
         options.addElement(SortPurchaseType.Cash.getName());
         sortPurchaseCombo.setModel(options);
         sortPurchaseCombo.setSize(createPurchaseBtn.getPreferredSize());
-        sortPurchaseCombo.setBorder(BorderFactory.createMatteBorder(2,2,2,2, Style.blue500()));
+        sortPurchaseCombo.setBorder(BorderFactory.createMatteBorder(2,2,2,2, ColorFactory.blue500()));
         sortPurchaseCombo.setSelectedIndex(0);
 
         /* TOOLBAR */
         toolbar.getLeftToolbar().add(createPurchaseBtn);
         toolbar.getLeftToolbar().add(deletePurchaseBtn);
         toolbar.getLeftToolbar().add(summaryBtn);
-        deletePurchaseBtn.setBackground(Style.blueGrey700());
+        deletePurchaseBtn.setBackground(ColorFactory.blueGrey700());
         deletePurchaseBtn.setEnabled(false);
         toolbar.getRightToolbar().add(viewPurchaseBtn);
         toolbar.getRightToolbar().add(sortPurchaseCombo);

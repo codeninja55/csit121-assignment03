@@ -1,12 +1,14 @@
 package application.view.customComponents;
 
+import styles.FontFactory;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class FormLabel extends JLabel {
     public FormLabel(String text) {
         super(text);
-        setFont(Style.labelFont());
+        setFont(FontFactory.labelFont());
         setVisible(false);
     }
 

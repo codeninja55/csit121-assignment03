@@ -2,6 +2,9 @@ package application.view.builderFactory;
 
 import application.controller.validator.*;
 import application.view.customComponents.*;
+import styles.CustomBorderFactory;
+import styles.FontFactory;
+import styles.IconFactory;
 
 import javax.swing.*;
 import java.awt.*;
@@ -43,7 +46,7 @@ public class DeleteCategoryForm extends BaseForm implements FormFactory, DeleteF
         idRuleErrLabel = new ErrorLabel("INVALID CATEGORY ID");
         othersDeleteErrLabel = new ErrorLabel("CANNOT DELETE OTHERS CATEGORY");
         deleteErrorLabel = new ErrorLabel("CATEGORY NOT DELETED");
-        deleteBtn = new FormButton("Delete Category", Style.deleteActionIcon());
+        deleteBtn = new FormButton("Delete Category", IconFactory.deleteActionIcon());
 
         /* RADIO BUTTONS SUB PANE */
         categoryRBGroup.add(idRB);
@@ -52,9 +55,9 @@ public class DeleteCategoryForm extends BaseForm implements FormFactory, DeleteF
         idRB.setSelected(true);
         deleteTypeLabel.setVisible(true);
         rbSubPane.add(deleteTypeLabel);
-        idRB.setFont(Style.labelFont());
+        idRB.setFont(FontFactory.labelFont());
         rbSubPane.add(idRB);
-        nameRB.setFont(Style.labelFont());
+        nameRB.setFont(FontFactory.labelFont());
         rbSubPane.add(nameRB);
         rbSubPane.setMinimumSize(rbSubPane.getPreferredSize());
         add(rbSubPane, BorderLayout.NORTH);
@@ -151,7 +154,7 @@ public class DeleteCategoryForm extends BaseForm implements FormFactory, DeleteF
         gc.insets = new Insets(20,0,20,0);
         deleteErrorLabel.setHorizontalAlignment(SwingConstants.CENTER);
         deleteErrorLabel.setFont(new Font("Product Sans", Font.BOLD, 32));
-        deleteErrorLabel.setBorder(Style.formBorder(""));
+        deleteErrorLabel.setBorder(CustomBorderFactory.formBorder(""));
         deleteCategoryForm.add(deleteErrorLabel, gc);
 
         /*========== BUTTON ROW ==========*/

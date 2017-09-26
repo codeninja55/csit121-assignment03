@@ -7,7 +7,9 @@ import application.model.card.SortCardType;
 import application.view.builderFactory.CardForm;
 import application.view.builderFactory.DeleteCardForm;
 import application.view.builderFactory.SearchCardForm;
-import application.view.customComponents.Style;
+import styles.ColorFactory;
+import styles.IconFactory;
+import styles.Style;
 import application.view.customComponents.Toolbar;
 import application.view.customComponents.ToolbarButton;
 import application.view.customComponents.ToolbarButtonListener;
@@ -38,10 +40,10 @@ public class CardViewPane extends JPanel implements DataObserver {
     /*============================== CONSTRUCTORS ==============================*/
     CardViewPane() {
         Toolbar toolbar = new Toolbar();
-        createCardBtn = new ToolbarButton("Create", Style.createIcon());
-        deleteCardBtn = new ToolbarButton("Delete", Style.deleteIcon());
-        searchBtn = new ToolbarButton("Search", Style.searchIcon());
-        viewBtn = new ToolbarButton("View", Style.viewIcon());
+        createCardBtn = new ToolbarButton("Create", IconFactory.createIcon());
+        deleteCardBtn = new ToolbarButton("Delete", IconFactory.deleteIcon());
+        searchBtn = new ToolbarButton("Search", IconFactory.searchIcon());
+        viewBtn = new ToolbarButton("View", IconFactory.viewIcon());
 
         cardTableModel = new CardTableModel();
         cardsTable = new JTable(cardTableModel);
@@ -56,7 +58,7 @@ public class CardViewPane extends JPanel implements DataObserver {
                 SortCardType.Points.getName()};
         sortedCombo = new JComboBox<>(sortOptions);
         sortedCombo.setSize(searchBtn.getPreferredSize());
-        sortedCombo.setBorder(BorderFactory.createMatteBorder(2,2,2,2, Style.blueGrey500()));
+        sortedCombo.setBorder(BorderFactory.createMatteBorder(2,2,2,2, ColorFactory.blueGrey500()));
         sortedCombo.setSelectedIndex(0);
 
         /* TOOLBAR */
