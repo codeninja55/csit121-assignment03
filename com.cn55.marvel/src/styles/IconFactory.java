@@ -21,4 +21,5 @@ public abstract class IconFactory {
     public static ImageIcon clearIcon() { return new ImageIcon("com.cn55.marvel/src/img/clear_all_white_36.png");}
     public static ImageIcon addIcon() { return new ImageIcon("com.cn55.marvel/src/img/add_white_36.png");}
     public static ImageIcon addIconDisabled() { return new ImageIcon("com.cn55.marvel/src/img/add_grey_36.png");}
+    public static ImageIcon datePickerIcon() { return new ImageIcon("com.cn55.marvel/src/img/event_white_36.png");}
 }
