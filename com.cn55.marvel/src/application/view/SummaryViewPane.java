@@ -17,6 +17,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,6 +35,8 @@ public class SummaryViewPane extends JPanel implements DataObserver, SummaryView
     private JTable purchasesTable;
     private CardTableModel cardsTableModel;
     private JTable cardsTable;
+    private MaterialDatePicker dateBeginPicker;
+    private MaterialDatePicker dateEndPicker;
     private MaterialSlider daysSlider;
     private MaterialSlider hoursSlider;
     private SummaryListener refreshListener;
@@ -61,8 +64,6 @@ public class SummaryViewPane extends JPanel implements DataObserver, SummaryView
         tableViewCombo.setSelectedIndex(0);
 
         /* TOOLBAR */
-        // Date Picker FROM
-        // Date Picker TO
         // Days Slider
         daysSlider = new MaterialSlider(JSlider.HORIZONTAL, 0, 7, 0);
 
@@ -83,9 +84,19 @@ public class SummaryViewPane extends JPanel implements DataObserver, SummaryView
         IntStream.range(0,24).forEachOrdered(i -> hoursSliderValues.put(i, new FormLabel(Integer.toString(i), ColorFactory.grey50(), FontFactory.sliderFont())));
         hoursSlider.setLabelTable(hoursSliderValues);
 
+        // Date Picker FROM
+        dateBeginPicker = new MaterialDatePicker();
+        dateBeginPicker.setPreferredSize(refreshTableBtn.getPreferredSize());
+
+        // Date Picker TO
+        dateEndPicker = new MaterialDatePicker();
+        dateEndPicker.setPreferredSize(refreshTableBtn.getPreferredSize());
+
         toolbar.getLeftToolbar().add(daysSlider);
         toolbar.getLeftToolbar().add(hoursSlider);
 
+        toolbar.getRightToolbar().add(dateEndPicker);
+        toolbar.getRightToolbar().add(dateBeginPicker);
         toolbar.getRightToolbar().add(refreshTableBtn);
         toolbar.getRightToolbar().add(tableViewCombo);
         add(toolbar, BorderLayout.NORTH);
@@ -149,4 +160,10 @@ public class SummaryViewPane extends JPanel implements DataObserver, SummaryView
     public String getTableOption() {
         return (String)tableViewCombo.getSelectedItem();
     }
+
+    public LocalDate getDateFromOption() { return dateBeginPicker.getDate(); }
+
+    public LocalDate getDateToOption() { return dateEndPicker.getDate(); }
+
+
 }
