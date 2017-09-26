@@ -7,7 +7,7 @@ public class MaterialSlider extends JSlider {
     public MaterialSlider(int orientation, int min, int max, int start) {
         super(orientation, min, max, start);
         setForeground(Style.red500());
-        setBackground(Style.blueGrey500());
+        setBackground(Style.blueGrey200());
         setPaintLabels(true);
         setPaintTicks(true);
         setMinorTickSpacing(1);
