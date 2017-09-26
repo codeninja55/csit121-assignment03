@@ -32,6 +32,7 @@ public class MaterialDatePicker extends DatePicker {
         JTextField pickerTextField = getComponentDateTextField();
         pickerTextField.setEditable(false);
         pickerTextField.setBackground(ColorFactory.red100());
+        pickerTextField.setHorizontalAlignment(JTextField.CENTER);
 
         // DatePickerSettings allows all changes below
         DatePickerSettings settings = new DatePickerSettings();
