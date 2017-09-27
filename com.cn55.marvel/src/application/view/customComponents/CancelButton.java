@@ -9,9 +9,9 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-class CancelButton extends JButton{
+public class CancelButton extends JButton{
 
-    CancelButton(String text) {
+    public CancelButton(String text) {
         super((" " + text));
 
         setIcon(IconFactory.cancelIcon());

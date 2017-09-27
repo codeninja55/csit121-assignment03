@@ -22,6 +22,7 @@ import java.util.Arrays;
 public class SummaryViewPane extends JPanel implements DataObserver {
     private DataObservable dataDAO;
     private SummaryOutputForm outputForm;
+    private SummaryFilterForm filterForm;
     private PurchaseTableModel purchasesTableModel;
     private JTable purchasesTable;
     private CardTableModel cardsTableModel;
@@ -34,6 +35,7 @@ public class SummaryViewPane extends JPanel implements DataObserver {
         ToolbarButton analyticsBtn = new ToolbarButton("Filter Data", IconFactory.analyticsIcon());
 
         outputForm = FormFactory.createOutputForm();
+        filterForm = FormFactory.createFilterForm();
         purchasesTableModel = new PurchaseTableModel();
         purchasesTable = new JTable(purchasesTableModel);
         Style.purchasesTableFormatter(purchasesTable);
@@ -54,6 +56,7 @@ public class SummaryViewPane extends JPanel implements DataObserver {
 
         add(new JScrollPane(purchasesTable), BorderLayout.CENTER);
         add(outputForm, BorderLayout.EAST);
+        add(filterForm, BorderLayout.WEST);
         outputForm.setVisible(true);
 
         tableViewCombo.addItemListener(e -> {
@@ -77,11 +80,6 @@ public class SummaryViewPane extends JPanel implements DataObserver {
     /*============================== MUTATORS ==============================*/
     public void setAnalyticsListener(ToolbarButtonListener analyticsListener) { this.analyticsListener = analyticsListener; }
 
-    public void setSummaryForms(SummaryFilterForm filterForm) {
-        this.add(filterForm, BorderLayout.WEST);
-        filterForm.setVisible(true);
-    }
-
     public void update() {
         purchasesTableModel.setData(new ArrayList<>(dataDAO.getPurchaseUpdate(this).values()));
         purchasesTableModel.fireTableDataChanged();
@@ -97,5 +95,7 @@ public class SummaryViewPane extends JPanel implements DataObserver {
     public void setSubject(DataObservable dataObservable) { this.dataDAO = dataObservable; }
 
     /*============================== ACCESSORS ==============================*/
+    public SummaryFilterForm getFilterForm() { return filterForm; }
+
     public SummaryOutputForm getOutputForm() { return outputForm; }
 }
