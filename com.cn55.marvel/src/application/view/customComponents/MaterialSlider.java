@@ -8,7 +8,7 @@ import java.awt.*;
 public class MaterialSlider extends JSlider {
     public MaterialSlider(int orientation, int min, int max, int start) {
         super(orientation, min, max, start);
-        setForeground(ColorFactory.red500());
+        setForeground(Color.BLACK);
         setBackground(ColorFactory.blueGrey200());
         setMinorTickSpacing(20);
         setMajorTickSpacing(max * 5);
