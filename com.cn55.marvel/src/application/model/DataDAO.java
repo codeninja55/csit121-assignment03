@@ -28,9 +28,9 @@ public class DataDAO implements DataObservable, CardsDAO, PurchaseDAO, CategoryD
     private final HashMap<Integer,Purchase> purchases;
     private final HashMap<Integer,Category> categories;
 
-    private final Path CATEGORIES_LOG_PATH = Paths.get("com.cn55.marvel/src/persistentData/CategoriesStorage.csv");
-    private final Path CARDS_LOG_PATH = Paths.get("com.cn55.marvel/src/persistentData/CardsStorage.csv");
-    private final Path PURCHASES_LOG_PATH = Paths.get("com.cn55.marvel/src/persistentData/PurchaseStorage.csv");
+    private final Path CATEGORIES_LOG_PATH = Paths.get("com.cn55.marvel/src/persistent_data/CategoriesStorage.csv");
+    private final Path CARDS_LOG_PATH = Paths.get("com.cn55.marvel/src/persistent_data/CardsStorage.csv");
+    private final Path PURCHASES_LOG_PATH = Paths.get("com.cn55.marvel/src/persistent_data/PurchaseStorage.csv");
 
     private LocalDateTime firstPurchaseDate;
     private LocalDateTime lastPurchaseDate;

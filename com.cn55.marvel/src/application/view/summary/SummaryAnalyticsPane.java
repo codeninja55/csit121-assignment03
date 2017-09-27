@@ -6,21 +6,19 @@ import application.model.card.Card;
 import application.model.card.CardType;
 import application.model.category.Category;
 import application.model.purchase.Purchase;
-import application.view.builderFactory.FormFactory;
-import application.view.customComponents.BaseForm;
-import application.view.customComponents.FormButton;
-import application.view.customComponents.FormLabel;
-import application.view.customComponents.FormTextField;
+import application.view.form_builder_factory.FormFactory;
+import application.view.custom_components.BaseForm;
+import application.view.custom_components.FormButton;
+import application.view.custom_components.FormLabel;
+import application.view.custom_components.FormTextField;
 import styles.ColorFactory;
 import styles.FormatterFactory;
 import styles.FontFactory;
-import sun.security.pkcs11.wrapper.Functions;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 import java.awt.*;
 import java.util.*;
-import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 

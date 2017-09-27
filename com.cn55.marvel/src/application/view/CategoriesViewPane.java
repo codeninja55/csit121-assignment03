@@ -3,13 +3,13 @@ package application.view;
 import application.model.DataObservable;
 import application.model.DataObserver;
 import application.model.category.Category;
-import application.view.builderFactory.CategoriesForm;
-import application.view.builderFactory.DeleteCategoryForm;
+import application.view.form_builder_factory.CategoriesForm;
+import application.view.form_builder_factory.DeleteCategoryForm;
 import styles.IconFactory;
 import styles.TableFormatterFactory;
-import application.view.customComponents.Toolbar;
-import application.view.customComponents.ToolbarButton;
-import application.view.customComponents.ToolbarButtonListener;
+import application.view.custom_components.Toolbar;
+import application.view.custom_components.ToolbarButton;
+import application.view.custom_components.ToolbarButtonListener;
 import application.view.jtableModels.CategoriesTableModel;
 
 import javax.swing.*;

@@ -4,13 +4,13 @@ import application.model.DataObservable;
 import application.model.DataObserver;
 import application.model.purchase.Purchase;
 import application.model.purchase.SortPurchaseType;
-import application.view.builderFactory.PurchaseForm;
+import application.view.form_builder_factory.PurchaseForm;
 import styles.ColorFactory;
 import styles.IconFactory;
 import styles.TableFormatterFactory;
-import application.view.customComponents.Toolbar;
-import application.view.customComponents.ToolbarButton;
-import application.view.customComponents.ToolbarButtonListener;
+import application.view.custom_components.Toolbar;
+import application.view.custom_components.ToolbarButton;
+import application.view.custom_components.ToolbarButtonListener;
 import application.view.jtableModels.PurchaseTableModel;
 
 import javax.swing.*;
