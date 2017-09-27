@@ -274,22 +274,6 @@ public class Program {
             });
         });
 
-        /*TOOLBAR | SUMMARY BUTTON*/
-        purchaseViewPane.setSummaryListener(() -> {
-            Predicate<Purchase> cashPurchases = e -> (e.getCardType().equals(CardType.Cash.getName()));
-
-            double cashTotal = db.getAllPurchases().values().stream().filter(cashPurchases)
-                    .mapToDouble(Purchase::getCategoriesTotal).sum();
-            double cardTotal = db.getAllPurchases().values().stream().filter(p -> !p.getCardType().equals(CardType.Cash.getName()))
-                    .mapToDouble(Purchase::getCategoriesTotal).sum();
-            double allTotal = db.getAllPurchases().values().stream().mapToDouble(Purchase::getCategoriesTotal).sum();
-
-            String resultsText = String.format("%n%s%n%n%s: $%.2f%n%n%s: $%.2f%n%n%s: $%.2f", "SUMMARY OF PURCHASES",
-                    "Card Purchase Total", cardTotal, "Cash Purchase Total", cashTotal, "Total for All Purchases", allTotal);
-
-            showResults(purchaseViewPane, resultsText);
-        });
-
         /*TOOLBAR | VIEW  BUTTON*/
         purchaseViewPane.setViewPurchaseListener(() -> {
             if (purchaseViewPane.getPurchasesTable().getSelectedRow() >= 0) {
