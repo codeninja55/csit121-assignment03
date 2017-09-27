@@ -452,7 +452,7 @@ public class Program {
     private void exitApplication() {
         String[] options = {"Save and Exit", "Exit without Save", "Cancel Exit"};
         int response = JOptionPane.showOptionDialog(null,
-                "Would you like to save your session data before exiting?\n\n\n\n",
+                "\nWould you like to save your session data before exiting?\n\n\n\n",
                 "Save on Exit", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE,
                 IconFactory.warningIcon(), options, options[0]);
 
