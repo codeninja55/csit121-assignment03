@@ -24,6 +24,10 @@ public class BasicCard extends AdvancedCard {
         super.cardType = CardType.BasicCard.getName();
     }
 
+    BasicCard(BasicCard o) {
+        super(o);
+    }
+
     /*============================== MUTATORS  ==============================*/
     public void calcPoints(double totalAmount) { super.points += POINTS_RATE * totalAmount; }
 

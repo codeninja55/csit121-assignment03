@@ -27,6 +27,11 @@ public class PremiumCard extends AdvancedCard {
         super.cardType = CardType.PremiumCard.getName();
     }
 
+    // copy constructor
+    PremiumCard(PremiumCard o) {
+        super(o);
+    }
+
     /*============================== MUTATORS  ==============================*/
     public void calcPoints(double totalAmount) {
         if (totalAmount < 40 && super.balance < 1000)

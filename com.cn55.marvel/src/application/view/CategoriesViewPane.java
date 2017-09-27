@@ -3,13 +3,13 @@ package application.view;
 import application.model.DataObservable;
 import application.model.DataObserver;
 import application.model.category.Category;
-import application.view.builderFactory.CategoriesForm;
-import application.view.builderFactory.DeleteCategoryForm;
+import application.view.form_builder_factory.CategoriesForm;
+import application.view.form_builder_factory.DeleteCategoryForm;
 import styles.IconFactory;
-import styles.Style;
-import application.view.customComponents.Toolbar;
-import application.view.customComponents.ToolbarButton;
-import application.view.customComponents.ToolbarButtonListener;
+import styles.TableFormatterFactory;
+import application.view.custom_components.Toolbar;
+import application.view.custom_components.ToolbarButton;
+import application.view.custom_components.ToolbarButtonListener;
 import application.view.jtableModels.CategoriesTableModel;
 
 import javax.swing.*;
@@ -19,9 +19,7 @@ import java.util.ArrayList;
 
 public class CategoriesViewPane extends JPanel implements DataObserver {
     private DataObservable dataDAO;
-
     private final CategoriesTableModel categoriesTableModel;
-
     private ToolbarButtonListener createCategoryListener;
     private ToolbarButtonListener deleteCategoryListener;
 
@@ -33,7 +31,7 @@ public class CategoriesViewPane extends JPanel implements DataObserver {
 
         categoriesTableModel = new CategoriesTableModel();
         JTable categoriesTable = new JTable(categoriesTableModel);
-        Style.categoriesTableFormatter(categoriesTable);
+        TableFormatterFactory.categoriesTableFormatter(categoriesTable);
 
         setLayout(new BorderLayout());
 
@@ -81,11 +79,8 @@ public class CategoriesViewPane extends JPanel implements DataObserver {
     }
 
     public void update() {
-        ArrayList<Category> allCategories = new ArrayList<>();
-        allCategories.addAll(dataDAO.getCategoriesUpdate(this).values());
+        ArrayList<Category> allCategories = new ArrayList<>(dataDAO.getCategoriesUpdate(this).values());
         categoriesTableModel.setData(allCategories);
         categoriesTableModel.fireTableDataChanged();
     }
-
-    /*============================== ACCESSORS  ==============================*/
 }

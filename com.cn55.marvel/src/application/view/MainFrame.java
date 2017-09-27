@@ -1,6 +1,7 @@
 package application.view;
 
 import application.controller.Utils;
+import application.view.summary.SummaryViewPane;
 import styles.ColorFactory;
 import styles.FontFactory;
 import styles.IconFactory;
