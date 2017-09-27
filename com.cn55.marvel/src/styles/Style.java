@@ -63,8 +63,8 @@ public abstract class Style {
         table.getColumnModel().getColumn(0).setCellRenderer(Style.centerRenderer());
         table.getColumnModel().getColumn(1).setCellRenderer(Style.centerRenderer());
         table.getColumnModel().getColumn(2).setCellRenderer(Style.centerRenderer());
-        table.getColumnModel().getColumn(3).setCellRenderer(Style.rightRenderer());
-        table.getColumnModel().getColumn(4).setCellRenderer(Style.centerRenderer());
+        table.getColumnModel().getColumn(3).setCellRenderer(Style.centerRenderer());
+        table.getColumnModel().getColumn(4).setCellRenderer(Style.rightRenderer());
     }
 
     public static void categoriesTableFormatter(JTable table) {
