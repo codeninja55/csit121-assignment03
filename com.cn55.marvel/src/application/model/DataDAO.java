@@ -17,10 +17,8 @@ import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.TreeMap;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /* Data Access Object (DAO) Implementation Layer */
 @SuppressWarnings("ConstantConditions")
@@ -154,12 +152,22 @@ public class DataDAO implements DataObservable, CardsDAO, PurchaseDAO, CategoryD
     public void notifyObservers() {
         dataObservers.forEach(DataObserver::update);
     }
-    public TreeMap<String, Card> getCardsUpdate(DataObserver who) { return new TreeMap<>(cards); }
+    public TreeMap<String, Card> getCardsUpdate(DataObserver who) {
+        return cards.entrySet().stream()
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
+                        (k,v) -> k, TreeMap::new));
+    }
     public TreeMap<Integer, Purchase> getPurchaseUpdate(DataObserver who) {
-        return new TreeMap<>(purchases);
+        return purchases.entrySet().stream()
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
+                        (k,v) -> k, TreeMap::new));
     }
     public TreeMap<Integer, Category> getCategoriesUpdate(DataObserver who) {
-        return new TreeMap<>(categories);
+        return categories.entrySet().stream()
+                .collect(Collectors.toMap(Map.Entry::getKey, // key mapper
+                        Map.Entry::getValue, // value mapper
+                        (k, v) -> k, // merge function
+                        TreeMap::new)); // supplier
     }
     public LocalDateTime getFirstPurchaseDate(DataObserver who) { return firstPurchaseDate; }
     public LocalDateTime getLastPurchaseDate(DataObserver who) { return lastPurchaseDate; }
