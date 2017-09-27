@@ -2,50 +2,40 @@ package application.view;
 
 import application.model.DataObservable;
 import application.model.DataObserver;
-import application.view.builderFactory.SummaryListener;
-import application.view.builderFactory.SummaryView;
+import application.view.builderFactory.FormFactory;
+import application.view.builderFactory.SummaryFilterForm;
+import application.view.builderFactory.SummaryOutputForm;
 import application.view.customComponents.*;
 import application.view.jtableModels.CardTableModel;
 import application.view.jtableModels.CategoriesTableModel;
 import application.view.jtableModels.PurchaseTableModel;
 import styles.ColorFactory;
-import styles.FontFactory;
 import styles.IconFactory;
 import styles.Style;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ItemEvent;
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Hashtable;
-import java.util.Locale;
-import java.util.stream.IntStream;
 
-public class SummaryViewPane extends JPanel implements DataObserver, SummaryView {
+public class SummaryViewPane extends JPanel implements DataObserver {
     private DataObservable dataDAO;
-
-    private JComboBox<String> tableViewCombo;
+    private SummaryOutputForm outputForm;
     private CategoriesTableModel categoriesTableModel;
     private JTable categoriesTable;
     private PurchaseTableModel purchasesTableModel;
     private JTable purchasesTable;
     private CardTableModel cardsTableModel;
     private JTable cardsTable;
-    private MaterialSlider daysSlider;
-    private MaterialSlider hoursSlider;
-    private MaterialDatePicker dateBeginPicker;
-    private MaterialDatePicker dateEndPicker;
-    private SummaryListener refreshListener;
+    private ToolbarButtonListener analyticsListener;
 
     SummaryViewPane() {
         setLayout(new BorderLayout());
         Toolbar toolbar = new Toolbar();
-        ToolbarButton refreshTableBtn = new ToolbarButton("Refresh", IconFactory.refreshIcon());
+        ToolbarButton analyticsBtn = new ToolbarButton("Filter Data", IconFactory.analyticsIcon());
 
+        outputForm = FormFactory.createOutputForm();
         categoriesTableModel = new CategoriesTableModel();
         categoriesTable = new JTable(categoriesTableModel);
         Style.categoriesTableFormatter(categoriesTable);
@@ -57,64 +47,19 @@ public class SummaryViewPane extends JPanel implements DataObserver, SummaryView
         Style.cardTableFormatter(cardsTable);
 
         /* TABLE VIEW COMBO BOX */
-        String[] tableOptions = {"Categories", "Purchases", "Cards"};
-        tableViewCombo = new JComboBox<>(tableOptions);
-        tableViewCombo.setPreferredSize(refreshTableBtn.getPreferredSize());
+        String[] tableOptions = {"Purchases", "Categories", "Cards"};
+        JComboBox<String> tableViewCombo = new JComboBox<>(tableOptions);
+        tableViewCombo.setPreferredSize(analyticsBtn.getPreferredSize());
         tableViewCombo.setBorder(BorderFactory.createMatteBorder(2,2,2,2, ColorFactory.blueGrey500()));
         tableViewCombo.setSelectedIndex(0);
 
-        /* TOOLBAR */
-        // Days Slider
-        daysSlider = new MaterialSlider(JSlider.HORIZONTAL, 0, 7, 0);
-
-        Hashtable<Integer, JComponent> daysSliderValues = new Hashtable<>();
-        daysSliderValues.put(0, new FormLabel("Any", ColorFactory.grey50(), FontFactory.sliderFont()));
-        Arrays.stream(DayOfWeek.values()).forEach(d ->
-            daysSliderValues.put(d.getValue(), new FormLabel(d.getDisplayName(TextStyle.SHORT, Locale.ENGLISH), ColorFactory.grey50(), FontFactory.sliderFont()))
-        );
-
-        daysSlider.setPreferredSize(new Dimension(550, 100));
-        daysSlider.setMinimumSize(daysSlider.getPreferredSize());
-        daysSlider.setLabelTable(daysSliderValues);
-
-        // Time of day slider
-        hoursSlider = new MaterialSlider(JSlider.HORIZONTAL, 0, 24, 24);
-        Hashtable<Integer, JComponent> hoursSliderValues = new Hashtable<>();
-        hoursSliderValues.put(24, new FormLabel("Any", ColorFactory.grey50(), FontFactory.sliderFont()));
-        IntStream.range(0,24).forEachOrdered(i -> hoursSliderValues.put(i, new FormLabel(Integer.toString(i), ColorFactory.grey50(), FontFactory.sliderFont())));
-        hoursSlider.setLabelTable(hoursSliderValues);
-
-        // Date Picker FROM
-        FormLabel dateBeginLabel = new FormLabel("Filter From:");
-        dateBeginLabel.setVisible(true);
-        dateBeginPicker = new MaterialDatePicker();
-        dateBeginPicker.setPreferredSize(refreshTableBtn.getPreferredSize());
-
-        // Date Picker TO
-        FormLabel dateEndLabel = new FormLabel("To:");
-        dateEndLabel.setVisible(true);
-        dateEndPicker = new MaterialDatePicker();
-        dateEndPicker.setPreferredSize(refreshTableBtn.getPreferredSize());
-
-        toolbar.getLeftToolbar().add(daysSlider);
-        toolbar.getLeftToolbar().add(hoursSlider);
-
-        toolbar.getRightToolbar().add(dateBeginLabel);
-        toolbar.getRightToolbar().add(dateBeginPicker);
-        toolbar.getRightToolbar().add(dateEndLabel);
-        toolbar.getRightToolbar().add(dateEndPicker);
-        toolbar.getRightToolbar().add(refreshTableBtn);
+        toolbar.getLeftToolbar().add(analyticsBtn);
         toolbar.getRightToolbar().add(tableViewCombo);
         add(toolbar, BorderLayout.NORTH);
 
-        add(new JScrollPane(categoriesTable), BorderLayout.CENTER);
-
-        /*daysSlider.addChangeListener(e -> {
-            JSlider source = (JSlider)e.getSource();
-            if (!daysSlider.getValueIsAdjusting()) {
-
-            }
-        });*/
+        add(new JScrollPane(purchasesTable), BorderLayout.CENTER);
+        add(outputForm, BorderLayout.EAST);
+        outputForm.setVisible(true);
 
         tableViewCombo.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
@@ -131,14 +76,17 @@ public class SummaryViewPane extends JPanel implements DataObserver, SummaryView
             }
         });
 
-        refreshTableBtn.addActionListener(e -> {
-            if (refreshListener != null) refreshListener.refreshActionPerformed(SummaryViewPane.this);
+        analyticsBtn.addActionListener(e -> {
+            if (analyticsListener != null) analyticsListener.toolbarButtonEventOccurred();
         });
     }
 
     /*============================== MUTATORS ==============================*/
-    public void setRefreshListener(SummaryListener refreshListener) {
-        this.refreshListener = refreshListener;
+    public void setAnalyticsListener(ToolbarButtonListener analyticsListener) { this.analyticsListener = analyticsListener; }
+
+    public void setSummaryForms(SummaryFilterForm filterForm) {
+        this.add(filterForm, BorderLayout.WEST);
+        filterForm.setVisible(true);
     }
 
     public void update() {
@@ -148,10 +96,11 @@ public class SummaryViewPane extends JPanel implements DataObserver, SummaryView
         purchasesTableModel.fireTableDataChanged();
         cardsTableModel.setData(new ArrayList<>(dataDAO.getCardsUpdate(this).values()));
         cardsTableModel.fireTableDataChanged();
-        LocalDate firstPurchaseDate = dataDAO.getFirstPurchaseDate(this).toLocalDate();
+        // TODO - Add these to the form
+        /*LocalDate firstPurchaseDate = dataDAO.getFirstPurchaseDate(this).toLocalDate();
         dateBeginPicker.setDate(firstPurchaseDate);
         LocalDate lastPurchaseDate = dataDAO.getLastPurchaseDate(this).toLocalDate();
-        dateEndPicker.setDate(lastPurchaseDate);
+        dateEndPicker.setDate(lastPurchaseDate);*/
     }
 
     public void setSubject(DataObservable dataObservable) { this.dataDAO = dataObservable; }
@@ -161,18 +110,5 @@ public class SummaryViewPane extends JPanel implements DataObserver, SummaryView
         return categoriesTableModel;
     }
 
-    public int getDaysOption() {
-        return daysSlider.getValue();
-    }
-
-    public int getHoursOption() { return hoursSlider.getValue(); }
-
-    public String getTableOption() {
-        return (String)tableViewCombo.getSelectedItem();
-    }
-
-    public LocalDate getDateFromOption() { return dateBeginPicker.getDate(); }
-
-    public LocalDate getDateToOption() { return dateEndPicker.getDate(); }
-
+    public SummaryOutputForm getOutputForm() { return outputForm; }
 }

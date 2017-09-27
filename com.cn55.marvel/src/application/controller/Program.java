@@ -9,6 +9,7 @@ import application.model.purchase.PurchaseType;
 import application.model.purchase.SortPurchaseType;
 import application.view.*;
 import application.view.builderFactory.*;
+import application.view.SummaryViewPane;
 import application.view.customComponents.ProgressDialog;
 import application.view.customComponents.ResultsPane;
 import styles.IconFactory;
@@ -365,7 +366,7 @@ public class Program {
 
     /*============================== SUMMARY VIEW HANDLERS ==============================*/
     private void setupSummaryViewHandlers() {
-        summaryViewPane.setRefreshListener((SummaryView e) -> {
+        /*summaryViewPane.setRefreshListener((SummaryView e) -> {
             ArrayList<Category> clonedCategories = db.getAllCategories().values().stream().map(Category::new)
                     .collect(Collectors.toCollection(ArrayList::new));
 
@@ -387,6 +388,17 @@ public class Program {
                 summaryViewPane.revalidate();
                 summaryViewPane.repaint();
             }
+        });*/
+
+        summaryViewPane.setAnalyticsListener(() -> {
+            removeCategoryForms();
+            SummaryFilterForm filterForm = FormFactory.createFilterForm();
+            summaryViewPane.setSummaryForms(filterForm);
+
+            filterForm.setListener(e -> {
+                // TODO
+                System.out.println("Filtering Not yet Impl");
+            });
         });
     }
 
@@ -413,7 +425,12 @@ public class Program {
 
     private void removeCategoryForms() {
         Arrays.stream(categoriesViewPane.getComponents()).filter(c -> c instanceof FormFactory)
-                .forEach(c -> {c.setVisible(false); categoriesViewPane.remove(c);});
+                .forEach(c -> c.setVisible(false));
+    }
+
+    private void removeSummaryForms() {
+        Arrays.stream(summaryViewPane.getComponents()).filter(FormFactory.class::isInstance)
+                .forEach(c -> c.setVisible(false));
     }
 
     /*============================== ACCESSORS ==============================*/

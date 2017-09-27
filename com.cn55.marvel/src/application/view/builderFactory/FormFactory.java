@@ -33,4 +33,8 @@ public interface FormFactory {
         return new PurchaseForm.PurchaseFormBuilder(Generator.setReceiptID())
                 .existingCardModel(cards).categoriesList(categories).build();
     }
+
+    static SummaryFilterForm createFilterForm() { return new SummaryFilterForm(); }
+
+    static SummaryOutputForm createOutputForm() { return new SummaryOutputForm(); }
 }
