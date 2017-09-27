@@ -6,8 +6,12 @@ import styles.IconFactory;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 import java.net.URL;
+import java.util.Arrays;
 
 public class MainFrame extends JFrame {
     private final JTabbedPane tabPane;
@@ -71,12 +75,23 @@ public class MainFrame extends JFrame {
 
         fileMenu.setFont(FontFactory.toolbarButtonFont());
         dataMenu.setFont(FontFactory.toolbarButtonFont());
-        adminSubMenu.setFont(FontFactory.comboboxFont());
-        login.setFont(FontFactory.comboboxFont());
-        logout.setFont(FontFactory.comboboxFont());
-        exit.setFont(FontFactory.comboboxFont());
-        importData.setFont(FontFactory.comboboxFont());
-        exportData.setFont(FontFactory.comboboxFont());
+        adminSubMenu.setFont(FontFactory.labelFont());
+        login.setFont(FontFactory.labelFont());
+        logout.setFont(FontFactory.labelFont());
+        exit.setFont(FontFactory.labelFont());
+        importData.setFont(FontFactory.labelFont());
+        exportData.setFont(FontFactory.labelFont());
+
+        fileMenu.setForeground(ColorFactory.redA700());
+        dataMenu.setForeground(ColorFactory.redA700());
+        adminSubMenu.setForeground(ColorFactory.redA700());
+        login.setForeground(ColorFactory.redA700());
+        logout.setForeground(ColorFactory.redA700());
+        exit.setForeground(ColorFactory.redA700());
+        importData.setForeground(ColorFactory.redA700());
+        exportData.setForeground(ColorFactory.redA700());
+
+        exit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, InputEvent.CTRL_MASK));
 
         adminSubMenu.add(login);
         adminSubMenu.add(logout);
