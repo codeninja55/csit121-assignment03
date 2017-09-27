@@ -6,6 +6,7 @@ import styles.IconFactory;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
 import java.net.URL;
 
 public class MainFrame extends JFrame {
@@ -14,6 +15,7 @@ public class MainFrame extends JFrame {
     private final PurchaseViewPane purchaseViewPane;
     private final CategoriesViewPane categoriesViewPane;
     private final SummaryViewPane summaryViewPane;
+    private ActionListener exitListener;
 
     public MainFrame() {
         super("Marvel Rewards Cards");
@@ -24,13 +26,76 @@ public class MainFrame extends JFrame {
         setVisible(true);
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 
+        setJMenuBar(createMenu());
+
         // Change the default Java icon to this
         ImageIcon mainIcon = new ImageIcon("com.cn55.marvel/src/img/favicon.png");
         setIconImage(mainIcon.getImage());
 
         this.tabPane = new JTabbedPane();
 
-        // Initialize panels for tabs
+        this.cardViewPane = new CardViewPane();
+        this.purchaseViewPane = new PurchaseViewPane();
+        this.categoriesViewPane = new CategoriesViewPane();
+        this.summaryViewPane = new SummaryViewPane();
+
+        // Add panels, toolbars, and panes to main Frame
+        tabPane.setBackground(ColorFactory.blueGrey500());
+        tabPane.setForeground(ColorFactory.btnTextColor());
+        tabPane.setFont(FontFactory.tabPaneFont());
+
+        add(tabPane, BorderLayout.CENTER);
+
+        // Add tabs to tabPane group
+        tabPane.addTab(" Start ", IconFactory.homeIcon(), createWelcomePanel());
+        tabPane.addTab(" Cards ", IconFactory.cardIcon(),cardViewPane);
+        tabPane.addTab(" Purchases ", IconFactory.purchaseIcon(), purchaseViewPane);
+        tabPane.addTab(" Categories ", IconFactory.categoryIcon(), categoriesViewPane);
+        tabPane.addTab(" Summary ", IconFactory.summaryViewPaneIcon(), summaryViewPane);
+
+        // DEFAULT PANE BEGIN AT
+        tabPane.setSelectedIndex(4);
+    }
+
+    /*============================== MUTATORS ==============================*/
+    private JMenuBar createMenu() {
+        JMenuBar menu = new JMenuBar();
+        JMenu fileMenu = new JMenu("File");
+        JMenu adminSubMenu = new JMenu("Administrator");
+        JMenu dataMenu = new JMenu("Data");
+        JMenuItem login = new JMenuItem("Login..", IconFactory.loginIcon());
+        JMenuItem logout = new JMenuItem("Logout..", IconFactory.logoutIcon());
+        JMenuItem exit = new JMenuItem("Exit", IconFactory.exitIcon());
+        JMenuItem importData = new JMenuItem("Import Data..", IconFactory.importIcon());
+        JMenuItem exportData = new JMenuItem("Export Data..", IconFactory.exportIcon());
+
+        fileMenu.setFont(FontFactory.toolbarButtonFont());
+        dataMenu.setFont(FontFactory.toolbarButtonFont());
+        adminSubMenu.setFont(FontFactory.comboboxFont());
+        login.setFont(FontFactory.comboboxFont());
+        logout.setFont(FontFactory.comboboxFont());
+        exit.setFont(FontFactory.comboboxFont());
+        importData.setFont(FontFactory.comboboxFont());
+        exportData.setFont(FontFactory.comboboxFont());
+
+        adminSubMenu.add(login);
+        adminSubMenu.add(logout);
+        fileMenu.add(adminSubMenu);
+        fileMenu.addSeparator();
+        fileMenu.add(exit);
+        dataMenu.add(importData);
+        dataMenu.add(exportData);
+        menu.add(fileMenu);
+        menu.add(dataMenu);
+
+        exit.addActionListener(e -> {
+            if (exitListener != null) exitListener.actionPerformed(e);
+        });
+
+        return menu;
+    }
+
+    private JPanel createWelcomePanel() {
         JPanel welcomePane = new JPanel();
         welcomePane.setLayout(new GridBagLayout());
         URL marvelURL = getClass().getResource("/img/Marvel-Logo-3-25pc.png");
@@ -60,28 +125,10 @@ public class MainFrame extends JFrame {
         gc.insets = new Insets(40,0,0,0);
         welcomePane.add(rewardsCardLabel, gc);
 
-        this.cardViewPane = new CardViewPane();
-        this.purchaseViewPane = new PurchaseViewPane();
-        this.categoriesViewPane = new CategoriesViewPane();
-        this.summaryViewPane = new SummaryViewPane();
-
-        // Add panels, toolbars, and panes to main Frame
-        tabPane.setBackground(ColorFactory.blueGrey500());
-        tabPane.setForeground(ColorFactory.btnTextColor());
-        tabPane.setFont(FontFactory.tabPaneFont());
-
-        add(tabPane, BorderLayout.CENTER);
-
-        // Add tabs to tabPane group
-        tabPane.addTab(" Start ", IconFactory.homeIcon(), welcomePane);
-        tabPane.addTab(" Cards ", IconFactory.cardIcon(),cardViewPane);
-        tabPane.addTab(" Purchases ", IconFactory.purchaseIcon(), purchaseViewPane);
-        tabPane.addTab(" Categories ", IconFactory.categoryIcon(), categoriesViewPane);
-        tabPane.addTab(" Summary ", IconFactory.summaryViewPaneIcon(), summaryViewPane);
-
-        // DEFAULT PANE BEGIN AT
-        tabPane.setSelectedIndex(4);
+        return welcomePane;
     }
+
+    public void setExitListener(ActionListener exitListener) { this.exitListener = exitListener; }
 
     /*============================== ACCESSORS  ==============================*/
     public JTabbedPane getTabPane() { return tabPane; }
