@@ -75,8 +75,6 @@ class Assignment2 {
         UIManager.put("Slider.focus", ColorFactory.grey500());
         UIManager.put("Slider.horizontalThumbIcon", new ImageIcon("com.cn55.marvel/src/img/slider_red500_24-custom.png"));
         UIManager.put("Slider.tickColour", ColorFactory.red500());
-        UIManager.put("Slider.trackWidth", 500);
-
 
         UIManager.put("TabbedPane.selected", ColorFactory.red500());
         UIManager.put("TabbedPane.selectedForeground", ColorFactory.blueGrey500());

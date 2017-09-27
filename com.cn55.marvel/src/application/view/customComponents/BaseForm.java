@@ -9,9 +9,7 @@ import java.awt.event.ComponentEvent;
 
 public class BaseForm extends JPanel {
     protected BaseForm() {
-        /* INITIALIZE THIS PANEL */
         setLayout(new BorderLayout());
-        /* SIZING - Make sure the form is at least always 800 pixels */
         Dimension dim = getPreferredSize();
         dim.width = 800;
         setPreferredSize(dim);
