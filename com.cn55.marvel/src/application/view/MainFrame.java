@@ -1,14 +1,17 @@
 package application.view;
 
+import application.controller.Utils;
 import styles.ColorFactory;
 import styles.FontFactory;
 import styles.IconFactory;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileFilter;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.io.File;
 import java.net.URL;
 
 public class MainFrame extends JFrame {
@@ -18,6 +21,7 @@ public class MainFrame extends JFrame {
     private final CategoriesViewPane categoriesViewPane;
     private final SummaryViewPane summaryViewPane;
     private ActionListener exitListener;
+    private JFileChooser fileChooser;
 
     public MainFrame() {
         super("Marvel Rewards Cards");
@@ -61,6 +65,7 @@ public class MainFrame extends JFrame {
 
     /*============================== MUTATORS ==============================*/
     private JMenuBar createMenu() {
+        fileChooser = new JFileChooser();
         JMenuBar menu = new JMenuBar();
         JMenu fileMenu = new JMenu("File");
         JMenu adminSubMenu = new JMenu("Administrator");
@@ -101,8 +106,23 @@ public class MainFrame extends JFrame {
         menu.add(fileMenu);
         menu.add(dataMenu);
 
+        fileChooser.addChoosableFileFilter(new CSVFileFilter());
+
         exit.addActionListener(e -> {
             if (exitListener != null) exitListener.actionPerformed(e);
+        });
+
+        // TODO - Add the handler for importing and exporting files
+        importData.addActionListener(e -> {
+            if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+                System.out.println(fileChooser.getSelectedFile());
+            }
+        });
+
+        exportData.addActionListener(e -> {
+            if (fileChooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
+                System.out.println(fileChooser.getSelectedFile());
+            }
         });
 
         return menu;
@@ -155,4 +175,17 @@ public class MainFrame extends JFrame {
     }
 
     public SummaryViewPane getSummaryViewPane() { return summaryViewPane; }
+
+    class CSVFileFilter extends FileFilter {
+        public boolean accept(File f) {
+            if (f.isDirectory()) return true;
+            String name = f.getName();
+            String extension = Utils.getFileExtensions(name);
+            return extension != null && extension.equals("csv");
+        }
+
+        public String getDescription() {
+            return "Comma Separated File (*.csv)";
+        }
+    }
 }
