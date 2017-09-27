@@ -22,8 +22,6 @@ import java.util.Arrays;
 public class SummaryViewPane extends JPanel implements DataObserver {
     private DataObservable dataDAO;
     private SummaryOutputForm outputForm;
-    private CategoriesTableModel categoriesTableModel;
-    private JTable categoriesTable;
     private PurchaseTableModel purchasesTableModel;
     private JTable purchasesTable;
     private CardTableModel cardsTableModel;
@@ -36,9 +34,6 @@ public class SummaryViewPane extends JPanel implements DataObserver {
         ToolbarButton analyticsBtn = new ToolbarButton("Filter Data", IconFactory.analyticsIcon());
 
         outputForm = FormFactory.createOutputForm();
-        categoriesTableModel = new CategoriesTableModel();
-        categoriesTable = new JTable(categoriesTableModel);
-        Style.categoriesTableFormatter(categoriesTable);
         purchasesTableModel = new PurchaseTableModel();
         purchasesTable = new JTable(purchasesTableModel);
         Style.purchasesTableFormatter(purchasesTable);
@@ -47,7 +42,7 @@ public class SummaryViewPane extends JPanel implements DataObserver {
         Style.cardTableFormatter(cardsTable);
 
         /* TABLE VIEW COMBO BOX */
-        String[] tableOptions = {"Purchases", "Categories", "Cards"};
+        String[] tableOptions = {"Purchases", "Cards"};
         JComboBox<String> tableViewCombo = new JComboBox<>(tableOptions);
         tableViewCombo.setPreferredSize(analyticsBtn.getPreferredSize());
         tableViewCombo.setBorder(BorderFactory.createMatteBorder(2,2,2,2, ColorFactory.blueGrey500()));
@@ -64,9 +59,7 @@ public class SummaryViewPane extends JPanel implements DataObserver {
         tableViewCombo.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
                 Arrays.stream(super.getComponents()).filter(c -> c instanceof JScrollPane).forEach(this::remove);
-                if (e.getItem().equals("Categories")) {
-                    super.add(new JScrollPane(categoriesTable), BorderLayout.CENTER);
-                } else if (e.getItem().equals("Purchases")) {
+                if (e.getItem().equals("Purchases")) {
                     super.add(new JScrollPane(purchasesTable), BorderLayout.CENTER);
                 } else if (e.getItem().equals("Cards")) {
                     super.add(new JScrollPane(cardsTable), BorderLayout.CENTER);
@@ -90,8 +83,6 @@ public class SummaryViewPane extends JPanel implements DataObserver {
     }
 
     public void update() {
-        categoriesTableModel.setData(new ArrayList<>(dataDAO.getCategoriesUpdate(this).values()));
-        categoriesTableModel.fireTableDataChanged();
         purchasesTableModel.setData(new ArrayList<>(dataDAO.getPurchaseUpdate(this).values()));
         purchasesTableModel.fireTableDataChanged();
         cardsTableModel.setData(new ArrayList<>(dataDAO.getCardsUpdate(this).values()));
@@ -106,9 +97,5 @@ public class SummaryViewPane extends JPanel implements DataObserver {
     public void setSubject(DataObservable dataObservable) { this.dataDAO = dataObservable; }
 
     /*============================== ACCESSORS ==============================*/
-    public CategoriesTableModel getCategoryTableModel() {
-        return categoriesTableModel;
-    }
-
     public SummaryOutputForm getOutputForm() { return outputForm; }
 }
