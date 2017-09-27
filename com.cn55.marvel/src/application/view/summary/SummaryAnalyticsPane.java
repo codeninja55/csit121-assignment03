@@ -2,23 +2,27 @@ package application.view.summary;
 
 import application.model.DataObservable;
 import application.model.DataObserver;
+import application.model.card.AdvancedCard;
 import application.model.card.Card;
 import application.model.card.CardType;
 import application.model.category.Category;
 import application.model.purchase.Purchase;
-import application.view.form_builder_factory.FormFactory;
 import application.view.custom_components.BaseForm;
 import application.view.custom_components.FormButton;
 import application.view.custom_components.FormLabel;
 import application.view.custom_components.FormTextField;
+import application.view.form_builder_factory.FormFactory;
 import styles.ColorFactory;
-import styles.FormatterFactory;
 import styles.FontFactory;
+import styles.FormatterFactory;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 import java.awt.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.DoubleSummaryStatistics;
+import java.util.HashMap;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -31,32 +35,35 @@ public class SummaryAnalyticsPane extends BaseForm implements FormFactory, DataO
     private FormTextField cardPurchasesTextField;
     private FormTextField totalCardsTextField;
     private FormTextField totalPointsTextField;
+    private FormTextField totalBalanceTextField;
 
     SummaryAnalyticsPane() {
         super();
         super.setBorder("Analytics");
         setLayout(new GridLayout(2,1,0,10));
         Dimension dim = getPreferredSize();
-        dim.width = 900;
+        dim.width = 700;
         setPreferredSize(dim);
         setMinimumSize(getPreferredSize());
 
         JPanel outputForm = new JPanel(new GridBagLayout());
         FormLabel purchasesLabel = new FormLabel("PURCHASES");
-        FormLabel totalPurchasesMadeLabel = new FormLabel("Total Purchases:");
+        FormLabel totalPurchasesMadeLabel = new FormLabel("Number of Purchases:");
         totalPurchasesMadeTextField = new FormTextField(20);
         FormLabel totalPurchasesLabel = new FormLabel("Total Amount:");
         totalPurchasesTextField = new FormTextField(20);
         FormLabel cashPurchasesLabel = new FormLabel("Cash Purchases:");
         cashPurchaseTextField = new FormTextField(20);
-        FormLabel totalCardsLabel = new FormLabel("Total Cards:");
+        FormLabel totalCardsLabel = new FormLabel("Number of Cards:");
         totalCardsTextField = new FormTextField(20);
         FormLabel cardPurchasesLabel = new FormLabel("Card Purchases:");
         cardPurchasesTextField = new FormTextField(20);
         FormLabel cardLabel = new FormLabel("CARDS");
         FormLabel totalPointsLabel = new FormLabel("Total Points:");
-        FormLabel categoriesLabel = new FormLabel("CATEGORIES");
         totalPointsTextField = new FormTextField(20);
+        FormLabel totalBalanceLabel = new FormLabel("Total Balance:");
+        totalBalanceTextField = new FormTextField(20);
+        FormLabel categoriesLabel = new FormLabel("CATEGORIES");
         categoriesTableModel = new SummaryCategoriesTableModel();
         JTable categoriesTable = new JTable(categoriesTableModel);
 
@@ -153,6 +160,18 @@ public class SummaryAnalyticsPane extends BaseForm implements FormFactory, DataO
         gc.insets = new Insets(10, 0,0,0);
         outputForm.add(totalPointsTextField, gc);
 
+        /*========== NEW ROW ==========*/
+        gc.anchor = GridBagConstraints.LINE_END;
+        gc.gridwidth = 1;
+        gc.gridx = 0; gc.gridy++;
+        gc.insets = new Insets(10, 0,0,0);
+        outputForm.add(totalBalanceLabel, gc);
+
+        gc.anchor = GridBagConstraints.LINE_START;
+        gc.gridx = 1;
+        gc.insets = new Insets(10, 0,0,0);
+        outputForm.add(totalBalanceTextField, gc);
+
         /*========== LAST ROW ==========*/
         gc.anchor = GridBagConstraints.CENTER;
         gc.gridwidth = 2;
@@ -178,7 +197,6 @@ public class SummaryAnalyticsPane extends BaseForm implements FormFactory, DataO
         Arrays.stream(outputForm.getComponents()).filter(c -> c instanceof FormTextField)
                 .forEach(c -> {
                     ((FormTextField)c).setEditable(false);
-                    ((FormTextField)c).setText("10001.00");
                     c.setPreferredSize(new Dimension(300,50));
                     c.setBackground(ColorFactory.blueGrey200());
                     c.setForeground(ColorFactory.grey50());
@@ -213,8 +231,11 @@ public class SummaryAnalyticsPane extends BaseForm implements FormFactory, DataO
 
     private void setCardAnalytics(HashMap<String, Card> cardsMap) {
         DoubleSummaryStatistics cardsStatistics = cardsMap.values().stream().mapToDouble(Card::getPoints).summaryStatistics();
+        double totalBalance = cardsMap.values().stream().filter(c -> c instanceof AdvancedCard)
+                .mapToDouble(c -> ((AdvancedCard)c).getBalance()).sum();
         totalPointsTextField.setText(FormatterFactory.pointsFormat().format(cardsStatistics.getSum()));
         totalCardsTextField.setText(Double.toString(cardsStatistics.getCount()));
+        totalBalanceTextField.setText(FormatterFactory.currencyFormat().format(totalBalance));
     }
 
     public void filterUpdate(ArrayList<Category> categories, ArrayList<Purchase> purchases) {
