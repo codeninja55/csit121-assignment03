@@ -78,6 +78,8 @@ public class Program {
         db.register(summaryViewPane);
         summaryViewPane.setSubject(db);
         summaryViewPane.update();
+        summaryViewPane.getOutputForm().setSubject(db);
+        summaryViewPane.getOutputForm().update();
 
         setupMainFrameHandlers();
         setupCardViewHandlers();
@@ -391,9 +393,8 @@ public class Program {
         });*/
 
         summaryViewPane.setAnalyticsListener(() -> {
-            removeCategoryForms();
-            SummaryFilterForm filterForm = FormFactory.createFilterForm();
-            summaryViewPane.setSummaryForms(filterForm);
+            SummaryFilterForm filterForm = summaryViewPane.getFilterForm();
+            filterForm.setVisible(true);
 
             filterForm.setListener(e -> {
                 // TODO
@@ -425,11 +426,6 @@ public class Program {
 
     private void removeCategoryForms() {
         Arrays.stream(categoriesViewPane.getComponents()).filter(c -> c instanceof FormFactory)
-                .forEach(c -> c.setVisible(false));
-    }
-
-    private void removeSummaryForms() {
-        Arrays.stream(summaryViewPane.getComponents()).filter(FormFactory.class::isInstance)
                 .forEach(c -> c.setVisible(false));
     }
 

@@ -2,6 +2,7 @@ package application.view.builderFactory;
 
 import application.view.customComponents.*;
 import styles.ColorFactory;
+import styles.CustomBorderFactory;
 import styles.FontFactory;
 import styles.IconFactory;
 
@@ -15,7 +16,7 @@ import java.util.Hashtable;
 import java.util.Locale;
 import java.util.stream.IntStream;
 
-public class SummaryFilterForm extends BaseForm implements FormFactory, SummaryView {
+public class SummaryFilterForm extends JPanel implements FormFactory, SummaryView {
     private MaterialDatePicker dateBeginPicker;
     private MaterialDatePicker dateEndPicker;
     private MaterialSlider daySlider;
@@ -23,15 +24,16 @@ public class SummaryFilterForm extends BaseForm implements FormFactory, SummaryV
     private SummaryListener listener;
 
     SummaryFilterForm() {
-        super();
-        super.setBorder("Filter Data");
-        super.setCancelBtn("Cancel Filtering");
+        setLayout(new BorderLayout());
         Dimension dim = getPreferredSize();
         dim.width = 900;
         setPreferredSize(dim);
         setMinimumSize(getPreferredSize());
+        setVisible(false);
+        setBorder(CustomBorderFactory.formBorder("Filter Form"));
 
         JPanel filterForm = new JPanel(new GridBagLayout());
+        CancelButton cancelBtn = new CancelButton("Cancel");
         FormLabel dateFromLabel = new FormLabel("Date From:");
         dateBeginPicker = new MaterialDatePicker();
         FormLabel dateToLabel = new FormLabel("Date To:");
@@ -126,10 +128,13 @@ public class SummaryFilterForm extends BaseForm implements FormFactory, SummaryV
         filterForm.add(clearBtn, gc);
 
         add(filterForm, BorderLayout.CENTER);
+        add(cancelBtn, BorderLayout.SOUTH);
 
         // Set form custom components visible
         Arrays.stream(filterForm.getComponents()).filter(c -> c instanceof FormLabel || c instanceof FormButton)
                 .forEach(c -> c.setVisible(true));
+
+        cancelBtn.addActionListener(e -> super.setVisible(false));
 
         filterBtn.addActionListener(e -> {
             if (listener != null) listener.refreshActionPerformed(SummaryFilterForm.this);

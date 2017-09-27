@@ -1,18 +1,25 @@
 package application.view.builderFactory;
 
+import application.model.DataObservable;
+import application.model.DataObserver;
+import application.model.category.Category;
 import application.view.customComponents.BaseForm;
 import application.view.customComponents.FormButton;
 import application.view.customComponents.FormLabel;
 import application.view.customComponents.FormTextField;
 import styles.ColorFactory;
 import styles.FontFactory;
+import styles.Style;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Arrays;
 
-public class SummaryOutputForm extends BaseForm implements FormFactory {
+public class SummaryOutputForm extends BaseForm implements FormFactory, DataObserver {
+    private DataObservable dataDAO;
+    private SummaryCategoriesTableModel categoriesTableModel;
 
     SummaryOutputForm() {
         super();
@@ -35,7 +42,7 @@ public class SummaryOutputForm extends BaseForm implements FormFactory {
         FormLabel totalPointsLabel = new FormLabel("Total Points:");
         FormLabel categoriesLabel = new FormLabel("CATEGORIES");
         FormTextField totalPointsTextField = new FormTextField(20);
-        SummaryCategoriesTableModel categoriesTableModel = new SummaryCategoriesTableModel();
+        categoriesTableModel = new SummaryCategoriesTableModel();
         JTable categoriesTable = new JTable(categoriesTableModel);
 
         /* FORM AREA */
@@ -114,6 +121,19 @@ public class SummaryOutputForm extends BaseForm implements FormFactory {
         categoriesLabel.setFont(FontFactory.toolbarButtonFont());
         outputForm.add(categoriesLabel, gc);
 
+        /* Table Formatting */
+        categoriesTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        categoriesTable.setRowHeight(55);
+        categoriesTable.setFont(FontFactory.labelFont());
+        categoriesTable.setFillsViewportHeight(true);
+        categoriesTable.setBackground(ColorFactory.blueGrey300());
+        categoriesTable.setShowVerticalLines(false);
+        categoriesTable.setShowHorizontalLines(false);
+        categoriesTable.setShowGrid(false);
+        categoriesTable.getTableHeader().setBackground(ColorFactory.blueGrey800());
+        categoriesTable.setSelectionBackground(ColorFactory.blueGrey500());
+        categoriesTable.setSelectionForeground(ColorFactory.grey50());
+
         Arrays.stream(outputForm.getComponents()).filter(c -> c instanceof FormTextField)
                 .forEach(c -> {
                     ((FormTextField)c).setEditable(false);
@@ -131,18 +151,36 @@ public class SummaryOutputForm extends BaseForm implements FormFactory {
         add(new JScrollPane(categoriesTable));
     }
 
+    public void update() {
+        ArrayList<Category> categories = new ArrayList<>(dataDAO.getCategoriesUpdate(this).values());
+        categoriesTableModel.setData(categories);
+        categoriesTableModel.fireTableDataChanged();
+    }
+
+    public void setSubject(DataObservable dataObservable) {
+        this.dataDAO = dataObservable;
+    }
+
     /*============================== INNER CLASS ==============================*/
     class SummaryCategoriesTableModel extends AbstractTableModel {
+        private ArrayList<Category> categories;
+        private final String[] headers = {"Name", "Total Amount"};
 
-        public int getRowCount() {
-            return 0;
-        }
+        public void setData(ArrayList<Category> categories) { this.categories = categories; }
 
-        public int getColumnCount() {
-            return 0;
-        }
+        public String getColumnName(int column) { return headers[column]; }
+
+        public int getRowCount() { return categories.size(); }
+
+        public int getColumnCount() { return headers.length; }
 
         public Object getValueAt(int rowIndex, int columnIndex) {
+            Category category = categories.get(rowIndex);
+            switch (columnIndex) {
+                case 0: return category.getName();
+                case 1: return Style.currencyFormat().format(category.getTotalAmount());
+            }
+
             return null;
         }
     }
