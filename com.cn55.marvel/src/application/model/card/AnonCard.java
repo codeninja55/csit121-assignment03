@@ -15,6 +15,12 @@ public class AnonCard extends Card {
         super.cardType = CardType.AnonCard.getName();
     }
 
+    // copy constructor
+    AnonCard(AnonCard o) {
+        super(o);
+        super.cardType = o.getCardType();
+    }
+
     /*============================== MUTATORS  ==============================*/
     public void calcPoints(double totalAmount) {
         this.points += POINTS_RATE * totalAmount;

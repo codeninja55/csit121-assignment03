@@ -21,6 +21,12 @@ public abstract class Card implements Comparable<Card> {
         this.cardType = null;
     }
 
+    Card(Card o) {
+        this.id = o.getID();
+        this.points = o.getPoints();
+        this.cardType = o.getCardType();
+    }
+
     /*============================== MUTATORS  ==============================*/
     void setPoints(double points) {
         this.points = points;
