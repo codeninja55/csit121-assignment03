@@ -9,14 +9,15 @@ import application.model.purchase.PurchaseType;
 import application.model.purchase.SortPurchaseType;
 import application.view.*;
 import application.view.builderFactory.*;
-import application.view.SummaryViewPane;
 import application.view.customComponents.ProgressDialog;
 import application.view.customComponents.ResultsPane;
+import application.view.summary.SummaryFilterForm;
+import application.view.summary.SummaryAnalyticsPane;
+import application.view.summary.SummaryView;
+import application.view.summary.SummaryViewPane;
 import styles.IconFactory;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.awt.event.WindowAdapter;
@@ -353,37 +354,107 @@ public class Program {
 
     /*============================== SUMMARY VIEW HANDLERS ==============================*/
     private void setupSummaryViewHandlers() {
-        /*summaryViewPane.setRefreshListener((SummaryView e) -> {
-            ArrayList<Category> clonedCategories = db.getAllCategories().values().stream().map(Category::new)
-                    .collect(Collectors.toCollection(ArrayList::new));
-
-            Predicate<Purchase> hoursPredicate = p -> (p.getPurchaseTime().getHour() == e.getHoursOption());
-            Predicate<Purchase> daysPredicate = p -> (p.getPurchaseTime().getDayOfWeek().getValue() == e.getDaysOption());
-
-            if (e.getTableOption().equals("Categories")) {
-                if (e.getDaysOption() != 0 && e.getHoursOption() < 24) {
-                    summaryViewPane.getCategoryTableModel().setData(summaryByDayAndHour(clonedCategories, daysPredicate, hoursPredicate));
-                } else if (e.getDaysOption() != 0 && e.getHoursOption() == 24) {
-                    summaryViewPane.getCategoryTableModel().setData(summaryByDay(clonedCategories, daysPredicate));
-                } else if (e.getDaysOption() == 0 && e.getHoursOption() < 24) {
-                    summaryViewPane.getCategoryTableModel().setData(summaryByHours(clonedCategories, hoursPredicate));
-                } else {
-                    // default option
-                    summaryViewPane.getCategoryTableModel().setData(new ArrayList<>(db.getAllCategories().values()));
-                }
-
-                summaryViewPane.revalidate();
-                summaryViewPane.repaint();
-            }
-        });*/
-
         summaryViewPane.setAnalyticsListener(() -> {
             SummaryFilterForm filterForm = summaryViewPane.getFilterForm();
             filterForm.setVisible(true);
 
-            filterForm.setListener(e -> {
-                // TODO
-                System.out.println("Filtering Not yet Impl");
+            filterForm.setListener((SummaryView e) -> {
+                SummaryAnalyticsPane outputForm = summaryViewPane.getAnalyticsPane();
+                boolean filterProceed = false;
+
+                // TODO - Ask Mark about this
+                ArrayList<Category> clonedCategories = db.getAllCategories().values().stream().map(Category::new)
+                        .collect(Collectors.toCollection(ArrayList::new));
+
+                ArrayList<Purchase> clonedPurchases = db.getAllPurchases().values().stream().map(Purchase::new)
+                        .collect(Collectors.toCollection(ArrayList::new));
+
+                Predicate<Purchase> hoursPredicate = p -> (p.getPurchaseTime().getHour() == e.getHoursOption());
+                Predicate<Purchase> daysPredicate = p -> (p.getPurchaseTime().getDayOfWeek().getValue() == e.getDaysOption());
+                Predicate<Purchase> dateFromPredicate = p -> (p.getPurchaseTime().toLocalDate().isAfter(e.getDateFromOption()));
+                Predicate<Purchase> dateToPredicate = p -> (p.getPurchaseTime().toLocalDate().isBefore(e.getDateToOption()));
+                Predicate<Purchase> dateEqualsPredicate = p -> (p.getPurchaseTime().toLocalDate().isEqual(e.getDateToOption())
+                        || p.getPurchaseTime().toLocalDate().isEqual(e.getDateFromOption()));
+                Predicate<Purchase> datePredicate = dateEqualsPredicate.or(dateFromPredicate.and(dateToPredicate));
+
+                if (e.getDaysOption() != 0 && e.getHoursOption() < 24) {
+                    /* Filter by day and hour */
+                    clonedCategories = clonedCategories.stream().map(c -> {
+                        double newTotal = db.getAllPurchases().values().stream()
+                                .filter(datePredicate)
+                                .filter(daysPredicate.and(hoursPredicate))
+                                .mapToDouble(p -> p.getCategories().get(c.getId()).getAmount()).sum();
+                        c.updateTotalAmount(newTotal);
+                        return c;
+                    }).collect(Collectors.toCollection(ArrayList::new));
+
+                    clonedPurchases = db.getAllPurchases().values().stream()
+                            .filter(datePredicate)
+                            .filter(daysPredicate.and(hoursPredicate))
+                            .collect(Collectors.toCollection(ArrayList::new));
+
+                    filterProceed = true;
+                } else if (e.getDaysOption() != 0 && e.getHoursOption() == 24) {
+                    /* Filter by day */
+                    clonedCategories = clonedCategories.stream().map(c -> {
+                        double newTotal = db.getAllPurchases().values().stream()
+                                .filter(datePredicate)
+                                .filter(daysPredicate)
+                                .mapToDouble(p -> p.getCategories().get(c.getId()).getAmount()).sum();
+                        c.updateTotalAmount(newTotal);
+                        return c;
+                    }).collect(Collectors.toCollection(ArrayList::new));
+
+                    clonedPurchases = db.getAllPurchases().values().stream()
+                            .filter(datePredicate)
+                            .filter(daysPredicate)
+                            .collect(Collectors.toCollection(ArrayList::new));
+
+                    filterProceed = true;
+                } else if (e.getDaysOption() == 0 && e.getHoursOption() < 24) {
+                    /* Filter by hour */
+                    clonedCategories = clonedCategories.stream().map(c -> {
+                        double newTotal = db.getAllPurchases().values().stream()
+                                .filter(datePredicate).filter(hoursPredicate)
+                                .mapToDouble(p -> p.getCategories().get(c.getId()).getAmount()).sum();
+                        c.updateTotalAmount(newTotal);
+                        return c;
+                    }).collect(Collectors.toCollection(ArrayList::new));
+
+                    clonedPurchases = db.getAllPurchases().values().stream()
+                            .filter(datePredicate).filter(hoursPredicate)
+                            .collect(Collectors.toCollection(ArrayList::new));
+
+                    filterProceed = true;
+                } else if (e.getDaysOption() == 0 && e.getHoursOption() == 24) {
+                    /* Filter by dates only */
+                    clonedCategories = clonedCategories.stream().map(c -> {
+                        double newTotal = db.getAllPurchases().values().stream()
+                                .filter(datePredicate)
+                                .mapToDouble(p -> p.getCategories().get(c.getId()).getAmount()).sum();
+                        c.updateTotalAmount(newTotal);
+                        return c;
+                    }).collect(Collectors.toCollection(ArrayList::new));
+
+                    clonedPurchases = db.getAllPurchases().values().stream().filter(datePredicate)
+                            .collect(Collectors.toCollection(ArrayList::new));
+
+                    filterProceed = true;
+                }
+
+                if (filterProceed) {
+                    // requires ArrayList<Purchase>
+                    summaryViewPane.filterPurchaseTable(clonedPurchases);
+                    // requires ArrayList<Purchase>, ArrayList<Categories>, HashMap<String, Card>
+                    outputForm.filterUpdate(clonedCategories, clonedPurchases);
+                } else {
+                    // default option
+                    summaryViewPane.update();
+                    outputForm.update();
+                }
+
+                summaryViewPane.revalidate();
+                summaryViewPane.repaint();
             });
         });
     }
@@ -423,36 +494,6 @@ public class Program {
     }
 
     /*============================== SUMMARY FILTER METHODS ==============================*/
-    private ArrayList<Category> summaryByDay(ArrayList<Category> categories, Predicate<Purchase> daysPredicate) {
-        categories.forEach((Category c) -> {
-            double newTotal = db.getAllPurchases().values().stream().filter(daysPredicate)
-                    .mapToDouble(p -> p.getCategories().get(c.getId()).getAmount()).sum();
-            c.updateTotalAmount(newTotal);
-        });
-
-        return categories;
-    }
-
-    private ArrayList<Category> summaryByHours(ArrayList<Category> categories, Predicate<Purchase> hoursPredicate) {
-        categories.forEach(c -> {
-            double newTotal = db.getAllPurchases().values().stream().filter(hoursPredicate)
-                    .mapToDouble(p -> p.getCategories().get(c.getId()).getAmount()).sum();
-            c.updateTotalAmount(newTotal);
-        });
-
-        return categories;
-    }
-
-    private ArrayList<Category> summaryByDayAndHour(ArrayList<Category> categories, Predicate<Purchase> daysPredicate,
-                                                    Predicate<Purchase> hoursPredicate) {
-        categories.forEach(c -> {
-            double newTotal = db.getAllPurchases().values().stream().filter(daysPredicate.and(hoursPredicate))
-                    .mapToDouble(p -> p.getCategories().get(c.getId()).getAmount()).sum();
-            c.updateTotalAmount(newTotal);
-        });
-
-        return categories;
-    }
 
     private void exitApplication() {
         String[] options = {"Save and Exit", "Exit without Save", "Cancel Exit"};
