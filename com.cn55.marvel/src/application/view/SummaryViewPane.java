@@ -39,8 +39,6 @@ public class SummaryViewPane extends JPanel implements DataObserver, SummaryView
     private MaterialSlider hoursSlider;
     private MaterialDatePicker dateBeginPicker;
     private MaterialDatePicker dateEndPicker;
-    private LocalDate firstPurchaseDate;
-    private LocalDate lastPurchaseDate;
     private SummaryListener refreshListener;
 
     SummaryViewPane() {
@@ -91,14 +89,12 @@ public class SummaryViewPane extends JPanel implements DataObserver, SummaryView
         dateBeginLabel.setVisible(true);
         dateBeginPicker = new MaterialDatePicker();
         dateBeginPicker.setPreferredSize(refreshTableBtn.getPreferredSize());
-        //dateBeginPicker.setDate(dataDAO.getFirstPurchaseDate(this).toLocalDate());
 
         // Date Picker TO
         FormLabel dateEndLabel = new FormLabel("To:");
         dateEndLabel.setVisible(true);
         dateEndPicker = new MaterialDatePicker();
         dateEndPicker.setPreferredSize(refreshTableBtn.getPreferredSize());
-        //dateEndPicker.setDate(dataDAO.getLastPurchaseDate(this).toLocalDate());
 
         toolbar.getLeftToolbar().add(daysSlider);
         toolbar.getLeftToolbar().add(hoursSlider);
@@ -152,9 +148,9 @@ public class SummaryViewPane extends JPanel implements DataObserver, SummaryView
         purchasesTableModel.fireTableDataChanged();
         cardsTableModel.setData(new ArrayList<>(dataDAO.getCardsUpdate(this).values()));
         cardsTableModel.fireTableDataChanged();
-        this.firstPurchaseDate = dataDAO.getFirstPurchaseDate(this).toLocalDate();
+        LocalDate firstPurchaseDate = dataDAO.getFirstPurchaseDate(this).toLocalDate();
         dateBeginPicker.setDate(firstPurchaseDate);
-        this.lastPurchaseDate = dataDAO.getLastPurchaseDate(this).toLocalDate();
+        LocalDate lastPurchaseDate = dataDAO.getLastPurchaseDate(this).toLocalDate();
         dateEndPicker.setDate(lastPurchaseDate);
     }
 

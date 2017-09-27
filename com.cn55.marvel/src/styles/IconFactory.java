@@ -3,6 +3,13 @@ import javax.swing.*;
 
 @SuppressWarnings("All")
 public abstract class IconFactory {
+    public static ImageIcon saveIcon() { return new ImageIcon("com.cn55.marvel/src/img/save_red500_24.png"); }
+    public static ImageIcon exportIcon() { return new ImageIcon("com.cn55.marvel/src/img/file_download_red500_24.png"); }
+    public static ImageIcon importIcon() { return new ImageIcon("com.cn55.marvel/src/img/file_upload_red500_24.png"); }
+    public static ImageIcon settingsIcon() { return new ImageIcon("com.cn55.marvel/src/img/settings_input_component_black_24.png"); }
+    public static ImageIcon loginIcon() { return new ImageIcon("com.cn55.marvel/src/img/lock_open_red500_24.png"); }
+    public static ImageIcon logoutIcon() { return new ImageIcon("com.cn55.marvel/src/img/lock_outline_red500_24.png"); }
+    public static ImageIcon exitIcon() { return new ImageIcon("com.cn55.marvel/src/img/close_red500_36.png"); }
     public static ImageIcon homeIcon() { return new ImageIcon("com.cn55.marvel/src/img/home_white_48.png"); }
     public static ImageIcon cardIcon() { return new ImageIcon("com.cn55.marvel/src/img/card_membership_white_48.png"); }
     public static ImageIcon purchaseIcon() { return new ImageIcon("com.cn55.marvel/src/img/shopping_cart_white_48.png"); }
@@ -22,4 +29,5 @@ public abstract class IconFactory {
     public static ImageIcon addIcon() { return new ImageIcon("com.cn55.marvel/src/img/add_white_36.png");}
     public static ImageIcon addIconDisabled() { return new ImageIcon("com.cn55.marvel/src/img/add_grey_36.png");}
     public static ImageIcon datePickerIcon() { return new ImageIcon("com.cn55.marvel/src/img/event_white_36.png");}
+    public static ImageIcon warningIcon() { return new ImageIcon("com.cn55.marvel/src/img/warning_red500_48.png");}
 }

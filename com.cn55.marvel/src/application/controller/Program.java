@@ -9,7 +9,9 @@ import application.model.purchase.PurchaseType;
 import application.model.purchase.SortPurchaseType;
 import application.view.*;
 import application.view.builderFactory.*;
+import application.view.customComponents.ProgressDialog;
 import application.view.customComponents.ResultsPane;
+import styles.IconFactory;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -18,8 +20,10 @@ import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -32,6 +36,7 @@ public class Program {
     private final PurchaseViewPane purchaseViewPane;
     private final CategoriesViewPane categoriesViewPane;
     private final SummaryViewPane summaryViewPane;
+    private ProgressDialog progressDialog;
 
     public Program() {
         /* Singleton Design Pattern - Only one instance of Shop available */
@@ -40,21 +45,7 @@ public class Program {
         db.readData();
 
         this.mainFrame = new MainFrame();
-
-        /* Windows Closing Listener */
-        mainFrame.addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent e) {
-            super.windowClosing(e);
-            int confirmSave = JOptionPane.showConfirmDialog(mainFrame,"\n\nWould you like to save your session data?\n\n",
-                    "Save on Exit", JOptionPane.OK_CANCEL_OPTION,JOptionPane.WARNING_MESSAGE);
-
-            if (confirmSave == JOptionPane.OK_OPTION) {
-                db.writeData();
-            }
-            System.gc(); // Garbage collector
-            mainFrame.dispose();
-            }
-        });
+        this.progressDialog = new ProgressDialog(mainFrame);
 
         this.tabPane = mainFrame.getTabPane();
         tabPane.addChangeListener(new ChangeListener() {
@@ -87,6 +78,7 @@ public class Program {
         summaryViewPane.setSubject(db);
         summaryViewPane.update();
 
+        setupMainFrameHandlers();
         setupCardViewHandlers();
         setupPurchaseViewHandlers();
         setupCategoriesViewHandlers();
@@ -94,6 +86,24 @@ public class Program {
     }
 
     /*============================== REGISTER AND HANDLE EVENTS ==============================*/
+    /*============================== MAIN FRAME HANDLERS ==============================*/
+    private void setupMainFrameHandlers() {
+        mainFrame.setSaveListener(e -> {
+            progressDialog.setVisible(true);
+            db.writeData();
+            progressDialog.setVisible(false);
+        });
+
+        mainFrame.addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                super.windowClosing(e);
+                exitApplication();
+            }
+        });
+
+        mainFrame.setExitListener(e -> exitApplication());
+    }
+
     /*============================== CARD VIEW HANDLERS ==============================*/
     private void setupCardViewHandlers() {
         /*TOOLBAR | CREATE CARD BUTTON*/
@@ -444,6 +454,22 @@ public class Program {
         });
 
         return categories;
+    }
+
+    private void exitApplication() {
+        String[] options = {"Save and Exit", "Exit without Save", "Cancel Exit"};
+        int response = JOptionPane.showOptionDialog(null,
+                "\nWould you like to save your session data before exiting?\n\n\n\n",
+                "Save on Exit", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE,
+                IconFactory.warningIcon(), options, options[0]);
+
+        if (response == 0) {
+            db.writeData();
+            // Add a loading bar
+        } else if (response == 1) {
+            System.gc();
+            System.exit(0);
+        }
     }
 
 }
