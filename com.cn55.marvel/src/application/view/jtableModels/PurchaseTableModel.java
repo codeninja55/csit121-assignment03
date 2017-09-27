@@ -1,7 +1,7 @@
 package application.view.jtableModels;
 
 import application.model.purchase.Purchase;
-import styles.Style;
+import styles.FormatterFactory;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
@@ -32,7 +32,7 @@ public class PurchaseTableModel extends AbstractTableModel {
             case 3:
                 return purchase.getCardType();
             case 4:
-                return Style.currencyFormat().format(purchase.getCategoriesTotal());
+                return FormatterFactory.currencyFormat().format(purchase.getCategoriesTotal());
         }
         return null;
     }

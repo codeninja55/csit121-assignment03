@@ -1,7 +1,7 @@
 package application.view.jtableModels;
 
 import application.model.category.Category;
-import styles.Style;
+import styles.FormatterFactory;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
@@ -38,7 +38,7 @@ public class CategoriesTableModel extends AbstractTableModel {
             case 2:
                 return category.getDescription();
             case 3:
-                return Style.currencyFormat().format(category.getTotalAmount());
+                return FormatterFactory.currencyFormat().format(category.getTotalAmount());
         }
         return null;
     }

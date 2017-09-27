@@ -7,7 +7,7 @@ import application.model.purchase.SortPurchaseType;
 import application.view.builderFactory.PurchaseForm;
 import styles.ColorFactory;
 import styles.IconFactory;
-import styles.Style;
+import styles.TableFormatterFactory;
 import application.view.customComponents.Toolbar;
 import application.view.customComponents.ToolbarButton;
 import application.view.customComponents.ToolbarButtonListener;
@@ -25,33 +25,27 @@ public class PurchaseViewPane extends JPanel implements DataObserver {
     private DataObservable dataDAO;
     private final ToolbarButton createPurchaseBtn;
     private final ToolbarButton deletePurchaseBtn;
-    private final ToolbarButton summaryBtn;
     private final JComboBox<String> sortPurchaseCombo;
     private final ToolbarButton viewPurchaseBtn;
     private final PurchaseTableModel purchaseTableModel;
     private final JTable purchasesTable;
     private ToolbarButtonListener createPurchaseListener;
     //private ToolbarButtonListener deletePurchaseListener;
-    private ToolbarButtonListener summaryListener;
     private ToolbarButtonListener viewPurchaseListener;
 
     /*============================== CONSTRUCTORS ==============================*/
     PurchaseViewPane() {
+        setLayout(new BorderLayout());
         Toolbar toolbar = new Toolbar();
         createPurchaseBtn = new ToolbarButton("Create", IconFactory.createIcon());
         deletePurchaseBtn = new ToolbarButton("Delete", IconFactory.deleteIconDisabled());
-        summaryBtn = new ToolbarButton("Summary", IconFactory.summaryIcon());
         viewPurchaseBtn = new ToolbarButton("View", IconFactory.viewIcon());
         sortPurchaseCombo = new JComboBox<>();
         DefaultComboBoxModel<String> options = new DefaultComboBoxModel<>();
 
         purchaseTableModel = new PurchaseTableModel();
         purchasesTable = new JTable(purchaseTableModel);
-        Style.purchasesTableFormatter(purchasesTable);
-
-        JPopupMenu tablePopup = new JPopupMenu();
-        JMenuItem removePurchase = new JMenuItem("Delete Purchase");
-        setLayout(new BorderLayout());
+        TableFormatterFactory.purchasesTableFormatter(purchasesTable);
 
         /* Sort Purchases Combo Setup */
         options.addElement(SortPurchaseType.All.getName());
@@ -65,14 +59,11 @@ public class PurchaseViewPane extends JPanel implements DataObserver {
         /* TOOLBAR */
         toolbar.getLeftToolbar().add(createPurchaseBtn);
         toolbar.getLeftToolbar().add(deletePurchaseBtn);
-        toolbar.getLeftToolbar().add(summaryBtn);
         deletePurchaseBtn.setBackground(ColorFactory.blueGrey700());
         deletePurchaseBtn.setEnabled(false);
         toolbar.getRightToolbar().add(viewPurchaseBtn);
         toolbar.getRightToolbar().add(sortPurchaseCombo);
         add(toolbar, BorderLayout.NORTH);
-
-        tablePopup.add(removePurchase);
 
         add(new JScrollPane(purchasesTable), BorderLayout.CENTER);
 
@@ -80,7 +71,6 @@ public class PurchaseViewPane extends JPanel implements DataObserver {
         ToolbarListener handler = new ToolbarListener();
         createPurchaseBtn.addActionListener(handler);
         deletePurchaseBtn.addActionListener(handler);
-        summaryBtn.addActionListener(handler);
         viewPurchaseBtn.addActionListener(handler);
     }
 
@@ -92,10 +82,6 @@ public class PurchaseViewPane extends JPanel implements DataObserver {
     //public void setDeletePurchaseListener(ToolbarButtonListener listener) {
     //    this.deletePurchaseListener = listener;
     //}
-
-    public void setSummaryListener(ToolbarButtonListener listener) {
-        this.summaryListener = listener;
-    }
 
     public void setViewPurchaseListener(ToolbarButtonListener listener) {
         this.viewPurchaseListener = listener;
@@ -145,9 +131,7 @@ public class PurchaseViewPane extends JPanel implements DataObserver {
                 // TODO - TEST CODE
                 System.err.println("Purchase View Delete Purchase Not Impl Yet");
                 System.out.println("Delete Purchase Button Pressed");
-            } else if (e.getSource() == summaryBtn)
-                if (summaryListener != null)
-                    summaryListener.toolbarButtonEventOccurred();
+            }
         }
     }
 }

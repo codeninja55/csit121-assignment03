@@ -4,7 +4,7 @@ import application.model.card.AdvancedCard;
 import application.model.card.BasicCard;
 import application.model.card.Card;
 import application.model.card.PremiumCard;
-import styles.Style;
+import styles.FormatterFactory;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
@@ -54,13 +54,13 @@ public class CardTableModel extends AbstractTableModel {
                 }
             case 4:
                 if (card instanceof AdvancedCard) {
-                    return Style.currencyFormat().format(((AdvancedCard) card).getBalance());
+                    return FormatterFactory.currencyFormat().format(((AdvancedCard) card).getBalance());
                 } else {
                     return "";
                 }
 
             case 5:
-                return Style.pointsFormat().format(card.getPoints());
+                return FormatterFactory.pointsFormat().format(card.getPoints());
         }
         return null;
     }

@@ -9,7 +9,7 @@ import application.view.builderFactory.DeleteCardForm;
 import application.view.builderFactory.SearchCardForm;
 import styles.ColorFactory;
 import styles.IconFactory;
-import styles.Style;
+import styles.TableFormatterFactory;
 import application.view.customComponents.Toolbar;
 import application.view.customComponents.ToolbarButton;
 import application.view.customComponents.ToolbarButtonListener;
@@ -47,7 +47,7 @@ public class CardViewPane extends JPanel implements DataObserver {
 
         cardTableModel = new CardTableModel();
         cardsTable = new JTable(cardTableModel);
-        Style.cardTableFormatter(cardsTable);
+        TableFormatterFactory.cardTableFormatter(cardsTable);
         setLayout(new BorderLayout());
 
         /* SORTED COMBO BOX */

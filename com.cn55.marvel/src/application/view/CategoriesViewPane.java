@@ -6,7 +6,7 @@ import application.model.category.Category;
 import application.view.builderFactory.CategoriesForm;
 import application.view.builderFactory.DeleteCategoryForm;
 import styles.IconFactory;
-import styles.Style;
+import styles.TableFormatterFactory;
 import application.view.customComponents.Toolbar;
 import application.view.customComponents.ToolbarButton;
 import application.view.customComponents.ToolbarButtonListener;
@@ -31,7 +31,7 @@ public class CategoriesViewPane extends JPanel implements DataObserver {
 
         categoriesTableModel = new CategoriesTableModel();
         JTable categoriesTable = new JTable(categoriesTableModel);
-        Style.categoriesTableFormatter(categoriesTable);
+        TableFormatterFactory.categoriesTableFormatter(categoriesTable);
 
         setLayout(new BorderLayout());
 
