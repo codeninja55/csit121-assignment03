@@ -9,6 +9,7 @@ import application.model.purchase.PurchaseType;
 import application.model.purchase.SortPurchaseType;
 import application.view.*;
 import application.view.builderFactory.*;
+import application.view.customComponents.ProgressDialog;
 import application.view.customComponents.ResultsPane;
 import styles.IconFactory;
 
@@ -19,8 +20,10 @@ import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -33,6 +36,7 @@ public class Program {
     private final PurchaseViewPane purchaseViewPane;
     private final CategoriesViewPane categoriesViewPane;
     private final SummaryViewPane summaryViewPane;
+    private ProgressDialog progressDialog;
 
     public Program() {
         /* Singleton Design Pattern - Only one instance of Shop available */
@@ -41,6 +45,7 @@ public class Program {
         db.readData();
 
         this.mainFrame = new MainFrame();
+        this.progressDialog = new ProgressDialog(mainFrame);
 
         this.tabPane = mainFrame.getTabPane();
         tabPane.addChangeListener(new ChangeListener() {
@@ -84,7 +89,9 @@ public class Program {
     /*============================== MAIN FRAME HANDLERS ==============================*/
     private void setupMainFrameHandlers() {
         mainFrame.setSaveListener(e -> {
+            progressDialog.setVisible(true);
             db.writeData();
+            progressDialog.setVisible(false);
         });
 
         mainFrame.addWindowListener(new WindowAdapter() {

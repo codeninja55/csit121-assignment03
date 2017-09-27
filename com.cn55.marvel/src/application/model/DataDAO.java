@@ -34,8 +34,8 @@ public class DataDAO implements DataObservable, CardsDAO, PurchaseDAO, CategoryD
     private final Path CARDS_LOG_PATH = Paths.get("com.cn55.marvel/src/persistentData/CardsStorage.csv");
     private final Path PURCHASES_LOG_PATH = Paths.get("com.cn55.marvel/src/persistentData/PurchaseStorage.csv");
 
-    public LocalDateTime firstPurchaseDate;
-    public LocalDateTime lastPurchaseDate;
+    private LocalDateTime firstPurchaseDate;
+    private LocalDateTime lastPurchaseDate;
 
     /*============================== CONSTRUCTORS  ==============================*/
     // Private modifier prevents any other class from instantiating
