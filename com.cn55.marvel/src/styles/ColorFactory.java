@@ -21,6 +21,7 @@ public abstract class ColorFactory {
     public static Color blueGrey50() { return new Color(236,239,241); }
     public static Color blueGrey100() { return new Color(207,216,220); }
     public static Color blueGrey200() { return new Color(176,190,197); }
+    public static Color blueGrey300() { return new Color(144,164,174); }
     public static Color blueGrey400() { return new Color(120,144,156); }
     public static Color blueGrey500() { return new Color(96,125,139); }
     public static Color blueGrey600() { return new Color(84,110,122); }

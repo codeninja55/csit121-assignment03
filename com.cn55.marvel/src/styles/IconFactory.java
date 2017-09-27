@@ -30,4 +30,6 @@ public abstract class IconFactory {
     public static ImageIcon addIconDisabled() { return new ImageIcon("com.cn55.marvel/src/img/add_grey_36.png");}
     public static ImageIcon datePickerIcon() { return new ImageIcon("com.cn55.marvel/src/img/event_white_36.png");}
     public static ImageIcon warningIcon() { return new ImageIcon("com.cn55.marvel/src/img/warning_red500_48.png");}
+    public static ImageIcon analyticsIcon() { return new ImageIcon("com.cn55.marvel/src/img/timeline_white_36.png");}
+    public static ImageIcon filterIcon() { return new ImageIcon("com.cn55.marvel/src/img/filter_list_white_36.png");}
 }
