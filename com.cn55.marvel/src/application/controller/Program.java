@@ -49,14 +49,6 @@ public class Program {
         this.progressDialog = new ProgressDialog(mainFrame);
 
         this.tabPane = mainFrame.getTabPane();
-        tabPane.addChangeListener(new ChangeListener() {
-            public void stateChanged(ChangeEvent e) {
-                // DESELECTED LISTENERS
-                if (tabPane.getSelectedComponent() != purchaseViewPane) removePurchaseForms();
-                if (tabPane.getSelectedComponent() != cardViewPane) removeCardForms();
-                if (tabPane.getSelectedComponent() != categoriesViewPane) removeCategoryForms();
-            }
-        });
 
         /* DataObserver Design Pattern - Registration and initial update calls */
         this.cardViewPane = mainFrame.getCardViewPane();
@@ -78,8 +70,17 @@ public class Program {
         db.register(summaryViewPane);
         summaryViewPane.setSubject(db);
         summaryViewPane.update();
-        summaryViewPane.getOutputForm().setSubject(db);
-        summaryViewPane.getOutputForm().update();
+        db.register(summaryViewPane.getAnalyticsPane());
+        summaryViewPane.getAnalyticsPane().setSubject(db);
+        summaryViewPane.getAnalyticsPane().update();
+
+        tabPane.addChangeListener(e -> {
+            if (tabPane.getSelectedComponent() != purchaseViewPane) removePurchaseForms();
+            if (tabPane.getSelectedComponent() != cardViewPane) removeCardForms();
+            if (tabPane.getSelectedComponent() != categoriesViewPane) removeCategoryForms();
+            if (tabPane.getSelectedComponent() != summaryViewPane)
+                summaryViewPane.getFilterForm().setVisible(false);
+        });
 
         setupMainFrameHandlers();
         setupCardViewHandlers();
