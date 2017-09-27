@@ -1,27 +1,40 @@
-package application.view.builderFactory;
+package application.view.summary;
 
 import application.model.DataObservable;
 import application.model.DataObserver;
+import application.model.card.Card;
+import application.model.card.CardType;
 import application.model.category.Category;
+import application.model.purchase.Purchase;
+import application.view.builderFactory.FormFactory;
 import application.view.customComponents.BaseForm;
 import application.view.customComponents.FormButton;
 import application.view.customComponents.FormLabel;
 import application.view.customComponents.FormTextField;
 import styles.ColorFactory;
+import styles.FormatterFactory;
 import styles.FontFactory;
-import styles.Style;
+import sun.security.pkcs11.wrapper.Functions;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.*;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
-public class SummaryOutputForm extends BaseForm implements FormFactory, DataObserver {
+public class SummaryAnalyticsPane extends BaseForm implements FormFactory, DataObserver {
     private DataObservable dataDAO;
     private SummaryCategoriesTableModel categoriesTableModel;
+    private FormTextField totalPurchasesMadeTextField;
+    private FormTextField totalPurchasesTextField;
+    private FormTextField cashPurchaseTextField;
+    private FormTextField cardPurchasesTextField;
+    private FormTextField totalCardsTextField;
+    private FormTextField totalPointsTextField;
 
-    SummaryOutputForm() {
+    SummaryAnalyticsPane() {
         super();
         super.setBorder("Analytics");
         setLayout(new GridLayout(2,1,0,10));
@@ -32,16 +45,20 @@ public class SummaryOutputForm extends BaseForm implements FormFactory, DataObse
 
         JPanel outputForm = new JPanel(new GridBagLayout());
         FormLabel purchasesLabel = new FormLabel("PURCHASES");
-        FormLabel totalPurchasesLabel = new FormLabel("Total Purchases:");
-        FormTextField totalPurchasesTextField = new FormTextField(20);
+        FormLabel totalPurchasesMadeLabel = new FormLabel("Total Purchases:");
+        totalPurchasesMadeTextField = new FormTextField(20);
+        FormLabel totalPurchasesLabel = new FormLabel("Total Amount:");
+        totalPurchasesTextField = new FormTextField(20);
         FormLabel cashPurchasesLabel = new FormLabel("Cash Purchases:");
-        FormTextField cashPurchaseTextField = new FormTextField(20);
+        cashPurchaseTextField = new FormTextField(20);
+        FormLabel totalCardsLabel = new FormLabel("Total Cards:");
+        totalCardsTextField = new FormTextField(20);
         FormLabel cardPurchasesLabel = new FormLabel("Card Purchases:");
-        FormTextField cardPurchasesTextField = new FormTextField(20);
+        cardPurchasesTextField = new FormTextField(20);
         FormLabel cardLabel = new FormLabel("CARDS");
         FormLabel totalPointsLabel = new FormLabel("Total Points:");
         FormLabel categoriesLabel = new FormLabel("CATEGORIES");
-        FormTextField totalPointsTextField = new FormTextField(20);
+        totalPointsTextField = new FormTextField(20);
         categoriesTableModel = new SummaryCategoriesTableModel();
         JTable categoriesTable = new JTable(categoriesTableModel);
 
@@ -56,6 +73,18 @@ public class SummaryOutputForm extends BaseForm implements FormFactory, DataObse
         purchasesLabel.setHorizontalAlignment(SwingConstants.CENTER);
         purchasesLabel.setFont(FontFactory.toolbarButtonFont());
         outputForm.add(purchasesLabel, gc);
+
+        /*========== NEW ROW ==========*/
+        gc.anchor = GridBagConstraints.LINE_END;
+        gc.gridwidth = 1;
+        gc.gridx = 0; gc.gridy++;
+        gc.insets = new Insets(10, 0,0,0);
+        outputForm.add(totalPurchasesMadeLabel, gc);
+
+        gc.anchor = GridBagConstraints.LINE_START;
+        gc.gridx = 1;
+        gc.insets = new Insets(10, 0,0,0);
+        outputForm.add(totalPurchasesMadeTextField, gc);
 
         /*========== NEW ROW ==========*/
         gc.anchor = GridBagConstraints.LINE_END;
@@ -91,6 +120,8 @@ public class SummaryOutputForm extends BaseForm implements FormFactory, DataObse
         gc.insets = new Insets(10, 0,0,0);
         outputForm.add(cardPurchasesTextField, gc);
 
+        outputForm.add(new JSeparator(),gc);
+
         /*========== NEW ROW ==========*/
         gc.anchor = GridBagConstraints.CENTER;
         gc.gridwidth = 2;
@@ -99,6 +130,18 @@ public class SummaryOutputForm extends BaseForm implements FormFactory, DataObse
         cardLabel.setHorizontalAlignment(SwingConstants.CENTER);
         cardLabel.setFont(FontFactory.toolbarButtonFont());
         outputForm.add(cardLabel, gc);
+
+        /*========== NEW ROW ==========*/
+        gc.anchor = GridBagConstraints.LINE_END;
+        gc.gridwidth = 1;
+        gc.gridx = 0; gc.gridy++;
+        gc.insets = new Insets(10, 0,0,0);
+        outputForm.add(totalCardsLabel, gc);
+
+        gc.anchor = GridBagConstraints.LINE_START;
+        gc.gridx = 1;
+        gc.insets = new Insets(10, 0,0,0);
+        outputForm.add(totalCardsTextField, gc);
 
         /*========== NEW ROW ==========*/
         gc.anchor = GridBagConstraints.LINE_END;
@@ -116,7 +159,7 @@ public class SummaryOutputForm extends BaseForm implements FormFactory, DataObse
         gc.anchor = GridBagConstraints.CENTER;
         gc.gridwidth = 2;
         gc.gridx = 0; gc.gridy++; gc.weightx = 2; gc.weighty = 2;
-        gc.insets = new Insets(95, 0,0,0);
+        gc.insets = new Insets(60, 0,0,0);
         categoriesLabel.setHorizontalAlignment(SwingConstants.CENTER);
         categoriesLabel.setFont(FontFactory.toolbarButtonFont());
         outputForm.add(categoriesLabel, gc);
@@ -151,7 +194,46 @@ public class SummaryOutputForm extends BaseForm implements FormFactory, DataObse
         add(new JScrollPane(categoriesTable));
     }
 
+    private void setPurchaseAnalytics(HashMap<Integer, Purchase> purchasesMap) {
+        Predicate<Purchase> cashPredicate = e -> (e.getCardType().equals(CardType.Cash.getName()));
+
+        DoubleSummaryStatistics purchaseStatistics = purchasesMap.values().stream().mapToDouble(Purchase::getCategoriesTotal)
+                .summaryStatistics();
+        totalPurchasesMadeTextField.setText(Double.toString(purchaseStatistics.getCount()));
+
+        totalPurchasesTextField.setText(FormatterFactory.currencyFormat().format(purchaseStatistics.getSum()));
+
+        double cashPurchases = purchasesMap.values().stream().filter(cashPredicate)
+                .mapToDouble(Purchase::getCategoriesTotal).sum();
+        cashPurchaseTextField.setText(FormatterFactory.currencyFormat().format(cashPurchases));
+
+        double cardPurchases = purchasesMap.values().stream().filter(cashPredicate.negate())
+                .mapToDouble(Purchase::getCategoriesTotal).sum();
+        cardPurchasesTextField.setText(FormatterFactory.currencyFormat().format(cardPurchases));
+
+    }
+
+    private void setCardAnalytics(HashMap<String, Card> cardsMap) {
+        DoubleSummaryStatistics cardsStatistics = cardsMap.values().stream().mapToDouble(Card::getPoints).summaryStatistics();
+        totalPointsTextField.setText(FormatterFactory.pointsFormat().format(cardsStatistics.getSum()));
+        totalCardsTextField.setText(Double.toString(cardsStatistics.getCount()));
+    }
+
+    public void filterUpdate(ArrayList<Category> categories, ArrayList<Purchase> purchases) {
+        HashMap<Integer, Purchase> purchasesMap = purchases.stream()
+                .collect(Collectors.toMap(Purchase::getReceiptID, Purchase::new,
+                        (k,v) -> k, HashMap::new));
+
+        setPurchaseAnalytics(purchasesMap);
+        categoriesTableModel.setData(categories);
+        categoriesTableModel.fireTableDataChanged();
+    }
+
     public void update() {
+        HashMap<Integer, Purchase> purchasesMap = new HashMap<>(dataDAO.getPurchaseUpdate(this));
+        setPurchaseAnalytics(purchasesMap);
+        HashMap<String, Card> cardsMap = new HashMap<>(dataDAO.getCardsUpdate(this));
+        setCardAnalytics(cardsMap);
         ArrayList<Category> categories = new ArrayList<>(dataDAO.getCategoriesUpdate(this).values());
         categoriesTableModel.setData(categories);
         categoriesTableModel.fireTableDataChanged();
@@ -166,7 +248,7 @@ public class SummaryOutputForm extends BaseForm implements FormFactory, DataObse
         private ArrayList<Category> categories;
         private final String[] headers = {"Name", "Total Amount"};
 
-        public void setData(ArrayList<Category> categories) { this.categories = categories; }
+        void setData(ArrayList<Category> categories) { this.categories = categories; }
 
         public String getColumnName(int column) { return headers[column]; }
 
@@ -178,9 +260,8 @@ public class SummaryOutputForm extends BaseForm implements FormFactory, DataObse
             Category category = categories.get(rowIndex);
             switch (columnIndex) {
                 case 0: return category.getName();
-                case 1: return Style.currencyFormat().format(category.getTotalAmount());
+                case 1: return FormatterFactory.currencyFormat().format(category.getTotalAmount());
             }
-
             return null;
         }
     }

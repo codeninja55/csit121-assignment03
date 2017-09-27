@@ -1,6 +1,4 @@
-package application.view.builderFactory;
-
-import application.view.jtableModels.CategoriesTableModel;
+package application.view.summary;
 
 import java.time.LocalDate;
 

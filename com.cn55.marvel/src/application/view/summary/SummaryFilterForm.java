@@ -1,5 +1,6 @@
-package application.view.builderFactory;
+package application.view.summary;
 
+import application.view.builderFactory.FormFactory;
 import application.view.customComponents.*;
 import styles.ColorFactory;
 import styles.CustomBorderFactory;
@@ -19,11 +20,13 @@ import java.util.stream.IntStream;
 public class SummaryFilterForm extends JPanel implements FormFactory, SummaryView {
     private MaterialDatePicker dateBeginPicker;
     private MaterialDatePicker dateEndPicker;
+    private LocalDate firstPurchaseDate;
+    private LocalDate lastPurchaseDate;
     private MaterialSlider daySlider;
     private MaterialSlider hourSlider;
     private SummaryListener listener;
 
-    SummaryFilterForm() {
+    SummaryFilterForm(SummaryViewPane parent, SummaryAnalyticsPane analyticsPane) {
         setLayout(new BorderLayout());
         Dimension dim = getPreferredSize();
         dim.width = 900;
@@ -107,6 +110,7 @@ public class SummaryFilterForm extends JPanel implements FormFactory, SummaryVie
         gc.gridy++;
         gc.insets = new Insets(20, 0,0,0);
         hourSliderLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        hourSlider.setInverted(true);
         filterForm.add(hourSliderLabel, gc);
 
         gc.anchor = GridBagConstraints.CENTER;
@@ -134,7 +138,11 @@ public class SummaryFilterForm extends JPanel implements FormFactory, SummaryVie
         Arrays.stream(filterForm.getComponents()).filter(c -> c instanceof FormLabel || c instanceof FormButton)
                 .forEach(c -> c.setVisible(true));
 
-        cancelBtn.addActionListener(e -> super.setVisible(false));
+        cancelBtn.addActionListener(e -> {
+            super.setVisible(false);
+            parent.update();
+            analyticsPane.update();
+        });
 
         filterBtn.addActionListener(e -> {
             if (listener != null) listener.refreshActionPerformed(SummaryFilterForm.this);
@@ -143,15 +151,23 @@ public class SummaryFilterForm extends JPanel implements FormFactory, SummaryVie
         clearBtn.addActionListener(e -> {
             hourSlider.setValue(24);
             daySlider.setValue(0);
-            // TODO Set the date pickers to their defaults
+            dateBeginPicker.setDate(firstPurchaseDate);
+            dateEndPicker.setDate(lastPurchaseDate);
+            // TODO - Need to reset the data
+            parent.update();
+            analyticsPane.update();
         });
-
-        // TODO - Need to set the first and last date
-
     }
 
     /*============================== MUTATORS  ==============================*/
     public void setListener(SummaryListener listener) { this.listener = listener; }
+
+    void setPurchaseDateBounds(LocalDate firstPurchaseDate, LocalDate lastPurchaseDate) {
+        this.firstPurchaseDate = firstPurchaseDate;
+        dateBeginPicker.setDate(firstPurchaseDate);
+        this.lastPurchaseDate = lastPurchaseDate;
+        dateEndPicker.setDate(lastPurchaseDate);
+    }
 
     /*============================== SUMMARY VIEW METHODS ==============================*/
     public int getDaysOption() { return daySlider.getValue(); }

@@ -1,27 +1,27 @@
-package application.view;
+package application.view.summary;
 
 import application.model.DataObservable;
 import application.model.DataObserver;
-import application.view.builderFactory.FormFactory;
-import application.view.builderFactory.SummaryFilterForm;
-import application.view.builderFactory.SummaryOutputForm;
-import application.view.customComponents.*;
+import application.model.purchase.Purchase;
+import application.view.customComponents.Toolbar;
+import application.view.customComponents.ToolbarButton;
+import application.view.customComponents.ToolbarButtonListener;
 import application.view.jtableModels.CardTableModel;
-import application.view.jtableModels.CategoriesTableModel;
 import application.view.jtableModels.PurchaseTableModel;
 import styles.ColorFactory;
 import styles.IconFactory;
-import styles.Style;
+import styles.TableFormatterFactory;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ItemEvent;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class SummaryViewPane extends JPanel implements DataObserver {
     private DataObservable dataDAO;
-    private SummaryOutputForm outputForm;
+    private SummaryAnalyticsPane analyticsPane;
     private SummaryFilterForm filterForm;
     private PurchaseTableModel purchasesTableModel;
     private JTable purchasesTable;
@@ -29,19 +29,19 @@ public class SummaryViewPane extends JPanel implements DataObserver {
     private JTable cardsTable;
     private ToolbarButtonListener analyticsListener;
 
-    SummaryViewPane() {
+    public SummaryViewPane() {
         setLayout(new BorderLayout());
         Toolbar toolbar = new Toolbar();
         ToolbarButton analyticsBtn = new ToolbarButton("Filter Data", IconFactory.analyticsIcon());
 
-        outputForm = FormFactory.createOutputForm();
-        filterForm = FormFactory.createFilterForm();
+        analyticsPane = new SummaryAnalyticsPane();
+        filterForm = new SummaryFilterForm(this, analyticsPane);
         purchasesTableModel = new PurchaseTableModel();
         purchasesTable = new JTable(purchasesTableModel);
-        Style.purchasesTableFormatter(purchasesTable);
+        TableFormatterFactory.purchasesTableFormatter(purchasesTable);
         cardsTableModel = new CardTableModel();
         cardsTable = new JTable(cardsTableModel);
-        Style.cardTableFormatter(cardsTable);
+        TableFormatterFactory.cardTableFormatter(cardsTable);
 
         /* TABLE VIEW COMBO BOX */
         String[] tableOptions = {"Purchases", "Cards"};
@@ -55,9 +55,9 @@ public class SummaryViewPane extends JPanel implements DataObserver {
         add(toolbar, BorderLayout.NORTH);
 
         add(new JScrollPane(purchasesTable), BorderLayout.CENTER);
-        add(outputForm, BorderLayout.EAST);
+        add(analyticsPane, BorderLayout.EAST);
         add(filterForm, BorderLayout.WEST);
-        outputForm.setVisible(true);
+        analyticsPane.setVisible(true);
 
         tableViewCombo.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
@@ -80,16 +80,19 @@ public class SummaryViewPane extends JPanel implements DataObserver {
     /*============================== MUTATORS ==============================*/
     public void setAnalyticsListener(ToolbarButtonListener analyticsListener) { this.analyticsListener = analyticsListener; }
 
+    public void filterPurchaseTable(ArrayList<Purchase> purchases) {
+        purchasesTableModel.setData(purchases);
+        purchasesTableModel.fireTableDataChanged();
+    }
+
     public void update() {
         purchasesTableModel.setData(new ArrayList<>(dataDAO.getPurchaseUpdate(this).values()));
         purchasesTableModel.fireTableDataChanged();
         cardsTableModel.setData(new ArrayList<>(dataDAO.getCardsUpdate(this).values()));
         cardsTableModel.fireTableDataChanged();
-        // TODO - Add these to the form
-        /*LocalDate firstPurchaseDate = dataDAO.getFirstPurchaseDate(this).toLocalDate();
-        dateBeginPicker.setDate(firstPurchaseDate);
+        LocalDate firstPurchaseDate = dataDAO.getFirstPurchaseDate(this).toLocalDate();
         LocalDate lastPurchaseDate = dataDAO.getLastPurchaseDate(this).toLocalDate();
-        dateEndPicker.setDate(lastPurchaseDate);*/
+        filterForm.setPurchaseDateBounds(firstPurchaseDate, lastPurchaseDate);
     }
 
     public void setSubject(DataObservable dataObservable) { this.dataDAO = dataObservable; }
@@ -97,5 +100,5 @@ public class SummaryViewPane extends JPanel implements DataObserver {
     /*============================== ACCESSORS ==============================*/
     public SummaryFilterForm getFilterForm() { return filterForm; }
 
-    public SummaryOutputForm getOutputForm() { return outputForm; }
+    public SummaryAnalyticsPane getAnalyticsPane() { return analyticsPane; }
 }
