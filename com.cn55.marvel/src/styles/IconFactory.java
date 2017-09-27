@@ -3,6 +3,7 @@ import javax.swing.*;
 
 @SuppressWarnings("All")
 public abstract class IconFactory {
+    public static ImageIcon saveIcon() { return new ImageIcon("com.cn55.marvel/src/img/save_red500_24.png"); }
     public static ImageIcon exportIcon() { return new ImageIcon("com.cn55.marvel/src/img/file_download_red500_24.png"); }
     public static ImageIcon importIcon() { return new ImageIcon("com.cn55.marvel/src/img/file_upload_red500_24.png"); }
     public static ImageIcon settingsIcon() { return new ImageIcon("com.cn55.marvel/src/img/settings_input_component_black_24.png"); }
