@@ -20,6 +20,7 @@ public class MainFrame extends JFrame {
     private final PurchaseViewPane purchaseViewPane;
     private final CategoriesViewPane categoriesViewPane;
     private final SummaryViewPane summaryViewPane;
+    private ActionListener saveListener;
     private ActionListener exitListener;
     private JFileChooser fileChooser;
 
@@ -73,6 +74,7 @@ public class MainFrame extends JFrame {
         JMenuItem login = new JMenuItem("Login..", IconFactory.loginIcon());
         JMenuItem logout = new JMenuItem("Logout..", IconFactory.logoutIcon());
         JMenuItem exit = new JMenuItem("Exit", IconFactory.exitIcon());
+        JMenuItem save = new JMenuItem("Save Data", IconFactory.saveIcon());
         JMenuItem importData = new JMenuItem("Import Data..", IconFactory.importIcon());
         JMenuItem exportData = new JMenuItem("Export Data..", IconFactory.exportIcon());
 
@@ -82,6 +84,7 @@ public class MainFrame extends JFrame {
         login.setFont(FontFactory.labelFont());
         logout.setFont(FontFactory.labelFont());
         exit.setFont(FontFactory.labelFont());
+        save.setFont(FontFactory.labelFont());
         importData.setFont(FontFactory.labelFont());
         exportData.setFont(FontFactory.labelFont());
 
@@ -91,6 +94,7 @@ public class MainFrame extends JFrame {
         login.setForeground(ColorFactory.redA700());
         logout.setForeground(ColorFactory.redA700());
         exit.setForeground(ColorFactory.redA700());
+        save.setForeground(ColorFactory.redA700());
         importData.setForeground(ColorFactory.redA700());
         exportData.setForeground(ColorFactory.redA700());
 
@@ -101,12 +105,18 @@ public class MainFrame extends JFrame {
         fileMenu.add(adminSubMenu);
         fileMenu.addSeparator();
         fileMenu.add(exit);
+        dataMenu.add(save);
+        dataMenu.addSeparator();
         dataMenu.add(importData);
         dataMenu.add(exportData);
         menu.add(fileMenu);
         menu.add(dataMenu);
 
         fileChooser.addChoosableFileFilter(new CSVFileFilter());
+
+        save.addActionListener(e -> {
+            if (saveListener != null) saveListener.actionPerformed(e);
+        });
 
         exit.addActionListener(e -> {
             if (exitListener != null) exitListener.actionPerformed(e);
@@ -160,6 +170,8 @@ public class MainFrame extends JFrame {
 
         return welcomePane;
     }
+
+    public void setSaveListener(ActionListener saveListener) { this.saveListener = saveListener; }
 
     public void setExitListener(ActionListener exitListener) { this.exitListener = exitListener; }
 
