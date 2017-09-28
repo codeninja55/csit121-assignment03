@@ -18,7 +18,7 @@ import java.util.Locale;
 import java.util.stream.IntStream;
 
 public class SummaryFilterForm extends JPanel implements FormFactory, SummaryView {
-    private MaterialDatePicker dateBeginPicker;
+    private MaterialDatePicker dateStartPicker;
     private MaterialDatePicker dateEndPicker;
     private LocalDate firstPurchaseDate;
     private LocalDate lastPurchaseDate;
@@ -37,10 +37,11 @@ public class SummaryFilterForm extends JPanel implements FormFactory, SummaryVie
 
         JPanel filterForm = new JPanel(new GridBagLayout());
         CancelButton cancelBtn = new CancelButton("Cancel");
-        FormLabel dateFromLabel = new FormLabel("Date From:");
-        dateBeginPicker = new MaterialDatePicker();
-        FormLabel dateToLabel = new FormLabel("Date To:");
+        FormLabel dateStartLabel = new FormLabel("Date Start:");
+        dateStartPicker = new MaterialDatePicker();
+        FormLabel dateEndLabel = new FormLabel("Date End:");
         dateEndPicker = new MaterialDatePicker();
+        ErrorLabel dateErrLabel = new ErrorLabel("Invalid Date Range. Date end before date start.");
         FormLabel daySliderLabel = new FormLabel("Filter by Day");
         daySlider = new MaterialSlider(JSlider.HORIZONTAL,0,7,0);
         FormLabel hourSliderLabel = new FormLabel("Filter by Hour");
@@ -75,27 +76,34 @@ public class SummaryFilterForm extends JPanel implements FormFactory, SummaryVie
         gc.gridwidth = 1;
         gc.gridx = 0; gc.gridy = 0; gc.weightx = 0.4; gc.weighty = 0.1;
         gc.insets = new Insets(25, 0,0,10);
-        filterForm.add(dateFromLabel, gc);
+        filterForm.add(dateStartLabel, gc);
 
         gc.anchor = GridBagConstraints.FIRST_LINE_START;
         gc.gridx = 1; gc.weightx = 0.6;
         gc.insets = new Insets(20, 0,0,0);
-        filterForm.add(dateBeginPicker, gc);
+        filterForm.add(dateStartPicker, gc);
 
         /*========== NEW ROW ==========*/
         gc.anchor = GridBagConstraints.FIRST_LINE_END;
         gc.gridx = 0; gc.gridy++;
         gc.insets = new Insets(15, 0,0,10);
-        filterForm.add(dateToLabel, gc);
+        filterForm.add(dateEndLabel, gc);
 
         gc.anchor = GridBagConstraints.FIRST_LINE_START;
         gc.gridx = 1;
         gc.insets = new Insets(10, 0,0,0);
         filterForm.add(dateEndPicker, gc);
 
-        /*========== NEW ROW - DAY SLIDER ==========*/
+        /*========== NEW ROW - DATE ERR LABEL ==========*/
         gc.anchor = GridBagConstraints.CENTER;
         gc.gridwidth = 2;
+        gc.gridx = 0; gc.gridy++; gc.weightx = 3; gc.weighty = 0.1;
+        gc.insets = new Insets(15, 0,15,0);
+        dateErrLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        filterForm.add(dateErrLabel, gc);
+
+        /*========== NEW ROW - DAY SLIDER ==========*/
+        gc.anchor = GridBagConstraints.CENTER;
         gc.gridx = 0; gc.gridy++; gc.weightx = 3; gc.weighty = 0.1;
         gc.insets = new Insets(20, 0,0,0);
         daySliderLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -140,20 +148,29 @@ public class SummaryFilterForm extends JPanel implements FormFactory, SummaryVie
 
         cancelBtn.addActionListener(e -> {
             super.setVisible(false);
+            dateErrLabel.setVisible(false);
             parent.update();
             analyticsPane.update();
         });
 
         filterBtn.addActionListener(e -> {
-            if (listener != null) listener.refreshActionPerformed(SummaryFilterForm.this);
+            if (getDateToOption().isBefore(getDateFromOption())) {
+                dateErrLabel.setVisible(true);
+                parent.update();
+                analyticsPane.update();
+            } else {
+                dateErrLabel.setVisible(false);
+                if (listener != null) listener.filterActionPerformed(SummaryFilterForm.this);
+            }
+
         });
 
         clearBtn.addActionListener(e -> {
             hourSlider.setValue(24);
             daySlider.setValue(0);
-            dateBeginPicker.setDate(firstPurchaseDate);
+            dateStartPicker.setDate(firstPurchaseDate);
             dateEndPicker.setDate(lastPurchaseDate);
-            // TODO - Need to reset the data
+            dateErrLabel.setVisible(false);
             parent.update();
             analyticsPane.update();
         });
@@ -164,7 +181,7 @@ public class SummaryFilterForm extends JPanel implements FormFactory, SummaryVie
 
     void setPurchaseDateBounds(LocalDate firstPurchaseDate, LocalDate lastPurchaseDate) {
         this.firstPurchaseDate = firstPurchaseDate;
-        dateBeginPicker.setDate(firstPurchaseDate);
+        dateStartPicker.setDate(firstPurchaseDate);
         this.lastPurchaseDate = lastPurchaseDate;
         dateEndPicker.setDate(lastPurchaseDate);
     }
@@ -172,6 +189,6 @@ public class SummaryFilterForm extends JPanel implements FormFactory, SummaryVie
     /*============================== SUMMARY VIEW METHODS ==============================*/
     public int getDaysOption() { return daySlider.getValue(); }
     public int getHoursOption() { return hourSlider.getValue(); }
-    public LocalDate getDateFromOption() { return dateBeginPicker.getDate(); }
+    public LocalDate getDateFromOption() { return dateStartPicker.getDate(); }
     public LocalDate getDateToOption() { return dateEndPicker.getDate(); }
 }
