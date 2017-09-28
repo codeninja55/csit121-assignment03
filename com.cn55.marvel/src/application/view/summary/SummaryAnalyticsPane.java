@@ -203,7 +203,7 @@ public class SummaryAnalyticsPane extends BaseForm implements FormFactory, DataO
                     c.setFont(FontFactory.labelFont());
                 });
 
-        Arrays.stream(outputForm.getComponents()).filter(c -> c instanceof FormLabel || c instanceof FormButton || c instanceof FormTextField)
+        Arrays.stream(outputForm.getComponents()).filter(c -> c instanceof FormLabel || c instanceof FormTextField)
                 .forEach(c -> c.setVisible(true));
 
         add(outputForm);
@@ -238,13 +238,10 @@ public class SummaryAnalyticsPane extends BaseForm implements FormFactory, DataO
         totalBalanceTextField.setText(FormatterFactory.currencyFormat().format(totalBalance));
     }
 
-    public void filterUpdate(ArrayList<Category> categories, ArrayList<Purchase> purchases) {
-        HashMap<Integer, Purchase> purchasesMap = purchases.stream()
-                .collect(Collectors.toMap(Purchase::getReceiptID, Purchase::new,
-                        (k,v) -> k, HashMap::new));
-
+    public void filterUpdate(HashMap<Integer, Category> categoriesMap, HashMap<Integer, Purchase> purchasesMap, HashMap<String, Card> cardsMap) {
         setPurchaseAnalytics(purchasesMap);
-        categoriesTableModel.setData(categories);
+        setCardAnalytics(cardsMap);
+        categoriesTableModel.setData(new ArrayList<>(categoriesMap.values()));
         categoriesTableModel.fireTableDataChanged();
     }
 

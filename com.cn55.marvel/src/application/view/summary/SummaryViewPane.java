@@ -2,6 +2,7 @@ package application.view.summary;
 
 import application.model.DataObservable;
 import application.model.DataObserver;
+import application.model.card.Card;
 import application.model.purchase.Purchase;
 import application.view.custom_components.Toolbar;
 import application.view.custom_components.ToolbarButton;
@@ -80,9 +81,11 @@ public class SummaryViewPane extends JPanel implements DataObserver {
     /*============================== MUTATORS ==============================*/
     public void setAnalyticsListener(ToolbarButtonListener analyticsListener) { this.analyticsListener = analyticsListener; }
 
-    public void filterPurchaseTable(ArrayList<Purchase> purchases) {
+    public void filterPurchaseTable(ArrayList<Purchase> purchases, ArrayList<Card> cards) {
         purchasesTableModel.setData(purchases);
         purchasesTableModel.fireTableDataChanged();
+        cardsTableModel.setData(cards);
+        cardsTableModel.fireTableDataChanged();
     }
 
     public void update() {
