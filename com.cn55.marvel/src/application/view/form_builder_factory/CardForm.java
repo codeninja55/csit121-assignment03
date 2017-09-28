@@ -13,8 +13,9 @@ import java.awt.event.*;
 import java.util.Arrays;
 
 public class CardForm extends BaseForm implements FormFactory, CardFormView {
-    private final DefaultComboBoxModel<String> options;
-    private final JComboBox<String> cardTypeCombo;
+    private final MaterialRadioButton anonRB;
+    private final MaterialRadioButton basicRB;
+    private final MaterialRadioButton premRB;
     private final JPanel baseCreateCardForm;
     private final FormLabel cardIDLabel;
     private final FormTextField cardIDTextField;
@@ -38,10 +39,13 @@ public class CardForm extends BaseForm implements FormFactory, CardFormView {
 
         /* INITIALIZE ALL COMPONENTS */
         baseCreateCardForm = new JPanel(new GridBagLayout());
-        cardTypeCombo = new JComboBox<>();
-        options = new DefaultComboBoxModel<>();
 
         /* NOTE: All FormLabels and FormTextFields are hidden by default */
+        JPanel cardRBPane = new JPanel(new GridLayout(1,3));
+        ButtonGroup cardButtonGroup = new ButtonGroup();
+        anonRB = new MaterialRadioButton("AnonCard");
+        basicRB = new MaterialRadioButton("BasicCard");
+        premRB = new MaterialRadioButton("PremiumCard");
         cardIDLabel = new FormLabel("Card ID: ");
         cardIDTextField = new FormTextField(20);
         cardNameLabel = new FormLabel("Name: ");
@@ -56,41 +60,40 @@ public class CardForm extends BaseForm implements FormFactory, CardFormView {
 
         /* REGISTRATION OF LISTENERS */
         FormListener handler = new FormListener();
-        cardTypeCombo.addItemListener(handler);
         createBtn.addActionListener(handler);
         clearBtn.addActionListener(handler);
 
-        /* CARD TYPE COMBO BOX - Create the model and the combobox */
-        options.addElement("Please Choose Card Type Below");
-        options.addElement(CardType.AnonCard.getName());
-        options.addElement(CardType.BasicCard.getName());
-        options.addElement(CardType.PremiumCard.getName());
+        cardButtonGroup.add(anonRB);
+        cardButtonGroup.add(basicRB);
+        cardButtonGroup.add(premRB);
+        anonRB.setSelected(true);
 
-        cardTypeCombo.setModel(options);
-        cardTypeCombo.setSelectedIndex(0);
-        cardTypeCombo.setEditable(false);
-        cardTypeCombo.setFont(FontFactory.comboboxFont());
-        add(cardTypeCombo, BorderLayout.NORTH);
+        cardRBPane.add(anonRB);
+        cardRBPane.add(basicRB);
+        cardRBPane.add(premRB);
 
-        this.addComponentListener(new ComponentAdapter() {
-            public void componentShown(ComponentEvent e) {
-                super.componentShown(e);
-                createBaseCreateCardForm();
-            }
-        });
+        add(cardRBPane, BorderLayout.NORTH);
 
-        this.addComponentListener(new ComponentAdapter() {
+        anonRB.addActionListener(e -> anonCardForm());
+        basicRB.addActionListener(e -> advancedCardForm());
+        premRB.addActionListener(e -> advancedCardForm());
+
+        createBaseCreateCardForm();
+        anonCardForm();
+        add(baseCreateCardForm, BorderLayout.CENTER);
+
+        /*this.addComponentListener(new ComponentAdapter() {
             public void componentHidden(ComponentEvent e) {
                 super.componentHidden(e);
                 baseCreateCardForm.setVisible(false);
-                CardForm.super.remove(baseCreateCardForm);
             }
-        });
+        });*/
+
+        Arrays.stream(baseCreateCardForm.getComponents()).filter(c -> !(c instanceof ErrorLabel)).forEach(c -> c.setVisible(true));
     }
 
     /*============================== BASE CREATE CARD FORM ==============================*/
     private void createBaseCreateCardForm() {
-        this.add(baseCreateCardForm, BorderLayout.CENTER);
         GridBagConstraints gc = new GridBagConstraints();
 
         /*========== FIRST ROW - CARD ID ==========*/
@@ -165,19 +168,12 @@ public class CardForm extends BaseForm implements FormFactory, CardFormView {
         cardIDTextField.setText(Generator.getNextCardID());
     }
 
-    private void baseCardForm() {
-        hideAllFormComponents(false);
-        hideErrorLabels();
-    }
-
     private void anonCardForm() {
-        hideAllFormComponents(true);
         hideErrorLabels();
         enableNameAndEmail(false);
     }
 
     private void advancedCardForm() {
-        hideAllFormComponents(true);
         hideErrorLabels();
         enableNameAndEmail(true);
     }
@@ -201,10 +197,6 @@ public class CardForm extends BaseForm implements FormFactory, CardFormView {
         gc.anchor = GridBagConstraints.FIRST_LINE_START;
     }
 
-    private void hideAllFormComponents(boolean isVisible) {
-        Arrays.stream(baseCreateCardForm.getComponents()).forEach(c -> c.setVisible(isVisible));
-    }
-
     private void enableNameAndEmail (boolean isEnabled) {
         cardNameLabel.setEnabled(isEnabled);
         cardNameTextField.setEditable(isEnabled);
@@ -215,24 +207,30 @@ public class CardForm extends BaseForm implements FormFactory, CardFormView {
     }
 
     private void hideErrorLabels() {
-            Arrays.stream(baseCreateCardForm.getComponents()).filter(c -> c instanceof ErrorLabel)
-                    .forEach(c -> c.setVisible(false));
+            Arrays.stream(baseCreateCardForm.getComponents()).filter(c -> c instanceof ErrorLabel).forEach(c -> c.setVisible(false));
     }
 
     /*============================== VIEW ONLY IMPLEMENTATIONS ==============================*/
-    public String getCardType() { return options.getElementAt(cardTypeCombo.getSelectedIndex()); }
+    public String getCardType() {
+        if (anonRB.isSelected())
+            return CardType.AnonCard.name;
+        else if (basicRB.isSelected())
+            return CardType.BasicCard.name;
+        else
+            return CardType.PremiumCard.name;
+    }
     public String getCardID() { return cardIDTextField.getText(); }
     public String getCardName() { return cardNameTextField.getText().trim(); }
     public String getCardEmail() { return cardEmailTextField.getText().trim(); }
 
     /*============================== INNER CLASS ==============================*/
-    private class FormListener implements ActionListener, ItemListener {
+    private class FormListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() == createBtn) {
                 hideErrorLabels();
                 boolean valid = true;
 
-                if (cardTypeCombo.getSelectedIndex() != 1) {
+                if (basicRB.isSelected() || premRB.isSelected()) {
                     if (cardNameTextField.getText() == null || cardNameTextField.getText().isEmpty()) {
                         nameErrorLabel.setVisible(true);
                         valid = false;
@@ -252,15 +250,6 @@ public class CardForm extends BaseForm implements FormFactory, CardFormView {
                         .forEach(c -> ((JTextField)c).setText(null));
                 Arrays.stream(formComponents).filter(c -> c instanceof ErrorLabel).forEach(c->c.setVisible(false));
                 Arrays.stream(formComponents).filter(c -> c instanceof FormLabel).forEach(c->c.setForeground(Color.BLACK));
-            }
-        }
-
-        public void itemStateChanged(ItemEvent e) {
-            if (e.getStateChange() == ItemEvent.SELECTED) {
-                if (e.getItem().equals(options.getElementAt(0))) baseCardForm();
-                else if (e.getItem().equals(options.getElementAt(1))) anonCardForm();
-                else if (e.getItem().equals(options.getElementAt(2))) advancedCardForm();
-                else if (e.getItem().equals(options.getElementAt(3))) advancedCardForm();
             }
         }
     }
