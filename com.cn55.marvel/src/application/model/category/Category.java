@@ -32,9 +32,12 @@ public class Category implements Comparable<Category> {
         this(other.getId(), other.getName(), other.getDescription(), other.getAmount());
     }
 
+    /*============================== MUTATORS  ==============================*/
     public void setAmount(double amount) { this.amount = amount; }
 
     public void updateTotalAmount(double amount) { this.totalAmount += amount; }
+
+    public void setTotalAmount(double totalAmount) { this.totalAmount = totalAmount; }
 
     /*============================== ACCESSORS  ==============================*/
     public int getId() { return id; }
