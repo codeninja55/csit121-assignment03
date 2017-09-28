@@ -15,10 +15,9 @@ public class AnonCard extends Card {
         super.cardType = CardType.AnonCard.getName();
     }
 
-    // copy constructor
-    AnonCard(AnonCard o) {
-        super(o);
-        super.cardType = o.getCardType();
+    // cloning method
+    public Card clone(Card o) {
+        return new AnonCard(o.getID(), o.getPoints());
     }
 
     /*============================== MUTATORS  ==============================*/

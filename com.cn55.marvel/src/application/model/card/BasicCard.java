@@ -24,8 +24,8 @@ public class BasicCard extends AdvancedCard {
         super.cardType = CardType.BasicCard.getName();
     }
 
-    BasicCard(BasicCard o) {
-        super(o);
+    public Card clone(Card o) {
+        return new BasicCard(o.getID(), ((BasicCard)o).getName(), ((BasicCard)o).getEmail(), o.getPoints(), ((BasicCard) o).getBalance());
     }
 
     /*============================== MUTATORS  ==============================*/

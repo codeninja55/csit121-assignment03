@@ -20,14 +20,7 @@ public abstract class AdvancedCard extends Card {
         this.balance = balance;
     }
 
-    // Copy constructor
-    AdvancedCard(AdvancedCard o) {
-        super(o);
-        super.cardType = o.getCardType();
-        this.name = o.getName();
-        this.email = o.getEmail();
-        this.balance = o.getBalance();
-    }
+    public abstract Card clone(Card o);
 
     public boolean equals (AdvancedCard other) { return this.name.equals(other.name); }
 

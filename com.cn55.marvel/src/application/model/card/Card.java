@@ -27,6 +27,8 @@ public abstract class Card implements Comparable<Card> {
         this.cardType = o.getCardType();
     }
 
+    public abstract Card clone(Card o);
+
     /*============================== MUTATORS  ==============================*/
     void setPoints(double points) {
         this.points = points;

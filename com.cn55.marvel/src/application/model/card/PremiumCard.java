@@ -1,10 +1,9 @@
 package application.model.card;
 
-@SuppressWarnings("FieldCanBeLocal")
+@SuppressWarnings("All")
 public class PremiumCard extends AdvancedCard {
     private final double POINTS_RATE_LOW = 0.025;
     private final double POINTS_RATE_HIGH = 0.03;
-    @SuppressWarnings("unused")
     private final double SIGNUP_FEE = 25.0;
 
     /*============================== CONSTRUCTORS  ==============================*/
@@ -14,7 +13,6 @@ public class PremiumCard extends AdvancedCard {
     }
 
     // constructor with details
-    @SuppressWarnings("unused")
     public PremiumCard(String name, String email, double totalAmount) {
         super(name, email);
         super.cardType = CardType.PremiumCard.getName();
@@ -27,9 +25,9 @@ public class PremiumCard extends AdvancedCard {
         super.cardType = CardType.PremiumCard.getName();
     }
 
-    // copy constructor
-    PremiumCard(PremiumCard o) {
-        super(o);
+    // Clone
+    public Card clone(Card o) {
+        return new PremiumCard(o.getID(), ((PremiumCard)o).getName(), ((PremiumCard) o).getEmail(), o.getPoints(), ((PremiumCard) o).getBalance());
     }
 
     /*============================== MUTATORS  ==============================*/
