@@ -96,7 +96,7 @@ public class Purchase {
                 "Card ID: ", cardID,
                 "Purchase Time: ", getPurchaseTimeStr());
 
-        categories.forEach((k, v) -> secondOutput.append(String.format("%n%s$%.2f", (v.getName() + ": "), v.getAmount())));
+        categories.values().forEach(c -> secondOutput.append(String.format("%n%s$%.2f", (c.getName() + ": "), c.getAmount())));
         return firstOutput + secondOutput;
     }
 }
