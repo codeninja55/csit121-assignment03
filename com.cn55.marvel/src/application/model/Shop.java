@@ -33,7 +33,7 @@ public class Shop {
     }
 
     public void makePurchase(String cardID, int receiptID, HashMap<Integer, Category> categories) {
-        if (cardID.equals(CardType.Cash.getName())) {
+        if (cardID.equals(CardType.Cash.name)) {
             db.createPurchase(new Purchase(categories, receiptID));
         } else {
             if (db.getAllCards().containsKey(cardID)) {
@@ -42,7 +42,7 @@ public class Shop {
                 Purchase newPurchase = new Purchase(cardID, cardType, categories, receiptID);
                 card.calcPoints(newPurchase.getCategoriesTotal());
 
-                if(!cardType.equals(CardType.AnonCard.getName()))
+                if(!cardType.equals(CardType.AnonCard.name))
                     card.calcBalance(newPurchase.getCategoriesTotal());
 
                 db.createPurchase(newPurchase);
@@ -56,8 +56,8 @@ public class Shop {
         String email = newCard.get("email");
         String cardType = newCard.get("cardType");
 
-        if (!cardType.equals(CardType.AnonCard.getName())) {
-            if (cardType.equals(CardType.BasicCard.getName()))
+        if (!cardType.equals(CardType.AnonCard.name)) {
+            if (cardType.equals(CardType.BasicCard.name))
                 db.createCard(new BasicCard(name, email));
             else
                 db.createCard(new PremiumCard(name, email));

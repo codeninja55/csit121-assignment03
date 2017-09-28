@@ -30,7 +30,7 @@ public interface FormFactory {
     }
 
     static PurchaseForm createPurchaseForm(ArrayList<Card> cards, ArrayList<Category> categories) {
-        return new PurchaseForm.PurchaseFormBuilder(Generator.setReceiptID())
+        return new PurchaseForm.PurchaseFormBuilder(Generator.getReceiptID())
                 .existingCardModel(cards).categoriesList(categories).build();
     }
 }

@@ -79,9 +79,9 @@ public class PurchaseForm extends BaseForm implements FormFactory, PurchaseFormV
 
         cardTypeLabel = new FormLabel("Card Type: ");
         ButtonGroup cardTypeRBGroup = new ButtonGroup();
-        anonCardRB = new MaterialRadioButton(CardType.AnonCard.getName());
-        basicCardRB = new MaterialRadioButton(CardType.BasicCard.getName());
-        premiumCardRB = new MaterialRadioButton(CardType.PremiumCard.getName());
+        anonCardRB = new MaterialRadioButton(CardType.AnonCard.name);
+        basicCardRB = new MaterialRadioButton(CardType.BasicCard.name);
+        premiumCardRB = new MaterialRadioButton(CardType.PremiumCard.name);
 
         cardNameLabel = new FormLabel("Customer Name: ");
         cardNameTextField = new FormTextField(20);

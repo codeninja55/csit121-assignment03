@@ -1,10 +1,9 @@
 package application.model.card;
 
-@SuppressWarnings("unused")
 public abstract class AdvancedCard extends Card {
-    final String name;
-    final String email;
-    double balance;
+    protected final String name;
+    protected final String email;
+    protected double balance;
 
     AdvancedCard (String name, String email) {
         super ();
@@ -14,25 +13,16 @@ public abstract class AdvancedCard extends Card {
     }
 
     AdvancedCard(String id, String name, String email,double points, double balance) {
-        super(id, points);
+        super(id, null, points);
         this.name = name;
         this.email = email;
         this.balance = balance;
     }
 
     public abstract Card clone(Card o);
-
-    public boolean equals (AdvancedCard other) { return this.name.equals(other.name); }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public double getBalance() {
-        return balance;
-    }
+    public String getCardType() { return super.cardType; }
+    public String getName() { return name; }
+    public String getEmail() { return email; }
+    public double getBalance() { return balance; }
+    public boolean equals(AdvancedCard other) { return this.name.equals(other.name); }
 }

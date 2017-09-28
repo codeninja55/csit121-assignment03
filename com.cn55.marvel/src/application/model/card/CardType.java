@@ -1,22 +1,12 @@
 package application.model.card;
-
 public enum CardType {
-    Cash("Cash", 0),
-    AnonCard("AnonCard", 1),
-    BasicCard("BasicCard", 2),
-    PremiumCard("PremiumCard", 3)
+    Cash("Cash"),
+    AnonCard("AnonCard"),
+    BasicCard("BasicCard"),
+    PremiumCard("PremiumCard")
     ;
-
-    private final String name;
-    @SuppressWarnings({"FieldCanBeLocal", "unused"})
-    private final int id;
-
-    CardType(String name,int id) {
+    public final String name;
+    CardType(String name) {
         this.name = name;
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
     }
 }

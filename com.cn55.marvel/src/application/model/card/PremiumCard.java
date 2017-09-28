@@ -9,23 +9,22 @@ public class PremiumCard extends AdvancedCard {
     /*============================== CONSTRUCTORS  ==============================*/
     public PremiumCard(String name, String email) {
         super(name, email);
-        super.cardType = CardType.PremiumCard.getName();
+        super.cardType = CardType.PremiumCard.name;
     }
 
     // constructor with details
     public PremiumCard(String name, String email, double totalAmount) {
         super(name, email);
-        super.cardType = CardType.PremiumCard.getName();
+        super.cardType = CardType.PremiumCard.name;
         super.balance = totalAmount; //- SIGNUP_FEE; - we were told to ignore this
         calcPoints(totalAmount);
     }
 
     PremiumCard(String id, String name, String email, double points, double balance) {
         super(id, name, email, points, balance);
-        super.cardType = CardType.PremiumCard.getName();
+        super.cardType = CardType.PremiumCard.name;
     }
 
-    // Clone
     public Card clone(Card o) {
         return new PremiumCard(o.getID(), ((PremiumCard)o).getName(), ((PremiumCard) o).getEmail(), o.getPoints(), ((PremiumCard) o).getBalance());
     }

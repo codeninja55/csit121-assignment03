@@ -7,21 +7,21 @@ public class BasicCard extends AdvancedCard {
     /*============================== CONSTRUCTORS  ==============================*/
     public BasicCard(String name, String email) {
         super(name, email);
-        super.cardType = CardType.BasicCard.getName();
+        super.cardType = CardType.BasicCard.name;
     }
 
     // Constructor with for new cards without purchase
     @SuppressWarnings("unused")
     public BasicCard(String name, String email, double totalAmount) {
         super(name, email);
-        super.cardType = CardType.BasicCard.getName();
+        super.cardType = CardType.BasicCard.name;
         super.balance = totalAmount;
         calcPoints(totalAmount);
     }
 
     BasicCard(String id, String name, String email, double points, double balance) {
         super(id, name, email, points, balance);
-        super.cardType = CardType.BasicCard.getName();
+        super.cardType = CardType.BasicCard.name;
     }
 
     public Card clone(Card o) {

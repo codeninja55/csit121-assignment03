@@ -21,7 +21,7 @@ public class Purchase {
     public Purchase(HashMap<Integer, Category> categories, int receiptID) {
         this.receiptID = receiptID;
         this.cardID = null;
-        this.cardType = CardType.Cash.getName();
+        this.cardType = CardType.Cash.name;
         this.categories = categories;
         this.purchaseTime = setPurchaseTime();
     }
@@ -65,7 +65,7 @@ public class Purchase {
     }
 
     public void convertPurchase() {
-        this.cardType = CardType.Cash.getName();
+        this.cardType = CardType.Cash.name;
         this.cardID = null;
     }
 
