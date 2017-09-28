@@ -13,6 +13,7 @@ import application.model.purchase.PurchaseDAO;
 import application.model.purchase.PurchasesExport;
 import application.model.purchase.PurchasesImport;
 
+import javax.swing.*;
 import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -22,7 +23,7 @@ import java.util.stream.Collectors;
 
 /* Data Access Object (DAO) Implementation Layer */
 @SuppressWarnings("ConstantConditions")
-public class DataDAO implements DataObservable, CardsDAO, PurchaseDAO, CategoryDAO {
+public class DataDAO extends SwingWorker<Void, Integer> implements DataObservable, CardsDAO, PurchaseDAO, CategoryDAO {
     private final ArrayList<DataObserver> dataObservers;
     private final HashMap<String,Card> cards;
     private final HashMap<Integer,Purchase> purchases;
@@ -43,6 +44,14 @@ public class DataDAO implements DataObservable, CardsDAO, PurchaseDAO, CategoryD
         this.dataObservers = new ArrayList<>();
         this.categories = new HashMap<>();
     }
+
+    /*============================== SWING WORKER ==============================*/
+    @Override
+    protected Void doInBackground() throws Exception {
+        return null;
+    }
+
+
 
     /*============================== CREATE ==============================*/
     public void createCategory(Category category) {
@@ -110,34 +119,71 @@ public class DataDAO implements DataObservable, CardsDAO, PurchaseDAO, CategoryD
     private BufferedReader openReadFile(Path path) throws FileNotFoundException {
         return new BufferedReader(new FileReader(path.toString()));
     }
-    public void readData() {
+    public void importData() {
         /* Strategy Design Pattern - Implementation of writing and reading buried in concrete classes */
         ImportFromCSV categoriesImporter = new CategoriesImport();
         ImportFromCSV cardsImporter = new CardsImport();
         ImportFromCSV purchasesImporter = new PurchasesImport();
-        try {
-            categoriesImporter.importData(openReadFile(CATEGORIES_LOG_PATH));
-            cardsImporter.importData(openReadFile(CARDS_LOG_PATH));
-            purchasesImporter.importData(openReadFile(PURCHASES_LOG_PATH));
-        } catch (FileNotFoundException e) {
-            System.out.println("FileNotFoundException: " + e.getMessage());
-        }
+
+        SwingWorker<Void, Integer> importWorker = new SwingWorker<Void, Integer>() {
+            protected Void doInBackground() throws Exception {
+                try {
+                    categoriesImporter.executeImport(DataDAO.this, openReadFile(CATEGORIES_LOG_PATH));
+                    cardsImporter.executeImport(DataDAO.this, openReadFile(CARDS_LOG_PATH));
+                    purchasesImporter.executeImport(DataDAO.this, openReadFile(PURCHASES_LOG_PATH));
+                } catch (FileNotFoundException e) {
+                    System.out.println("FileNotFoundException: " + e.getMessage());
+                } catch (IOException e) {
+                    System.out.println("IOException: " + e.getMessage());
+                }
+                return null;
+            }
+
+            protected void process(List<Integer> counts) {
+                // do something
+                System.out.println(counts);
+            }
+
+            protected void done() {
+                notifyObservers();
+            }
+        };
+
+        importWorker.execute();
     }
     private BufferedWriter openWriteFile(Path path) throws IOException {
         return new BufferedWriter(new FileWriter(path.toString()));
     }
-    public void writeData() {
+
+    public void exportData() {
         ExportToCSV categoriesExport = new CategoriesExport();
         ExportToCSV cardsExport = new CardsExport();
         ExportToCSV purchasesExport = new PurchasesExport();
 
-        try {
-            categoriesExport.exportData(openWriteFile(CATEGORIES_LOG_PATH));
-            cardsExport.exportData(openWriteFile(CARDS_LOG_PATH));
-            purchasesExport.exportData(openWriteFile(PURCHASES_LOG_PATH));
-        } catch (IOException e) {
-            System.err.println("IOException: " + e.getMessage());
-        }
+        SwingWorker<Void, Integer> exportWorker = new SwingWorker<Void, Integer>() {
+            @Override
+            protected Void doInBackground() throws Exception {
+                try {
+                    categoriesExport.exportData(DataDAO.this, openWriteFile(CATEGORIES_LOG_PATH));
+                    cardsExport.exportData(DataDAO.this, openWriteFile(CARDS_LOG_PATH));
+                    purchasesExport.exportData(DataDAO.this, openWriteFile(PURCHASES_LOG_PATH));
+                } catch (IOException e) {
+                    System.err.println("IOException: " + e.getMessage());
+                }
+
+                return null;
+            }
+
+            protected void process(List<Integer> counts) {
+                super.process(counts);
+            }
+
+            protected void done() {
+                notifyObservers();
+            }
+        };
+
+        exportWorker.execute();
     }
 
     /*============================== OBSERVER DESIGN PATTERN ==============================*/
@@ -148,9 +194,7 @@ public class DataDAO implements DataObservable, CardsDAO, PurchaseDAO, CategoryD
     public void unregister(DataObserver obj) {
         dataObservers.remove(obj);
     }
-    public void notifyObservers() {
-        dataObservers.forEach(DataObserver::update);
-    }
+    public void notifyObservers() { dataObservers.forEach(DataObserver::update); }
     public TreeMap<String, Card> getCardsUpdate(DataObserver who) {
         return cards.entrySet().stream()
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
