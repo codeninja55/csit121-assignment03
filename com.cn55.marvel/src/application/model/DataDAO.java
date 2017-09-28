@@ -115,7 +115,6 @@ public class DataDAO implements DataObservable, CardsDAO, PurchaseDAO, CategoryD
         ImportFromCSV categoriesImporter = new CategoriesImport();
         ImportFromCSV cardsImporter = new CardsImport();
         ImportFromCSV purchasesImporter = new PurchasesImport();
-
         try {
             categoriesImporter.importData(openReadFile(CATEGORIES_LOG_PATH));
             cardsImporter.importData(openReadFile(CARDS_LOG_PATH));

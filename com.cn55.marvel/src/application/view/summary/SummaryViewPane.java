@@ -81,7 +81,7 @@ public class SummaryViewPane extends JPanel implements DataObserver {
     /*============================== MUTATORS ==============================*/
     public void setAnalyticsListener(ToolbarButtonListener analyticsListener) { this.analyticsListener = analyticsListener; }
 
-    public void filterPurchaseTable(ArrayList<Purchase> purchases, ArrayList<Card> cards) {
+    public void filterTables(ArrayList<Purchase> purchases, ArrayList<Card> cards) {
         purchasesTableModel.setData(purchases);
         purchasesTableModel.fireTableDataChanged();
         cardsTableModel.setData(cards);
