@@ -1,6 +1,8 @@
 package application;
 
 import application.controller.Program;
+import application.model.DataDAO;
+import application.model.Shop;
 import styles.ColorFactory;
 import styles.FontFactory;
 
@@ -13,7 +15,6 @@ import java.nio.file.Paths;
 
 class Assignment2 {
     public static void main(String[] args) {
-
         // Custom font creation
         try {
             Path fontPath = Paths.get("com.cn55.marvel/src/font/ProductSansRegular.ttf");
@@ -21,24 +22,24 @@ class Assignment2 {
             //Returned font is of pt size 1
             Font productSansFont = Font.createFont(Font.TRUETYPE_FONT, new File(fontPath.toString()));
             productSansFont.deriveFont(24f);
-            Font productSansBoldFont = Font.createFont(Font.BOLD, new File(fontBoldPath.toString()));
+            Font productSansBoldFont = Font.createFont(Font.TRUETYPE_FONT, new File(fontBoldPath.toString()));
             productSansBoldFont.deriveFont(24f);
-
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
             ge.registerFont(productSansFont);
             ge.registerFont(productSansBoldFont);
-
         } catch (IOException|FontFormatException e) {
-            // Handle exception
+            //e.printStackTrace();
         }
 
-        // Loop through and get all the fonts available in the system
-        /*GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-        Font[] fonts = ge.getAllFonts();
-        for (Font font : fonts) {
-            System.out.println(font.getName());
-        }*/
+        uiChanges();
 
+        Shop shop = Shop.getShopInstance();
+        shop.getDataStore().importData();
+
+        java.awt.EventQueue.invokeLater(() -> new Program(shop));
+    }
+
+    private static void uiChanges() {
         // Change some of the Default Look and Feel
         UIManager.put("Panel.background", ColorFactory.blueGrey200());
         UIManager.put("Viewport.background", ColorFactory.blueGrey200());
@@ -87,9 +88,5 @@ class Assignment2 {
 
         UIManager.put("TextField.font", FontFactory.textFieldFont());
         UIManager.put("TextField.caretForeground", ColorFactory.red500());
-
-        /* Create and display the Program the safe Java way */
-        java.awt.EventQueue.invokeLater(Program::new);
     }
-
 }
