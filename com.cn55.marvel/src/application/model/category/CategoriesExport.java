@@ -1,33 +1,32 @@
 package application.model.category;
 
+import application.model.DataDAO;
 import application.model.ExportToCSV;
 import application.model.Shop;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.time.Instant;
 
 public class CategoriesExport implements ExportToCSV {
     private static final char DEFAULT_SEPARATOR = ',';
     private BufferedWriter output;
 
-    public void exportData(BufferedWriter writer) {
+    public void exportData(DataDAO db, BufferedWriter writer) throws IOException {
         this.output = writer;
-//        ArrayList<Category> categoriesList = categories.stream().collect(Collectors.toList());
-        try{
-            for (Category c : Shop.getShopInstance().getDataStore().getAllCategories().values()) {
-                output.append(Integer.toString(c.getId())).append(DEFAULT_SEPARATOR);
-                output.append(c.getName()).append(DEFAULT_SEPARATOR);
-                output.append(c.getDescription()).append(DEFAULT_SEPARATOR);
-                output.append(Double.toString(c.getAmount()));
-                output.newLine();
-            }
-        } catch (IOException e) {
-            System.err.println("IOException: " + e.getMessage());
+
+        for (Category c : Shop.getShopInstance().getDataStore().getAllCategories().values()) {
+            output.append(Instant.now().toString()).append(DEFAULT_SEPARATOR)
+                    .append(Integer.toString(c.getId())).append(DEFAULT_SEPARATOR)
+                    .append(c.getName()).append(DEFAULT_SEPARATOR)
+                    .append(c.getDescription()).append(DEFAULT_SEPARATOR)
+                    .append(Double.toString(c.getAmount()));
+            output.newLine();
         }
+
         closeFile();
     }
 
-    @Override
     public void closeFile() {
         try {
             output.flush();

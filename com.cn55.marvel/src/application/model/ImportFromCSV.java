@@ -1,8 +1,10 @@
 package application.model;
+
 import java.io.BufferedReader;
+import java.io.IOException;
+
 /* USING A STRATEGY DESIGN PATTERN */
-@SuppressWarnings("unused")
 public interface ImportFromCSV {
-    void importData(BufferedReader reader);
+    void executeImport(DataDAO db, BufferedReader reader) throws IOException;
     void closeFile();
 }
