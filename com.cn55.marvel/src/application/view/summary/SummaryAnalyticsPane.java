@@ -211,7 +211,7 @@ public class SummaryAnalyticsPane extends BaseForm implements FormFactory, DataO
     }
 
     private void setPurchaseAnalytics(HashMap<Integer, Purchase> purchasesMap) {
-        Predicate<Purchase> cashPredicate = e -> (e.getCardType().equals(CardType.Cash.getName()));
+        Predicate<Purchase> cashPredicate = e -> (e.getCardType().equals(CardType.Cash.name));
 
         DoubleSummaryStatistics purchaseStatistics = purchasesMap.values().stream().mapToDouble(Purchase::getCategoriesTotal)
                 .summaryStatistics();
@@ -268,7 +268,7 @@ public class SummaryAnalyticsPane extends BaseForm implements FormFactory, DataO
 
         public String getColumnName(int column) { return headers[column]; }
 
-        public int getRowCount() { return categories.size(); }
+        public int getRowCount() { return (categories != null) ? categories.size() : 0; }
 
         public int getColumnCount() { return headers.length; }
 

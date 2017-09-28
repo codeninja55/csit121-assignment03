@@ -22,7 +22,7 @@ public class CardTableModel extends AbstractTableModel {
     }
 
     public int getRowCount() {
-        return cards.size();
+        return (cards != null) ? cards.size() : 0;
     }
 
     public int getColumnCount() {

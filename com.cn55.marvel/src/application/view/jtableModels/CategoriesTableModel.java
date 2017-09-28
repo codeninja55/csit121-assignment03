@@ -21,7 +21,7 @@ public class CategoriesTableModel extends AbstractTableModel {
     public String getColumnName(int column) { return tableHeaders[column]; }
 
     public int getRowCount() {
-        return categories.size();
+        return (categories != null) ? categories.size() : 0;
     }
 
     public int getColumnCount() {

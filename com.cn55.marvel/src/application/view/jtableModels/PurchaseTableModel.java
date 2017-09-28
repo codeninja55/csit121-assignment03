@@ -16,7 +16,7 @@ public class PurchaseTableModel extends AbstractTableModel {
         return tableHeaders[column];
     }
 
-    public int getRowCount() { return purchases.size(); }
+    public int getRowCount() { return (purchases != null) ? purchases.size() : 0; }
 
     public int getColumnCount() { return tableHeaders.length; }
 
