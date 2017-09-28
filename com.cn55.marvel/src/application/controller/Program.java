@@ -40,40 +40,32 @@ public class Program {
     private final SummaryViewPane summaryViewPane;
     private ProgressDialog progressDialog;
 
-    public Program() {
-        /* Singleton Design Pattern - Only one instance of Shop available */
-        shop = Shop.getShopInstance();
-        db = shop.getDataStore();
-        db.readData();
+    public Program(Shop shop) {
+        this.shop = shop;
+        this.db = shop.getDataStore();
 
         this.mainFrame = new MainFrame();
         this.progressDialog = new ProgressDialog(mainFrame);
-
         this.tabPane = mainFrame.getTabPane();
 
         /* DataObserver Design Pattern - Registration and initial update calls */
         this.cardViewPane = mainFrame.getCardViewPane();
         db.register(cardViewPane);
         cardViewPane.setSubject(db);
-        cardViewPane.update();
 
         this.purchaseViewPane = mainFrame.getPurchaseViewPane();
         db.register(purchaseViewPane);
         purchaseViewPane.setSubject(db);
-        purchaseViewPane.update();
 
         this.categoriesViewPane = mainFrame.getCategoriesViewPane();
         db.register(categoriesViewPane);
         categoriesViewPane.setSubject(db);
-        categoriesViewPane.update();
 
         this.summaryViewPane = mainFrame.getSummaryViewPane();
         db.register(summaryViewPane);
         summaryViewPane.setSubject(db);
-        summaryViewPane.update();
         db.register(summaryViewPane.getAnalyticsPane());
         summaryViewPane.getAnalyticsPane().setSubject(db);
-        summaryViewPane.getAnalyticsPane().update();
 
         tabPane.addChangeListener(e -> {
             if (tabPane.getSelectedComponent() != purchaseViewPane) removePurchaseForms();
@@ -95,7 +87,7 @@ public class Program {
     private void setupMainFrameHandlers() {
         mainFrame.setSaveListener(e -> {
             progressDialog.setVisible(true);
-            db.writeData();
+            db.exportData();
             progressDialog.setVisible(false);
         });
 
@@ -126,17 +118,17 @@ public class Program {
                 HashMap<String, String> newCard = new HashMap<>();
 
                 assert type != null;
-                if (type.equals(CardType.AnonCard.getName())) {
+                if (type.equals(CardType.AnonCard.name)) {
                     newCard.put("name", null);
                     newCard.put("email", null);
-                    newCard.put("cardType", CardType.AnonCard.getName());
+                    newCard.put("cardType", CardType.AnonCard.name());
                 } else {
                     newCard.put("name", name);
                     newCard.put("email", email);
-                    if (type.equals(CardType.BasicCard.getName()))
-                        newCard.put("cardType", CardType.BasicCard.getName());
-                    else if (type.equals(CardType.PremiumCard.getName()))
-                        newCard.put("cardType", CardType.PremiumCard.getName());
+                    if (type.equals(CardType.BasicCard.name))
+                        newCard.put("cardType", CardType.BasicCard.name);
+                    else if (type.equals(CardType.PremiumCard.name))
+                        newCard.put("cardType", CardType.PremiumCard.name);
                 }
                 shop.makeCard(newCard);
                 removeCardForms();
@@ -263,7 +255,7 @@ public class Program {
                     HashMap<String, String> newCard = new HashMap<>();
                     newCard.put("name", name);
                     newCard.put("email", email);
-                    newCard.put("cardType", cardType.getName());
+                    newCard.put("cardType", cardType.name);
                     newCard.put("cardID", cardID);
 
                     shop.makeCard(newCard);
@@ -296,11 +288,11 @@ public class Program {
                     purchaseViewPane.update();
                 } else if (e.getItem().equals(SortPurchaseType.Card.getName())) {
                     purchaseViewPane.sortPurchaseTableMode(purchasesList.stream()
-                            .filter(c -> !c.getCardType().equals(CardType.Cash.getName()))
+                            .filter(c -> !c.getCardType().equals(CardType.Cash.name))
                             .collect(Collectors.toCollection(ArrayList::new))); // Negative cash validation
                 } else if (e.getItem().equals(SortPurchaseType.Cash.getName())) {
                     purchaseViewPane.sortPurchaseTableMode(purchasesList.stream()
-                            .filter(c -> c.getCardType().equals(CardType.Cash.getName()))
+                            .filter(c -> c.getCardType().equals(CardType.Cash.name))
                             .collect(Collectors.toCollection(ArrayList::new))); // Positive cash validation
                 }
             }
@@ -403,9 +395,6 @@ public class Program {
         boolean filterProceed = false;
 
         // TODO - Ask Mark about this
-                /*final ArrayList<Card> clonedCards = db.getAllCards().values().stream().map(c -> c.clone(c))
-                        .collect(Collectors.toCollection(ArrayList::new));*/
-
         final HashMap<String, Card> clonedCardsMap = db.getAllCards().entrySet().stream()
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (k, v) -> k, HashMap::new));
 
@@ -489,8 +478,7 @@ public class Program {
         }
 
         if (filterProceed) {
-            /* Possible slow - need to refactor */
-            filteredCards = filteredPurchases.values().stream().filter(p -> !p.getCardType().equals(CardType.Cash.getName()))
+            filteredCards = filteredPurchases.values().stream().filter(p -> !p.getCardType().equals(CardType.Cash.name))
                     .map(p -> clonedCardsMap.getOrDefault(p.getCardID(), null))
                     .filter(Objects::nonNull).collect(Collectors.toMap(Card::getID, c -> c, (k,v) -> k, HashMap::new));
 
@@ -499,7 +487,6 @@ public class Program {
             // requires ArrayList<Purchase>, ArrayList<Categories>, HashMap<String, Card>
             analyticsPane.filterUpdate(filteredCategories, filteredPurchases, filteredCards);
         }
-
         summaryViewPane.revalidate();
         summaryViewPane.repaint();
     }
@@ -512,8 +499,10 @@ public class Program {
                 IconFactory.warningIcon(), options, options[0]);
 
         if (response == 0) {
-            db.writeData();
+            db.exportData();
             // Add a loading bar
+            System.gc();
+            System.exit(0);
         } else if (response == 1) {
             System.gc();
             System.exit(0);

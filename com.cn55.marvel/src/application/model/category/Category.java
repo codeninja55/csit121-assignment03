@@ -12,7 +12,7 @@ public class Category implements Comparable<Category> {
 
     /*============================== CONSTRUCTORS  ==============================*/
     public Category(String name, String description) {
-        this.id = Generator.setCategoryID();
+        this.id = Generator.getCategoryID();
         this.name = name;
         this.description = description;
         this.amount = 0D;
