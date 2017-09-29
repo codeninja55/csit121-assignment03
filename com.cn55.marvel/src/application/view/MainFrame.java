@@ -61,7 +61,7 @@ public class MainFrame extends JFrame {
         tabPane.addTab(" Summary ", IconFactory.summaryViewPaneIcon(), summaryViewPane);
 
         // DEFAULT PANE BEGIN AT
-        tabPane.setSelectedIndex(4);
+        tabPane.setSelectedIndex(0);
     }
 
     /*============================== MUTATORS ==============================*/

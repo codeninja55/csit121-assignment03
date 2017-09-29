@@ -99,8 +99,7 @@ public class PurchaseViewPane extends JPanel implements DataObserver {
 
     /* OBSERVER DESIGN PATTERN - DATA STORE OBSERVING IMPLEMENTATION */
     public void update() {
-        ArrayList<Purchase> allPurchases = new ArrayList<>(dataDAO.getPurchaseUpdate(this).values());
-        purchaseTableModel.setData(allPurchases);
+        purchaseTableModel.setData(new ArrayList<>(dataDAO.getPurchaseUpdate(this).values()));
         purchaseTableModel.fireTableDataChanged();
     }
 
