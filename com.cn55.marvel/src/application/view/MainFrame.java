@@ -42,7 +42,6 @@ public class MainFrame extends JFrame {
         setIconImage(mainIcon.getImage());
 
         this.tabPane = new JTabbedPane();
-
         this.cardViewPane = new CardViewPane();
         this.purchaseViewPane = new PurchaseViewPane();
         this.categoriesViewPane = new CategoriesViewPane();
@@ -71,6 +70,7 @@ public class MainFrame extends JFrame {
     /*============================== MUTATORS ==============================*/
     private JMenuBar createMenu() {
         fileChooser = new JFileChooser();
+        loginDialog = new LoginDialog(this);
         JMenuBar menu = new JMenuBar();
         JMenu fileMenu = new JMenu("File");
         JMenu adminSubMenu = new JMenu("Administrator");
@@ -118,7 +118,6 @@ public class MainFrame extends JFrame {
         menu.add(fileMenu);
         menu.add(dataMenu);
 
-        loginDialog = new LoginDialog(this);
         fileChooser.addChoosableFileFilter(new CSVFileFilter());
 
         login.addActionListener(e -> loginDialog.setVisible(true));
