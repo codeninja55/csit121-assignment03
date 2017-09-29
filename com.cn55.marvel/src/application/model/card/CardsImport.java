@@ -9,11 +9,14 @@ import java.io.IOException;
 
 public class CardsImport implements ImportFromCSV {
     private static final String DEFAULT_SEPARATOR = ",";
+    private BufferedReader input;
 
     public void executeImport(DataDAO db, BufferedReader reader) throws IOException {
+        this.input = reader;
         String line;
 
-        while((line = reader.readLine()) != null) {
+
+        while((line = input.readLine()) != null) {
             String[] readLine = line.split(DEFAULT_SEPARATOR);
             // [1] = ID | [2] = cardType | [3] = name | [4] = email | [5] = balance | [6] = points
             Card importCard = null;
@@ -32,6 +35,15 @@ public class CardsImport implements ImportFromCSV {
             assert importCard != null;
             db.createCard(importCard);
         }
+
+        closeFile();
     }
 
+    private void closeFile() {
+        try {
+            input.close();
+        } catch (IOException e) {
+            System.err.println("IOException: " + e.getMessage());
+        }
+    }
 }
