@@ -505,10 +505,10 @@ public class Program {
         if (response == 0) {
             db.exportData(new ProgressDialog(mainFrame, "Saving Data", "Saving..."));
             System.gc();
-            Runtime.getRuntime().exit(0);
+            mainFrame.dispose();
         } else if (response == 1) {
             System.gc();
-            Runtime.getRuntime().exit(0);
+            mainFrame.dispose();
         }
     }
 }
