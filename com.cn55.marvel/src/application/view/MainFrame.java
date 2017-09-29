@@ -99,6 +99,7 @@ public class MainFrame extends JFrame {
         exportData.setForeground(ColorFactory.redA700());
 
         exit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, InputEvent.CTRL_MASK));
+        save.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK));
 
         adminSubMenu.add(login);
         adminSubMenu.add(logout);
@@ -114,25 +115,19 @@ public class MainFrame extends JFrame {
 
         fileChooser.addChoosableFileFilter(new CSVFileFilter());
 
-        save.addActionListener(e -> {
-            if (saveListener != null) saveListener.actionPerformed(e);
-        });
+        save.addActionListener(e -> { if (saveListener != null) saveListener.actionPerformed(e); });
 
-        exit.addActionListener(e -> {
-            if (exitListener != null) exitListener.actionPerformed(e);
-        });
+        exit.addActionListener(e -> { if (exitListener != null) exitListener.actionPerformed(e); });
 
         // TODO - Add the handler for importing and exporting files
         importData.addActionListener(e -> {
-            if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+            if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION)
                 System.out.println(fileChooser.getSelectedFile());
-            }
         });
 
         exportData.addActionListener(e -> {
-            if (fileChooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
+            if (fileChooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION)
                 System.out.println(fileChooser.getSelectedFile());
-            }
         });
 
         return menu;

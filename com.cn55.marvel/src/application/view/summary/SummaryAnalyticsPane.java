@@ -15,6 +15,7 @@ import application.view.form_builder_factory.FormFactory;
 import styles.ColorFactory;
 import styles.FontFactory;
 import styles.FormatterFactory;
+import styles.TableFormatterFactory;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
@@ -42,7 +43,7 @@ public class SummaryAnalyticsPane extends BaseForm implements FormFactory, DataO
         super.setBorder("Analytics");
         setLayout(new GridLayout(2,1,0,10));
         Dimension dim = getPreferredSize();
-        dim.width = 700;
+        dim.width = 800;
         setPreferredSize(dim);
         setMinimumSize(getPreferredSize());
 
@@ -77,51 +78,52 @@ public class SummaryAnalyticsPane extends BaseForm implements FormFactory, DataO
         gc.insets = new Insets(20, 0,30,0);
         purchasesLabel.setHorizontalAlignment(SwingConstants.CENTER);
         purchasesLabel.setFont(FontFactory.toolbarButtonFont());
+        purchasesLabel.setForeground(ColorFactory.blueGrey800());
         outputForm.add(purchasesLabel, gc);
 
         /*========== NEW ROW ==========*/
         gc.anchor = GridBagConstraints.LINE_END;
         gc.gridwidth = 1;
-        gc.gridx = 0; gc.gridy++;
+        gc.gridx = 0; gc.gridy++; gc.weightx = 2;
         gc.insets = new Insets(10, 0,0,0);
         outputForm.add(totalPurchasesMadeLabel, gc);
 
         gc.anchor = GridBagConstraints.LINE_START;
-        gc.gridx = 1;
+        gc.gridx = 1; gc.weightx = 0.3;
         gc.insets = new Insets(10, 0,0,0);
         outputForm.add(totalPurchasesMadeTextField, gc);
 
         /*========== NEW ROW ==========*/
         gc.anchor = GridBagConstraints.LINE_END;
         gc.gridwidth = 1;
-        gc.gridx = 0; gc.gridy++;
+        gc.gridx = 0; gc.gridy++; gc.weightx = 2;
         gc.insets = new Insets(10, 0,0,0);
         outputForm.add(totalPurchasesLabel, gc);
 
         gc.anchor = GridBagConstraints.LINE_START;
-        gc.gridx = 1;
+        gc.gridx = 1; gc.weightx = 0.3;
         gc.insets = new Insets(10, 0,0,0);
         outputForm.add(totalPurchasesTextField, gc);
 
         /*========== NEW ROW ==========*/
         gc.anchor = GridBagConstraints.LINE_END;
-        gc.gridx = 0; gc.gridy++;
+        gc.gridx = 0; gc.gridy++; gc.weightx = 0.7;
         gc.insets = new Insets(10, 0,0,0);
         outputForm.add(cashPurchasesLabel, gc);
 
         gc.anchor = GridBagConstraints.LINE_START;
-        gc.gridx = 1;
+        gc.gridx = 1; gc.weightx = 0.3;
         gc.insets = new Insets(10, 0,0,0);
         outputForm.add(cashPurchaseTextField, gc);
 
         /*========== NEW ROW ==========*/
         gc.anchor = GridBagConstraints.LINE_END;
-        gc.gridx = 0; gc.gridy++;
+        gc.gridx = 0; gc.gridy++; gc.weightx = 0.7;
         gc.insets = new Insets(10, 0,0,0);
         outputForm.add(cardPurchasesLabel, gc);
 
         gc.anchor = GridBagConstraints.LINE_START;
-        gc.gridx = 1;
+        gc.gridx = 1; gc.weightx = 0.3;
         gc.insets = new Insets(10, 0,0,0);
         outputForm.add(cardPurchasesTextField, gc);
 
@@ -129,56 +131,58 @@ public class SummaryAnalyticsPane extends BaseForm implements FormFactory, DataO
 
         /*========== NEW ROW ==========*/
         gc.anchor = GridBagConstraints.CENTER;
-        gc.gridwidth = 2;
-        gc.gridx = 0; gc.gridy++;
+        gc.gridwidth = 2; gc.weightx = 3;
+        gc.gridx = 0; gc.gridy++; gc.weightx = 3;
         gc.insets = new Insets(30, 0,30,0);
         cardLabel.setHorizontalAlignment(SwingConstants.CENTER);
         cardLabel.setFont(FontFactory.toolbarButtonFont());
+        cardLabel.setForeground(ColorFactory.blueGrey800());
         outputForm.add(cardLabel, gc);
 
         /*========== NEW ROW ==========*/
         gc.anchor = GridBagConstraints.LINE_END;
-        gc.gridwidth = 1;
+        gc.gridwidth = 1; gc.weightx = 0.7;
         gc.gridx = 0; gc.gridy++;
         gc.insets = new Insets(10, 0,0,0);
         outputForm.add(totalCardsLabel, gc);
 
         gc.anchor = GridBagConstraints.LINE_START;
-        gc.gridx = 1;
+        gc.gridx = 1; gc.weightx = 0.3;
         gc.insets = new Insets(10, 0,0,0);
         outputForm.add(totalCardsTextField, gc);
 
         /*========== NEW ROW ==========*/
         gc.anchor = GridBagConstraints.LINE_END;
-        gc.gridwidth = 1;
+        gc.gridwidth = 1; gc.weightx = 0.7;
         gc.gridx = 0; gc.gridy++;
         gc.insets = new Insets(10, 0,0,0);
         outputForm.add(totalPointsLabel, gc);
 
         gc.anchor = GridBagConstraints.LINE_START;
-        gc.gridx = 1;
+        gc.gridx = 1; gc.weightx = 0.3;
         gc.insets = new Insets(10, 0,0,0);
         outputForm.add(totalPointsTextField, gc);
 
         /*========== NEW ROW ==========*/
         gc.anchor = GridBagConstraints.LINE_END;
-        gc.gridwidth = 1;
+        gc.gridwidth = 1; gc.weightx = 0.7;
         gc.gridx = 0; gc.gridy++;
         gc.insets = new Insets(10, 0,0,0);
         outputForm.add(totalBalanceLabel, gc);
 
         gc.anchor = GridBagConstraints.LINE_START;
-        gc.gridx = 1;
+        gc.gridx = 1; gc.weightx = 0.3;
         gc.insets = new Insets(10, 0,0,0);
         outputForm.add(totalBalanceTextField, gc);
 
         /*========== LAST ROW ==========*/
         gc.anchor = GridBagConstraints.CENTER;
-        gc.gridwidth = 2;
+        gc.gridwidth = 2; gc.weightx = 3;
         gc.gridx = 0; gc.gridy++; gc.weightx = 2; gc.weighty = 2;
         gc.insets = new Insets(60, 0,0,0);
         categoriesLabel.setHorizontalAlignment(SwingConstants.CENTER);
         categoriesLabel.setFont(FontFactory.toolbarButtonFont());
+        categoriesLabel.setForeground(ColorFactory.blueGrey800());
         outputForm.add(categoriesLabel, gc);
 
         /* Table Formatting */
@@ -193,18 +197,26 @@ public class SummaryAnalyticsPane extends BaseForm implements FormFactory, DataO
         categoriesTable.getTableHeader().setBackground(ColorFactory.blueGrey800());
         categoriesTable.setSelectionBackground(ColorFactory.blueGrey500());
         categoriesTable.setSelectionForeground(ColorFactory.grey50());
+        categoriesTable.getColumnModel().getColumn(1).setCellRenderer(TableFormatterFactory.rightRenderer());
+
+        Dimension textFieldSize = totalBalanceTextField.getPreferredSize();
+        textFieldSize.width = 100;
+        textFieldSize.height = 50;
 
         Arrays.stream(outputForm.getComponents()).filter(c -> c instanceof FormTextField)
                 .forEach(c -> {
                     ((FormTextField)c).setEditable(false);
-                    c.setPreferredSize(new Dimension(300,50));
-                    c.setBackground(ColorFactory.blueGrey200());
+                    c.setPreferredSize(textFieldSize);
+                    c.setMinimumSize(c.getPreferredSize());
+                    c.setBackground(ColorFactory.blueGrey100());
                     c.setForeground(ColorFactory.grey50());
                     c.setFont(FontFactory.labelFont());
+                    c.setVisible(true);
+                    ((FormTextField) c).setHorizontalAlignment(SwingConstants.RIGHT);
+                    ((FormTextField) c).setMargin(new Insets(0,0,0,10));
                 });
 
-        Arrays.stream(outputForm.getComponents()).filter(c -> c instanceof FormLabel || c instanceof FormTextField)
-                .forEach(c -> c.setVisible(true));
+        Arrays.stream(outputForm.getComponents()).filter(c -> c instanceof FormLabel).forEach(c -> c.setVisible(true));
 
         add(outputForm);
         add(new JScrollPane(categoriesTable));
@@ -212,21 +224,16 @@ public class SummaryAnalyticsPane extends BaseForm implements FormFactory, DataO
 
     private void setPurchaseAnalytics(HashMap<Integer, Purchase> purchasesMap) {
         Predicate<Purchase> cashPredicate = e -> (e.getCardType().equals(CardType.Cash.name));
-
         DoubleSummaryStatistics purchaseStatistics = purchasesMap.values().stream().mapToDouble(Purchase::getCategoriesTotal)
                 .summaryStatistics();
-        totalPurchasesMadeTextField.setText(Double.toString(purchaseStatistics.getCount()));
-
+        totalPurchasesMadeTextField.setText(FormatterFactory.integerFormat().format(purchaseStatistics.getCount()));
         totalPurchasesTextField.setText(FormatterFactory.currencyFormat().format(purchaseStatistics.getSum()));
-
         double cashPurchases = purchasesMap.values().stream().filter(cashPredicate)
                 .mapToDouble(Purchase::getCategoriesTotal).sum();
         cashPurchaseTextField.setText(FormatterFactory.currencyFormat().format(cashPurchases));
-
         double cardPurchases = purchasesMap.values().stream().filter(cashPredicate.negate())
                 .mapToDouble(Purchase::getCategoriesTotal).sum();
         cardPurchasesTextField.setText(FormatterFactory.currencyFormat().format(cardPurchases));
-
     }
 
     private void setCardAnalytics(HashMap<String, Card> cardsMap) {
@@ -234,7 +241,7 @@ public class SummaryAnalyticsPane extends BaseForm implements FormFactory, DataO
         double totalBalance = cardsMap.values().stream().filter(c -> c instanceof AdvancedCard)
                 .mapToDouble(c -> ((AdvancedCard)c).getBalance()).sum();
         totalPointsTextField.setText(FormatterFactory.pointsFormat().format(cardsStatistics.getSum()));
-        totalCardsTextField.setText(Double.toString(cardsStatistics.getCount()));
+        totalCardsTextField.setText(FormatterFactory.integerFormat().format(cardsStatistics.getCount()));
         totalBalanceTextField.setText(FormatterFactory.currencyFormat().format(totalBalance));
     }
 

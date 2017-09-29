@@ -5,19 +5,19 @@ import javax.swing.table.DefaultTableCellRenderer;
 
 public abstract class TableFormatterFactory {
 
-    private static DefaultTableCellRenderer centerRenderer() {
+    public static DefaultTableCellRenderer centerRenderer() {
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
         return centerRenderer;
     }
 
-    private static DefaultTableCellRenderer leftRenderer() {
+    public static DefaultTableCellRenderer leftRenderer() {
         DefaultTableCellRenderer leftRenderer = new DefaultTableCellRenderer();
         leftRenderer.setHorizontalAlignment(SwingConstants.LEFT);
         return leftRenderer;
     }
 
-    private static DefaultTableCellRenderer rightRenderer() {
+    public static DefaultTableCellRenderer rightRenderer() {
         DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
         rightRenderer.setHorizontalAlignment(SwingConstants.RIGHT);
         return rightRenderer;

@@ -7,11 +7,13 @@ import javax.swing.*;
 import java.awt.*;
 
 public class ProgressDialog extends JDialog {
+    private Window parent;
     private JProgressBar progressBar;
     private CancelButton cancelBtn;
 
     public ProgressDialog(Window parent, String title, String initialString) {
         super(parent, title, ModalityType.APPLICATION_MODAL);
+        this.parent = parent;
         setLayout(new FlowLayout());
 
         progressBar = new JProgressBar(SwingConstants.HORIZONTAL);
@@ -59,6 +61,15 @@ public class ProgressDialog extends JDialog {
             } else {
                 progressBar.setValue(0);
             }
+
+            if (isVisible) {
+                parent.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+            } else {
+                parent.setCursor(Cursor.getDefaultCursor());
+                setCursor(Cursor.getDefaultCursor());
+            }
+
             ProgressDialog.super.setVisible(isVisible);
         });
     }

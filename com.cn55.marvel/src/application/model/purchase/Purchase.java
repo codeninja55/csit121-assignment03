@@ -46,10 +46,10 @@ public class Purchase implements Comparable<Purchase> {
 
     // Clone constructor
     public Purchase(Purchase o) {
+        this.purchaseTime = o.getPurchaseTime();
         this.receiptID = o.getReceiptID();
         this.cardID = o.getCardID();
         this.cardType = o.getCardType();
-        this.purchaseTime = o.getPurchaseTime();
         this.categories = o.getCategories();
     }
 
