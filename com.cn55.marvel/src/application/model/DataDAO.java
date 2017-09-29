@@ -12,7 +12,7 @@ import application.model.purchase.Purchase;
 import application.model.purchase.PurchaseDAO;
 import application.model.purchase.PurchasesExport;
 import application.model.purchase.PurchasesImport;
-import application.view.custom_components.ProgressDialog;
+import application.view.custom.components.ProgressDialog;
 
 import javax.swing.*;
 import java.io.*;

@@ -6,7 +6,7 @@ public enum CardType {
     PremiumCard("PremiumCard")
     ;
     public final String name;
-    CardType(String name) {
-        this.name = name;
-    }
+    CardType(String name) { this.name = name; }
+    public String toString() { return name; }
+    public boolean equalsName(String other) { return name.equals(other); }
 }

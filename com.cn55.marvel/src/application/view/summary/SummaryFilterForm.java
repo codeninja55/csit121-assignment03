@@ -1,7 +1,7 @@
 package application.view.summary;
 
-import application.view.form_builder_factory.FormFactory;
-import application.view.custom_components.*;
+import application.view.custom.components.*;
+import application.view.formbuilder.factory.FormFactory;
 import styles.ColorFactory;
 import styles.CustomBorderFactory;
 import styles.FontFactory;

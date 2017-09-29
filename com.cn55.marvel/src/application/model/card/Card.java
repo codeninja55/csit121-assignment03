@@ -25,7 +25,6 @@ public abstract class Card implements Comparable<Card> {
     public abstract Card clone(Card o);
 
     public abstract void calcPoints(double totalAmount);
-    public void calcBalance(double totalAmount) {}
 
     /*============================== ACCESSORS  ==============================*/
     public String getID() { return id; }

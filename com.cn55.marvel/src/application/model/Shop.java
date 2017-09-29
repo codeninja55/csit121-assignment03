@@ -42,8 +42,8 @@ public class Shop {
                 Purchase newPurchase = new Purchase(cardID, cardType, categories, receiptID);
                 card.calcPoints(newPurchase.getCategoriesTotal());
 
-                if(!cardType.equals(CardType.AnonCard.name))
-                    card.calcBalance(newPurchase.getCategoriesTotal());
+                if(card instanceof AdvancedCard)
+                    ((AdvancedCard)card).calcBalance(newPurchase.getCategoriesTotal());
 
                 db.createPurchase(newPurchase);
             }

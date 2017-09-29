@@ -11,9 +11,8 @@ import application.view.CardViewPane;
 import application.view.CategoriesViewPane;
 import application.view.MainFrame;
 import application.view.PurchaseViewPane;
-import application.view.custom_components.ProgressDialog;
-import application.view.custom_components.ResultsPane;
-import application.view.form_builder_factory.*;
+import application.view.custom.components.ProgressDialog;
+import application.view.formbuilder.factory.*;
 import application.view.summary.SummaryAnalyticsPane;
 import application.view.summary.SummaryFilterForm;
 import application.view.summary.SummaryView;
@@ -126,16 +125,16 @@ public class Program {
                 HashMap<String, String> newCard = new HashMap<>();
 
                 assert type != null;
-                if (type.equals(CardType.AnonCard.name)) {
+                if (CardType.AnonCard.equalsName(type)) {
                     newCard.put("name", null);
                     newCard.put("email", null);
                     newCard.put("cardType", CardType.AnonCard.name());
                 } else {
                     newCard.put("name", name);
                     newCard.put("email", email);
-                    if (type.equals(CardType.BasicCard.name))
+                    if (CardType.BasicCard.equalsName(type))
                         newCard.put("cardType", CardType.BasicCard.name);
-                    else if (type.equals(CardType.PremiumCard.name))
+                    else if (CardType.PremiumCard.equalsName(type))
                         newCard.put("cardType", CardType.PremiumCard.name);
                 }
                 shop.makeCard(newCard);
@@ -172,10 +171,8 @@ public class Program {
                     shop.deleteCard(cardID);
                     // Purchases by this card will be changed to cash
                     shop.convertPurchase(cardID);
-                    removeCardForms();
-                } else {
-                    removeCardForms();
                 }
+                removeCardForms();
             });
         });
 
@@ -207,15 +204,15 @@ public class Program {
             if (e.getStateChange() == ItemEvent.SELECTED) {
                 ArrayList<Card> sortedCardsList = db.getAllCards().values().parallelStream().map((Card c) -> c.clone(c))
                         .collect(Collectors.toCollection(ArrayList::new));
-                if (e.getItem().equals("Sort..") || e.getItem().equals(SortCardType.CreatedOrder.getName())) {
+                if (e.getItem().equals("Sort..") || e.getItem().equals(SortCardType.CreatedOrder.name)) {
                     // Lambda version of sorting with Comparator comparing method
                     sortedCardsList.sort(Comparator.comparing(Card::getID));
                     cardViewPane.updateTableData(sortedCardsList);
-                } else if (e.getItem().equals(SortCardType.ReverseCreatedOrder.getName())) {
+                } else if (e.getItem().equals(SortCardType.ReverseCreatedOrder.name)) {
                     // Lambda version of sorting with Comparator
                     sortedCardsList.sort((Card c1, Card c2) -> c2.getID().compareTo(c1.getID()));
                     cardViewPane.updateTableData(sortedCardsList);
-                } else if (e.getItem().equals(SortCardType.Name.getName())) {
+                } else if (e.getItem().equals(SortCardType.Name.name)) {
                     sortedCardsList.sort(((c1, c2) -> {
                         if (c1 instanceof AdvancedCard && c2 instanceof AdvancedCard)
                             return ((AdvancedCard) c1).getName().compareTo(((AdvancedCard) c2).getName());
@@ -223,7 +220,7 @@ public class Program {
                         return (c1 instanceof AnonCard && c2 instanceof AdvancedCard) ? -1 : 1;
                     }));
                     cardViewPane.updateTableData(sortedCardsList);
-                } else if (e.getItem().equals(SortCardType.Points.getName())) {
+                } else if (e.getItem().equals(SortCardType.Points.name)) {
                     // Lambda version of sorting with Comparator comparingDouble method
                     sortedCardsList.sort(Comparator.comparingDouble(Card::getPoints).reversed());
                     cardViewPane.updateTableData(sortedCardsList);
@@ -250,13 +247,13 @@ public class Program {
                 HashMap<Integer, Category> categories = new HashMap<>(v.getCategories());
                 String resultsText = "";
 
-                if (purchaseType.equals(PurchaseType.ExistingCardPurchase.getName())) {
+                if (purchaseType.equals(PurchaseType.ExistingCardPurchase.toString())) {
                     shop.makePurchase(cardID, receiptID, categories);
                     resultsText = db.getCard(cardID).toString() + db.getPurchase(receiptID).toString();
-                } else if (purchaseType.equals(PurchaseType.CashPurchase.getName())) {
+                } else if (purchaseType.equals(PurchaseType.CashPurchase.name)) {
                     shop.makePurchase(cardID, receiptID, categories);
                     resultsText = db.getPurchase(receiptID).toString();
-                } else if (purchaseType.equals(PurchaseType.NewCardPurchase.getName())) {
+                } else if (purchaseType.equals(PurchaseType.NewCardPurchase.name)) {
                     String name = (!cardType.equals(CardType.AnonCard)) ? v.getCardName() : null;
                     String email = (!cardType.equals(CardType.AnonCard)) ? v.getCardEmail() : null;
 
@@ -291,13 +288,13 @@ public class Program {
             if (e.getStateChange() == ItemEvent.SELECTED) {
                 ArrayList<Purchase> purchasesList = db.getAllPurchases().values().parallelStream().map(Purchase::new)
                         .collect(Collectors.toCollection(ArrayList::new));
-                if (e.getItem().equals(SortPurchaseType.All.getName())) {
+                if (e.getItem().equals(SortPurchaseType.All.name)) {
                     purchaseViewPane.update();
-                } else if (e.getItem().equals(SortPurchaseType.Card.getName())) {
+                } else if (e.getItem().equals(SortPurchaseType.Card.name)) {
                     purchaseViewPane.sortPurchaseTableMode(purchasesList.stream()
                             .filter(c -> !c.getCardType().equals(CardType.Cash.name))
                             .collect(Collectors.toCollection(ArrayList::new))); // Negative cash validation
-                } else if (e.getItem().equals(SortPurchaseType.Cash.getName())) {
+                } else if (e.getItem().equals(SortPurchaseType.Cash.name)) {
                     purchaseViewPane.sortPurchaseTableMode(purchasesList.stream()
                             .filter(c -> c.getCardType().equals(CardType.Cash.name))
                             .collect(Collectors.toCollection(ArrayList::new))); // Positive cash validation

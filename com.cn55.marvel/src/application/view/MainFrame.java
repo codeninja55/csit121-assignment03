@@ -1,7 +1,7 @@
 package application.view;
 
 import application.controller.Utils;
-import application.view.custom_components.LoginDialog;
+import application.view.custom.components.LoginDialog;
 import application.view.summary.SummaryViewPane;
 import styles.ColorFactory;
 import styles.FontFactory;

@@ -4,14 +4,14 @@ import application.model.DataObservable;
 import application.model.DataObserver;
 import application.model.purchase.Purchase;
 import application.model.purchase.SortPurchaseType;
-import application.view.form_builder_factory.PurchaseForm;
+import application.view.formbuilder.factory.PurchaseForm;
 import styles.ColorFactory;
 import styles.IconFactory;
 import styles.TableFormatterFactory;
-import application.view.custom_components.Toolbar;
-import application.view.custom_components.ToolbarButton;
-import application.view.custom_components.ToolbarButtonListener;
-import application.view.jtableModels.PurchaseTableModel;
+import application.view.custom.components.Toolbar;
+import application.view.custom.components.ToolbarButton;
+import application.view.custom.components.ToolbarButtonListener;
+import application.view.table.models.PurchaseTableModel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -48,9 +48,9 @@ public class PurchaseViewPane extends JPanel implements DataObserver {
         TableFormatterFactory.purchasesTableFormatter(purchasesTable);
 
         /* Sort Purchases Combo Setup */
-        options.addElement(SortPurchaseType.All.getName());
-        options.addElement(SortPurchaseType.Card.getName());
-        options.addElement(SortPurchaseType.Cash.getName());
+        options.addElement(SortPurchaseType.All.name);
+        options.addElement(SortPurchaseType.Card.name);
+        options.addElement(SortPurchaseType.Cash.name);
         sortPurchaseCombo.setModel(options);
         sortPurchaseCombo.setSize(createPurchaseBtn.getPreferredSize());
         sortPurchaseCombo.setBorder(BorderFactory.createMatteBorder(2,2,2,2, ColorFactory.blue500()));

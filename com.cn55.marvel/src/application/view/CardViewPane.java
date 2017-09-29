@@ -4,16 +4,16 @@ import application.model.DataObservable;
 import application.model.DataObserver;
 import application.model.card.Card;
 import application.model.card.SortCardType;
-import application.view.form_builder_factory.CardForm;
-import application.view.form_builder_factory.DeleteCardForm;
-import application.view.form_builder_factory.SearchCardForm;
+import application.view.formbuilder.factory.CardForm;
+import application.view.formbuilder.factory.DeleteCardForm;
+import application.view.formbuilder.factory.SearchCardForm;
 import styles.ColorFactory;
 import styles.IconFactory;
 import styles.TableFormatterFactory;
-import application.view.custom_components.Toolbar;
-import application.view.custom_components.ToolbarButton;
-import application.view.custom_components.ToolbarButtonListener;
-import application.view.jtableModels.CardTableModel;
+import application.view.custom.components.Toolbar;
+import application.view.custom.components.ToolbarButton;
+import application.view.custom.components.ToolbarButtonListener;
+import application.view.table.models.CardTableModel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -52,10 +52,10 @@ public class CardViewPane extends JPanel implements DataObserver {
 
         /* SORTED COMBO BOX */
         String[] sortOptions = {"Sort..",
-                SortCardType.CreatedOrder.getName(),
-                SortCardType.ReverseCreatedOrder.getName(),
-                SortCardType.Name.getName(),
-                SortCardType.Points.getName()};
+                SortCardType.CreatedOrder.name,
+                SortCardType.ReverseCreatedOrder.name,
+                SortCardType.Name.name,
+                SortCardType.Points.name};
         sortedCombo = new JComboBox<>(sortOptions);
         sortedCombo.setSize(searchBtn.getPreferredSize());
         sortedCombo.setBorder(BorderFactory.createMatteBorder(2,2,2,2, ColorFactory.blueGrey500()));
@@ -143,14 +143,14 @@ public class CardViewPane extends JPanel implements DataObserver {
     /*============================ TOOLBAR LISTENER ===========================*/
     public class ToolbarListener extends MouseAdapter implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-            if (e.getSource() == searchBtn) {
-                if (searchCardListener != null) searchCardListener.toolbarButtonEventOccurred();
-            } else if (e.getSource() == createCardBtn) {
-                if (createCardListener != null) createCardListener.toolbarButtonEventOccurred();
-            } else if (e.getSource() == deleteCardBtn) {
-                if (deleteCardListener != null) deleteCardListener.toolbarButtonEventOccurred();
-            } else if (e.getSource() == viewBtn) {
-                if (viewCardListener != null) viewCardListener.toolbarButtonEventOccurred();
+            if (e.getSource() == searchBtn && searchCardListener != null) {
+                searchCardListener.toolbarButtonEventOccurred();
+            } else if (e.getSource() == createCardBtn && createCardListener != null) {
+                createCardListener.toolbarButtonEventOccurred();
+            } else if (e.getSource() == deleteCardBtn && deleteCardListener != null) {
+                deleteCardListener.toolbarButtonEventOccurred();
+            } else if (e.getSource() == viewBtn && viewCardListener != null) {
+                viewCardListener.toolbarButtonEventOccurred();
             }
         }
     }

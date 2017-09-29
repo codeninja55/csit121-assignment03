@@ -22,12 +22,12 @@ public class CardsImport implements ImportFromCSV {
             Card importCard = null;
             String cardID = readLine[1];
 
-            if (readLine[2].equals(CardType.AnonCard.name))
+            if (CardType.AnonCard.equalsName(readLine[2]))
                 importCard = new AnonCard(cardID, Double.parseDouble(readLine[5]));
-            else if (readLine[2].equals(CardType.BasicCard.name))
+            else if (CardType.BasicCard.equalsName(readLine[2]))
                 importCard = new BasicCard(cardID, readLine[3], readLine[4], Double.parseDouble(readLine[5]),
                         Double.parseDouble(readLine[6]));
-            else if (readLine[2].equals(CardType.PremiumCard.name))
+            else if (CardType.PremiumCard.equalsName(readLine[2]))
                 importCard = new PremiumCard(cardID, readLine[3], readLine[4], Double.parseDouble(readLine[5]),
                         Double.parseDouble(readLine[6]));
 
@@ -35,7 +35,6 @@ public class CardsImport implements ImportFromCSV {
             assert importCard != null;
             db.createCard(importCard);
         }
-
         closeFile();
     }
 

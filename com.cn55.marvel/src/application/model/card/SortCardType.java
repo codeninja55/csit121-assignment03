@@ -1,23 +1,13 @@
 package application.model.card;
-
 public enum SortCardType {
-    // Constants
-    CreatedOrder(1, "Sort by Created Order"),
-    ReverseCreatedOrder(2, "Sort by Descending Created Order"),
-    Name(3, "Sort by Name"),
-    Points(4, "Sort by Points")
+    CreatedOrder("Sort by Created Order"),
+    ReverseCreatedOrder("Sort by Descending Created Order"),
+    Name("Sort by Name"),
+    Points("Sort by Points")
     ;
-
-    private final String name;
-    @SuppressWarnings({"FieldCanBeLocal", "unused"})
-    private final int id;
-
-    SortCardType(int id, String name) {
+    public final String name;
+    SortCardType(String name) {
         this.name = name;
-        this.id = id;
     }
-
-    public String getName() {
-        return name;
-    }
+    public String toString() { return name; }
 }

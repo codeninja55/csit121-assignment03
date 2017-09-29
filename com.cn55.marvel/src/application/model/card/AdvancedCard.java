@@ -21,6 +21,7 @@ public abstract class AdvancedCard extends Card {
     }
 
     public abstract Card clone(Card o);
+    public abstract void calcBalance(double totalAmount);
     public String getCardType() { return super.cardType; }
     public String getName() { return name; }
     public String getEmail() { return email; }
