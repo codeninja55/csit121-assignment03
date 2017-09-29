@@ -11,6 +11,7 @@ import application.view.CardViewPane;
 import application.view.CategoriesViewPane;
 import application.view.MainFrame;
 import application.view.PurchaseViewPane;
+import application.view.custom_components.LoginListener;
 import application.view.custom_components.ProgressDialog;
 import application.view.custom_components.ResultsPane;
 import application.view.form_builder_factory.*;
@@ -93,6 +94,10 @@ public class Program {
         });
 
         mainFrame.setExitListener(e -> exitApplication());
+
+        mainFrame.getLoginDialog().setListener((username, password) -> {
+            System.out.println("Login Requested");
+        });
     }
 
     /*============================== CARD VIEW HANDLERS ==============================*/
