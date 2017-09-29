@@ -3,12 +3,14 @@ import javax.swing.*;
 
 @SuppressWarnings("All")
 public abstract class IconFactory {
+    public static ImageIcon checkBoxIcon() { return new ImageIcon("com.cn55.marvel/src/img/check_box_outline_blank_black_24.png"); }
+    public static ImageIcon checkBoxIconChecked() { return new ImageIcon("com.cn55.marvel/src/img/check_box_black_24.png"); }
     public static ImageIcon saveIcon() { return new ImageIcon("com.cn55.marvel/src/img/save_red500_24.png"); }
     public static ImageIcon exportIcon() { return new ImageIcon("com.cn55.marvel/src/img/file_download_red500_24.png"); }
     public static ImageIcon importIcon() { return new ImageIcon("com.cn55.marvel/src/img/file_upload_red500_24.png"); }
     public static ImageIcon settingsIcon() { return new ImageIcon("com.cn55.marvel/src/img/settings_input_component_black_24.png"); }
     public static ImageIcon loginRed500Icon() { return new ImageIcon("com.cn55.marvel/src/img/lock_open_red500_24.png"); }
-    public static ImageIcon loginWhiteIcon() { return new ImageIcon("com.cn55.marvel/src/img/lock_open_white_24.png"); }
+    public static ImageIcon loginWhiteIcon() { return new ImageIcon("com.cn55.marvel/src/img/input_white_24.png"); }
     public static ImageIcon logoutIcon() { return new ImageIcon("com.cn55.marvel/src/img/lock_outline_red500_24.png"); }
     public static ImageIcon exitIcon() { return new ImageIcon("com.cn55.marvel/src/img/close_red500_36.png"); }
     public static ImageIcon homeIcon() { return new ImageIcon("com.cn55.marvel/src/img/home_white_48.png"); }
@@ -16,6 +18,7 @@ public abstract class IconFactory {
     public static ImageIcon purchaseIcon() { return new ImageIcon("com.cn55.marvel/src/img/shopping_cart_white_48.png"); }
     public static ImageIcon categoryIcon() { return new ImageIcon("com.cn55.marvel/src/img/view_list_white_48.png"); }
     public static ImageIcon summaryViewPaneIcon() { return new ImageIcon("com.cn55.marvel/src/img/assessment_white_48.png"); }
+    public static ImageIcon summaryViewPaneIconDisbaled() { return new ImageIcon("com.cn55.marvel/src/img/assessment_black_48.png"); }
     public static ImageIcon refreshIcon() { return new ImageIcon("com.cn55.marvel/src/img/refresh_white_48.png"); }
     public static ImageIcon createIcon() { return new ImageIcon("com.cn55.marvel/src/img/add_circle_white_36.png"); }
     public static ImageIcon deleteIcon() { return new ImageIcon("com.cn55.marvel/src/img/remove_circle_white_36.png"); }

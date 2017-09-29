@@ -92,6 +92,19 @@ public class Program {
             }
         });
 
+        mainFrame.getLoginDialog().setListener((username, password, signup) -> {
+            mainFrame.getLoginDialog().setVisible(false);
+            if (signup) {
+                db.signup(username, password);
+            } else {
+                if (db.login(username, password)) {
+                    mainFrame.setSummaryViewPaneEnabled(true);
+                } else {
+                    System.out.println("NOT AUTHENTICATED");
+                }
+            }
+        });
+
         mainFrame.setExitListener(e -> exitApplication());
     }
 

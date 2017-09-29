@@ -1,6 +1,7 @@
 package application.view;
 
 import application.controller.Utils;
+import application.view.custom_components.LoginDialog;
 import application.view.summary.SummaryViewPane;
 import styles.ColorFactory;
 import styles.FontFactory;
@@ -23,6 +24,7 @@ public class MainFrame extends JFrame {
     private final SummaryViewPane summaryViewPane;
     private ActionListener saveListener;
     private ActionListener exitListener;
+    private LoginDialog loginDialog;
     private JFileChooser fileChooser;
 
     public MainFrame() {
@@ -62,6 +64,8 @@ public class MainFrame extends JFrame {
 
         // DEFAULT PANE BEGIN AT
         tabPane.setSelectedIndex(0);
+        tabPane.setDisabledIconAt(4, IconFactory.summaryViewPaneIconDisbaled());
+        tabPane.setEnabledAt(4, false);
     }
 
     /*============================== MUTATORS ==============================*/
@@ -71,7 +75,7 @@ public class MainFrame extends JFrame {
         JMenu fileMenu = new JMenu("File");
         JMenu adminSubMenu = new JMenu("Administrator");
         JMenu dataMenu = new JMenu("Data");
-        JMenuItem login = new JMenuItem("Login..", IconFactory.loginIcon());
+        JMenuItem login = new JMenuItem("Login..", IconFactory.loginRed500Icon());
         JMenuItem logout = new JMenuItem("Logout..", IconFactory.logoutIcon());
         JMenuItem exit = new JMenuItem("Exit", IconFactory.exitIcon());
         JMenuItem save = new JMenuItem("Save Data", IconFactory.saveIcon());
@@ -100,6 +104,7 @@ public class MainFrame extends JFrame {
 
         exit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, InputEvent.CTRL_MASK));
         save.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK));
+        login.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, InputEvent.ALT_MASK));
 
         adminSubMenu.add(login);
         adminSubMenu.add(logout);
@@ -113,7 +118,15 @@ public class MainFrame extends JFrame {
         menu.add(fileMenu);
         menu.add(dataMenu);
 
+        loginDialog = new LoginDialog(this);
         fileChooser.addChoosableFileFilter(new CSVFileFilter());
+
+        login.addActionListener(e -> loginDialog.setVisible(true));
+
+        logout.addActionListener(e -> {
+            setSummaryViewPaneEnabled(false);
+            tabPane.setSelectedIndex(0);
+        });
 
         save.addActionListener(e -> { if (saveListener != null) saveListener.actionPerformed(e); });
 
@@ -170,6 +183,8 @@ public class MainFrame extends JFrame {
 
     public void setExitListener(ActionListener exitListener) { this.exitListener = exitListener; }
 
+    public void setSummaryViewPaneEnabled(boolean isEnabled) { tabPane.setEnabledAt(4,isEnabled); }
+
     /*============================== ACCESSORS  ==============================*/
     public JTabbedPane getTabPane() { return tabPane; }
 
@@ -182,6 +197,8 @@ public class MainFrame extends JFrame {
     }
 
     public SummaryViewPane getSummaryViewPane() { return summaryViewPane; }
+
+    public LoginDialog getLoginDialog() { return loginDialog; }
 
     class CSVFileFilter extends FileFilter {
         public boolean accept(File f) {

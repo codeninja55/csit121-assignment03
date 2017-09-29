@@ -147,14 +147,14 @@ public class PurchaseForm extends BaseForm implements FormFactory, PurchaseFormV
         GridBagConstraints gc = new GridBagConstraints();
 
         /*========== FIRST ROW - RECEIPT ID ==========*/
-        gc.fill = GridBagConstraints.NONE;
-        gc.gridy = 0; gc.gridx = 0; gc.weightx = 1; gc.weighty = 0.1;
         gc.anchor = GridBagConstraints.FIRST_LINE_END;
+        gc.fill = GridBagConstraints.NONE;
+        gc.gridx = 0; gc.gridy = 0; gc.weightx = 1; gc.weighty = 0.1;
         gc.insets = new Insets(20,0,0,10);
         baseCreatePurchaseForm.add(receiptIDLabel, gc);
 
-        gc.gridx = 1;
         gc.anchor = GridBagConstraints.FIRST_LINE_START;
+        gc.gridx = 1;
         gc.insets = new Insets(20,0,0,10);
         receiptIDTextField.setEditable(false);
         receiptIDTextField.setText(Integer.toString(generatedReceiptID));
@@ -262,12 +262,12 @@ public class PurchaseForm extends BaseForm implements FormFactory, PurchaseFormV
         baseCreatePurchaseForm.add(purchaseErrorLabel, gc);
 
         /*========== BUTTON ROW ==========*/
-        gc.gridy++; gc.gridx = 0; gc.weightx = 0.5; gc.weighty = 3; gc.gridwidth = 1;
+        gc.gridx = 0; gc.gridy++; gc.weightx = 0.5; gc.weighty = 3; gc.gridwidth = 1;
         gc.anchor = GridBagConstraints.FIRST_LINE_END;
         gc.insets = new Insets(20,0,0,1);
         baseCreatePurchaseForm.add(createBtn, gc);
 
-        gc.gridx = 1; gc.gridwidth = 1; gc.weightx = 0.5; gc.gridwidth = 1;
+        gc.gridx = 1; gc.weightx = 0.5; gc.gridwidth = 1;
         gc.anchor = GridBagConstraints.FIRST_LINE_START;
         gc.insets = new Insets(20,1,0,0);
         baseCreatePurchaseForm.add(clearBtn, gc);

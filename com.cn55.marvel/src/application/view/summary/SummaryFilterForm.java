@@ -130,7 +130,7 @@ public class SummaryFilterForm extends JPanel implements FormFactory, SummaryVie
         gc.anchor = GridBagConstraints.FIRST_LINE_END;
         gc.fill = GridBagConstraints.HORIZONTAL;
         gc.gridwidth = 1;
-        gc.gridy++; gc.gridx = 0; gc.weightx = 0.5; gc.weighty = 3;
+        gc.gridx = 0; gc.gridy++; gc.weightx = 0.5; gc.weighty = 3;
         gc.insets = new Insets(20,0,0,5);
         filterForm.add(filterBtn, gc);
 
