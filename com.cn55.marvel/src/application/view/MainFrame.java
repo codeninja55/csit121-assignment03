@@ -64,6 +64,8 @@ public class MainFrame extends JFrame {
 
         // DEFAULT PANE BEGIN AT
         tabPane.setSelectedIndex(0);
+        tabPane.setDisabledIconAt(4, IconFactory.summaryViewPaneIconDisbaled());
+        tabPane.setEnabledAt(4, false);
     }
 
     /*============================== MUTATORS ==============================*/
@@ -119,8 +121,11 @@ public class MainFrame extends JFrame {
         loginDialog = new LoginDialog(this);
         fileChooser.addChoosableFileFilter(new CSVFileFilter());
 
-        login.addActionListener(e -> {
-            loginDialog.setVisible(true);
+        login.addActionListener(e -> loginDialog.setVisible(true));
+
+        logout.addActionListener(e -> {
+            setSummaryViewPaneEnabled(false);
+            tabPane.setSelectedIndex(0);
         });
 
         save.addActionListener(e -> { if (saveListener != null) saveListener.actionPerformed(e); });
@@ -177,6 +182,8 @@ public class MainFrame extends JFrame {
     public void setSaveListener(ActionListener saveListener) { this.saveListener = saveListener; }
 
     public void setExitListener(ActionListener exitListener) { this.exitListener = exitListener; }
+
+    public void setSummaryViewPaneEnabled(boolean isEnabled) { tabPane.setEnabledAt(4,isEnabled); }
 
     /*============================== ACCESSORS  ==============================*/
     public JTabbedPane getTabPane() { return tabPane; }
