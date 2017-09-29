@@ -22,15 +22,12 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.function.IntToDoubleFunction;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 import java.util.stream.Collectors;
 
-import static com.sun.javafx.font.FontResource.SALT;
-
 /* Data Access Object (DAO) Implementation Layer */
-@SuppressWarnings("ConstantConditions")
+@SuppressWarnings({"ConstantConditions", "FieldCanBeLocal"})
 public class DataDAO implements DataObservable, CardsDAO, PurchaseDAO, CategoryDAO {
     private static final String SALT = "#M@rV3!4v3n9eRs";
     private final Path PROGRAM_SETTINGS = Paths.get("com.cn55.marvel/src/persistent_data/settings.txt");

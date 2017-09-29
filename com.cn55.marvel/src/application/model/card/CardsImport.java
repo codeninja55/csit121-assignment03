@@ -6,19 +6,14 @@ import application.model.ImportFromCSV;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 public class CardsImport implements ImportFromCSV {
     private static final String DEFAULT_SEPARATOR = ",";
-    private BufferedReader input;
 
     public void executeImport(DataDAO db, BufferedReader reader) throws IOException {
-        this.input = reader;
         String line;
 
-        while((line = input.readLine()) != null) {
+        while((line = reader.readLine()) != null) {
             String[] readLine = line.split(DEFAULT_SEPARATOR);
             // [1] = ID | [2] = cardType | [3] = name | [4] = email | [5] = balance | [6] = points
             Card importCard = null;
@@ -39,11 +34,4 @@ public class CardsImport implements ImportFromCSV {
         }
     }
 
-    public void closeFile() {
-        try {
-            input.close();
-        } catch (IOException e) {
-            System.err.println("IOException: " + e.getMessage());
-        }
-    }
 }

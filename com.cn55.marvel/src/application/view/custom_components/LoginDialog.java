@@ -11,8 +11,8 @@ import java.awt.event.ComponentEvent;
 import java.util.Arrays;
 
 public class LoginDialog extends JDialog {
-    private JPanel loginForm;
-    private JCheckBox signupOption;
+    private final JPanel loginForm;
+    private final JCheckBox signupOption;
     private final FormLabel usernameLabel;
     private final FormTextField usernameTextField;
     private final FormLabel passwordLabel;

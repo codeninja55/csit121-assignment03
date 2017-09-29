@@ -4,7 +4,6 @@ import application.model.Generator;
 import application.model.card.CardType;
 import application.view.custom_components.*;
 import styles.CustomBorderFactory;
-import styles.FontFactory;
 import styles.IconFactory;
 
 import javax.swing.*;

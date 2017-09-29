@@ -3,15 +3,11 @@ package application.model;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
-import java.util.TreeSet;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 public class Generator {
     private static int cardIDCounter = 10000;
     private static int categoryIDCounter = 100;
     private static final Set<Integer> receiptSet = new HashSet<>();
-    public static TreeSet<String> cardsIDSet = new TreeSet<>();
 
     /*============================== MUTATORS  ==============================*/
     public static void addReceiptID(int receiptID) { receiptSet.add(receiptID); }

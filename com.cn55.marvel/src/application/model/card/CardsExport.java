@@ -28,7 +28,7 @@ public class CardsExport implements ExportToCSV {
         closeFile();
     }
 
-    public void closeFile() {
+    private void closeFile() {
         try {
             output.flush();
             output.close();

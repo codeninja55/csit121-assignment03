@@ -5,13 +5,13 @@ import javax.swing.table.DefaultTableCellRenderer;
 
 public abstract class TableFormatterFactory {
 
-    public static DefaultTableCellRenderer centerRenderer() {
+    private static DefaultTableCellRenderer centerRenderer() {
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
         return centerRenderer;
     }
 
-    public static DefaultTableCellRenderer leftRenderer() {
+    private static DefaultTableCellRenderer leftRenderer() {
         DefaultTableCellRenderer leftRenderer = new DefaultTableCellRenderer();
         leftRenderer.setHorizontalAlignment(SwingConstants.LEFT);
         return leftRenderer;

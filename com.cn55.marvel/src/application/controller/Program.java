@@ -29,6 +29,7 @@ import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+@SuppressWarnings("SimplifyStreamApiCallChains")
 public class Program {
     private final Shop shop;
     private final DataDAO db;

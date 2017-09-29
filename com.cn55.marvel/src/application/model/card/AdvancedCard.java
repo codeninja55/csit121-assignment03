@@ -1,5 +1,6 @@
 package application.model.card;
 
+@SuppressWarnings({"WeakerAccess", "unused"})
 public abstract class AdvancedCard extends Card {
     protected final String name;
     protected final String email;

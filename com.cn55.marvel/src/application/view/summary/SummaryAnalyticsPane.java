@@ -8,7 +8,6 @@ import application.model.card.CardType;
 import application.model.category.Category;
 import application.model.purchase.Purchase;
 import application.view.custom_components.BaseForm;
-import application.view.custom_components.FormButton;
 import application.view.custom_components.FormLabel;
 import application.view.custom_components.FormTextField;
 import application.view.form_builder_factory.FormFactory;
@@ -25,18 +24,17 @@ import java.util.Arrays;
 import java.util.DoubleSummaryStatistics;
 import java.util.HashMap;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 public class SummaryAnalyticsPane extends BaseForm implements FormFactory, DataObserver {
     private DataObservable dataDAO;
-    private SummaryCategoriesTableModel categoriesTableModel;
-    private FormTextField totalPurchasesMadeTextField;
-    private FormTextField totalPurchasesTextField;
-    private FormTextField cashPurchaseTextField;
-    private FormTextField cardPurchasesTextField;
-    private FormTextField totalCardsTextField;
-    private FormTextField totalPointsTextField;
-    private FormTextField totalBalanceTextField;
+    private final SummaryCategoriesTableModel categoriesTableModel;
+    private final FormTextField totalPurchasesMadeTextField;
+    private final FormTextField totalPurchasesTextField;
+    private final FormTextField cashPurchaseTextField;
+    private final FormTextField cardPurchasesTextField;
+    private final FormTextField totalCardsTextField;
+    private final FormTextField totalPointsTextField;
+    private final FormTextField totalBalanceTextField;
 
     SummaryAnalyticsPane() {
         super();

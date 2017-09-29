@@ -2,6 +2,7 @@ package application.model.card;
 
 import application.model.Generator;
 
+@SuppressWarnings("WeakerAccess")
 public abstract class Card implements Comparable<Card> {
     protected final String id;
     protected String cardType;
@@ -23,10 +24,6 @@ public abstract class Card implements Comparable<Card> {
 
     public abstract Card clone(Card o);
 
-    /*============================== MUTATORS  ==============================*/
-    protected void setPoints(double points) {
-        this.points = points;
-    }
     public abstract void calcPoints(double totalAmount);
     public void calcBalance(double totalAmount) {}
 

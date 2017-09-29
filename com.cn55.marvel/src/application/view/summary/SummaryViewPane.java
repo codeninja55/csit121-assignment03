@@ -22,12 +22,12 @@ import java.util.Arrays;
 
 public class SummaryViewPane extends JPanel implements DataObserver {
     private DataObservable dataDAO;
-    private SummaryAnalyticsPane analyticsPane;
-    private SummaryFilterForm filterForm;
-    private PurchaseTableModel purchasesTableModel;
-    private JTable purchasesTable;
-    private CardTableModel cardsTableModel;
-    private JTable cardsTable;
+    private final SummaryAnalyticsPane analyticsPane;
+    private final SummaryFilterForm filterForm;
+    private final PurchaseTableModel purchasesTableModel;
+    private final JTable purchasesTable;
+    private final CardTableModel cardsTableModel;
+    private final JTable cardsTable;
     private ToolbarButtonListener analyticsListener;
 
     public SummaryViewPane() {

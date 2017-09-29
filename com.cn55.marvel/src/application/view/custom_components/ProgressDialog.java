@@ -7,9 +7,9 @@ import javax.swing.*;
 import java.awt.*;
 
 public class ProgressDialog extends JDialog {
-    private Window parent;
-    private JProgressBar progressBar;
-    private CancelButton cancelBtn;
+    private final Window parent;
+    private final JProgressBar progressBar;
+    private final CancelButton cancelBtn;
 
     public ProgressDialog(Window parent, String title, String initialString) {
         super(parent, title, ModalityType.APPLICATION_MODAL);

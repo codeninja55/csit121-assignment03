@@ -1,7 +1,6 @@
 package application;
 
 import application.controller.Program;
-import application.model.DataDAO;
 import application.model.Shop;
 import styles.ColorFactory;
 import styles.FontFactory;

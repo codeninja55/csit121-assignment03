@@ -50,7 +50,7 @@ public class PurchasesImport implements ImportFromCSV {
         closeFile();
     }
 
-    public void closeFile() {
+    private void closeFile() {
         try {
             input.close();
         } catch (IOException e) {

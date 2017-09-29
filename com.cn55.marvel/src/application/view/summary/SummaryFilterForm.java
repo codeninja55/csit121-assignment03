@@ -18,12 +18,12 @@ import java.util.Locale;
 import java.util.stream.IntStream;
 
 public class SummaryFilterForm extends JPanel implements FormFactory, SummaryView {
-    private MaterialDatePicker dateStartPicker;
-    private MaterialDatePicker dateEndPicker;
+    private final MaterialDatePicker dateStartPicker;
+    private final MaterialDatePicker dateEndPicker;
     private LocalDate firstPurchaseDate;
     private LocalDate lastPurchaseDate;
-    private MaterialSlider daySlider;
-    private MaterialSlider hourSlider;
+    private final MaterialSlider daySlider;
+    private final MaterialSlider hourSlider;
     private SummaryListener listener;
 
     SummaryFilterForm(SummaryViewPane parent, SummaryAnalyticsPane analyticsPane) {
