@@ -8,7 +8,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 
 @SuppressWarnings("SameParameterValue")
-public class Purchase {
+public class Purchase implements Comparable<Purchase> {
     private static final DateTimeFormatter DATE_TIME_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     private final LocalDateTime purchaseTime;
     private final int receiptID;
@@ -99,4 +99,6 @@ public class Purchase {
         categories.values().forEach(c -> secondOutput.append(String.format("%n%s$%.2f", (c.getName() + ": "), c.getAmount())));
         return firstOutput + secondOutput;
     }
+
+    public int compareTo(Purchase o) { return this.purchaseTime.compareTo(o.purchaseTime); }
 }
