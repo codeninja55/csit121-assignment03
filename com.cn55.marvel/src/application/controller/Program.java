@@ -388,14 +388,14 @@ public class Program {
         boolean filterProceed = false;
 
         // TODO - Ask Mark about this
-        final HashMap<String, Card> clonedCardsMap = db.getAllCards().entrySet().stream()
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (k, v) -> k, HashMap::new));
+        final HashMap<String, Card> clonedCardsMap = db.getAllCards().entrySet().parallelStream().map(c -> c.getValue().clone(c.getValue()))
+                .collect(Collectors.toMap(Card::getID, c -> c.clone(c), (k, v) -> k, HashMap::new));
 
-        final HashMap<Integer, Purchase> clonedPurchasesMap = db.getAllPurchases().entrySet().stream()
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (k, v) -> k, HashMap::new));
+        final HashMap<Integer, Purchase> clonedPurchasesMap = db.getAllPurchases().entrySet().parallelStream()
+                .map(p -> new Purchase(p.getValue())).collect(Collectors.toMap(Purchase::getReceiptID, Purchase::new, (k, v) -> k, HashMap::new));
 
-        final HashMap<Integer, Category> clonedCategoriesMap = db.getAllCategories().entrySet().stream()
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (k, v) -> k, HashMap::new));
+        final HashMap<Integer, Category> clonedCategoriesMap = db.getAllCategories().entrySet().parallelStream()
+                .map(c -> new Category(c.getValue())).collect(Collectors.toMap(Category::getId, Category::new, (k, v) -> k, HashMap::new));
 
         final HashMap<Integer, Purchase> filteredPurchases;
         final HashMap<Integer, Category> filteredCategories;
