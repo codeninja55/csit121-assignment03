@@ -7,6 +7,7 @@ import java.awt.*;
 public class ProgressDialog extends JDialog {
     private JProgressBar progressBar;
 
+
     public ProgressDialog(Window parent) {
         super(parent, "Saving data...", ModalityType.APPLICATION_MODAL);
         setLocationRelativeTo(parent);
@@ -22,7 +23,7 @@ public class ProgressDialog extends JDialog {
         progressBar.setPreferredSize(size);
         progressBar.setMinimumSize(size);
         progressBar.setValue(0);
-        progressBar.setIndeterminate(true);
+        progressBar.setIndeterminate(false);
 
         add(progressBar);
         add(cancelBtn);
@@ -36,16 +37,16 @@ public class ProgressDialog extends JDialog {
     }
 
     @Override
-    public void setVisible(boolean b) {
+    public void setVisible(boolean isVisible) {
         SwingUtilities.invokeLater(() -> {
-            if (!b) {
+            if (!isVisible) {
                 try {
                     Thread.sleep(2000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
-            ProgressDialog.super.setVisible(b);
+            ProgressDialog.super.setVisible(isVisible);
         });
     }
 }

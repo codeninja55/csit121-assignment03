@@ -33,7 +33,6 @@ public class MainFrame extends JFrame {
         setUndecorated(false);
         setVisible(true);
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-
         setJMenuBar(createMenu());
 
         // Change the default Java icon to this

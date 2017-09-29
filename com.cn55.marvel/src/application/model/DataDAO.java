@@ -12,6 +12,7 @@ import application.model.purchase.Purchase;
 import application.model.purchase.PurchaseDAO;
 import application.model.purchase.PurchasesExport;
 import application.model.purchase.PurchasesImport;
+import application.view.custom_components.ProgressDialog;
 
 import javax.swing.*;
 import java.io.*;
@@ -141,7 +142,6 @@ public class DataDAO extends SwingWorker<Void, Integer> implements DataObservabl
 
             protected void process(List<Integer> counts) {
                 // do something
-                System.out.println(counts);
             }
 
             protected void done() {
@@ -155,14 +155,16 @@ public class DataDAO extends SwingWorker<Void, Integer> implements DataObservabl
         return new BufferedWriter(new FileWriter(path.toString()));
     }
 
-    public void exportData() {
+    public void exportData(final ProgressDialog progressBar) {
         ExportToCSV categoriesExport = new CategoriesExport();
         ExportToCSV cardsExport = new CardsExport();
         ExportToCSV purchasesExport = new PurchasesExport();
 
         SwingWorker<Void, Integer> exportWorker = new SwingWorker<Void, Integer>() {
-            @Override
             protected Void doInBackground() throws Exception {
+                progressBar.setVisible(true);
+                progressBar.setMaximum(categories.values().size() + purchases.values().size() + cards.values().size());
+
                 try {
                     categoriesExport.exportData(DataDAO.this, openWriteFile(CATEGORIES_LOG_PATH));
                     cardsExport.exportData(DataDAO.this, openWriteFile(CARDS_LOG_PATH));
@@ -175,11 +177,12 @@ public class DataDAO extends SwingWorker<Void, Integer> implements DataObservabl
             }
 
             protected void process(List<Integer> counts) {
-                super.process(counts);
+                progressBar.setValue(counts.size());
             }
 
             protected void done() {
                 notifyObservers();
+                progressBar.setVisible(false);
             }
         };
 

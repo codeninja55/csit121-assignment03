@@ -85,11 +85,7 @@ public class Program {
     /*============================== REGISTER AND HANDLE EVENTS ==============================*/
     /*============================== MAIN FRAME HANDLERS ==============================*/
     private void setupMainFrameHandlers() {
-        mainFrame.setSaveListener(e -> {
-            progressDialog.setVisible(true);
-            db.exportData();
-            progressDialog.setVisible(false);
-        });
+        mainFrame.setSaveListener(e -> db.exportData(progressDialog));
 
         mainFrame.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
@@ -499,7 +495,7 @@ public class Program {
                 IconFactory.warningIcon(), options, options[0]);
 
         if (response == 0) {
-            db.exportData();
+            db.exportData(progressDialog);
             // Add a loading bar
             System.gc();
             System.exit(0);
