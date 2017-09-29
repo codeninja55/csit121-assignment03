@@ -211,21 +211,20 @@ public class DataDAO extends SwingWorker<Void, Integer> implements DataObservabl
         dataObservers.remove(obj);
     }
     public void notifyObservers() { dataObservers.forEach(DataObserver::update); }
+    // NOTE: All these methods only return a deep copy of the original data as constructed by a stream
     public TreeMap<String, Card> getCardsUpdate(DataObserver who) {
-        return cards.entrySet().stream().collect(Collectors
-                .toMap(Map.Entry::getKey, Map.Entry::getValue, (k,v) -> k, TreeMap::new));
+        return cards.entrySet().parallelStream().map(c -> c.getValue().clone(c.getValue()))
+                .collect(Collectors.toMap(Card::getID, c -> c, (k,v) -> k, TreeMap::new));
     }
     public TreeMap<Integer, Purchase> getPurchaseUpdate(DataObserver who) {
-        return purchases.entrySet().stream().collect(Collectors
-                .toMap(Map.Entry::getKey, Map.Entry::getValue, (k,v) -> k, TreeMap::new));
+        return purchases.entrySet().parallelStream().map(p -> new Purchase(p.getValue()))
+                .collect(Collectors.toMap(Purchase::getReceiptID, p -> p, (k,v) -> k, TreeMap::new));
     }
     public TreeMap<Integer, Category> getCategoriesUpdate(DataObserver who) {
-        return categories.entrySet().stream().collect(Collectors
-                .toMap(Map.Entry::getKey, // key mapper
-                        Map.Entry::getValue, // value mapper
-                        (k, v) -> k, // merge function
-                        TreeMap::new)); // supplier
+        return categories.entrySet().parallelStream().map(c -> new Category(c.getValue(), c.getValue().getTotalAmount()))
+                .collect(Collectors.toMap(Category::getId, c -> c, (k,v) -> k, TreeMap::new));
     }
+    // NOTE: This returns a shallow copy only
     public LocalDateTime getFirstPurchaseDate(DataObserver who) { return firstPurchaseDate; }
     public LocalDateTime getLastPurchaseDate(DataObserver who) { return lastPurchaseDate; }
 }
