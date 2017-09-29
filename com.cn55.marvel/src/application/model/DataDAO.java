@@ -18,23 +18,30 @@ import javax.swing.*;
 import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.function.IntToDoubleFunction;
+import java.util.prefs.BackingStoreException;
+import java.util.prefs.Preferences;
 import java.util.stream.Collectors;
+
+import static com.sun.javafx.font.FontResource.SALT;
 
 /* Data Access Object (DAO) Implementation Layer */
 @SuppressWarnings("ConstantConditions")
-public class DataDAO extends SwingWorker<Void, Integer> implements DataObservable, CardsDAO, PurchaseDAO, CategoryDAO {
+public class DataDAO implements DataObservable, CardsDAO, PurchaseDAO, CategoryDAO {
+    private static final String SALT = "#M@rV3!4v3n9eRs";
+    private final Path PROGRAM_SETTINGS = Paths.get("com.cn55.marvel/src/persistent_data/settings.txt");
+    private final Path CATEGORIES_LOG_PATH = Paths.get("com.cn55.marvel/src/persistent_data/CategoriesStorage.csv");
+    private final Path CARDS_LOG_PATH = Paths.get("com.cn55.marvel/src/persistent_data/CardsStorage.csv");
+    private final Path PURCHASES_LOG_PATH = Paths.get("com.cn55.marvel/src/persistent_data/PurchaseStorage.csv");
+    private final Preferences programSettings;
     private final ArrayList<DataObserver> dataObservers;
     private final HashMap<String,Card> cards;
     private final HashMap<Integer,Purchase> purchases;
     private final HashMap<Integer,Category> categories;
-
-    private final Path CATEGORIES_LOG_PATH = Paths.get("com.cn55.marvel/src/persistent_data/CategoriesStorage.csv");
-    private final Path CARDS_LOG_PATH = Paths.get("com.cn55.marvel/src/persistent_data/CardsStorage.csv");
-    private final Path PURCHASES_LOG_PATH = Paths.get("com.cn55.marvel/src/persistent_data/PurchaseStorage.csv");
-
     private LocalDateTime firstPurchaseDate;
     private LocalDateTime lastPurchaseDate;
 
@@ -45,15 +52,8 @@ public class DataDAO extends SwingWorker<Void, Integer> implements DataObservabl
         this.purchases = new HashMap<>();
         this.dataObservers = new ArrayList<>();
         this.categories = new HashMap<>();
+        this.programSettings = Preferences.userRoot().node(PROGRAM_SETTINGS.toString());
     }
-
-    /*============================== SWING WORKER ==============================*/
-    @Override
-    protected Void doInBackground() throws Exception {
-        return null;
-    }
-
-
 
     /*============================== CREATE ==============================*/
     public void createCategory(Category category) {
@@ -155,7 +155,6 @@ public class DataDAO extends SwingWorker<Void, Integer> implements DataObservabl
     private BufferedWriter openWriteFile(Path path) throws IOException {
         return new BufferedWriter(new FileWriter(path.toString()));
     }
-
     public void exportData(final ProgressDialog progressBar) {
         ExportToCSV categoriesExport = new CategoriesExport();
         ExportToCSV cardsExport = new CardsExport();
