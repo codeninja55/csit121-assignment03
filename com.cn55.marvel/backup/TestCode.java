@@ -12,9 +12,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
-public class TestCode {
-    private DataDAO db;
-    private Shop shop;
+@SuppressWarnings("unused")
+class TestCode {
+    private final DataDAO db;
+    private final Shop shop;
 
     public TestCode(DataDAO db, Shop shop) {
         this.db = db;
@@ -30,7 +31,6 @@ public class TestCode {
         shop.makeCategory(new Category("Google Pixel", "Nobody wants an inferior phone"));
     }
 
-    /* TODO - REMOVE TEST CODE */
     @SuppressWarnings("ConstantConditions")
     private Double generateRandomValue() {
         Random randomValueObj = new Random();
@@ -51,7 +51,6 @@ public class TestCode {
         return valueOptions.get(randomValueObj.nextInt(valueOptions.size()));
     }
 
-    /* TODO - REMOVE TEST CODE */
     private HashMap<Integer, Category> generateRandomCategoriesMap() {
         HashMap<Integer, Category> testingCategoryMap = new HashMap<>();
         db.getAllCategories().values().forEach(cat -> testingCategoryMap.put(cat.getId(), new Category(cat)));
@@ -60,13 +59,11 @@ public class TestCode {
         return testingCategoryMap;
     }
 
-    /* TODO - REMOVE TEST CODE */
     private void testMakePurchases(int numOfPurchases, String id) {
         for (int i = 0; i < numOfPurchases; i++)
             shop.makePurchase(id, Generator.getReceiptID(), generateRandomCategoriesMap());
     }
 
-    /* TODO - REMOVE TEST CODE */
     public void createTestCode() {
 
         db.createCard(new BasicCard("Natasha Romanov",
