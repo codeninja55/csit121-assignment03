@@ -22,7 +22,7 @@ public class LoginDialog extends JDialog {
     private LoginListener listener;
 
     public LoginDialog(JFrame parent) {
-        super(parent, "Login", false);
+        super(parent, "Administrator Login", false);
         setSize(600, 300);
 
         loginForm = new JPanel(new GridBagLayout());
@@ -74,6 +74,7 @@ public class LoginDialog extends JDialog {
         gc.anchor = GridBagConstraints.FIRST_LINE_START;
         gc.gridx = 1; gc.gridy = 0;
         gc.insets = new Insets(20,5,0,30);
+        usernameTextField.setFocusable(true);
         loginForm.add(usernameTextField, gc);
 
         /*========== NEW ROW ==========*/
@@ -115,6 +116,8 @@ public class LoginDialog extends JDialog {
         signupOption.setBorderPaintedFlat(false);
         signupOption.setHorizontalAlignment(SwingConstants.LEFT);
         loginForm.add(signupOption, gc);
+
+        signupOption.setEnabled(false);
 
         /*========== BUTTON ROW ==========*/
         gc.anchor = GridBagConstraints.CENTER;
