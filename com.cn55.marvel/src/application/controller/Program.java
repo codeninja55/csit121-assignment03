@@ -74,10 +74,21 @@ public class Program {
         });
 
         setupMainFrameHandlers();
-        setupCardViewHandlers();
-        setupPurchaseViewHandlers();
-        setupCategoriesViewHandlers();
-        setupSummaryViewHandlers();
+
+        createCardHandler();
+        searchCardsHandler();
+        viewCardHandler();
+        deleteCardHandler();
+        sortCardsHandler();
+
+        createPurchaseHandler();
+        viewPurchaseHandler();
+        sortPurchasesHandler();
+
+        createCategoryHandler();
+        deleteCategoryHandler();
+
+        summaryViewHandler();
     }
 
     /*============================== REGISTER AND HANDLE EVENTS ==============================*/
@@ -109,8 +120,8 @@ public class Program {
     }
 
     /*============================== CARD VIEW HANDLERS ==============================*/
-    private void setupCardViewHandlers() {
-        /*TOOLBAR | CREATE CARD BUTTON*/
+    /*TOOLBAR | CREATE CARD BUTTON*/
+    private void createCardHandler() {
         cardViewPane.setCreateCardListener(() -> {
             removeCardForms();
             CardForm form = FormFactory.createCardForm();
@@ -142,8 +153,37 @@ public class Program {
                 showResults(cardViewPane, printCard(cardID, "CARD ADDED"));
             });
         });
+    }
 
-        /*TOOLBAR | DELETE CARD BUTTON*/
+    /*TOOLBAR | SEARCH BUTTON*/
+    private void searchCardsHandler() {
+        cardViewPane.setSearchCardListener(() -> {
+            removeCardForms();
+            SearchCardForm form = FormFactory.searchCardForm();
+            cardViewPane.setSearchCardForm(form);
+
+            // ADD A CANCEL BUTTON LISTENER AFTER CREATING FORM
+            form.setSearchListener(e -> {
+                final String cardID = e.getID();
+                showResults(cardViewPane, printCard(cardID,"CARD FOUND"));
+            });
+        });
+    }
+
+    /*TOOLBAR | VIEW BUTTON*/
+    private void viewCardHandler() {
+        cardViewPane.setViewCardListener(() -> {
+            if (cardViewPane.getCardsTable().getSelectedRow() >= 0) {
+                removeCardForms();
+                final int selectedRow = cardViewPane.getCardsTable().getSelectedRow();
+                final String cardID = (String)cardViewPane.getCardsTable().getValueAt(selectedRow, 0);
+                showResults(cardViewPane, printCard(cardID,"CARD"));
+            }
+        });
+    }
+
+    /*TOOLBAR | DELETE CARD BUTTON*/
+    private void deleteCardHandler() {
         cardViewPane.setDeleteCardListener(() -> {
             removeCardForms();
             DeleteCardForm form = FormFactory.deleteCardForm();
@@ -175,31 +215,10 @@ public class Program {
                 removeCardForms();
             });
         });
+    }
 
-        /*TOOLBAR | SEARCH BUTTON*/
-        cardViewPane.setSearchCardListener(() -> {
-            removeCardForms();
-            SearchCardForm form = FormFactory.searchCardForm();
-            cardViewPane.setSearchCardForm(form);
-
-            // ADD A CANCEL BUTTON LISTENER AFTER CREATING FORM
-            form.setSearchListener(e -> {
-                final String cardID = e.getID();
-                showResults(cardViewPane, printCard(cardID,"CARD FOUND"));
-            });
-        });
-
-        /*TOOLBAR | VIEW BUTTON*/
-        cardViewPane.setViewCardListener(() -> {
-            if (cardViewPane.getCardsTable().getSelectedRow() >= 0) {
-                removeCardForms();
-                final int selectedRow = cardViewPane.getCardsTable().getSelectedRow();
-                final String cardID = (String)cardViewPane.getCardsTable().getValueAt(selectedRow, 0);
-                showResults(cardViewPane, printCard(cardID,"CARD"));
-            }
-        });
-
-        /*TOOLBAR | SORT COMBOBOX*/
+    /*TOOLBAR | SORT COMBOBOX*/
+    private void sortCardsHandler() {
         cardViewPane.getSortedCombo().addItemListener((e) -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
                 ArrayList<Card> sortedCardsList = db.getAllCards().values().parallelStream().map((Card c) -> c.clone(c))
@@ -230,8 +249,8 @@ public class Program {
     }
 
     /*============================== PURCHASE VIEW HANDLERS ==============================*/
-    private void setupPurchaseViewHandlers() {
-        /*TOOLBAR | CREATE BUTTON*/
+    /*TOOLBAR | CREATE BUTTON*/
+    private void createPurchaseHandler() {
         purchaseViewPane.setCreatePurchaseListener(() -> {
             removePurchaseForms();
             PurchaseForm form = FormFactory.createPurchaseForm(new ArrayList<>(db.getAllCards().values()),
@@ -271,8 +290,10 @@ public class Program {
                 showResults(purchaseViewPane, resultsText);
             });
         });
+    }
 
-        /*TOOLBAR | VIEW  BUTTON*/
+    /*TOOLBAR | VIEW  BUTTON*/
+    private void viewPurchaseHandler() {
         purchaseViewPane.setViewPurchaseListener(() -> {
             if (purchaseViewPane.getPurchasesTable().getSelectedRow() >= 0) {
                 final int selectedRow = purchaseViewPane.getPurchasesTable().getSelectedRow();
@@ -282,8 +303,10 @@ public class Program {
                 showResults(purchaseViewPane, resultsText);
             }
         });
+    }
 
-        /*TOOLBAR | SORT COMBOBOX*/
+    /*TOOLBAR | SORT COMBOBOX*/
+    private void sortPurchasesHandler() {
         purchaseViewPane.getSortPurchaseCombo().addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
                 ArrayList<Purchase> purchasesList = db.getAllPurchases().values().parallelStream().map(Purchase::new)
@@ -304,8 +327,8 @@ public class Program {
     }
 
     /*=========================== CATEGORIES VIEW HANDLERS ===========================*/
-    private void setupCategoriesViewHandlers() {
-        /*TOOLBAR | CREATE CATEGORY BUTTON*/
+    /*TOOLBAR | CREATE CATEGORY BUTTON*/
+    private void createCategoryHandler() {
         categoriesViewPane.setCreateCategoryListener(() -> {
             removeCategoryForms();
             CategoriesForm form = FormFactory.createCategoryForm();
@@ -317,8 +340,10 @@ public class Program {
                 removeCategoryForms();
             });
         });
+    }
 
-        /*TOOLBAR | DELETE CATEGORY BUTTON*/
+    /*TOOLBAR | DELETE CATEGORY BUTTON*/
+    private void deleteCategoryHandler() {
         categoriesViewPane.setDeleteCategoryListener(() -> {
             removeCategoryForms();
             DeleteCategoryForm form = FormFactory.deleteCategoryForm();
@@ -349,7 +374,7 @@ public class Program {
     }
 
     /*============================== SUMMARY VIEW HANDLERS ==============================*/
-    private void setupSummaryViewHandlers() {
+    private void summaryViewHandler() {
         summaryViewPane.setAnalyticsListener(() -> {
             SummaryFilterForm filterForm = summaryViewPane.getFilterForm();
             filterForm.setVisible(true);
@@ -357,7 +382,6 @@ public class Program {
             filterForm.setListener(this::filterActionPerformed);
         });
     }
-
 
     /*============================== MUTATORS  ==============================*/
     private void showResults(JPanel viewPane, String resultsText) {
