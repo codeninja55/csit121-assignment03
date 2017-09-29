@@ -2,7 +2,6 @@ package application.model.category;
 
 import application.model.DataDAO;
 import application.model.ExportToCSV;
-import application.model.Shop;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -15,7 +14,7 @@ public class CategoriesExport implements ExportToCSV {
     public void exportData(DataDAO db, BufferedWriter writer) throws IOException {
         this.output = writer;
 
-        for (Category c : Shop.getShopInstance().getDataStore().getAllCategories().values()) {
+        for (Category c : db.getAllCategories().values()) {
             output.append(Instant.now().toString()).append(DEFAULT_SEPARATOR)
                     .append(Integer.toString(c.getId())).append(DEFAULT_SEPARATOR)
                     .append(c.getName()).append(DEFAULT_SEPARATOR)

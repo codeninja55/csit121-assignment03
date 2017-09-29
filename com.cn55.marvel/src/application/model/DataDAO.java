@@ -20,6 +20,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.function.IntToDoubleFunction;
 import java.util.stream.Collectors;
 
 /* Data Access Object (DAO) Implementation Layer */
@@ -160,32 +161,44 @@ public class DataDAO extends SwingWorker<Void, Integer> implements DataObservabl
         ExportToCSV cardsExport = new CardsExport();
         ExportToCSV purchasesExport = new PurchasesExport();
 
+        progressBar.setMaximum(100);
+        progressBar.setVisible(true);
+
         SwingWorker<Void, Integer> exportWorker = new SwingWorker<Void, Integer>() {
             protected Void doInBackground() throws Exception {
-                progressBar.setVisible(true);
-                progressBar.setMaximum(categories.values().size() + purchases.values().size() + cards.values().size());
+                int progress = 0;
+                // Calls the this.cancel() method which throws an InterruptedException event
+                progressBar.getCancelBtn().addActionListener(e -> this.cancel(true));
 
-                try {
-                    categoriesExport.exportData(DataDAO.this, openWriteFile(CATEGORIES_LOG_PATH));
-                    cardsExport.exportData(DataDAO.this, openWriteFile(CARDS_LOG_PATH));
-                    purchasesExport.exportData(DataDAO.this, openWriteFile(PURCHASES_LOG_PATH));
-                } catch (IOException e) {
-                    System.err.println("IOException: " + e.getMessage());
+                while(progress < 100) {
+                    try {
+                        Thread.sleep(200);
+                    } catch (InterruptedException e) {
+                        // When the user presses cancel,
+                        // the exception will break the loop and progress never reaches 100
+                        break;
+                    }
+                    progressBar.setValue(progress += 10);
                 }
 
+                // This task is done so fast that u don't really notice.
+                // While its working in the background, the GUI is not locked up
+                if (progress == 100) {
+                    try {
+                        categoriesExport.exportData(DataDAO.this, openWriteFile(CATEGORIES_LOG_PATH));
+                        cardsExport.exportData(DataDAO.this, openWriteFile(CARDS_LOG_PATH));
+                        purchasesExport.exportData(DataDAO.this, openWriteFile(PURCHASES_LOG_PATH));
+                    } catch (IOException e) {
+                        System.err.println("IOException: " + e.getMessage());
+                    }
+                } else {
+                    progressBar.setString("Cancelled. Data Not Saved.");
+                }
                 return null;
             }
 
-            protected void process(List<Integer> counts) {
-                progressBar.setValue(counts.size());
-            }
-
-            protected void done() {
-                notifyObservers();
-                progressBar.setVisible(false);
-            }
+            protected void done() { progressBar.setVisible(false); }
         };
-
         exportWorker.execute();
     }
 
@@ -199,18 +212,16 @@ public class DataDAO extends SwingWorker<Void, Integer> implements DataObservabl
     }
     public void notifyObservers() { dataObservers.forEach(DataObserver::update); }
     public TreeMap<String, Card> getCardsUpdate(DataObserver who) {
-        return cards.entrySet().stream()
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
-                        (k,v) -> k, TreeMap::new));
+        return cards.entrySet().stream().collect(Collectors
+                .toMap(Map.Entry::getKey, Map.Entry::getValue, (k,v) -> k, TreeMap::new));
     }
     public TreeMap<Integer, Purchase> getPurchaseUpdate(DataObserver who) {
-        return purchases.entrySet().stream()
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
-                        (k,v) -> k, TreeMap::new));
+        return purchases.entrySet().stream().collect(Collectors
+                .toMap(Map.Entry::getKey, Map.Entry::getValue, (k,v) -> k, TreeMap::new));
     }
     public TreeMap<Integer, Category> getCategoriesUpdate(DataObserver who) {
-        return categories.entrySet().stream()
-                .collect(Collectors.toMap(Map.Entry::getKey, // key mapper
+        return categories.entrySet().stream().collect(Collectors
+                .toMap(Map.Entry::getKey, // key mapper
                         Map.Entry::getValue, // value mapper
                         (k, v) -> k, // merge function
                         TreeMap::new)); // supplier

@@ -38,14 +38,12 @@ public class Program {
     private final PurchaseViewPane purchaseViewPane;
     private final CategoriesViewPane categoriesViewPane;
     private final SummaryViewPane summaryViewPane;
-    private ProgressDialog progressDialog;
 
     public Program(Shop shop) {
         this.shop = shop;
         this.db = shop.getDataStore();
 
         this.mainFrame = new MainFrame();
-        this.progressDialog = new ProgressDialog(mainFrame);
         this.tabPane = mainFrame.getTabPane();
 
         /* DataObserver Design Pattern - Registration and initial update calls */
@@ -85,7 +83,7 @@ public class Program {
     /*============================== REGISTER AND HANDLE EVENTS ==============================*/
     /*============================== MAIN FRAME HANDLERS ==============================*/
     private void setupMainFrameHandlers() {
-        mainFrame.setSaveListener(e -> db.exportData(progressDialog));
+        mainFrame.setSaveListener(e -> db.exportData(new ProgressDialog(mainFrame, "Saving Data", "Saving...")));
 
         mainFrame.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
@@ -151,7 +149,7 @@ public class Program {
                         "Confirm Delete?", // title
                         JOptionPane.OK_CANCEL_OPTION, // button options
                         JOptionPane.WARNING_MESSAGE, // icon
-                        null, // do not use custom icon
+                        IconFactory.warningIcon(), // use custom icon
                         btnOptions, // title of buttons
                         btnOptions[1] // default button title
                 );
@@ -184,7 +182,7 @@ public class Program {
         cardViewPane.setViewCardListener(() -> {
             if (cardViewPane.getCardsTable().getSelectedRow() >= 0) {
                 removeCardForms();
-                int selectedRow = cardViewPane.getCardsTable().getSelectedRow();
+                final int selectedRow = cardViewPane.getCardsTable().getSelectedRow();
                 final String cardID = (String)cardViewPane.getCardsTable().getValueAt(selectedRow, 0);
                 showResults(cardViewPane, printCard(cardID,"CARD"));
             }
@@ -193,8 +191,8 @@ public class Program {
         /*TOOLBAR | SORT COMBOBOX*/
         cardViewPane.getSortedCombo().addItemListener((e) -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
-                ArrayList<Card> sortedCardsList = new ArrayList<>();
-                sortedCardsList.addAll(db.getAllCards().values());
+                ArrayList<Card> sortedCardsList = db.getAllCards().values().parallelStream().map((Card c) -> c.clone(c))
+                        .collect(Collectors.toCollection(ArrayList::new));
                 if (e.getItem().equals("Sort..") || e.getItem().equals(SortCardType.CreatedOrder.getName())) {
                     // Lambda version of sorting with Comparator comparing method
                     sortedCardsList.sort(Comparator.comparing(Card::getID));
@@ -266,12 +264,10 @@ public class Program {
         /*TOOLBAR | VIEW  BUTTON*/
         purchaseViewPane.setViewPurchaseListener(() -> {
             if (purchaseViewPane.getPurchasesTable().getSelectedRow() >= 0) {
-                int selectedRow = purchaseViewPane.getPurchasesTable().getSelectedRow();
+                final int selectedRow = purchaseViewPane.getPurchasesTable().getSelectedRow();
                 final int receiptID = (Integer)purchaseViewPane.getPurchasesTable().getValueAt(selectedRow, 0);
-
                 String resultsText = db.getAllPurchases().values().stream().filter(p -> p.getReceiptID() == receiptID)
                         .map(Purchase::toString).collect(Collectors.joining("\n"));
-
                 showResults(purchaseViewPane, resultsText);
             }
         });
@@ -279,7 +275,8 @@ public class Program {
         /*TOOLBAR | SORT COMBOBOX*/
         purchaseViewPane.getSortPurchaseCombo().addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
-                ArrayList<Purchase> purchasesList = new ArrayList<>(db.getAllPurchases().values());
+                ArrayList<Purchase> purchasesList = db.getAllPurchases().values().parallelStream().map(Purchase::new)
+                        .collect(Collectors.toCollection(ArrayList::new));
                 if (e.getItem().equals(SortPurchaseType.All.getName())) {
                     purchaseViewPane.update();
                 } else if (e.getItem().equals(SortPurchaseType.Card.getName())) {
@@ -329,7 +326,7 @@ public class Program {
                         "Confirm Delete?", // title
                         JOptionPane.OK_CANCEL_OPTION, // button options
                         JOptionPane.WARNING_MESSAGE, // icon
-                        null, // do not use custom icon
+                        IconFactory.warningIcon(), // use custom icon
                         btnOptions, // title of buttons
                         btnOptions[1] // default button title
                 );
@@ -495,8 +492,7 @@ public class Program {
                 IconFactory.warningIcon(), options, options[0]);
 
         if (response == 0) {
-            db.exportData(progressDialog);
-            // Add a loading bar
+            db.exportData(new ProgressDialog(mainFrame, "Saving Data", "Saving..."));
             System.gc();
             System.exit(0);
         } else if (response == 1) {

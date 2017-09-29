@@ -1,4 +1,7 @@
 package application.model;
+import application.view.custom_components.ProgressDialog;
+
+import javax.swing.*;
 import java.io.BufferedWriter;
 import java.io.IOException;
 
