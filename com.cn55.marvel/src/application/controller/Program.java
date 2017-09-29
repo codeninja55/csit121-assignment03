@@ -406,10 +406,10 @@ public class Program {
                 .collect(Collectors.toMap(Card::getID, c -> c.clone(c), (k, v) -> k, HashMap::new));
 
         final HashMap<Integer, Purchase> clonedPurchasesMap = db.getAllPurchases().entrySet().parallelStream()
-                .map(p -> new Purchase(p.getValue())).collect(Collectors.toMap(Purchase::getReceiptID, Purchase::new, (k, v) -> k, HashMap::new));
+                .map(p -> new Purchase(p.getValue())).collect(Collectors.toMap(Purchase::getReceiptID, p -> p, (k, v) -> k, HashMap::new));
 
         final HashMap<Integer, Category> clonedCategoriesMap = db.getAllCategories().entrySet().parallelStream()
-                .map(c -> new Category(c.getValue())).collect(Collectors.toMap(Category::getId, Category::new, (k, v) -> k, HashMap::new));
+                .map(c -> new Category(c.getValue())).collect(Collectors.toMap(Category::getId, c -> c, (k, v) -> k, HashMap::new));
 
         final HashMap<Integer, Purchase> filteredPurchases;
         final HashMap<Integer, Category> filteredCategories;
