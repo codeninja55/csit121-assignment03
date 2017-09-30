@@ -143,6 +143,7 @@ public class StartViewPane extends JPanel {
         logoutBtn.addActionListener(e -> {
             logoutBtn.setEnabled(false);
             tabbedPane.setEnabledAt(4,false);
+            setDefaults();
         });
 
         return loginPane;
@@ -177,7 +178,7 @@ public class StartViewPane extends JPanel {
 
     public void setListener(LoginListener listener) { this.listener = listener; }
 
-    private void setDefaults() {
+    public void setDefaults() {
         usernameTextField.setText(null);
         passwordTextField.setText(null);
         signupOption.setSelected(false);

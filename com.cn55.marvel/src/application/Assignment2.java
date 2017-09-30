@@ -29,12 +29,8 @@ class Assignment2 {
         } catch (IOException|FontFormatException e) {
             //e.printStackTrace();
         }
-
         uiChanges();
-
-        Shop shop = Shop.getShopInstance();
-
-        java.awt.EventQueue.invokeLater(() -> new Program(shop));
+        java.awt.EventQueue.invokeLater(() -> new Program("", ""));
     }
 
     private static void uiChanges() {

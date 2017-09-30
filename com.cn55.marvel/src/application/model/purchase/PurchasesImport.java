@@ -1,6 +1,6 @@
 package application.model.purchase;
 
-import application.model.dao.DataDAO;
+import application.model.dao.DataStoreDAO;
 import application.model.Generator;
 import application.model.dao.ImportFromCSV;
 import application.model.category.Category;
@@ -16,7 +16,7 @@ public class PurchasesImport implements ImportFromCSV {
     private final Pattern categoryRegex = Pattern.compile("\\[(.*?)]");
     private BufferedReader input;
 
-    public void executeImport(DataDAO db, BufferedReader reader) throws IOException {
+    public void executeImport(DataStoreDAO db, BufferedReader reader) throws IOException {
         this.input = reader;
         String line;
 

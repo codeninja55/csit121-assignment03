@@ -1,5 +1,5 @@
 package application.model.dao;
 
-abstract class DAODecorator {
+abstract class DAODecorator extends DAO {
 
 }

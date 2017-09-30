@@ -1,6 +1,6 @@
 package application.model.purchase;
 
-import application.model.dao.DataDAO;
+import application.model.dao.DataStoreDAO;
 import application.model.dao.ExportToCSV;
 import application.model.card.CardType;
 import application.model.category.Category;
@@ -13,7 +13,7 @@ public class PurchasesExport implements ExportToCSV {
     private static final char DEFAULT_SEPARATOR = ',';
     private BufferedWriter output;
 
-    public void exportData(DataDAO db, BufferedWriter writer) throws IOException {
+    public void exportData(DataStoreDAO db, BufferedWriter writer) throws IOException {
         this.output = writer;
 
         for (Purchase p : db.getAllPurchases().values()) {

@@ -1,42 +1,73 @@
 package application.model.dao;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import javax.swing.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.*;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.stream.Collectors;
 
-public class AuthenticatorDAO extends DAODecorator {
+public class AuthenticatorDAO extends DAO {
     private static final String SALT = "#M@rV3!4v3n9eRs";
     private final Path PROGRAM_SETTINGS = Paths.get("com.cn55.marvel/src/persistent_data/settings.txt");
-    private boolean adminstratorAccess;
 
     public AuthenticatorDAO() {
+        super.users = new LinkedHashMap<>();
+    }
 
+    /*============================== IMPORT USERS ==============================*/
+    public void importUsers() {
+        SwingWorker<Void, Boolean> importWorker = new SwingWorker<Void, Boolean>() {
+            protected Void doInBackground() throws Exception {
+                Files.lines(PROGRAM_SETTINGS).forEach(line -> {
+                    String[] lineArr = line.split(":");
+                    users.put(lineArr[0], lineArr[1]);
+                });
+
+                return null;
+            }
+        };
+
+        importWorker.execute();
+    }
+
+    public void exportUsers() {
+        SwingWorker<Void, Void> exportWorker = new SwingWorker<Void, Void>() {
+            protected Void doInBackground() throws Exception {
+                BufferedWriter writer = Files.newBufferedWriter(PROGRAM_SETTINGS, StandardOpenOption.WRITE);
+                users.entrySet().parallelStream().forEach((entry) -> {
+                    try {
+                        writer.append(entry.getKey()).append(":").append(entry.getValue());
+                        writer.newLine();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
+                writer.flush();
+                writer.close();
+                return null;
+            }
+        };
+
+        exportWorker.execute();
     }
 
     /*============================== AUTHENTICATION ==============================*/
     public void signup(String username, char[] password) {
         String saltedPassword = SALT + new String(password);
-
-        /*try {
-            programSettings.put("username", generatedHashUsername(username));
-            programSettings.put("password", generateHashPassword(saltedPassword));
-            programSettings.flush();
-        } catch (BackingStoreException e) {
-            e.printStackTrace();
-        }*/
+        users.put(generatedHashUsername(username), generateHashPassword(saltedPassword));
     }
 
     public boolean login(String username, char[] password) {
         String hashedUsername = generatedHashUsername(username);
         String saltedPassword = SALT + new String(password);
         String hashedPassword = generateHashPassword(saltedPassword);
-
-        /*String storedUsername = programSettings.get("username", "");
-        String storedPassword = programSettings.get("password", "");*/
-
-        //return storedUsername.equals(hashedUsername) && storedPassword.equals(hashedPassword);
-        return false;
+        return users.containsKey(hashedUsername) && users.containsValue(hashedPassword);
     }
 
     private String generateHashPassword(String saltedPassword) {

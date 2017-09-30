@@ -10,5 +10,5 @@ abstract class DAO {
     protected HashMap<String,Card> cards;
     protected HashMap<Integer,Purchase> purchases;
     protected HashMap<Integer,Category> categories;
-
+    protected HashMap<String, String> users;
 }

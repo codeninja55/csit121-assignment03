@@ -1,6 +1,6 @@
 package application.controller;
 
-import application.model.dao.DataDAO;
+import application.model.dao.DataStoreDAO;
 import application.model.Shop;
 import application.model.card.*;
 import application.model.category.Category;
@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 @SuppressWarnings("SimplifyStreamApiCallChains")
 public class Program {
     private final Shop shop;
-    private final DataDAO db;
+    private final DataStoreDAO db;
     private final MainFrame mainFrame;
     private final JTabbedPane tabPane;
     private final CardViewPane cardViewPane;
@@ -39,9 +39,11 @@ public class Program {
     private final CategoriesViewPane categoriesViewPane;
     private final SummaryViewPane summaryViewPane;
 
-    public Program(Shop shop) {
-        this.shop = shop;
+    public Program(String username, String password) {
+        this.shop = Shop.getShopInstance();
         this.db = shop.getDataStore();
+        shop.getFileDAO().importData();
+        shop.getAuthenticator().importUsers();
 
         this.mainFrame = new MainFrame();
         this.tabPane = mainFrame.getTabPane();
@@ -94,7 +96,7 @@ public class Program {
     /*============================== REGISTER AND HANDLE EVENTS ==============================*/
     /*============================== MAIN FRAME HANDLERS ==============================*/
     private void setupMainFrameHandlers() {
-        mainFrame.setSaveListener(e -> db.exportData(new ProgressDialog(mainFrame, "Saving Data", "Saving...")));
+        mainFrame.setSaveListener(e -> shop.getFileDAO().exportData(new ProgressDialog(mainFrame, "Saving Data", "Saving...")));
 
         mainFrame.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
@@ -105,11 +107,13 @@ public class Program {
 
         mainFrame.getStartViewPane().setListener((username, password, signup) -> {
             if (signup) {
-                db.signup(username, password);
+                shop.getAuthenticator().signup(username, password);
+                mainFrame.getStartViewPane().setDefaults();
             } else {
-                if (db.login(username, password)) {
+                if (shop.getAuthenticator().login(username, password)) {
                     mainFrame.setSummaryViewPaneEnabled(true);
                     mainFrame.getStartViewPane().getLogoutBtn().setEnabled(true);
+                    mainFrame.getStartViewPane().setDefaults();
                 } else {
                     System.out.println("NOT AUTHENTICATED");
                 }
@@ -527,7 +531,8 @@ public class Program {
                 IconFactory.warningIcon(), options, options[0]);
 
         if (response == 0) {
-            db.exportData(new ProgressDialog(mainFrame, "Saving Data", "Saving..."));
+            shop.getFileDAO().exportData(new ProgressDialog(mainFrame, "Saving Data", "Saving..."));
+            shop.getAuthenticator().exportUsers();
             System.gc();
             mainFrame.dispose();
         } else if (response == 1) {

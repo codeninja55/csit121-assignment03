@@ -14,7 +14,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
-public class FileDAO extends DataDAO {
+public class FileStoreDAO extends DataStoreDAO {
     private final Path CATEGORIES_LOG_PATH = Paths.get("com.cn55.marvel/src/persistent_data/CategoriesStorage.csv");
     private final Path CARDS_LOG_PATH = Paths.get("com.cn55.marvel/src/persistent_data/CardsStorage.csv");
     private final Path PURCHASES_LOG_PATH = Paths.get("com.cn55.marvel/src/persistent_data/PurchaseStorage.csv");
@@ -32,9 +32,9 @@ public class FileDAO extends DataDAO {
         SwingWorker<Void, Integer> importWorker = new SwingWorker<Void, Integer>() {
             protected Void doInBackground() throws Exception {
                 try {
-                    categoriesImporter.executeImport(FileDAO.this, openReadFile(CATEGORIES_LOG_PATH));
-                    cardsImporter.executeImport(FileDAO.this, openReadFile(CARDS_LOG_PATH));
-                    purchasesImporter.executeImport(FileDAO.this, openReadFile(PURCHASES_LOG_PATH));
+                    categoriesImporter.executeImport(FileStoreDAO.this, openReadFile(CATEGORIES_LOG_PATH));
+                    cardsImporter.executeImport(FileStoreDAO.this, openReadFile(CARDS_LOG_PATH));
+                    purchasesImporter.executeImport(FileStoreDAO.this, openReadFile(PURCHASES_LOG_PATH));
                 } catch (FileNotFoundException e) {
                     System.out.println("FileNotFoundException: " + e.getMessage());
                 } catch (IOException e) {
@@ -87,9 +87,9 @@ public class FileDAO extends DataDAO {
                 // While its working in the background, the GUI is not locked up
                 if (progress == 100) {
                     try {
-                        categoriesExport.exportData(FileDAO.this, openWriteFile(CATEGORIES_LOG_PATH));
-                        cardsExport.exportData(FileDAO.this, openWriteFile(CARDS_LOG_PATH));
-                        purchasesExport.exportData(FileDAO.this, openWriteFile(PURCHASES_LOG_PATH));
+                        categoriesExport.exportData(FileStoreDAO.this, openWriteFile(CATEGORIES_LOG_PATH));
+                        cardsExport.exportData(FileStoreDAO.this, openWriteFile(CARDS_LOG_PATH));
+                        purchasesExport.exportData(FileStoreDAO.this, openWriteFile(PURCHASES_LOG_PATH));
                     } catch (IOException e) {
                         System.err.println("IOException: " + e.getMessage());
                     }

@@ -21,14 +21,14 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /* Data Access Object (DAO) Implementation Layer */
-public class DataDAO extends DAO implements DataObservable, CardsDAO, PurchaseDAO, CategoryDAO {
+public class DataStoreDAO extends DAO implements DataObservable, CardsDAO, PurchaseDAO, CategoryDAO {
     private final ArrayList<DataObserver> dataObservers;
     private LocalDateTime firstPurchaseDate;
     private LocalDateTime lastPurchaseDate;
 
     /*============================== CONSTRUCTORS  ==============================*/
     // Private modifier prevents any other class from instantiating
-    public DataDAO() {
+    public DataStoreDAO() {
         this.dataObservers = new ArrayList<>();
         super.cards = new HashMap<>();
         super.purchases = new HashMap<>();

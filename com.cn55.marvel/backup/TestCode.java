@@ -1,3 +1,4 @@
+/*
 package application;
 
 import application.model.DataDAO;
@@ -53,7 +54,7 @@ class TestCode {
 
     private HashMap<Integer, Category> generateRandomCategoriesMap() {
         HashMap<Integer, Category> testingCategoryMap = new HashMap<>();
-        db.getAllCategories().values().forEach(cat -> testingCategoryMap.put(cat.getId(), new Category(cat)));
+        shop.getDataStore().getAllCategories().values().forEach(cat -> testingCategoryMap.put(cat.getId(), new Category(cat)));
         testingCategoryMap.forEach((k,v) -> v.setAmount(generateRandomValue()));
 
         return testingCategoryMap;
@@ -145,3 +146,4 @@ class TestCode {
 
     }
 }
+*/

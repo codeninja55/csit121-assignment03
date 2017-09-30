@@ -1,6 +1,6 @@
 package application.model.category;
 
-import application.model.dao.DataDAO;
+import application.model.dao.DataStoreDAO;
 import application.model.Generator;
 import application.model.dao.ImportFromCSV;
 
@@ -11,7 +11,7 @@ public class CategoriesImport implements ImportFromCSV {
     private static final String DEFAULT_SEPARATOR = ",";
     private BufferedReader input;
 
-    public void executeImport(DataDAO db, BufferedReader reader) throws IOException {
+    public void executeImport(DataStoreDAO db, BufferedReader reader) throws IOException {
         this.input = reader;
         String line;
 

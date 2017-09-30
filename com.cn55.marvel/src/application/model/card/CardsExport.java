@@ -1,6 +1,6 @@
 package application.model.card;
 
-import application.model.dao.DataDAO;
+import application.model.dao.DataStoreDAO;
 import application.model.dao.ExportToCSV;
 
 import java.io.BufferedWriter;
@@ -11,7 +11,7 @@ public class CardsExport implements ExportToCSV {
     private static final char DEFAULT_SEPARATOR = ',';
     private BufferedWriter output;
 
-    public void exportData(DataDAO db, BufferedWriter writer) throws IOException {
+    public void exportData(DataStoreDAO db, BufferedWriter writer) throws IOException {
         this.output = writer;
 
         for (Card card : db.getAllCards().values()) {
@@ -28,12 +28,8 @@ public class CardsExport implements ExportToCSV {
         closeFile();
     }
 
-    private void closeFile() {
-        try {
-            output.flush();
-            output.close();
-        } catch (IOException e) {
-            System.err.println("IOException: " + e.getMessage());
-        }
+    private void closeFile() throws IOException {
+        output.flush();
+        output.close();
     }
 }

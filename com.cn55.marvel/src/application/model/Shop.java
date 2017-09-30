@@ -2,8 +2,9 @@ package application.model;
 
 import application.model.card.*;
 import application.model.category.Category;
-import application.model.dao.DataDAO;
-import application.model.dao.FileDAO;
+import application.model.dao.AuthenticatorDAO;
+import application.model.dao.DataStoreDAO;
+import application.model.dao.FileStoreDAO;
 import application.model.purchase.Purchase;
 
 import java.util.HashMap;
@@ -13,13 +14,15 @@ import java.util.HashMap;
 @SuppressWarnings("ConstantConditions")
 public class Shop {
     private static Shop shop;
-    private final DataDAO db;
-    private final FileDAO fileDAO;
+    private final DataStoreDAO db;
+    private final FileStoreDAO fileDAO;
+    private final AuthenticatorDAO authenticator;
 
     /*============================== CONSTRUCTORS  ==============================*/
     private Shop() {
-        this.fileDAO = new FileDAO();
-        this.db = new DataDAO();
+        this.fileDAO = new FileStoreDAO();
+        this.db = new DataStoreDAO();
+        this.authenticator = new AuthenticatorDAO();
     }
 
     // Provide global point of access
@@ -97,7 +100,9 @@ public class Shop {
     }
 
     /*============================== ACCESSORS ==============================*/
-    public DataDAO getDataStore() {
+    public DataStoreDAO getDataStore() {
         return db;
     }
+    public FileStoreDAO getFileDAO() { return fileDAO; }
+    public AuthenticatorDAO getAuthenticator() { return authenticator; }
 }

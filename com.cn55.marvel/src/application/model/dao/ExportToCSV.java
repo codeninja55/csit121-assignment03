@@ -5,5 +5,5 @@ import java.io.IOException;
 
 /* USING A STRATEGY DESIGN PATTERN */
 public interface ExportToCSV {
-    void exportData(DataDAO db, BufferedWriter writer) throws IOException;
+    void exportData(DataStoreDAO db, BufferedWriter writer) throws IOException;
 }
