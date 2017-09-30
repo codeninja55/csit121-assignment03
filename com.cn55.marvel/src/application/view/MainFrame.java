@@ -1,7 +1,6 @@
 package application.view;
 
 import application.controller.Utils;
-import application.view.custom.components.LoginDialog;
 import application.view.summary.SummaryViewPane;
 import styles.ColorFactory;
 import styles.FontFactory;
@@ -14,17 +13,16 @@ import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
-import java.net.URL;
 
 public class MainFrame extends JFrame {
     private final JTabbedPane tabPane;
+    private final StartViewPane startViewPane;
     private final CardViewPane cardViewPane;
     private final PurchaseViewPane purchaseViewPane;
     private final CategoriesViewPane categoriesViewPane;
     private final SummaryViewPane summaryViewPane;
     private ActionListener saveListener;
     private ActionListener exitListener;
-    private LoginDialog loginDialog;
     private JFileChooser fileChooser;
 
     public MainFrame() {
@@ -42,6 +40,7 @@ public class MainFrame extends JFrame {
         setIconImage(mainIcon.getImage());
 
         this.tabPane = new JTabbedPane();
+        this.startViewPane = new StartViewPane(tabPane);
         this.cardViewPane = new CardViewPane();
         this.purchaseViewPane = new PurchaseViewPane();
         this.categoriesViewPane = new CategoriesViewPane();
@@ -55,7 +54,7 @@ public class MainFrame extends JFrame {
         add(tabPane, BorderLayout.CENTER);
 
         // Add tabs to tabPane group
-        tabPane.addTab(" Start ", IconFactory.homeIcon(), createWelcomePanel());
+        tabPane.addTab(" Start ", IconFactory.homeIcon(), startViewPane);
         tabPane.addTab(" Cards ", IconFactory.cardIcon(),cardViewPane);
         tabPane.addTab(" Purchases ", IconFactory.purchaseIcon(), purchaseViewPane);
         tabPane.addTab(" Categories ", IconFactory.categoryIcon(), categoriesViewPane);
@@ -70,10 +69,8 @@ public class MainFrame extends JFrame {
     /*============================== MUTATORS ==============================*/
     private JMenuBar createMenu() {
         fileChooser = new JFileChooser();
-        loginDialog = new LoginDialog(this);
         JMenuBar menu = new JMenuBar();
         JMenu fileMenu = new JMenu("File");
-        JMenu adminSubMenu = new JMenu("Administrator");
         JMenu dataMenu = new JMenu("Data");
         JMenuItem login = new JMenuItem("Login..", IconFactory.loginRed500Icon());
         JMenuItem logout = new JMenuItem("Logout..", IconFactory.logoutIcon());
@@ -84,7 +81,6 @@ public class MainFrame extends JFrame {
 
         fileMenu.setFont(FontFactory.toolbarButtonFont());
         dataMenu.setFont(FontFactory.toolbarButtonFont());
-        adminSubMenu.setFont(FontFactory.labelFont());
         login.setFont(FontFactory.labelFont());
         logout.setFont(FontFactory.labelFont());
         exit.setFont(FontFactory.labelFont());
@@ -94,7 +90,6 @@ public class MainFrame extends JFrame {
 
         fileMenu.setForeground(ColorFactory.redA700());
         dataMenu.setForeground(ColorFactory.redA700());
-        adminSubMenu.setForeground(ColorFactory.redA700());
         login.setForeground(ColorFactory.redA700());
         logout.setForeground(ColorFactory.redA700());
         exit.setForeground(ColorFactory.redA700());
@@ -106,9 +101,8 @@ public class MainFrame extends JFrame {
         save.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK));
         login.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, InputEvent.ALT_MASK));
 
-        adminSubMenu.add(login);
-        adminSubMenu.add(logout);
-        fileMenu.add(adminSubMenu);
+        fileMenu.add(login);
+        fileMenu.add(logout);
         fileMenu.addSeparator();
         fileMenu.add(exit);
         dataMenu.add(save);
@@ -120,10 +114,11 @@ public class MainFrame extends JFrame {
 
         fileChooser.addChoosableFileFilter(new CSVFileFilter());
 
-        login.addActionListener(e -> loginDialog.setVisible(true));
+        login.addActionListener(e -> tabPane.setSelectedIndex(0));
 
         logout.addActionListener(e -> {
             setSummaryViewPaneEnabled(false);
+            startViewPane.getLogoutBtn().setEnabled(false);
             tabPane.setSelectedIndex(0);
         });
 
@@ -145,39 +140,6 @@ public class MainFrame extends JFrame {
         return menu;
     }
 
-    private JPanel createWelcomePanel() {
-        JPanel welcomePane = new JPanel();
-        welcomePane.setLayout(new GridBagLayout());
-        URL marvelURL = getClass().getResource("/img/Marvel-Logo-3-25pc.png");
-        ImageIcon marvelImage = new ImageIcon(marvelURL);
-        JLabel welcomeLabel = new JLabel("WELCOME TO");
-        JLabel imageLabel = new JLabel("", marvelImage, SwingConstants.CENTER);
-        JLabel rewardsCardLabel = new JLabel("REWARDS CARDS", SwingConstants.CENTER);
-        welcomeLabel.setFont(new Font("Product Sans", Font.BOLD,80));
-        welcomeLabel.setForeground(ColorFactory.red500());
-        rewardsCardLabel.setFont(new Font("Product Sans", Font.BOLD,72));
-        rewardsCardLabel.setForeground(ColorFactory.red500());
-
-        GridBagConstraints gc = new GridBagConstraints();
-        gc.fill = GridBagConstraints.NONE;
-        gc.gridx = 0; gc.gridy = 0;
-        gc.weightx = 1; gc.weighty = 0.1;
-        gc.anchor = GridBagConstraints.PAGE_END;
-        gc.insets = new Insets(300,0,0,0);
-
-        welcomePane.add(welcomeLabel, gc);
-
-        gc.gridy++; gc.insets = new Insets(0,0,0,0);
-        welcomePane.add(imageLabel, gc);
-
-        gc.gridy++;  gc.weighty = 2;
-        gc.anchor = GridBagConstraints.PAGE_START;
-        gc.insets = new Insets(40,0,0,0);
-        welcomePane.add(rewardsCardLabel, gc);
-
-        return welcomePane;
-    }
-
     public void setSaveListener(ActionListener saveListener) { this.saveListener = saveListener; }
 
     public void setExitListener(ActionListener exitListener) { this.exitListener = exitListener; }
@@ -186,6 +148,8 @@ public class MainFrame extends JFrame {
 
     /*============================== ACCESSORS  ==============================*/
     public JTabbedPane getTabPane() { return tabPane; }
+
+    public StartViewPane getStartViewPane() { return startViewPane; }
 
     public CardViewPane getCardViewPane() { return cardViewPane; }
 
@@ -196,8 +160,6 @@ public class MainFrame extends JFrame {
     }
 
     public SummaryViewPane getSummaryViewPane() { return summaryViewPane; }
-
-    public LoginDialog getLoginDialog() { return loginDialog; }
 
     class CSVFileFilter extends FileFilter {
         public boolean accept(File f) {
