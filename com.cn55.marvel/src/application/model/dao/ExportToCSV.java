@@ -1,4 +1,4 @@
-package application.model;
+package application.model.dao;
 
 import java.io.BufferedWriter;
 import java.io.IOException;

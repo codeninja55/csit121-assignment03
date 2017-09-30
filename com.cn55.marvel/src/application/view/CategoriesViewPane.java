@@ -1,7 +1,7 @@
 package application.view;
 
-import application.model.DataObservable;
-import application.model.DataObserver;
+import application.model.dao.DataObservable;
+import application.model.dao.DataObserver;
 import application.model.category.Category;
 import application.view.formbuilder.factory.CategoriesForm;
 import application.view.formbuilder.factory.DeleteCategoryForm;

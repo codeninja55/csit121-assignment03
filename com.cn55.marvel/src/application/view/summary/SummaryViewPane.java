@@ -1,7 +1,7 @@
 package application.view.summary;
 
-import application.model.DataObservable;
-import application.model.DataObserver;
+import application.model.dao.DataObservable;
+import application.model.dao.DataObserver;
 import application.model.card.Card;
 import application.model.purchase.Purchase;
 import application.view.custom.components.Toolbar;

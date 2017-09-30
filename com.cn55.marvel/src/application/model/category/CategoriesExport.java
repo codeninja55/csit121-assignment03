@@ -1,7 +1,7 @@
 package application.model.category;
 
-import application.model.DataDAO;
-import application.model.ExportToCSV;
+import application.model.dao.DataDAO;
+import application.model.dao.ExportToCSV;
 
 import java.io.BufferedWriter;
 import java.io.IOException;

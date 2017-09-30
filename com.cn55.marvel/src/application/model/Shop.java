@@ -2,6 +2,8 @@ package application.model;
 
 import application.model.card.*;
 import application.model.category.Category;
+import application.model.dao.DataDAO;
+import application.model.dao.FileDAO;
 import application.model.purchase.Purchase;
 
 import java.util.HashMap;
@@ -12,9 +14,11 @@ import java.util.HashMap;
 public class Shop {
     private static Shop shop;
     private final DataDAO db;
+    private final FileDAO fileDAO;
 
     /*============================== CONSTRUCTORS  ==============================*/
     private Shop() {
+        this.fileDAO = new FileDAO();
         this.db = new DataDAO();
     }
 

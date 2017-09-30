@@ -1,6 +1,6 @@
 package application.controller;
 
-import application.model.DataDAO;
+import application.model.dao.DataDAO;
 import application.model.Shop;
 import application.model.card.*;
 import application.model.category.Category;

@@ -1,8 +1,8 @@
 package application.model.category;
 
-import application.model.DataDAO;
+import application.model.dao.DataDAO;
 import application.model.Generator;
-import application.model.ImportFromCSV;
+import application.model.dao.ImportFromCSV;
 
 import java.io.BufferedReader;
 import java.io.IOException;

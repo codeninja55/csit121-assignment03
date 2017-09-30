@@ -1,7 +1,7 @@
 package application.model.purchase;
 
-import application.model.DataDAO;
-import application.model.ExportToCSV;
+import application.model.dao.DataDAO;
+import application.model.dao.ExportToCSV;
 import application.model.card.CardType;
 import application.model.category.Category;
 

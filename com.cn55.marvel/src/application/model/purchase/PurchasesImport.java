@@ -1,8 +1,8 @@
 package application.model.purchase;
 
-import application.model.DataDAO;
+import application.model.dao.DataDAO;
 import application.model.Generator;
-import application.model.ImportFromCSV;
+import application.model.dao.ImportFromCSV;
 import application.model.category.Category;
 
 import java.io.BufferedReader;

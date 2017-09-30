@@ -33,7 +33,6 @@ class Assignment2 {
         uiChanges();
 
         Shop shop = Shop.getShopInstance();
-        shop.getDataStore().importData();
 
         java.awt.EventQueue.invokeLater(() -> new Program(shop));
     }
