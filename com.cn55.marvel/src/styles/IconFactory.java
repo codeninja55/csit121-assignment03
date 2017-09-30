@@ -12,6 +12,7 @@ public abstract class IconFactory {
     public static ImageIcon loginRed500Icon() { return new ImageIcon("com.cn55.marvel/src/img/lock_open_red500_24.png"); }
     public static ImageIcon loginWhiteIcon() { return new ImageIcon("com.cn55.marvel/src/img/input_white_24.png"); }
     public static ImageIcon logoutIcon() { return new ImageIcon("com.cn55.marvel/src/img/lock_outline_red500_24.png"); }
+    public static ImageIcon logoutWhiteIcon() { return new ImageIcon("com.cn55.marvel/src/img/power_settings_new_white_24.png"); }
     public static ImageIcon exitIcon() { return new ImageIcon("com.cn55.marvel/src/img/close_red500_36.png"); }
     public static ImageIcon homeIcon() { return new ImageIcon("com.cn55.marvel/src/img/home_white_48.png"); }
     public static ImageIcon cardIcon() { return new ImageIcon("com.cn55.marvel/src/img/card_membership_white_48.png"); }
@@ -39,4 +40,5 @@ public abstract class IconFactory {
     public static ImageIcon warningIcon() { return new ImageIcon("com.cn55.marvel/src/img/warning_red500_48.png");}
     public static ImageIcon analyticsIcon() { return new ImageIcon("com.cn55.marvel/src/img/timeline_white_36.png");}
     public static ImageIcon filterIcon() { return new ImageIcon("com.cn55.marvel/src/img/filter_list_white_36.png");}
+    public static ImageIcon copyrightIcon() { return new ImageIcon("com.cn55.marvel/src/img/copyright_googred_36.png");}
 }
