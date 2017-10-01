@@ -3,7 +3,7 @@ package application.model.dao;
 import application.model.Generator;
 import application.model.card.Card;
 import application.model.category.Category;
-import application.model.exceptions.ImportEmptyException;
+import application.model.exceptions.ImportException;
 import application.model.exceptions.PurchasesEmptyException;
 import application.model.file_connectors.*;
 import application.model.purchase.Purchase;
@@ -64,8 +64,9 @@ public class DataStoreDAO implements DataObservable, CardsDAO, PurchaseDAO, Cate
                     categoriesImporter.executeImport(DataStoreDAO.this, Files.newBufferedReader(CATEGORIES_LOG_PATH, Charset.defaultCharset()));
                     cardsImporter.executeImport(DataStoreDAO.this, Files.newBufferedReader(CARDS_LOG_PATH, Charset.defaultCharset()));
                     purchasesImporter.executeImport(DataStoreDAO.this, Files.newBufferedReader(PURCHASES_LOG_PATH, Charset.defaultCharset()));
-                } catch (ImportEmptyException e) {
-                    System.err.println(e.getMessage());
+                } catch (ImportException e) {
+                    System.err.println("Import Error: " + e.getMessage());
+                    System.err.println("Caused by: " + e.getCause());
                 } catch (FileNotFoundException e) {
                     System.err.println("FileNotFoundException: " + e.getMessage());
                 } catch (IOException e) {
