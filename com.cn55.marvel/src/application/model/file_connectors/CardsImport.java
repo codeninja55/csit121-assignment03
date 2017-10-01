@@ -3,16 +3,16 @@ package application.model.file_connectors;
 import application.model.Generator;
 import application.model.card.*;
 import application.model.dao.DataStoreDAO;
-import application.model.exceptions.ImportEmptyException;
+import application.model.exceptions.ImportException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 
-public class CardsImport implements ImportFromCSV {
-    public void executeImport(DataStoreDAO dataStore, BufferedReader reader) throws IOException, ImportEmptyException {
+public class CardsImport extends Throwable implements ImportFromCSV {
+    public void executeImport(DataStoreDAO dataStore, BufferedReader reader) throws IOException, ImportException {
         if (reader.lines().count() == 0) {
             reader.close();
-            throw new ImportEmptyException("CardsStorage.csv is empty");
+            throw new ImportException("CardsStorage.csv is empty", CardsImport.this);
         } else {
             reader.lines().forEach(line -> {
                 String[] readLine = line.split(CSV.DEFAULT_SEPARATOR_STR);

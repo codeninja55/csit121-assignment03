@@ -3,7 +3,6 @@ package application.model.file_connectors;
 import application.model.Generator;
 import application.model.category.Category;
 import application.model.dao.DataStoreDAO;
-import application.model.exceptions.ImportCategoriesException;
 import application.model.exceptions.ImportException;
 
 import java.io.BufferedReader;

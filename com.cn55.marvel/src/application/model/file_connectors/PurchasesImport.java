@@ -3,9 +3,8 @@ package application.model.file_connectors;
 import application.model.Generator;
 import application.model.category.Category;
 import application.model.dao.DataStoreDAO;
-import application.model.exceptions.ImportEmptyException;
+import application.model.exceptions.ImportException;
 import application.model.purchase.Purchase;
-import sun.awt.image.ImageAccessException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -13,13 +12,13 @@ import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class PurchasesImport implements ImportFromCSV {
+public class PurchasesImport extends Throwable implements ImportFromCSV {
     private final Pattern categoryRegex = Pattern.compile("\\[(.*?)]");
 
-    public void executeImport(DataStoreDAO dataStore, BufferedReader reader) throws ImportEmptyException, IOException {
+    public void executeImport(DataStoreDAO dataStore, BufferedReader reader) throws ImportException, IOException {
         if (reader.lines().count() == 0) {
             reader.close();
-            throw new ImportEmptyException("PurchasesStorage.csv is empty");
+            throw new ImportException("PurchasesStorage.csv is empty", this);
         } else {
             reader.lines().forEach(line -> {
                 HashMap<Integer, Category> categories = new HashMap<>();
