@@ -299,8 +299,8 @@ public class Program {
         purchaseViewPane.setViewPurchaseListener(() -> {
             if (purchaseViewPane.getPurchasesTable().getSelectedRow() >= 0) {
                 final int selectedRow = purchaseViewPane.getPurchasesTable().getSelectedRow();
-                final int receiptID = (Integer)purchaseViewPane.getPurchasesTable().getValueAt(selectedRow, 0);
-                String resultsText = db.getAllPurchases().values().stream().filter(p -> p.getReceiptID() == receiptID)
+                final int receiptID = (Integer)purchaseViewPane.getPurchasesTable().getValueAt(selectedRow, 1);
+                String resultsText = db.getOrigPurchasesMap().values().stream().filter(p -> p.getReceiptID() == receiptID)
                         .map(Purchase::toString).collect(Collectors.joining("\n"));
                 showResults(purchaseViewPane, resultsText);
             }
