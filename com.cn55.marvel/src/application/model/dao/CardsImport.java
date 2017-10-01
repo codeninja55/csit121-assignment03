@@ -1,9 +1,7 @@
-package application.model.card;
+package application.model.dao;
 
 import application.model.Generator;
-import application.model.dao.CSV;
-import application.model.dao.DataStoreDAO;
-import application.model.dao.ImportFromCSV;
+import application.model.card.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;

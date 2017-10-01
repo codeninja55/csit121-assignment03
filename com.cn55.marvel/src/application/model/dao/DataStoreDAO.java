@@ -2,14 +2,8 @@ package application.model.dao;
 
 import application.model.Generator;
 import application.model.card.Card;
-import application.model.card.CardsExport;
-import application.model.card.CardsImport;
-import application.model.category.CategoriesExport;
-import application.model.category.CategoriesImport;
 import application.model.category.Category;
 import application.model.purchase.Purchase;
-import application.model.purchase.PurchasesExport;
-import application.model.purchase.PurchasesImport;
 import application.view.custom.components.ProgressDialog;
 
 import javax.swing.*;
@@ -68,17 +62,14 @@ public class DataStoreDAO implements DataObservable, CardsDAO, PurchaseDAO, Cate
                     cardsImporter.executeImport(DataStoreDAO.this, Files.newBufferedReader(CARDS_LOG_PATH, Charset.defaultCharset()));
                     purchasesImporter.executeImport(DataStoreDAO.this, Files.newBufferedReader(PURCHASES_LOG_PATH, Charset.defaultCharset()));
                 } catch (FileNotFoundException e) {
-                    System.out.println("FileNotFoundException: " + e.getMessage());
+                    System.err.println("FileNotFoundException: " + e.getMessage());
                 } catch (IOException e) {
-                    System.out.println("IOException: " + e.getMessage());
+                    System.err.println("IOException: " + e.getMessage());
                 }
                 return null;
             }
 
-            protected void done() {
-                System.out.println("Import Done");
-                notifyObservers();
-            }
+            protected void done() { notifyObservers(); }
         };
 
         importWorker.execute();
@@ -149,17 +140,17 @@ public class DataStoreDAO implements DataObservable, CardsDAO, PurchaseDAO, Cate
     }
 
     /*============================== RETRIEVE ==============================*/
-    public HashMap<String,Card> getAllCards() {
+    public HashMap<String,Card> getOrigCardsMap() {
         return cardsMap;
     }
     public Card getCard(String cardID) { return cardsMap.getOrDefault(cardID, null); }
-    public HashMap<Integer,Purchase> getAllPurchases() {
+    public HashMap<Integer,Purchase> getOrigPurchasesMap() {
         return purchasesMap;
     }
     public Purchase getPurchase(int receiptID) {
         return purchasesMap.getOrDefault(receiptID, null);
     }
-    public HashMap<Integer, Category> getAllCategories() {
+    public HashMap<Integer, Category> getOrigCategoriesMap() {
         return categoriesMap;
     }
     public Category getCategory(int categoryID) {
