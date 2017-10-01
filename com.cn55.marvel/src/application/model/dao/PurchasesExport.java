@@ -12,7 +12,7 @@ import java.time.Instant;
 
 public class PurchasesExport implements ExportToCSV {
     public void exportData(DataStoreDAO db, BufferedWriter writer) throws IOException {
-        db.getAllPurchases().values().parallelStream().forEach(p -> {
+        db.getOrigPurchasesMap().values().parallelStream().forEach(p -> {
             try {
                 int lastLine = 1;
                 writer.append(Instant.now().toString()).append(CSV.DEFAULT_SEPARATOR)

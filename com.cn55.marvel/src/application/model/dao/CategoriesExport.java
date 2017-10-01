@@ -9,7 +9,7 @@ import java.time.Instant;
 
 public class CategoriesExport implements ExportToCSV {
     public void exportData(DataStoreDAO dataStore, BufferedWriter writer) throws IOException {
-        dataStore.getAllCategories().values().parallelStream().forEach(c -> {
+        dataStore.getOrigCategoriesMap().values().parallelStream().forEach(c -> {
             try {
                 writer.append(Instant.now().toString()).append(DEFAULT_SEPARATOR)
                         .append(Integer.toString(c.getId())).append(DEFAULT_SEPARATOR)

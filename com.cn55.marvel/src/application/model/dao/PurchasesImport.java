@@ -30,7 +30,6 @@ public class PurchasesImport implements ImportFromCSV {
                 // Match the string with the pattern defined to extract a group [...] then
                 // get a substring of that to remove the [ ].
                 String categoryStrObj = categoryRegexMatch.group().substring(1, categoryRegexMatch.group().lastIndexOf("]"));
-                System.out.println(categoryStrObj);
                 // The string is now just id,name,description,amount which can be split on the delimiter
                 // to put into an array to be used.
                 categoriesAttr = categoryStrObj.split(CSV.DEFAULT_SEPARATOR_STR);
