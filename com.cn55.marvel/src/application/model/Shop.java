@@ -33,18 +33,16 @@ public class Shop {
 
     /*============================== MUTATORS  ==============================*/
     public void makeCategory(Category category) {
-        // must add category to each purchase
-
-
-        db.createCategory(category);
+        dataStore.createCategory(category);
+        updatePurchaseAddCategory(category);
     }
 
     public void makePurchase(String cardID, int receiptID, HashMap<Integer, Category> categories) {
         if (cardID.equals(CardType.Cash.name)) {
-            db.createPurchase(new Purchase(categories, receiptID));
+            dataStore.createPurchase(new Purchase(categories, receiptID));
         } else {
-            if (db.getAllCards().containsKey(cardID)) {
-                Card card = db.getCard(cardID);
+            if (dataStore.getOrigCardsMap().containsKey(cardID)) {
+                Card card = dataStore.getCard(cardID);
                 String cardType = card.getCardType();
                 Purchase newPurchase = new Purchase(cardID, cardType, categories, receiptID);
                 card.calcPoints(newPurchase.getCategoriesTotal());
@@ -52,56 +50,62 @@ public class Shop {
                 if (card instanceof AdvancedCard)
                     ((AdvancedCard)card).calcBalance(newPurchase.getCategoriesTotal());
 
-                db.createPurchase(newPurchase);
+                dataStore.createPurchase(newPurchase);
             }
         }
     }
 
     public void makeCard(HashMap<String, String> newCard) {
-
         String name = newCard.get("name");
         String email = newCard.get("email");
         String cardType = newCard.get("cardType");
 
         if (!cardType.equals(CardType.AnonCard.name)) {
             if (cardType.equals(CardType.BasicCard.name))
-                db.createCard(new BasicCard(name, email));
+                dataStore.createCard(new BasicCard(name, email));
             else
-                db.createCard(new PremiumCard(name, email));
+                dataStore.createCard(new PremiumCard(name, email));
         } else {
-            db.createCard(new AnonCard());
+            dataStore.createCard(new AnonCard());
         }
     }
 
     public void deleteCard(String cardID) {
-        db.deleteCard(cardID);
-    }
-
-    // Converts a purchase from a card purchase to a cash purchase when the card has been deleted
-    public void convertPurchase(String cardID) {
-        db.getAllPurchases().forEach((k,v) -> {
-            if (v.getCardID() != null && v.getCardID().equals(cardID)) v.convertPurchase();
-        });
+        dataStore.deleteCard(cardID);
+        convertPurchase(cardID);
     }
 
     public void deleteCategory(int categoryID) {
         // Update the amount for each purchase
-        db.getAllPurchases().values().forEach((Purchase p) -> {
+        dataStore.getOrigPurchasesMap().values().forEach((Purchase p) -> {
             Category other = p.getCategories().get(100);
             other.setAmount(other.getAmount() + p.getCategories().get(categoryID).getAmount());
             p.getCategories().remove(categoryID);
         });
 
         // Update the total amounts in the defaultCategories List
-        double deletedCategoryValue = db.getAllCategories().get(categoryID).getTotalAmount();
-        db.getAllCategories().get(100).updateTotalAmount(deletedCategoryValue);
+        double deletedCategoryValue = dataStore.getOrigCategoriesMap().get(categoryID).getTotalAmount();
+        dataStore.getOrigCategoriesMap().get(100).updateTotalAmount(deletedCategoryValue);
 
-        db.deleteCategory(categoryID);
+        dataStore.deleteCategory(categoryID);
+    }
+
+    private void convertPurchase(String cardID) {
+        // Converts a purchase from a card purchase to a cash purchase when the card has been deleted
+        dataStore.getOrigPurchasesMap().values().parallelStream().filter(p -> p.getCardID() != null)
+                .filter(p -> p.getCardID().equals(cardID)).forEach(p -> {
+                    p.setCardID(null);
+                    p.setCardType(CardType.Cash.name);
+        });
+    }
+
+    private void updatePurchaseAddCategory(Category category) {
+        // Adds the categories to each purchase when purchase created
+        dataStore.getOrigPurchasesMap().values().parallelStream()
+                .forEach(p -> p.getCategories().put(category.getId(), category));
     }
 
     /*============================== ACCESSORS ==============================*/
-    public DataStoreDAO getDataStore() {
-        return db;
-    }
+    public DataStoreDAO getDataStore() { return dataStore; }
     public AuthenticatorDAO getAuthenticator() { return authenticator; }
 }
