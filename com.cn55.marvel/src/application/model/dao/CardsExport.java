@@ -8,7 +8,7 @@ import java.time.Instant;
 
 public class CardsExport implements ExportToCSV {
     public void exportData(DataStoreDAO dataStore, BufferedWriter writer) throws IOException {
-        dataStore.getOrigCardsMap().values().parallelStream().forEach(card -> {
+        dataStore.getOrigCardsMap().values().forEach(card -> {
             try {
                 writer.append(Instant.now().toString()).append(DEFAULT_SEPARATOR)
                         .append(card.getID()).append(DEFAULT_SEPARATOR)
