@@ -4,6 +4,7 @@ import application.model.Generator;
 import application.model.card.Card;
 import application.model.category.Category;
 import application.model.exceptions.ImportEmptyException;
+import application.model.exceptions.PurchasesEmptyException;
 import application.model.file_connectors.*;
 import application.model.purchase.Purchase;
 import application.view.custom.components.ProgressDialog;
@@ -136,9 +137,9 @@ public class DataStoreDAO implements DataObservable, CardsDAO, PurchaseDAO, Cate
         notifyObservers();
     }
     public void createPurchase(Purchase purchase) {
-        updateCategoryTotalAmount(purchase.getCategories());
         Generator.addReceiptID(purchase.getReceiptID());
         this.purchasesMap.put(purchase.getReceiptID(), purchase);
+        updateCategoryTotalAmount(purchase.getCategories());
         updatePurchaseDateBounds();
         notifyObservers();
     }
@@ -168,10 +169,10 @@ public class DataStoreDAO implements DataObservable, CardsDAO, PurchaseDAO, Cate
     private void updatePurchaseDateBounds() {
         firstPurchaseDate = purchasesMap.values().stream()
                 .sorted(Comparator.comparing(Purchase::getPurchaseTime))
-                .map(Purchase::getPurchaseTime).findFirst().orElse(LocalDateTime.of(1970,1,1,0,0));
+                .map(Purchase::getPurchaseTime).findFirst().orElse(null);
         lastPurchaseDate = purchasesMap.values().stream()
                 .sorted(Comparator.comparing(Purchase::getPurchaseTime).reversed())
-                .map(Purchase::getPurchaseTime).findFirst().orElse(LocalDateTime.now());
+                .map(Purchase::getPurchaseTime).findFirst().orElse(null);
     }
 
     /*============================== DELETE ==============================*/
@@ -211,6 +212,26 @@ public class DataStoreDAO implements DataObservable, CardsDAO, PurchaseDAO, Cate
                 .collect(Collectors.toMap(Category::getId, c -> c, (k,v) -> k, TreeMap::new));
     }
     // NOTE: This returns a shallow copy only
-    public LocalDateTime getFirstPurchaseDate(DataObserver who) { return firstPurchaseDate; }
-    public LocalDateTime getLastPurchaseDate(DataObserver who) { return lastPurchaseDate; }
+    public LocalDateTime getFirstPurchaseDate(DataObserver who) {
+        if (firstPurchaseDate == null) {
+            try {
+                throw new PurchasesEmptyException("No purchases have been imported.\nTherefore, there are no first purchase dates");
+            } catch (PurchasesEmptyException e) {
+                return LocalDateTime.now();
+            }
+        } else {
+            return firstPurchaseDate;
+        }
+    }
+    public LocalDateTime getLastPurchaseDate(DataObserver who) {
+        if (lastPurchaseDate == null) {
+            try {
+                throw new PurchasesEmptyException("No purchases have been imported.\nTherefore, there are no latest purchase date.");
+            } catch (PurchasesEmptyException e) {
+                return LocalDateTime.now();
+            }
+        } else {
+            return lastPurchaseDate;
+        }
+    }
 }
