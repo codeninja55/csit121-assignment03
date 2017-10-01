@@ -42,8 +42,6 @@ public class PurchasesExport implements ExportToCSV {
                 System.err.println("IOException" + e.getMessage());
             }
         });
-
-        writer.flush();
-        writer.close();
+        ExportToCSV.closeWriter(writer);
     }
 }
