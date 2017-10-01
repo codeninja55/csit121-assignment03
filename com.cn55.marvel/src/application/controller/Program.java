@@ -211,8 +211,6 @@ public class Program {
 
                 if (confirm == JOptionPane.OK_OPTION) {
                     shop.deleteCard(cardID);
-                    // Purchases by this card will be changed to cash
-                    shop.convertPurchase(cardID);
                 }
                 removeCardForms();
             });
@@ -223,7 +221,7 @@ public class Program {
     private void sortCardsHandler() {
         cardViewPane.getSortedCombo().addItemListener((e) -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
-                ArrayList<Card> sortedCardsList = db.getAllCards().values().parallelStream().map((Card c) -> c.clone(c))
+                ArrayList<Card> sortedCardsList = db.getOrigCardsMap().values().parallelStream().map((Card c) -> c.clone(c))
                         .collect(Collectors.toCollection(ArrayList::new));
                 if (e.getItem().equals("Sort..") || e.getItem().equals(SortCardType.CreatedOrder.name)) {
                     // Lambda version of sorting with Comparator comparing method
@@ -255,8 +253,8 @@ public class Program {
     private void createPurchaseHandler() {
         purchaseViewPane.setCreatePurchaseListener(() -> {
             removePurchaseForms();
-            PurchaseForm form = FormFactory.createPurchaseForm(new ArrayList<>(db.getAllCards().values()),
-                    new ArrayList<>(db.getAllCategories().values()));
+            PurchaseForm form = FormFactory.createPurchaseForm(new ArrayList<>(db.getOrigCardsMap().values()),
+                    new ArrayList<>(db.getOrigCategoriesMap().values()));
             purchaseViewPane.setCreatePurchaseForm(form);
 
             // FORM CREATE BUTTON
@@ -299,8 +297,8 @@ public class Program {
         purchaseViewPane.setViewPurchaseListener(() -> {
             if (purchaseViewPane.getPurchasesTable().getSelectedRow() >= 0) {
                 final int selectedRow = purchaseViewPane.getPurchasesTable().getSelectedRow();
-                final int receiptID = (Integer)purchaseViewPane.getPurchasesTable().getValueAt(selectedRow, 0);
-                String resultsText = db.getAllPurchases().values().stream().filter(p -> p.getReceiptID() == receiptID)
+                final int receiptID = (Integer)purchaseViewPane.getPurchasesTable().getValueAt(selectedRow, 1);
+                String resultsText = db.getOrigPurchasesMap().values().stream().filter(p -> p.getReceiptID() == receiptID)
                         .map(Purchase::toString).collect(Collectors.joining("\n"));
                 showResults(purchaseViewPane, resultsText);
             }
@@ -311,7 +309,7 @@ public class Program {
     private void sortPurchasesHandler() {
         purchaseViewPane.getSortPurchaseCombo().addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
-                ArrayList<Purchase> purchasesList = db.getAllPurchases().values().parallelStream().map(Purchase::new)
+                ArrayList<Purchase> purchasesList = db.getOrigPurchasesMap().values().parallelStream().map(Purchase::new)
                         .collect(Collectors.toCollection(ArrayList::new));
                 if (e.getItem().equals(SortPurchaseType.All.name)) {
                     purchaseViewPane.update();
@@ -414,7 +412,7 @@ public class Program {
     /*============================== ACCESSORS ==============================*/
     private String printCard(String cardID, String title) {
         String cText = db.getCard(cardID).toString();
-        String pText = db.getAllPurchases().values().stream().filter(p -> p.getCardID() != null && p.getCardID().equals(cardID))
+        String pText = db.getOrigPurchasesMap().values().stream().filter(p -> p.getCardID() != null && p.getCardID().equals(cardID))
                 .map(Purchase::toString).collect(Collectors.joining("\n"));
         return String.format("%s%n%s%n%s%n%s", title, cText,"PURCHASE(S)", pText);
     }
@@ -425,13 +423,13 @@ public class Program {
         boolean filterProceed = false;
 
         // TODO - Ask Mark about this
-        final HashMap<String, Card> clonedCardsMap = db.getAllCards().entrySet().parallelStream().map(c -> c.getValue().clone(c.getValue()))
+        final HashMap<String, Card> clonedCardsMap = db.getOrigCardsMap().entrySet().parallelStream().map(c -> c.getValue().clone(c.getValue()))
                 .collect(Collectors.toMap(Card::getID, c -> c.clone(c), (k, v) -> k, HashMap::new));
 
-        final HashMap<Integer, Purchase> clonedPurchasesMap = db.getAllPurchases().entrySet().parallelStream()
+        final HashMap<Integer, Purchase> clonedPurchasesMap = db.getOrigPurchasesMap().entrySet().parallelStream()
                 .map(p -> new Purchase(p.getValue())).collect(Collectors.toMap(Purchase::getReceiptID, p -> p, (k, v) -> k, HashMap::new));
 
-        final HashMap<Integer, Category> clonedCategoriesMap = db.getAllCategories().entrySet().parallelStream()
+        final HashMap<Integer, Category> clonedCategoriesMap = db.getOrigCategoriesMap().entrySet().parallelStream()
                 .map(c -> new Category(c.getValue())).collect(Collectors.toMap(Category::getId, c -> c, (k, v) -> k, HashMap::new));
 
         final HashMap<Integer, Purchase> filteredPurchases;

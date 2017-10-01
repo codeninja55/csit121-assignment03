@@ -1,7 +1,6 @@
-package application.model.card;
+package application.model.dao;
 
-import application.model.dao.DataStoreDAO;
-import application.model.dao.ExportToCSV;
+import application.model.card.AdvancedCard;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -9,7 +8,7 @@ import java.time.Instant;
 
 public class CardsExport implements ExportToCSV {
     public void exportData(DataStoreDAO dataStore, BufferedWriter writer) throws IOException {
-        dataStore.getAllCards().values().parallelStream().forEach(card -> {
+        dataStore.getOrigCardsMap().values().forEach(card -> {
             try {
                 writer.append(Instant.now().toString()).append(DEFAULT_SEPARATOR)
                         .append(card.getID()).append(DEFAULT_SEPARATOR)

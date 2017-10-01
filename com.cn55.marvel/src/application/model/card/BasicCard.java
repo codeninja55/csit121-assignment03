@@ -19,7 +19,7 @@ public class BasicCard extends AdvancedCard {
         calcPoints(totalAmount);
     }
 
-    BasicCard(String id, String name, String email, double points, double balance) {
+    public BasicCard(String id, String name, String email, double points, double balance) {
         super(id, name, email, points, balance);
         super.cardType = CardType.BasicCard.name;
     }

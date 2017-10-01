@@ -58,16 +58,14 @@ public class Purchase implements Comparable<Purchase> {
     private LocalDateTime setPurchaseTime() {
         // REF: https://stackoverflow.com/questions/1459656/how-to-get-the-current-time-in-yyyy-mm-dd-hhmisec-millisecond-format-in-java
         // REF: https://docs.oracle.com/javase/tutorial/datetime/overview/design.html
-        // REF: https://docs.oracle.com/javase/8/docs/api/java/time/package-summary.html
         // REF: https://docs.oracle.com/javase/8/docs/api/java/time/LocalDateTime.html
         // REF: https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html
         return LocalDateTime.now();
     }
 
-    public void convertPurchase() {
-        this.cardType = CardType.Cash.name;
-        this.cardID = null;
-    }
+    public void setCardID(String cardID) { this.cardID = cardID; }
+
+    public void setCardType(String cardType) { this.cardType = cardType; }
 
     /*============================== ACCESSORS  ==============================*/
     public int getReceiptID() { return receiptID; }

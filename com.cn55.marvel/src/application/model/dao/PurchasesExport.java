@@ -1,10 +1,7 @@
-package application.model.purchase;
+package application.model.dao;
 
 import application.model.card.CardType;
 import application.model.category.Category;
-import application.model.dao.CSV;
-import application.model.dao.DataStoreDAO;
-import application.model.dao.ExportToCSV;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -12,17 +9,17 @@ import java.time.Instant;
 
 public class PurchasesExport implements ExportToCSV {
     public void exportData(DataStoreDAO db, BufferedWriter writer) throws IOException {
-        db.getAllPurchases().values().parallelStream().forEach(p -> {
+        db.getOrigPurchasesMap().values().forEach(p -> {
             try {
-                int lastLine = 1;
                 writer.append(Instant.now().toString()).append(CSV.DEFAULT_SEPARATOR)
                         .append(p.getPurchaseTimeStr()).append(CSV.DEFAULT_SEPARATOR)
                         .append(Integer.toString(p.getReceiptID())).append(CSV.DEFAULT_SEPARATOR)
                         .append(p.getCardType()).append(CSV.DEFAULT_SEPARATOR);
 
                 writer.append((p.getCardType().equals(CardType.Cash.name)) ? "" : p.getCardID());
-
                 writer.append(ExportToCSV.DEFAULT_SEPARATOR).append("{");
+                
+                int lastLine = 1;
                 for (Category c : p.getCategories().values()) {
                     writer.append("[")
                             .append(Integer.toString(c.getId())).append(CSV.DEFAULT_SEPARATOR)

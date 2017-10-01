@@ -10,7 +10,7 @@ public class AnonCard extends Card {
         super.points = 0;
     }
 
-    AnonCard(String id, double points) {
+    public AnonCard(String id, double points) {
         super(id, CardType.AnonCard.name, points);
     }
 

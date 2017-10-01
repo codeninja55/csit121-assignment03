@@ -20,7 +20,7 @@ public class PremiumCard extends AdvancedCard {
         calcPoints(totalAmount);
     }
 
-    PremiumCard(String id, String name, String email, double points, double balance) {
+    public PremiumCard(String id, String name, String email, double points, double balance) {
         super(id, name, email, points, balance);
         super.cardType = CardType.PremiumCard.name;
     }

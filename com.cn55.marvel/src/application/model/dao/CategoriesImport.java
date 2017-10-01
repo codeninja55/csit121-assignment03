@@ -1,6 +1,7 @@
-package application.model.category;
+package application.model.dao;
 
 import application.model.Generator;
+import application.model.category.Category;
 import application.model.dao.CSV;
 import application.model.dao.DataStoreDAO;
 import application.model.dao.ImportFromCSV;
