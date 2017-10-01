@@ -3,6 +3,7 @@ package application.model.dao;
 import application.model.Generator;
 import application.model.card.Card;
 import application.model.category.Category;
+import application.model.file_connectors.*;
 import application.model.purchase.Purchase;
 import application.view.custom.components.ProgressDialog;
 

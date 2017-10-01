@@ -1,4 +1,6 @@
-package application.model.dao;
+package application.model.file_connectors;
+
+import application.model.dao.DataStoreDAO;
 
 import java.io.BufferedWriter;
 import java.io.IOException;

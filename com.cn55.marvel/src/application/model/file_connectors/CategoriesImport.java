@@ -1,10 +1,8 @@
-package application.model.dao;
+package application.model.file_connectors;
 
 import application.model.Generator;
 import application.model.category.Category;
-import application.model.dao.CSV;
 import application.model.dao.DataStoreDAO;
-import application.model.dao.ImportFromCSV;
 
 import java.io.BufferedReader;
 import java.io.IOException;
