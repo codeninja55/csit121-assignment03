@@ -8,7 +8,7 @@ public interface PurchaseDAO {
     @SuppressWarnings("unused")
     void createPurchase(Purchase purchase);
     @SuppressWarnings("unused")
-    HashMap<Integer,Purchase> getAllPurchases();
+    HashMap<Integer,Purchase> getOrigPurchasesMap();
     @SuppressWarnings("unused")
     Purchase getPurchase(int receiptID);
     @SuppressWarnings("unused")
