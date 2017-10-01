@@ -79,8 +79,7 @@ public class CategoriesViewPane extends JPanel implements DataObserver {
     }
 
     public void update() {
-        ArrayList<Category> allCategories = new ArrayList<>(dataDAO.getCategoriesUpdate(this).values());
-        categoriesTableModel.setData(allCategories);
+        categoriesTableModel.setData(new ArrayList<>(dataDAO.getCategoriesUpdate(this).values()));
         categoriesTableModel.fireTableDataChanged();
     }
 }

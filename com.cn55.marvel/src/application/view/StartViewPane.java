@@ -117,6 +117,7 @@ public class StartViewPane extends JPanel {
         signupOption.setBorderPaintedFlat(false);
         loginPane.add(signupOption);
         loginPane.add(new JSeparator(JSeparator.HORIZONTAL));
+        signupOption.setEnabled(false);
 
         loginBtn.setIconTextGap(15);
         loginPane.add(loginBtn);

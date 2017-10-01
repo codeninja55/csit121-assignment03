@@ -4,6 +4,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 
 /* USING A STRATEGY DESIGN PATTERN */
-public interface ImportFromCSV {
-    void executeImport(DataStoreDAO db, BufferedReader reader) throws IOException;
+public interface ImportFromCSV extends CSV {
+    void executeImport(DataStoreDAO dataStore, BufferedReader reader) throws IOException;
 }

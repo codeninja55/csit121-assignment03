@@ -30,7 +30,11 @@ class Assignment2 {
             //e.printStackTrace();
         }
         uiChanges();
-        java.awt.EventQueue.invokeLater(() -> new Program("", ""));
+        Shop shop = Shop.getShopInstance();
+        shop.getDataStore().importData();
+        shop.getAuthenticator().importUsers();
+
+        java.awt.EventQueue.invokeLater(Program::new);
     }
 
     private static void uiChanges() {

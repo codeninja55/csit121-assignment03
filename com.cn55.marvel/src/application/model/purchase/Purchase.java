@@ -17,7 +17,7 @@ public class Purchase implements Comparable<Purchase> {
     private final HashMap<Integer, Category> categories;
 
     /*============================== CONSTRUCTORS ==============================*/
-    // Constructor for Cash purchases
+    // Constructor for Cash purchasesMap
     public Purchase(HashMap<Integer, Category> categories, int receiptID) {
         this.receiptID = receiptID;
         this.cardID = null;
@@ -26,7 +26,7 @@ public class Purchase implements Comparable<Purchase> {
         this.purchaseTime = setPurchaseTime();
     }
 
-    // Constructor for Card purchases
+    // Constructor for Card purchasesMap
     public Purchase(String cardID, String cardType, HashMap<Integer, Category> categories, int receiptID) {
         this.receiptID = receiptID;
         this.cardID = cardID;

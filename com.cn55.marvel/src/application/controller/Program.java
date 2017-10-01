@@ -39,11 +39,9 @@ public class Program {
     private final CategoriesViewPane categoriesViewPane;
     private final SummaryViewPane summaryViewPane;
 
-    public Program(String username, String password) {
+    public Program() {
         this.shop = Shop.getShopInstance();
         this.db = shop.getDataStore();
-        shop.getFileDAO().importData();
-        shop.getAuthenticator().importUsers();
 
         this.mainFrame = new MainFrame();
         this.tabPane = mainFrame.getTabPane();
@@ -96,7 +94,7 @@ public class Program {
     /*============================== REGISTER AND HANDLE EVENTS ==============================*/
     /*============================== MAIN FRAME HANDLERS ==============================*/
     private void setupMainFrameHandlers() {
-        mainFrame.setSaveListener(e -> shop.getFileDAO().exportData(new ProgressDialog(mainFrame, "Saving Data", "Saving...")));
+        mainFrame.setSaveListener(e -> db.exportData(new ProgressDialog(mainFrame, "Saving Data", "Saving...")));
 
         mainFrame.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
@@ -198,7 +196,7 @@ public class Program {
                 final String cardID = e.getID();
                 String[] btnOptions = {"Yes","No"};
                 String message = "Are you sure you want to DELETE card: " + cardID + "\nThis cannot be undone."
-                        + "\n\nAll purchases for this card will be changed to CASH status.\n\n";
+                        + "\n\nAll purchasesMap for this card will be changed to CASH status.\n\n";
 
                 showResults(cardViewPane, printCard(cardID, "DELETE CARD?"));
                 int confirm = JOptionPane.showOptionDialog(mainFrame, // frame, can be null
@@ -359,7 +357,7 @@ public class Program {
 
                 String[] btnOptions = {"Yes","Cancel"};
                 String message = "Are you sure you want to DELETE Category: " + e.getID() + "\nThis cannot be undone."
-                        + "\n\nAll purchases for this category will be moved to Other category.\n\n";
+                        + "\n\nAll purchasesMap for this category will be moved to Other category.\n\n";
 
                 int confirm = JOptionPane.showOptionDialog(mainFrame, // frame, can be null
                         message, // message
@@ -531,7 +529,7 @@ public class Program {
                 IconFactory.warningIcon(), options, options[0]);
 
         if (response == 0) {
-            shop.getFileDAO().exportData(new ProgressDialog(mainFrame, "Saving Data", "Saving..."));
+            db.exportData(new ProgressDialog(mainFrame, "Saving Data", "Saving..."));
             shop.getAuthenticator().exportUsers();
             System.gc();
             mainFrame.dispose();

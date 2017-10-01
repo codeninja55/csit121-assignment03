@@ -1,9 +1,10 @@
 package application.model.purchase;
 
-import application.model.dao.DataStoreDAO;
 import application.model.Generator;
-import application.model.dao.ImportFromCSV;
 import application.model.category.Category;
+import application.model.dao.CSV;
+import application.model.dao.DataStoreDAO;
+import application.model.dao.ImportFromCSV;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,21 +13,16 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class PurchasesImport implements ImportFromCSV {
-    private static final String DEFAULT_SEPARATOR = ",";
     private final Pattern categoryRegex = Pattern.compile("\\[(.*?)]");
-    private BufferedReader input;
 
-    public void executeImport(DataStoreDAO db, BufferedReader reader) throws IOException {
-        this.input = reader;
-        String line;
-
-        while((line = input.readLine()) != null) {
+    public void executeImport(DataStoreDAO dataStore, BufferedReader reader) throws IOException {
+        reader.lines().forEach(line -> {
             HashMap<Integer, Category> categories = new HashMap<>();
             String categoriesAttr[];
-            String[] readLine = line.split(DEFAULT_SEPARATOR, 6);
+            String[] readLine = line.split(CSV.DEFAULT_SEPARATOR_STR, 6);
             int receiptID = Integer.parseInt(readLine[2]);
             // readLine[0] = purchaseTime | [1] = receiptID | [2] = cardType | [3] = cardID
-            // [4] = categories --> {[Category],[Category 2],..[Category n]}
+            // [4] = categoriesMap --> {[Category],[Category 2],..[Category n]}
             // Get the substring between the { } --> [Category],[Category 2],..[Category n]
             String categoriesLine = readLine[5].substring(1, readLine[5].lastIndexOf("}"));
             Matcher categoryRegexMatch = categoryRegex.matcher(categoriesLine);
@@ -34,27 +30,19 @@ public class PurchasesImport implements ImportFromCSV {
                 // Match the string with the pattern defined to extract a group [...] then
                 // get a substring of that to remove the [ ].
                 String categoryStrObj = categoryRegexMatch.group().substring(1, categoryRegexMatch.group().lastIndexOf("]"));
+                System.out.println(categoryStrObj);
                 // The string is now just id,name,description,amount which can be split on the delimiter
                 // to put into an array to be used.
-                categoriesAttr = categoryStrObj.split(DEFAULT_SEPARATOR);
+                categoriesAttr = categoryStrObj.split(CSV.DEFAULT_SEPARATOR_STR);
                 categories.put(Integer.parseInt(categoriesAttr[0]),
                         new Category(Integer.parseInt(categoriesAttr[0]), categoriesAttr[1],
                                 categoriesAttr[2], Double.parseDouble(categoriesAttr[3])));
             }
 
             Purchase importedPurchase = new Purchase(readLine[1], receiptID, readLine[3], readLine[4], categories);
-
             Generator.addReceiptID(receiptID);
-            db.createPurchase(importedPurchase);
-        }
-        closeFile();
-    }
-
-    private void closeFile() {
-        try {
-            input.close();
-        } catch (IOException e) {
-            System.err.println("IOException: " + e.getMessage());
-        }
+            dataStore.createPurchase(importedPurchase);
+        });
+        reader.close();
     }
 }

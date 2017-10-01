@@ -1,23 +1,25 @@
 package application.model.dao;
 
 import javax.swing.*;
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.*;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.stream.Collectors;
 
-public class AuthenticatorDAO extends DAO {
+public class AuthenticatorDAO {
     private static final String SALT = "#M@rV3!4v3n9eRs";
     private final Path PROGRAM_SETTINGS = Paths.get("com.cn55.marvel/src/persistent_data/settings.txt");
+    private HashMap<String, String> users;
 
     public AuthenticatorDAO() {
-        super.users = new LinkedHashMap<>();
+        this.users = new LinkedHashMap<>();
     }
 
     /*============================== IMPORT USERS ==============================*/
@@ -28,18 +30,19 @@ public class AuthenticatorDAO extends DAO {
                     String[] lineArr = line.split(":");
                     users.put(lineArr[0], lineArr[1]);
                 });
-
                 return null;
             }
         };
-
         importWorker.execute();
     }
 
     public void exportUsers() {
         SwingWorker<Void, Void> exportWorker = new SwingWorker<Void, Void>() {
             protected Void doInBackground() throws Exception {
-                BufferedWriter writer = Files.newBufferedWriter(PROGRAM_SETTINGS, StandardOpenOption.WRITE);
+                BufferedWriter writer = Files.newBufferedWriter(PROGRAM_SETTINGS, Charset.defaultCharset(),
+                                                                StandardOpenOption.CREATE,
+                                                                StandardOpenOption.WRITE);
+
                 users.entrySet().parallelStream().forEach((entry) -> {
                     try {
                         writer.append(entry.getKey()).append(":").append(entry.getValue());
