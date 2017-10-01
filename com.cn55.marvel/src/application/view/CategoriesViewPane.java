@@ -1,7 +1,7 @@
 package application.view;
 
-import application.model.DataObservable;
-import application.model.DataObserver;
+import application.model.dao.DataObservable;
+import application.model.dao.DataObserver;
 import application.model.category.Category;
 import application.view.formbuilder.factory.CategoriesForm;
 import application.view.formbuilder.factory.DeleteCategoryForm;
@@ -79,8 +79,7 @@ public class CategoriesViewPane extends JPanel implements DataObserver {
     }
 
     public void update() {
-        ArrayList<Category> allCategories = new ArrayList<>(dataDAO.getCategoriesUpdate(this).values());
-        categoriesTableModel.setData(allCategories);
+        categoriesTableModel.setData(new ArrayList<>(dataDAO.getCategoriesUpdate(this).values()));
         categoriesTableModel.fireTableDataChanged();
     }
 }

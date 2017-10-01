@@ -1,4 +1,4 @@
-package application.model;
+package application.model.dao;
 
 @SuppressWarnings("ALL")
 public interface DataObserver {

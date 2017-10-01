@@ -29,13 +29,12 @@ class Assignment2 {
         } catch (IOException|FontFormatException e) {
             //e.printStackTrace();
         }
-
         uiChanges();
-
         Shop shop = Shop.getShopInstance();
         shop.getDataStore().importData();
+        shop.getAuthenticator().importUsers();
 
-        java.awt.EventQueue.invokeLater(() -> new Program(shop));
+        java.awt.EventQueue.invokeLater(Program::new);
     }
 
     private static void uiChanges() {

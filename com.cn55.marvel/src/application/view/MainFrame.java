@@ -119,6 +119,7 @@ public class MainFrame extends JFrame {
         logout.addActionListener(e -> {
             setSummaryViewPaneEnabled(false);
             startViewPane.getLogoutBtn().setEnabled(false);
+            startViewPane.setDefaults();
             tabPane.setSelectedIndex(0);
         });
 

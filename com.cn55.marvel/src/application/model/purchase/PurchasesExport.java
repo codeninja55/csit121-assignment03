@@ -1,56 +1,49 @@
 package application.model.purchase;
 
-import application.model.DataDAO;
-import application.model.ExportToCSV;
 import application.model.card.CardType;
 import application.model.category.Category;
+import application.model.dao.CSV;
+import application.model.dao.DataStoreDAO;
+import application.model.dao.ExportToCSV;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.time.Instant;
 
 public class PurchasesExport implements ExportToCSV {
-    private static final char DEFAULT_SEPARATOR = ',';
-    private BufferedWriter output;
+    public void exportData(DataStoreDAO db, BufferedWriter writer) throws IOException {
+        db.getAllPurchases().values().parallelStream().forEach(p -> {
+            try {
+                int lastLine = 1;
+                writer.append(Instant.now().toString()).append(CSV.DEFAULT_SEPARATOR)
+                        .append(p.getPurchaseTimeStr()).append(CSV.DEFAULT_SEPARATOR)
+                        .append(Integer.toString(p.getReceiptID())).append(CSV.DEFAULT_SEPARATOR)
+                        .append(p.getCardType()).append(CSV.DEFAULT_SEPARATOR);
 
-    public void exportData(DataDAO db, BufferedWriter writer) throws IOException {
-        this.output = writer;
+                writer.append((p.getCardType().equals(CardType.Cash.name)) ? "" : p.getCardID());
 
-        for (Purchase p : db.getAllPurchases().values()) {
-            int lastLine = 1;
-            output.append(Instant.now().toString()).append(DEFAULT_SEPARATOR)
-                    .append(p.getPurchaseTimeStr()).append(DEFAULT_SEPARATOR)
-                    .append(Integer.toString(p.getReceiptID())).append(DEFAULT_SEPARATOR)
-                    .append(p.getCardType()).append(DEFAULT_SEPARATOR);
+                writer.append(ExportToCSV.DEFAULT_SEPARATOR).append("{");
+                for (Category c : p.getCategories().values()) {
+                    writer.append("[")
+                            .append(Integer.toString(c.getId())).append(CSV.DEFAULT_SEPARATOR)
+                            .append(c.getName()).append(CSV.DEFAULT_SEPARATOR)
+                            .append(c.getDescription()).append(CSV.DEFAULT_SEPARATOR)
+                            .append(Double.toString(c.getAmount())).append("]");
 
-            output.append((p.getCardType().equals(CardType.Cash.name)) ? "" : p.getCardID());
-
-            output.append(DEFAULT_SEPARATOR).append("{");
-            for (Category c : p.getCategories().values()) {
-                output.append("[")
-                        .append(Integer.toString(c.getId())).append(DEFAULT_SEPARATOR)
-                        .append(c.getName()).append(DEFAULT_SEPARATOR)
-                        .append(c.getDescription()).append(DEFAULT_SEPARATOR)
-                        .append(Double.toString(c.getAmount())).append("]");
-
-                if (lastLine != p.getCategories().size()) {
-                    output.append(DEFAULT_SEPARATOR);
-                    lastLine++;
+                    if (lastLine != p.getCategories().size()) {
+                        writer.append(CSV.DEFAULT_SEPARATOR);
+                        lastLine++;
+                    }
                 }
+
+                writer.append("}");
+                writer.newLine();
+            } catch (IOException e) {
+                System.err.println("IOException" + e.getMessage());
             }
-            output.append("}");
-            output.newLine();
-        }
+        });
 
-        closeFile();
-    }
-
-    private void closeFile() {
-        try {
-            output.flush();
-            output.close();
-        } catch (IOException e) {
-            System.err.println("IOException: " + e.getMessage());
-        }
+        writer.flush();
+        writer.close();
     }
 }

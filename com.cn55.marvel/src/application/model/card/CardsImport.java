@@ -1,8 +1,8 @@
 package application.model.card;
 
-import application.model.DataDAO;
 import application.model.Generator;
-import application.model.ImportFromCSV;
+import application.model.dao.DataStoreDAO;
+import application.model.dao.ImportFromCSV;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,7 +11,7 @@ public class CardsImport implements ImportFromCSV {
     private static final String DEFAULT_SEPARATOR = ",";
     private BufferedReader input;
 
-    public void executeImport(DataDAO db, BufferedReader reader) throws IOException {
+    public void executeImport(DataStoreDAO dataStore, BufferedReader reader) throws IOException {
         this.input = reader;
         String line;
 
@@ -33,7 +33,7 @@ public class CardsImport implements ImportFromCSV {
 
             Generator.updateCardIDCounter();
             assert importCard != null;
-            db.createCard(importCard);
+            dataStore.createCard(importCard);
         }
         closeFile();
     }

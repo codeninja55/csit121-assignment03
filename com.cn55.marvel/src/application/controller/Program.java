@@ -1,6 +1,6 @@
 package application.controller;
 
-import application.model.DataDAO;
+import application.model.dao.DataStoreDAO;
 import application.model.Shop;
 import application.model.card.*;
 import application.model.category.Category;
@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 @SuppressWarnings("SimplifyStreamApiCallChains")
 public class Program {
     private final Shop shop;
-    private final DataDAO db;
+    private final DataStoreDAO db;
     private final MainFrame mainFrame;
     private final JTabbedPane tabPane;
     private final CardViewPane cardViewPane;
@@ -39,8 +39,8 @@ public class Program {
     private final CategoriesViewPane categoriesViewPane;
     private final SummaryViewPane summaryViewPane;
 
-    public Program(Shop shop) {
-        this.shop = shop;
+    public Program() {
+        this.shop = Shop.getShopInstance();
         this.db = shop.getDataStore();
 
         this.mainFrame = new MainFrame();
@@ -105,11 +105,13 @@ public class Program {
 
         mainFrame.getStartViewPane().setListener((username, password, signup) -> {
             if (signup) {
-                db.signup(username, password);
+                shop.getAuthenticator().signup(username, password);
+                mainFrame.getStartViewPane().setDefaults();
             } else {
-                if (db.login(username, password)) {
+                if (shop.getAuthenticator().login(username, password)) {
                     mainFrame.setSummaryViewPaneEnabled(true);
                     mainFrame.getStartViewPane().getLogoutBtn().setEnabled(true);
+                    mainFrame.getStartViewPane().setDefaults();
                 } else {
                     System.out.println("NOT AUTHENTICATED");
                 }
@@ -194,7 +196,7 @@ public class Program {
                 final String cardID = e.getID();
                 String[] btnOptions = {"Yes","No"};
                 String message = "Are you sure you want to DELETE card: " + cardID + "\nThis cannot be undone."
-                        + "\n\nAll purchases for this card will be changed to CASH status.\n\n";
+                        + "\n\nAll purchasesMap for this card will be changed to CASH status.\n\n";
 
                 showResults(cardViewPane, printCard(cardID, "DELETE CARD?"));
                 int confirm = JOptionPane.showOptionDialog(mainFrame, // frame, can be null
@@ -355,7 +357,7 @@ public class Program {
 
                 String[] btnOptions = {"Yes","Cancel"};
                 String message = "Are you sure you want to DELETE Category: " + e.getID() + "\nThis cannot be undone."
-                        + "\n\nAll purchases for this category will be moved to Other category.\n\n";
+                        + "\n\nAll purchasesMap for this category will be moved to Other category.\n\n";
 
                 int confirm = JOptionPane.showOptionDialog(mainFrame, // frame, can be null
                         message, // message
@@ -528,6 +530,7 @@ public class Program {
 
         if (response == 0) {
             db.exportData(new ProgressDialog(mainFrame, "Saving Data", "Saving..."));
+            shop.getAuthenticator().exportUsers();
             System.gc();
             mainFrame.dispose();
         } else if (response == 1) {

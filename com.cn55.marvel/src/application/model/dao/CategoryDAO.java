@@ -1,4 +1,6 @@
-package application.model.category;
+package application.model.dao;
+
+import application.model.category.Category;
 
 import java.util.HashMap;
 

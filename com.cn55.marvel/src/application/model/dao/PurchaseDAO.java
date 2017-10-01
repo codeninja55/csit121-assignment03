@@ -1,4 +1,6 @@
-package application.model.purchase;
+package application.model.dao;
+
+import application.model.purchase.Purchase;
 
 import java.util.HashMap;
 

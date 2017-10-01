@@ -1,4 +1,4 @@
-package application.model;
+package application.model.dao;
 
 import application.model.card.Card;
 import application.model.category.Category;

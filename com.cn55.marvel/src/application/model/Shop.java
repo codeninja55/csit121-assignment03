@@ -2,6 +2,8 @@ package application.model;
 
 import application.model.card.*;
 import application.model.category.Category;
+import application.model.dao.AuthenticatorDAO;
+import application.model.dao.DataStoreDAO;
 import application.model.purchase.Purchase;
 
 import java.util.HashMap;
@@ -11,11 +13,13 @@ import java.util.HashMap;
 @SuppressWarnings("ConstantConditions")
 public class Shop {
     private static Shop shop;
-    private final DataDAO db;
+    private final DataStoreDAO db;
+    private final AuthenticatorDAO authenticator;
 
     /*============================== CONSTRUCTORS  ==============================*/
     private Shop() {
-        this.db = new DataDAO();
+        this.db = DataStoreDAO.getDataStoreInstance();
+        this.authenticator = new AuthenticatorDAO();
     }
 
     // Provide global point of access
@@ -29,6 +33,9 @@ public class Shop {
 
     /*============================== MUTATORS  ==============================*/
     public void makeCategory(Category category) {
+        // must add category to each purchase
+
+
         db.createCategory(category);
     }
 
@@ -42,7 +49,7 @@ public class Shop {
                 Purchase newPurchase = new Purchase(cardID, cardType, categories, receiptID);
                 card.calcPoints(newPurchase.getCategoriesTotal());
 
-                if(card instanceof AdvancedCard)
+                if (card instanceof AdvancedCard)
                     ((AdvancedCard)card).calcBalance(newPurchase.getCategoriesTotal());
 
                 db.createPurchase(newPurchase);
@@ -93,7 +100,8 @@ public class Shop {
     }
 
     /*============================== ACCESSORS ==============================*/
-    public DataDAO getDataStore() {
+    public DataStoreDAO getDataStore() {
         return db;
     }
+    public AuthenticatorDAO getAuthenticator() { return authenticator; }
 }

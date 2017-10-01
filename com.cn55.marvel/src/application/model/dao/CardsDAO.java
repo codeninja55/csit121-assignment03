@@ -1,4 +1,6 @@
-package application.model.card;
+package application.model.dao;
+
+import application.model.card.Card;
 
 import java.util.HashMap;
 
