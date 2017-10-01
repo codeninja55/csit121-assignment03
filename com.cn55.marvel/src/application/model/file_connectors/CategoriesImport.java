@@ -3,16 +3,18 @@ package application.model.file_connectors;
 import application.model.Generator;
 import application.model.category.Category;
 import application.model.dao.DataStoreDAO;
-import application.model.exceptions.ImportEmptyException;
+import application.model.exceptions.ImportCategoriesException;
+import application.model.exceptions.ImportException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 
-public class CategoriesImport implements ImportFromCSV {
-    public void executeImport(DataStoreDAO dataStore, BufferedReader reader) throws ImportEmptyException, IOException {
+public class CategoriesImport extends Throwable implements ImportFromCSV {
+    public void executeImport(DataStoreDAO dataStore, BufferedReader reader) throws ImportException, IOException {
         if (reader.lines().count() == 0) {
             reader.close();
-            throw new ImportEmptyException("CategoriesStorage.csv is empty");
+            dataStore.createCategory(new Category("Other", "Default category"));
+            throw new ImportException("CategoriesStorage.csv is empty", this);
         } else {
             reader.lines().forEach(line -> {
                 String[] readLine = line.split(CSV.DEFAULT_SEPARATOR_STR);
