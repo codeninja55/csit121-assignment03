@@ -1,7 +1,6 @@
-package application.model.card;
+package application.model.dao;
 
-import application.model.dao.DataStoreDAO;
-import application.model.dao.ExportToCSV;
+import application.model.card.AdvancedCard;
 
 import java.io.BufferedWriter;
 import java.io.IOException;

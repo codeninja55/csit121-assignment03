@@ -8,6 +8,6 @@ import java.util.HashMap;
 public interface CardsDAO {
     void createCard(Card card);
     Card getCard(String id);
-    HashMap<String, Card> getAllCards();
+    HashMap<String, Card> getOrigCardsMap();
     void deleteCard(String id);
 }

@@ -13,12 +13,12 @@ import java.util.HashMap;
 @SuppressWarnings("ConstantConditions")
 public class Shop {
     private static Shop shop;
-    private final DataStoreDAO db;
+    private final DataStoreDAO dataStore;
     private final AuthenticatorDAO authenticator;
 
     /*============================== CONSTRUCTORS  ==============================*/
     private Shop() {
-        this.db = DataStoreDAO.getDataStoreInstance();
+        this.dataStore = DataStoreDAO.getDataStoreInstance();
         this.authenticator = new AuthenticatorDAO();
     }
 
