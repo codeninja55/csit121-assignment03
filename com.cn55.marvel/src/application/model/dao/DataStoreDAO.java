@@ -4,15 +4,12 @@ import application.model.Generator;
 import application.model.card.Card;
 import application.model.category.Category;
 import application.model.exceptions.ImportException;
-import application.model.exceptions.PurchasesEmptyException;
 import application.model.file_connectors.*;
 import application.model.purchase.Purchase;
 import application.view.custom.components.ProgressDialog;
 
 import javax.swing.*;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -52,7 +49,7 @@ public class DataStoreDAO implements DataObservable, CardsDAO, PurchaseDAO, Cate
     }
 
     /*============================== FILE CONNECTORS ==============================*/
-    public void importData() {
+    public void importData() throws IOException {
         /* Strategy Design Pattern - Implementation of writing and reading buried in concrete classes */
         ImportFromCSV categoriesImporter = new CategoriesImport();
         ImportFromCSV cardsImporter = new CardsImport();
@@ -61,17 +58,26 @@ public class DataStoreDAO implements DataObservable, CardsDAO, PurchaseDAO, Cate
         SwingWorker<Void, Integer> importWorker = new SwingWorker<Void, Integer>() {
             protected Void doInBackground() throws Exception {
                 try {
-                    categoriesImporter.executeImport(DataStoreDAO.this, Files.newBufferedReader(CATEGORIES_LOG_PATH, Charset.defaultCharset()));
-                    cardsImporter.executeImport(DataStoreDAO.this, Files.newBufferedReader(CARDS_LOG_PATH, Charset.defaultCharset()));
-                    purchasesImporter.executeImport(DataStoreDAO.this, Files.newBufferedReader(PURCHASES_LOG_PATH, Charset.defaultCharset()));
+                    categoriesImporter.executeImport(DataStoreDAO.this, CATEGORIES_LOG_PATH);
                 } catch (ImportException e) {
                     System.err.println("Import Error: " + e.getMessage());
                     System.err.println("Caused by: " + e.getCause());
-                } catch (FileNotFoundException e) {
-                    System.err.println("FileNotFoundException: " + e.getMessage());
-                } catch (IOException e) {
-                    System.err.println("IOException: " + e.getMessage());
                 }
+
+                try {
+                    cardsImporter.executeImport(DataStoreDAO.this, CARDS_LOG_PATH);
+                } catch (ImportException e) {
+                    System.err.println("Import Error: " + e.getMessage());
+                    System.err.println("Caused by: " + e.getCause());
+                }
+
+                try {
+                    purchasesImporter.executeImport(DataStoreDAO.this, PURCHASES_LOG_PATH);
+                } catch (ImportException e) {
+                    System.err.println("Import Error: " + e.getMessage());
+                    System.err.println("Caused by: " + e.getCause());
+                }
+
                 return null;
             }
 
@@ -214,25 +220,9 @@ public class DataStoreDAO implements DataObservable, CardsDAO, PurchaseDAO, Cate
     }
     // NOTE: This returns a shallow copy only
     public LocalDateTime getFirstPurchaseDate(DataObserver who) {
-        if (firstPurchaseDate == null) {
-            try {
-                throw new PurchasesEmptyException("No purchases have been imported.\nTherefore, there are no first purchase dates");
-            } catch (PurchasesEmptyException e) {
-                return LocalDateTime.now();
-            }
-        } else {
-            return firstPurchaseDate;
-        }
+        return (firstPurchaseDate == null) ? LocalDateTime.now() : firstPurchaseDate;
     }
     public LocalDateTime getLastPurchaseDate(DataObserver who) {
-        if (lastPurchaseDate == null) {
-            try {
-                throw new PurchasesEmptyException("No purchases have been imported.\nTherefore, there are no latest purchase date.");
-            } catch (PurchasesEmptyException e) {
-                return LocalDateTime.now();
-            }
-        } else {
-            return lastPurchaseDate;
-        }
+        return  (lastPurchaseDate == null) ? LocalDateTime.now() : lastPurchaseDate;
     }
 }
