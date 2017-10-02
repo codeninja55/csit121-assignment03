@@ -1,5 +1,7 @@
 package application.model.card;
 
+import java.time.Instant;
+
 @SuppressWarnings({"WeakerAccess", "unused"})
 public abstract class AdvancedCard extends Card {
     protected final String name;
@@ -26,5 +28,9 @@ public abstract class AdvancedCard extends Card {
     public String getName() { return name; }
     public String getEmail() { return email; }
     public double getBalance() { return balance; }
+    public String toStringDelim() {
+        return String.format("%s,%s,%s,%s,%s,%.4f,%.4f", Instant.now().toString(), id, cardType, name, email, points, balance);
+    }
+
     public boolean equals(AdvancedCard other) { return this.name.equals(other.name); }
 }

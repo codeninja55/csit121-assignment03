@@ -1,5 +1,7 @@
 package application.model.card;
 
+import java.time.Instant;
+
 @SuppressWarnings("FieldCanBeLocal")
 public class BasicCard extends AdvancedCard {
     private final double POINTS_RATE = 0.015;

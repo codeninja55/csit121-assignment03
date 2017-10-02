@@ -31,6 +31,7 @@ public abstract class Card implements Comparable<Card> {
     public abstract String getCardType();
     public double getPoints() { return points; }
     public abstract String toString();
+    public abstract String toStringDelim();
     @SuppressWarnings("unused")
     public boolean equals(Card other) { return this.id.equals(other.id); }
     public int compareTo(Card o) {

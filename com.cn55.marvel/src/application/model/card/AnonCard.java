@@ -1,5 +1,7 @@
 package application.model.card;
 
+import java.time.Instant;
+
 public class AnonCard extends Card {
     private static final double POINTS_RATE = 0.01;
 
@@ -31,5 +33,8 @@ public class AnonCard extends Card {
                 "Card Type", this.cardType,
                 "Card ID", super.id,
                 "Points", super.points);
+    }
+    public String toStringDelim() {
+        return String.format("%s,%s,%s,,,%.4f,", Instant.now().toString(), id, cardType, points);
     }
 }
