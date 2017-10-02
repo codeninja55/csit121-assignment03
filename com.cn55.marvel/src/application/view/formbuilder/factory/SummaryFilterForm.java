@@ -25,6 +25,7 @@ public class SummaryFilterForm extends JPanel implements FormFactory, SummaryVie
     private LocalDate lastPurchaseDate;
     private final MaterialSlider daySlider;
     private final MaterialSlider hourSlider;
+    private final MaterialSlider meridiemSlider;
     private SummaryListener listener;
 
     SummaryFilterForm(SummaryViewPane parent, SummaryAnalyticsPane analyticsPane) {
@@ -46,7 +47,8 @@ public class SummaryFilterForm extends JPanel implements FormFactory, SummaryVie
         FormLabel daySliderLabel = new FormLabel("Filter by Day");
         daySlider = new MaterialSlider(JSlider.HORIZONTAL,0,7,0);
         FormLabel hourSliderLabel = new FormLabel("Filter by Hour");
-        hourSlider = new MaterialSlider(JSlider.HORIZONTAL,0,24,24);
+        hourSlider = new MaterialSlider(JSlider.HORIZONTAL,0,12,0);
+        meridiemSlider = new MaterialSlider(JSlider.HORIZONTAL, 1,2, 1);
         FormButton filterBtn = new FormButton("Filter", IconFactory.filterIcon());
         FormButton clearBtn = new FormButton("Clear", IconFactory.clearIcon());
 
@@ -62,9 +64,14 @@ public class SummaryFilterForm extends JPanel implements FormFactory, SummaryVie
         daySlider.setValue(0);
 
         Hashtable<Integer, JComponent> hoursSliderValues = new Hashtable<>();
-        hoursSliderValues.put(24, new FormLabel("Any", ColorFactory.grey50(), FontFactory.sliderFont()));
-        IntStream.range(0,24).forEachOrdered(i -> hoursSliderValues.put(i, new FormLabel(Integer.toString(i), ColorFactory.grey50(), FontFactory.sliderFont())));
+        hoursSliderValues.put(0, new FormLabel("Any", ColorFactory.grey50(), FontFactory.sliderFont()));
+        IntStream.range(1,13).forEachOrdered(i -> hoursSliderValues.put(i, new FormLabel(Integer.toString(i), ColorFactory.grey50(), FontFactory.sliderFont())));
         hourSlider.setLabelTable(hoursSliderValues);
+
+        Hashtable<Integer, JComponent> meridiemSliderValues = new Hashtable<>();
+        meridiemSliderValues.put(1, new FormLabel("AM", ColorFactory.grey50(), FontFactory.sliderFont()));
+        meridiemSliderValues.put(2, new FormLabel("PM", ColorFactory.grey50(), FontFactory.sliderFont()));
+        meridiemSlider.setLabelTable(meridiemSliderValues);
 
         /* FORM AREA */
         GridBagConstraints gc = new GridBagConstraints();
@@ -119,13 +126,22 @@ public class SummaryFilterForm extends JPanel implements FormFactory, SummaryVie
         gc.gridy++;
         gc.insets = new Insets(20, 0,0,0);
         hourSliderLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        hourSlider.setInverted(true);
         filterForm.add(hourSliderLabel, gc);
 
-        gc.anchor = GridBagConstraints.CENTER;
-        gc.gridy++;
-        gc.insets = new Insets(10, 0,0,0);
+        gc.anchor = GridBagConstraints.LINE_START;
+        gc.fill = GridBagConstraints.NONE;
+        gc.gridx = 0; gc.gridy++; gc.weightx = 1;
+        gc.insets = new Insets(10, 0,0,7);
         filterForm.add(hourSlider, gc);
+
+        gc.anchor = GridBagConstraints.LINE_END;
+        gc.gridx = 1; gc.weightx = 1;
+        gc.insets = new Insets(10, 7,0,0);
+        meridiemSlider.setMajorTickSpacing(1);
+        meridiemSlider.setMinorTickSpacing(1);
+        meridiemSlider.setPreferredSize(new Dimension(95, 70));
+        meridiemSlider.setEnabled(false);
+        filterForm.add(meridiemSlider, gc);
 
         /*========== BUTTON ROW ==========*/
         gc.anchor = GridBagConstraints.FIRST_LINE_END;
@@ -147,6 +163,15 @@ public class SummaryFilterForm extends JPanel implements FormFactory, SummaryVie
         Arrays.stream(filterForm.getComponents()).filter(c -> c instanceof FormLabel || c instanceof FormButton)
                 .forEach(c -> c.setVisible(true));
 
+        hourSlider.addChangeListener(e -> {
+            JSlider source = (JSlider)e.getSource();
+            if (source.getValue() != 0) {
+                meridiemSlider.setEnabled(true);
+            } else {
+                meridiemSlider.setEnabled(false);
+            }
+        });
+
         cancelBtn.addActionListener(e -> {
             super.setVisible(false);
             dateErrLabel.setVisible(false);
@@ -167,8 +192,10 @@ public class SummaryFilterForm extends JPanel implements FormFactory, SummaryVie
         });
 
         clearBtn.addActionListener(e -> {
-            hourSlider.setValue(24);
+            hourSlider.setValue(0);
             daySlider.setValue(0);
+            meridiemSlider.setValue(0);
+            meridiemSlider.setEnabled(false);
             dateStartPicker.setDate(firstPurchaseDate);
             dateEndPicker.setDate(lastPurchaseDate);
             dateErrLabel.setVisible(false);
@@ -190,7 +217,13 @@ public class SummaryFilterForm extends JPanel implements FormFactory, SummaryVie
     /*============================== SUMMARY VIEW METHODS ==============================*/
     public int getDaysOption() { return daySlider.getValue(); }
     public int getHoursOption() {
-        return hourSlider.getValue();
+        if (hourSlider.getValue() == 0) {
+            return 24;
+        } else if (meridiemSlider.getValue() == 1) {
+            return (hourSlider.getValue() == 12) ? 0 : hourSlider.getValue();
+        } else {
+            return hourSlider.getValue() + 11;
+        }
     }
     public LocalDate getDateFromOption() { return dateStartPicker.getDate(); }
     public LocalDate getDateToOption() { return dateEndPicker.getDate(); }
