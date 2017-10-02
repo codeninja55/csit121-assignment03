@@ -61,6 +61,7 @@ public class MaterialDatePicker extends DatePicker {
         settings.setFormatForDatesBeforeCommonEra("uuuu-MM-dd");
         settings.setFirstDayOfWeek(DayOfWeek.MONDAY);
         settings.setAllowKeyboardEditing(false);
+        settings.setVisibleClearButton(false);
 
         setSettings(settings);
     }
