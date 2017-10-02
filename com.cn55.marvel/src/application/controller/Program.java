@@ -24,6 +24,7 @@ import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -48,18 +49,16 @@ public class Program {
 
         /* DataObserver Design Pattern - Registration and initial update calls */
         this.cardViewPane = mainFrame.getCardViewPane();
+        this.purchaseViewPane = mainFrame.getPurchaseViewPane();
+        this.categoriesViewPane = mainFrame.getCategoriesViewPane();
+        this.summaryViewPane = mainFrame.getSummaryViewPane();
+
         db.register(cardViewPane);
         cardViewPane.setSubject(db);
-
-        this.purchaseViewPane = mainFrame.getPurchaseViewPane();
         db.register(purchaseViewPane);
         purchaseViewPane.setSubject(db);
-
-        this.categoriesViewPane = mainFrame.getCategoriesViewPane();
         db.register(categoriesViewPane);
         categoriesViewPane.setSubject(db);
-
-        this.summaryViewPane = mainFrame.getSummaryViewPane();
         db.register(summaryViewPane);
         summaryViewPane.setSubject(db);
         db.register(summaryViewPane.getAnalyticsPane());
