@@ -1,7 +1,7 @@
 package application.controller;
 
 import application.model.dao.DataStoreDAO;
-import application.model.Shop;
+import application.Shop;
 import application.model.card.*;
 import application.model.category.Category;
 import application.model.purchase.Purchase;
@@ -24,7 +24,6 @@ import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;

@@ -3,7 +3,7 @@ package application;
 
 import application.model.DataDAO;
 import application.model.Generator;
-import application.model.Shop;
+import application.Shop;
 import application.model.card.AnonCard;
 import application.model.card.BasicCard;
 import application.model.card.PremiumCard;

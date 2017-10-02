@@ -105,8 +105,7 @@ public class DataStoreDAO implements DataObservable, CardsDAO, PurchaseDAO, Cate
                     try {
                         Thread.sleep(200);
                     } catch (InterruptedException e) {
-                        // When the user presses cancel,
-                        // the exception will break the loop and progress never reaches 100
+                        // When the user presses cancel, the exception will break the loop and progress never reaches 100
                         break;
                     }
                     progressBar.setValue(progress += 10);
@@ -116,6 +115,7 @@ public class DataStoreDAO implements DataObservable, CardsDAO, PurchaseDAO, Cate
                 // While its working in the background, the GUI is not locked up
                 if (progress == 100) {
                     try {
+                        // Explicit call but implicitly, Files.newBufferedWriter uses CREATE | TRUNCATE_EXISTING | WRITE
                         categoriesExport.exportData(DataStoreDAO.this, Files.newBufferedWriter(CATEGORIES_LOG_PATH, StandardOpenOption.CREATE,
                                 StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.WRITE));
                         cardsExport.exportData(DataStoreDAO.this, Files.newBufferedWriter(CARDS_LOG_PATH));

@@ -1,4 +1,4 @@
-package application.model;
+package application;
 
 import application.model.card.*;
 import application.model.category.Category;
@@ -9,7 +9,8 @@ import application.model.purchase.Purchase;
 import java.util.HashMap;
 
 /* SINGLETON DESIGN PATTERN */
-
+/* BUSINESS LOGIC LAYER */
+// All logic that a shop would require should be implemented in this method instead of the DataStoreDAO
 @SuppressWarnings("ConstantConditions")
 public class Shop {
     private static Shop shop;
