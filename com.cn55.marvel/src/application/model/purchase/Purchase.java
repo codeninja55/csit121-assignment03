@@ -3,9 +3,11 @@ package application.model.purchase;
 import application.model.card.CardType;
 import application.model.category.Category;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import java.util.stream.Collectors;
 
 @SuppressWarnings("SameParameterValue")
 public class Purchase implements Comparable<Purchase> {
@@ -80,7 +82,7 @@ public class Purchase implements Comparable<Purchase> {
 
     public LocalDateTime getPurchaseTime() { return purchaseTime; }
 
-    public String getPurchaseTimeStr() { return purchaseTime.format(DATE_TIME_FORMAT); }
+    public String getPurchaseTimeFormattedStr() { return purchaseTime.format(DATE_TIME_FORMAT); }
 
     public double getCategoriesTotal() {
         return categories.values().stream().mapToDouble(Category::getAmount).sum();
@@ -92,10 +94,17 @@ public class Purchase implements Comparable<Purchase> {
                 "Receipt ID: ", receiptID,
                 "Card Type: ", cardType,
                 "Card ID: ", cardID,
-                "Purchase Time: ", getPurchaseTimeStr());
+                "Purchase Time: ", getPurchaseTimeFormattedStr());
 
         categories.values().forEach(c -> secondOutput.append(String.format("%n%s$%.2f", (c.getName() + ": "), c.getAmount())));
         return firstOutput + secondOutput;
+    }
+
+    public String toStringDelim() {
+        String cardID = (this.cardType.equals(CardType.Cash.name)) ? "" : this.cardID;
+        String categoriesStr = categories.values().stream().map(c -> "[" + c.toStringDelim() + "],").collect(Collectors.joining());
+        return String.format("%s,%s,%d,%s,%s,{%s}", Instant.now().toString(), getPurchaseTimeFormattedStr(), receiptID,
+                cardType, cardID, categoriesStr);
     }
 
     public int compareTo(Purchase o) { return this.purchaseTime.compareTo(o.purchaseTime); }
