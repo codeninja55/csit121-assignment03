@@ -1,7 +1,8 @@
-package application.view.summary;
+package application.view.formbuilder.factory;
 
 import application.view.custom.components.*;
-import application.view.formbuilder.factory.FormFactory;
+import application.view.summary.SummaryAnalyticsPane;
+import application.view.summary.SummaryViewPane;
 import styles.ColorFactory;
 import styles.CustomBorderFactory;
 import styles.FontFactory;
@@ -179,7 +180,7 @@ public class SummaryFilterForm extends JPanel implements FormFactory, SummaryVie
     /*============================== MUTATORS  ==============================*/
     public void setListener(SummaryListener listener) { this.listener = listener; }
 
-    void setPurchaseDateBounds(LocalDate firstPurchaseDate, LocalDate lastPurchaseDate) {
+    public void setPurchaseDateBounds(LocalDate firstPurchaseDate, LocalDate lastPurchaseDate) {
         this.firstPurchaseDate = firstPurchaseDate;
         dateStartPicker.setDate(firstPurchaseDate);
         this.lastPurchaseDate = lastPurchaseDate;
@@ -188,7 +189,9 @@ public class SummaryFilterForm extends JPanel implements FormFactory, SummaryVie
 
     /*============================== SUMMARY VIEW METHODS ==============================*/
     public int getDaysOption() { return daySlider.getValue(); }
-    public int getHoursOption() { return hourSlider.getValue(); }
+    public int getHoursOption() {
+        return hourSlider.getValue();
+    }
     public LocalDate getDateFromOption() { return dateStartPicker.getDate(); }
     public LocalDate getDateToOption() { return dateEndPicker.getDate(); }
 }

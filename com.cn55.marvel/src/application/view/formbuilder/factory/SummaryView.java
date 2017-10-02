@@ -1,4 +1,4 @@
-package application.view.summary;
+package application.view.formbuilder.factory;
 
 import java.time.LocalDate;
 

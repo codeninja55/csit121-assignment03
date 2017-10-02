@@ -7,6 +7,8 @@ import application.model.purchase.Purchase;
 import application.view.custom.components.Toolbar;
 import application.view.custom.components.ToolbarButton;
 import application.view.custom.components.ToolbarButtonListener;
+import application.view.formbuilder.factory.FormFactory;
+import application.view.formbuilder.factory.SummaryFilterForm;
 import application.view.table.models.CardTableModel;
 import application.view.table.models.PurchaseTableModel;
 import styles.ColorFactory;
@@ -36,7 +38,7 @@ public class SummaryViewPane extends JPanel implements DataObserver {
         ToolbarButton analyticsBtn = new ToolbarButton("Filter Data", IconFactory.analyticsIcon());
 
         analyticsPane = new SummaryAnalyticsPane();
-        filterForm = new SummaryFilterForm(this, analyticsPane);
+        filterForm = FormFactory.createSummaryFilterForm(this, analyticsPane);
         purchasesTableModel = new PurchaseTableModel();
         purchasesTable = new JTable(purchasesTableModel);
         TableFormatterFactory.purchasesTableFormatter(purchasesTable);

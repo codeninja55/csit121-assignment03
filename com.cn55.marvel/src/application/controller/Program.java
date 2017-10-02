@@ -14,8 +14,8 @@ import application.view.PurchaseViewPane;
 import application.view.custom.components.ProgressDialog;
 import application.view.formbuilder.factory.*;
 import application.view.summary.SummaryAnalyticsPane;
-import application.view.summary.SummaryFilterForm;
-import application.view.summary.SummaryView;
+import application.view.formbuilder.factory.SummaryFilterForm;
+import application.view.formbuilder.factory.SummaryView;
 import application.view.summary.SummaryViewPane;
 import styles.IconFactory;
 
