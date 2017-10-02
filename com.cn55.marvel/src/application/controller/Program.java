@@ -1,9 +1,9 @@
 package application.controller;
 
-import application.model.dao.DataStoreDAO;
 import application.Shop;
 import application.model.card.*;
 import application.model.category.Category;
+import application.model.dao.DataStoreDAO;
 import application.model.purchase.Purchase;
 import application.model.purchase.PurchaseType;
 import application.model.purchase.SortPurchaseType;
@@ -14,8 +14,6 @@ import application.view.PurchaseViewPane;
 import application.view.custom.components.ProgressDialog;
 import application.view.formbuilder.factory.*;
 import application.view.summary.SummaryAnalyticsPane;
-import application.view.formbuilder.factory.SummaryFilterForm;
-import application.view.formbuilder.factory.SummaryView;
 import application.view.summary.SummaryViewPane;
 import styles.IconFactory;
 
