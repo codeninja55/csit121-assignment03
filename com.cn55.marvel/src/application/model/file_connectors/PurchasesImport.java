@@ -9,6 +9,7 @@ import application.model.purchase.Purchase;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -22,7 +23,7 @@ public class PurchasesImport extends Throwable implements ImportFromCSV {
         } else {
             Files.newBufferedReader(file).lines().forEach(line -> {
                 HashMap<Integer, Category> categories = new HashMap<>();
-                String categoriesAttr[];
+                String categoriesArr[];
                 String[] readLine = line.split(CSV.DEFAULT_SEPARATOR_STR, 6);
                 int receiptID = Integer.parseInt(readLine[2]);
                 // readLine[0] = purchaseTime | [1] = receiptID | [2] = cardType | [3] = cardID
@@ -36,10 +37,10 @@ public class PurchasesImport extends Throwable implements ImportFromCSV {
                     String categoryStrObj = categoryRegexMatch.group().substring(1, categoryRegexMatch.group().lastIndexOf("]"));
                     // The string is now just id,name,description,amount which can be split on the delimiter
                     // to put into an array to be used.
-                    categoriesAttr = categoryStrObj.split(CSV.DEFAULT_SEPARATOR_STR);
-                    categories.put(Integer.parseInt(categoriesAttr[0]),
-                            new Category(Integer.parseInt(categoriesAttr[0]), categoriesAttr[1],
-                                    categoriesAttr[2], Double.parseDouble(categoriesAttr[3])));
+                    categoriesArr = categoryStrObj.split(CSV.DEFAULT_SEPARATOR_STR);
+                    categories.put(Integer.parseInt(categoriesArr[1]),
+                            new Category(Integer.parseInt(categoriesArr[1]), categoriesArr[2],
+                                    categoriesArr[3], Double.parseDouble(categoriesArr[4])));
                 }
 
                 Purchase importedPurchase = new Purchase(readLine[1], receiptID, readLine[3], readLine[4], categories);

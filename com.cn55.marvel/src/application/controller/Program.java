@@ -45,13 +45,12 @@ public class Program {
 
         this.mainFrame = new MainFrame();
         this.tabPane = mainFrame.getTabPane();
-
-        /* DataObserver Design Pattern - Registration and initial update calls */
         this.cardViewPane = mainFrame.getCardViewPane();
         this.purchaseViewPane = mainFrame.getPurchaseViewPane();
         this.categoriesViewPane = mainFrame.getCategoriesViewPane();
         this.summaryViewPane = mainFrame.getSummaryViewPane();
 
+        /* DataObserver Design Pattern - Registration */
         db.register(cardViewPane);
         cardViewPane.setSubject(db);
         db.register(purchaseViewPane);

@@ -55,6 +55,8 @@ public class DataStoreDAO implements DataObservable, CardsDAO, PurchaseDAO, Cate
         ImportFromCSV cardsImporter = new CardsImport();
         ImportFromCSV purchasesImporter = new PurchasesImport();
 
+        // Instantiate a new SwingWorker thread and use an anonymous class to implement its behaviour on a separate thread
+        // from the GUI Event Dispatch Thread. This stops freezing up of the GUI when exporting or exporting.
         SwingWorker<Void, Integer> importWorker = new SwingWorker<Void, Integer>() {
             protected Void doInBackground() throws Exception {
                 try {
@@ -81,7 +83,9 @@ public class DataStoreDAO implements DataObservable, CardsDAO, PurchaseDAO, Cate
                 return null;
             }
 
-            protected void done() { notifyObservers(); }
+            protected void done() {
+                notifyObservers();
+            }
         };
 
         importWorker.execute();

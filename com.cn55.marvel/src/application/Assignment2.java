@@ -1,6 +1,7 @@
 package application;
 
 import application.controller.Program;
+import application.model.purchase.Purchase;
 import styles.ColorFactory;
 import styles.FontFactory;
 

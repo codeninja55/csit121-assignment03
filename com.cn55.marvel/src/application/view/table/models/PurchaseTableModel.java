@@ -24,7 +24,7 @@ public class PurchaseTableModel extends AbstractTableModel {
         Purchase purchase = purchases.get(rowIndex);
         switch (columnIndex) {
             case 0:
-                return purchase.getPurchaseTimeStr();
+                return purchase.getPurchaseTimeFormattedStr();
             case 1:
                 return purchase.getReceiptID();
             case 2:
