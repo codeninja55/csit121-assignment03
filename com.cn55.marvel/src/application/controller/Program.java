@@ -71,27 +71,26 @@ public class Program {
         });
 
         setupMainFrameHandlers();
-
         createCardHandler();
         searchCardsHandler();
         viewCardHandler();
         deleteCardHandler();
         sortCardsHandler();
-
         createPurchaseHandler();
         viewPurchaseHandler();
         sortPurchasesHandler();
-
         createCategoryHandler();
         deleteCategoryHandler();
-
         summaryViewHandler();
     }
 
     /*============================== REGISTER AND HANDLE EVENTS ==============================*/
     /*============================== MAIN FRAME HANDLERS ==============================*/
     private void setupMainFrameHandlers() {
-        mainFrame.setSaveListener(e -> db.exportData(new ProgressDialog(mainFrame, "Saving Data", "Saving...")));
+        mainFrame.setSaveListener(e ->  {
+            db.exportData(new ProgressDialog(mainFrame, "Saving Data", "Saving..."));
+            shop.getAuthenticator().exportUsers();
+        });
 
         mainFrame.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
@@ -108,6 +107,7 @@ public class Program {
                 if (shop.getAuthenticator().login(username, password)) {
                     mainFrame.setSummaryViewPaneEnabled(true);
                     mainFrame.getStartViewPane().getLogoutBtn().setEnabled(true);
+                    mainFrame.getStartViewPane().getNewUserOption().setEnabled(true);
                     mainFrame.getStartViewPane().setDefaults();
                 } else {
                     System.out.println("NOT AUTHENTICATED");
@@ -420,6 +420,7 @@ public class Program {
         boolean filterProceed = false;
 
         // TODO - Ask Mark about this
+        // Clone each data structure so the filtering doesn't change other parts of the program.
         final HashMap<String, Card> clonedCardsMap = db.getOrigCardsMap().entrySet().parallelStream().map(c -> c.getValue().clone(c.getValue()))
                 .collect(Collectors.toMap(Card::getID, c -> c.clone(c), (k, v) -> k, HashMap::new));
 
@@ -435,6 +436,7 @@ public class Program {
 
         final Predicate<Purchase> hoursPredicate = p -> (p.getPurchaseTime().getHour() == e.getHoursOption());
         final Predicate<Purchase> daysPredicate = p -> (p.getPurchaseTime().getDayOfWeek().getValue() == e.getDaysOption());
+        // Using a chained predicates to always make sure the filter is between and equals to 2 dates
         final Predicate<Purchase> dateFromPredicate = p -> (p.getPurchaseTime().toLocalDate().isAfter(e.getDateFromOption()));
         final Predicate<Purchase> dateToPredicate = p -> (p.getPurchaseTime().toLocalDate().isBefore(e.getDateToOption()));
         final Predicate<Purchase> dateEqualsFromPredicate = p -> (p.getPurchaseTime().toLocalDate().isEqual(e.getDateFromOption()));
@@ -443,7 +445,7 @@ public class Program {
 
         if (e.getDaysOption() != 0 && e.getHoursOption() < 24) {
             /* Filter by date, day and hour */
-            filteredCategories = clonedCategoriesMap.values().parallelStream().map(c -> {
+            filteredCategories = clonedCategoriesMap.values().stream().map(c -> {
                 double newTotal = clonedPurchasesMap.values().parallelStream().filter(datePredicate)
                         .filter(daysPredicate.and(hoursPredicate))
                         .mapToDouble(p -> p.getCategories().get(c.getId()).getAmount()).sum();
@@ -451,46 +453,46 @@ public class Program {
                 return c;
             }).collect(Collectors.toMap(Category::getId, c -> c, (k, v) -> k, HashMap::new));
 
-            filteredPurchases = clonedPurchasesMap.values().parallelStream().filter(datePredicate).filter(daysPredicate.and(hoursPredicate))
+            filteredPurchases = clonedPurchasesMap.values().stream().filter(datePredicate).filter(daysPredicate.and(hoursPredicate))
                     .collect(Collectors.toMap(Purchase::getReceiptID, p -> p, (k, v) -> k, HashMap::new));
 
             filterProceed = true;
         } else if (e.getDaysOption() != 0 && e.getHoursOption() == 24) {
             /* Filter by day and date */
-            filteredCategories = clonedCategoriesMap.values().parallelStream().map(c -> {
+            filteredCategories = clonedCategoriesMap.values().stream().map(c -> {
                 double newTotal = clonedPurchasesMap.values().parallelStream().filter(datePredicate).filter(daysPredicate)
                         .mapToDouble(p -> p.getCategories().get(c.getId()).getAmount()).sum();
                 c.setTotalAmount(newTotal);
                 return c;
             }).collect(Collectors.toMap(Category::getId, c -> c, (k, v) -> k, HashMap::new));
 
-            filteredPurchases = clonedPurchasesMap.values().parallelStream().filter(datePredicate).filter(daysPredicate)
+            filteredPurchases = clonedPurchasesMap.values().stream().filter(datePredicate).filter(daysPredicate)
                     .collect(Collectors.toMap(Purchase::getReceiptID, p -> p, (k, v) -> k, HashMap::new));
 
             filterProceed = true;
         } else if (e.getDaysOption() == 0 && e.getHoursOption() < 24) {
             /* Filter by hour */
-            filteredCategories = clonedCategoriesMap.values().parallelStream().map(c -> {
+            filteredCategories = clonedCategoriesMap.values().stream().map(c -> {
                 double newTotal = clonedPurchasesMap.values().parallelStream().filter(datePredicate).filter(hoursPredicate)
                         .mapToDouble(p -> p.getCategories().get(c.getId()).getAmount()).sum();
                 c.setTotalAmount(newTotal);
                 return c;
             }).collect(Collectors.toMap(Category::getId, c -> c, (k, v) -> k, HashMap::new));
 
-            filteredPurchases = clonedPurchasesMap.values().parallelStream().filter(datePredicate).filter(hoursPredicate)
+            filteredPurchases = clonedPurchasesMap.values().stream().filter(datePredicate).filter(hoursPredicate)
                     .collect(Collectors.toMap(Purchase::getReceiptID, p -> p, (k, v) -> k, HashMap::new));
 
             filterProceed = true;
         } else if (e.getDaysOption() == 0 && e.getHoursOption() == 24) {
             /* Filter by dates only */
-            filteredCategories = clonedCategoriesMap.values().parallelStream().map(c -> {
+            filteredCategories = clonedCategoriesMap.values().stream().map(c -> {
                 double newTotal = clonedPurchasesMap.values().parallelStream().filter(datePredicate)
                         .mapToDouble(p -> p.getCategories().get(c.getId()).getAmount()).sum();
                 c.setTotalAmount(newTotal);
                 return c;
             }).collect(Collectors.toMap(Category::getId, c -> c, (k, v) -> k, HashMap::new));
 
-            filteredPurchases = clonedPurchasesMap.values().parallelStream().filter(datePredicate)
+            filteredPurchases = clonedPurchasesMap.values().stream().filter(datePredicate)
                     .collect(Collectors.toMap(Purchase::getReceiptID, p -> p, (k, v) -> k, HashMap::new));
 
             filterProceed = true;
@@ -507,9 +509,7 @@ public class Program {
                     .map(p -> clonedCardsMap.getOrDefault(p.getCardID(), null))
                     .filter(Objects::nonNull).collect(Collectors.toMap(Card::getID, c -> c, (k,v) -> k, HashMap::new));
 
-            // requires ArrayList<Purchase>, ArrayList<Card>
             summaryViewPane.filterTables(new ArrayList<>(filteredPurchases.values()), new ArrayList<>(filteredCards.values()));
-            // requires ArrayList<Purchase>, ArrayList<Categories>, HashMap<String, Card>
             analyticsPane.filterUpdate(filteredCategories, filteredPurchases, filteredCards);
         }
         summaryViewPane.revalidate();

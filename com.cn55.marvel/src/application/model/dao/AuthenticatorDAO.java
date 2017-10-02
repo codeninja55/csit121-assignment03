@@ -12,13 +12,17 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 public class AuthenticatorDAO {
     private static final String SALT = "#M@rV3!4v3n9eRs";
-    private final Path PROGRAM_SETTINGS = Paths.get("com.cn55.marvel/src/persistent_data/settings.txt");
+    private final Path PROGRAM_SETTINGS = Paths.get("com.cn55.marvel/src/persistent_data/users_credentials");
+    private final Path ADMIN_SETTINGS = Paths.get("com.cn55.marvel/src/persistent_data/administrator_credentials");
+    private String[] administrator;
     private HashMap<String, String> users;
 
     public AuthenticatorDAO() {
+        this.administrator = new String[2];
         this.users = new LinkedHashMap<>();
     }
 
@@ -30,6 +34,11 @@ public class AuthenticatorDAO {
                     String[] lineArr = line.split(":");
                     users.put(lineArr[0], lineArr[1]);
                 });
+
+                List<String> fileLine = Files.readAllLines(ADMIN_SETTINGS);
+                administrator[0] = fileLine.get(0).substring(0, fileLine.get(0).indexOf(":"));
+                administrator[1] = fileLine.get(0).substring(fileLine.get(0).indexOf(":") + 1);
+
                 return null;
             }
         };
@@ -53,6 +62,10 @@ public class AuthenticatorDAO {
                 });
                 writer.flush();
                 writer.close();
+
+                String administratorCredentials = administrator[0] + ":" + administrator[1];
+                Files.write(ADMIN_SETTINGS, administratorCredentials.getBytes());
+
                 return null;
             }
         };
@@ -61,6 +74,7 @@ public class AuthenticatorDAO {
     }
 
     /*============================== AUTHENTICATION ==============================*/
+
     public void signup(String username, char[] password) {
         String saltedPassword = SALT + new String(password);
         users.put(generatedHashUsername(username), generateHashPassword(saltedPassword));
@@ -70,8 +84,31 @@ public class AuthenticatorDAO {
         String hashedUsername = generatedHashUsername(username);
         String saltedPassword = SALT + new String(password);
         String hashedPassword = generateHashPassword(saltedPassword);
-        return users.containsKey(hashedUsername) && users.containsValue(hashedPassword);
+
+        return administrator[0].equals(hashedUsername) && administrator[1].equals(hashedPassword) ||
+                users.containsKey(hashedUsername) && users.containsValue(hashedPassword);
     }
+
+    /*
+    * Title: Java SHA Hashing Example
+    * Author: mkyong
+    * Date: 24-02-2010
+    * Availability: https://www.mkyong.com/java/java-sha-hashing-example/
+    * */
+
+    /*
+    * Title: Generate Secure Password Hash : MD5, SHA, PBKDF2, BCrypt Examples
+    * Author: Lokesh Gupta
+    * Date: 22-07-2013
+    * Availability: https://howtodoinjava.com/security/how-to-generate-secure-password-hash-md5-sha-pbkdf2-bcrypt-examples/
+    * */
+
+    /*
+    * Title: SHA-256 Hashing in Java
+    * Author: baeldung
+    * Date: 20-11-2016
+    * Availability: http://www.baeldung.com/sha-256-hashing-java
+    * */
 
     private String generateHashPassword(String saltedPassword) {
         StringBuilder hash = new StringBuilder();

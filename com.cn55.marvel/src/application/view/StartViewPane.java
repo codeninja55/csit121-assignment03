@@ -17,7 +17,7 @@ import java.util.Locale;
 public class StartViewPane extends JPanel {
     private final JTabbedPane tabbedPane;
     private final JPanel loginPane;
-    private final JCheckBox signupOption;
+    private final JCheckBox newUserOption;
     private final FormLabel usernameLabel;
     private final FormTextField usernameTextField;
     private final FormLabel passwordLabel;
@@ -32,7 +32,7 @@ public class StartViewPane extends JPanel {
         this.tabbedPane = tabbedPane;
         Toolbar toolbar = new Toolbar();
         loginPane = new JPanel(new FlowLayout());
-        signupOption = new JCheckBox("Sign Up", IconFactory.checkBoxIcon());
+        newUserOption = new JCheckBox("New User", IconFactory.checkBoxIcon());
         usernameLabel = new FormLabel("Username: ");
         usernameTextField = new FormTextField(10);
         passwordLabel = new FormLabel("Password: ");
@@ -110,14 +110,14 @@ public class StartViewPane extends JPanel {
         loginPane.add(passwordTextField);
         loginPane.add(new JSeparator(JSeparator.HORIZONTAL));
 
-        signupOption.setSelectedIcon(IconFactory.checkBoxIconChecked());
-        signupOption.setFont(FontFactory.labelFont());
-        signupOption.setBackground(ColorFactory.blueGrey200());
-        signupOption.setBorderPainted(false);
-        signupOption.setBorderPaintedFlat(false);
-        loginPane.add(signupOption);
+        newUserOption.setSelectedIcon(IconFactory.checkBoxIconChecked());
+        newUserOption.setFont(FontFactory.labelFont());
+        newUserOption.setBackground(ColorFactory.blueGrey200());
+        newUserOption.setBorderPainted(false);
+        newUserOption.setBorderPaintedFlat(false);
+        newUserOption.setEnabled(false);
+        loginPane.add(newUserOption);
         loginPane.add(new JSeparator(JSeparator.HORIZONTAL));
-        signupOption.setEnabled(false);
 
         loginBtn.setIconTextGap(15);
         loginPane.add(loginBtn);
@@ -135,14 +135,16 @@ public class StartViewPane extends JPanel {
                 .filter(c -> c instanceof FormButton || c instanceof FormLabel || c instanceof FormTextField).forEach(c -> c.setVisible(true));
         logoutBtn.setEnabled(false);
 
+
         loginBtn.addActionListener(e -> {
             String username = usernameTextField.getText().trim();
             char[] password = passwordTextField.getPassword();
-            if (listener != null) listener.loginDetailsSet(username, password, signupOption.isSelected());
+            if (listener != null) listener.loginDetailsSet(username, password, newUserOption.isSelected());
         });
 
         logoutBtn.addActionListener(e -> {
             logoutBtn.setEnabled(false);
+            newUserOption.setEnabled(false);
             tabbedPane.setEnabledAt(4,false);
             setDefaults();
         });
@@ -182,8 +184,10 @@ public class StartViewPane extends JPanel {
     public void setDefaults() {
         usernameTextField.setText(null);
         passwordTextField.setText(null);
-        signupOption.setSelected(false);
+        newUserOption.setSelected(false);
     }
+
+    public JCheckBox getNewUserOption() { return newUserOption; }
 
     public FormButton getLogoutBtn() { return logoutBtn; }
 }
