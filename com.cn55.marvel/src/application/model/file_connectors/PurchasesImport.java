@@ -6,8 +6,9 @@ import application.model.dao.DataStoreDAO;
 import application.model.exceptions.ImportException;
 import application.model.purchase.Purchase;
 
-import java.io.BufferedReader;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -15,12 +16,11 @@ import java.util.regex.Pattern;
 public class PurchasesImport extends Throwable implements ImportFromCSV {
     private final Pattern categoryRegex = Pattern.compile("\\[(.*?)]");
 
-    public void executeImport(DataStoreDAO dataStore, BufferedReader reader) throws ImportException, IOException {
-        if (reader.lines().count() == 0) {
-            reader.close();
+    public void executeImport(DataStoreDAO dataStore, Path file) throws ImportException, IOException {
+        if (Files.lines(file).count() == 0) {
             throw new ImportException("PurchasesStorage.csv is empty", this);
         } else {
-            reader.lines().forEach(line -> {
+            Files.newBufferedReader(file).lines().forEach(line -> {
                 HashMap<Integer, Category> categories = new HashMap<>();
                 String categoriesAttr[];
                 String[] readLine = line.split(CSV.DEFAULT_SEPARATOR_STR, 6);
@@ -46,7 +46,6 @@ public class PurchasesImport extends Throwable implements ImportFromCSV {
                 Generator.addReceiptID(receiptID);
                 dataStore.createPurchase(importedPurchase);
             });
-            reader.close();
         }
     }
 }

@@ -5,16 +5,16 @@ import application.model.card.*;
 import application.model.dao.DataStoreDAO;
 import application.model.exceptions.ImportException;
 
-import java.io.BufferedReader;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 public class CardsImport extends Throwable implements ImportFromCSV {
-    public void executeImport(DataStoreDAO dataStore, BufferedReader reader) throws IOException, ImportException {
-        if (reader.lines().count() == 0) {
-            reader.close();
+    public void executeImport(DataStoreDAO dataStore, Path file) throws IOException, ImportException {
+        if (Files.lines(file).count() == 0) {
             throw new ImportException("CardsStorage.csv is empty", CardsImport.this);
         } else {
-            reader.lines().forEach(line -> {
+            Files.newBufferedReader(file).lines().forEach(line -> {
                 String[] readLine = line.split(CSV.DEFAULT_SEPARATOR_STR);
                 // [1] = ID | [2] = cardType | [3] = name | [4] = email | [5] = balance | [6] = points
                 Card importCard = null;
@@ -33,7 +33,6 @@ public class CardsImport extends Throwable implements ImportFromCSV {
                 assert importCard != null;
                 dataStore.createCard(importCard);
             });
-            reader.close();
         }
 
     }
