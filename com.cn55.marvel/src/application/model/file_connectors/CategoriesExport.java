@@ -8,13 +8,9 @@ import java.time.Instant;
 
 public class CategoriesExport implements ExportToCSV {
     public void exportData(DataStoreDAO dataStore, BufferedWriter writer) throws IOException {
-        dataStore.getOrigCategoriesMap().values().forEach(c -> {
+        dataStore.getOrigCategoriesMap().values().forEach(category -> {
             try {
-                writer.append(Instant.now().toString()).append(DEFAULT_SEPARATOR)
-                        .append(Integer.toString(c.getId())).append(DEFAULT_SEPARATOR)
-                        .append(c.getName()).append(DEFAULT_SEPARATOR)
-                        .append(c.getDescription()).append(DEFAULT_SEPARATOR)
-                        .append(Double.toString(c.getAmount()));
+                writer.append(category.toStringDelim());
                 writer.newLine();
             } catch (IOException e) {
                 e.printStackTrace();
