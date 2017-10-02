@@ -49,7 +49,7 @@ public class DataStoreDAO implements DataObservable, CardsDAO, PurchaseDAO, Cate
     }
 
     /*============================== FILE CONNECTORS ==============================*/
-    public void importData() throws IOException {
+    public void importData() {
         /* Strategy Design Pattern - Implementation of writing and reading buried in concrete classes */
         ImportFromCSV categoriesImporter = new CategoriesImport();
         ImportFromCSV cardsImporter = new CardsImport();

@@ -141,7 +141,7 @@ public class CardViewPane extends JPanel implements DataObserver {
     /*============================== INNER CLASS ==============================*/
 
     /*============================ TOOLBAR LISTENER ===========================*/
-    public class ToolbarListener extends MouseAdapter implements ActionListener {
+    class ToolbarListener extends MouseAdapter implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() == searchBtn && searchCardListener != null) {
                 searchCardListener.toolbarButtonEventOccurred();

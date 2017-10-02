@@ -1,5 +1,4 @@
 package application.model.file_connectors;
-public interface CSV {
-    char DEFAULT_SEPARATOR = ',';
+interface CSV {
     String DEFAULT_SEPARATOR_STR = ",";
 }

@@ -4,7 +4,6 @@ import application.model.dao.DataStoreDAO;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.time.Instant;
 
 public class CategoriesExport implements ExportToCSV {
     public void exportData(DataStoreDAO dataStore, BufferedWriter writer) throws IOException {

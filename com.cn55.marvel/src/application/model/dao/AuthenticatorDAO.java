@@ -18,8 +18,8 @@ public class AuthenticatorDAO {
     private static final String SALT = "#M@rV3!4v3n9eRs";
     private final Path PROGRAM_SETTINGS = Paths.get("com.cn55.marvel/src/persistent_data/users_credentials");
     private final Path ADMIN_SETTINGS = Paths.get("com.cn55.marvel/src/persistent_data/administrator_credentials");
-    private String[] administrator;
-    private HashMap<String, String> users;
+    private final String[] administrator;
+    private final HashMap<String, String> users;
 
     public AuthenticatorDAO() {
         this.administrator = new String[2];

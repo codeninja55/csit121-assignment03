@@ -4,7 +4,7 @@ import application.model.purchase.Purchase;
 
 import java.util.HashMap;
 
-public interface PurchaseDAO {
+interface PurchaseDAO {
     @SuppressWarnings("unused")
     void createPurchase(Purchase purchase);
     @SuppressWarnings("unused")
