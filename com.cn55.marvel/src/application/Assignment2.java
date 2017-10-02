@@ -31,9 +31,12 @@ class Assignment2 {
         }
         uiChanges();
         Shop shop = Shop.getShopInstance();
-        shop.getDataStore().importData();
+        try {
+            shop.getDataStore().importData();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         shop.getAuthenticator().importUsers();
-
         java.awt.EventQueue.invokeLater(Program::new);
     }
 
