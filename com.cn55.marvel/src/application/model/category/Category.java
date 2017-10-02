@@ -2,6 +2,8 @@ package application.model.category;
 
 import application.model.Generator;
 
+import java.time.Instant;
+
 public class Category implements Comparable<Category> {
 
     private final int id;
@@ -61,7 +63,10 @@ public class Category implements Comparable<Category> {
         return String.format("%n%s : $%.2f", name, amount);
     }
 
-    @Override
+    public String toStringDelim() {
+        return String.format("%s,%s,%s,%s,%.2f", Instant.now().toString(),id,name,description,amount);
+    }
+
     public int compareTo(Category o) {
         /* ASCENDING ORDER */
         return this.getName().compareTo(o.getName());
