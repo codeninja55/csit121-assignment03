@@ -447,7 +447,7 @@ public class Program {
         final Predicate<Purchase> datePredicate = (dateEqualsFromPredicate.or(dateFromPredicate)).and(dateEqualsToPredicate.or(dateToPredicate));
 
         // Create a DoubleBiFunction that returns the total purchase amount for one category
-        ToDoubleBiFunction<Stream<Purchase>, Category> purchaseCategorySumBiFunction = (purchaseStream, category) -> purchaseStream
+        final ToDoubleBiFunction<Stream<Purchase>, Category> purchaseCategorySumBiFunction = (purchaseStream, category) -> purchaseStream
                 .mapToDouble(p -> p.getCategories().get(category.getId()).getAmount()).sum();
 
         Function<Category, Category> function;
@@ -484,8 +484,7 @@ public class Program {
                     .collect(Collectors.toMap(Purchase::getReceiptID, p -> p, (k, v) -> k, HashMap::new));
 
             filteredCategories = clonedCategoriesMap.values().stream().map(c -> {
-                double newTotal = clonedPurchasesMap.values().stream().filter(datePredicate).filter(hoursPredicate)
-                        .mapToDouble(p -> p.getCategories().get(c.getId()).getAmount()).sum();
+                double newTotal = filteredPurchases.values().stream().mapToDouble(p -> p.getCategories().get(c.getId()).getAmount()).sum();
                 c.setTotalAmount(newTotal);
                 return c;
             }).collect(Collectors.toMap(Category::getId, c -> c, (k, v) -> k, HashMap::new));
@@ -497,8 +496,7 @@ public class Program {
                     .collect(Collectors.toMap(Purchase::getReceiptID, p -> p, (k, v) -> k, HashMap::new));
 
             filteredCategories = clonedCategoriesMap.values().stream().map(c -> {
-                double newTotal = filteredPurchases.values().stream().filter(datePredicate)
-                        .mapToDouble(p -> p.getCategories().get(c.getId()).getAmount()).sum();
+                double newTotal = filteredPurchases.values().stream().mapToDouble(p -> p.getCategories().get(c.getId()).getAmount()).sum();
                 c.setTotalAmount(newTotal);
                 return c;
             }).collect(Collectors.toMap(Category::getId, c -> c, (k, v) -> k, HashMap::new));
