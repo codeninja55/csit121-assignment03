@@ -178,10 +178,10 @@ public class DataStoreDAO implements DataObservable, CardsDAO, PurchaseDAO, Cate
         categoriesMap.values().forEach((c) -> c.updateTotalAmount(purchaseCategoriesMap.get(c.getId()).getAmount()));
     }
     private void updatePurchaseDateBounds() {
-        firstPurchaseDate = purchasesMap.values().stream()
+        firstPurchaseDate = purchasesMap.values().parallelStream()
                 .sorted(Comparator.comparing(Purchase::getPurchaseTime))
                 .map(Purchase::getPurchaseTime).findFirst().orElse(null);
-        lastPurchaseDate = purchasesMap.values().stream()
+        lastPurchaseDate = purchasesMap.values().parallelStream()
                 .sorted(Comparator.comparing(Purchase::getPurchaseTime).reversed())
                 .map(Purchase::getPurchaseTime).findFirst().orElse(null);
     }
@@ -211,15 +211,15 @@ public class DataStoreDAO implements DataObservable, CardsDAO, PurchaseDAO, Cate
     public void notifyObservers() { dataObservers.forEach(DataObserver::update); }
     // NOTE: All these methods only return a deep copy of the original data as constructed by a stream
     public TreeMap<String, Card> getCardsUpdate(DataObserver who) {
-        return cardsMap.entrySet().parallelStream().map(c -> c.getValue().clone(c.getValue()))
+        return cardsMap.entrySet().stream().map(c -> c.getValue().clone(c.getValue()))
                 .collect(Collectors.toMap(Card::getID, c -> c, (k,v) -> k, TreeMap::new));
     }
     public TreeMap<Integer, Purchase> getPurchaseUpdate(DataObserver who) {
-        return purchasesMap.entrySet().parallelStream().map(p -> new Purchase(p.getValue()))
+        return purchasesMap.entrySet().stream().map(p -> new Purchase(p.getValue()))
                 .collect(Collectors.toMap(Purchase::getReceiptID, p -> p, (k,v) -> k, TreeMap::new));
     }
     public TreeMap<Integer, Category> getCategoriesUpdate(DataObserver who) {
-        return categoriesMap.entrySet().parallelStream().map(c -> new Category(c.getValue(), c.getValue().getTotalAmount()))
+        return categoriesMap.entrySet().stream().map(c -> new Category(c.getValue(), c.getValue().getTotalAmount()))
                 .collect(Collectors.toMap(Category::getId, c -> c, (k,v) -> k, TreeMap::new));
     }
     // NOTE: This returns a shallow copy only

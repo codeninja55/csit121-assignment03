@@ -221,7 +221,7 @@ public class Program {
     private void sortCardsHandler() {
         cardViewPane.getSortedCombo().addItemListener((e) -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
-                ArrayList<Card> sortedCardsList = db.getOrigCardsMap().values().parallelStream().map((Card c) -> c.clone(c))
+                ArrayList<Card> sortedCardsList = db.getOrigCardsMap().values().stream().map((Card c) -> c.clone(c))
                         .collect(Collectors.toCollection(ArrayList::new));
                 if (e.getItem().equals("Sort..") || e.getItem().equals(SortCardType.CreatedOrder.name)) {
                     // Lambda version of sorting with Comparator comparing method
@@ -309,7 +309,7 @@ public class Program {
     private void sortPurchasesHandler() {
         purchaseViewPane.getSortPurchaseCombo().addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
-                ArrayList<Purchase> purchasesList = db.getOrigPurchasesMap().values().parallelStream().map(Purchase::new)
+                ArrayList<Purchase> purchasesList = db.getOrigPurchasesMap().values().stream().map(Purchase::new)
                         .collect(Collectors.toCollection(ArrayList::new));
                 if (e.getItem().equals(SortPurchaseType.All.name)) {
                     purchaseViewPane.update();
@@ -447,7 +447,7 @@ public class Program {
         final Predicate<Purchase> datePredicate = (dateEqualsFromPredicate.or(dateFromPredicate)).and(dateEqualsToPredicate.or(dateToPredicate));
 
         // Create a DoubleBiFunction that returns the total purchase amount for one category
-        final ToDoubleBiFunction<Stream<Purchase>, Category> purchaseCategorySumBiFunction = (purchaseStream, category) -> purchaseStream
+        final ToDoubleBiFunction<Stream<Purchase>, Category> doubleBiFunction = (purchaseStream, category) -> purchaseStream
                 .mapToDouble(p -> p.getCategories().get(category.getId()).getAmount()).sum();
 
         Function<Category, Category> function;
@@ -459,7 +459,7 @@ public class Program {
                     .collect(Collectors.toMap(Purchase::getReceiptID, p -> p, (k, v) -> k, HashMap::new));
 
             // Use the purchaseCategorySumBiFunction to make a new category with a new Total Amount
-            function = category -> new Category(category, purchaseCategorySumBiFunction.applyAsDouble(filteredPurchases.values().parallelStream(), category));
+            function = c -> new Category(c, doubleBiFunction.applyAsDouble(filteredPurchases.values().stream(), c));
 
             // Get the filtered categories result based on the filtering done previously
             filteredCategories = clonedCategoriesMap.values().stream().map(function)
@@ -471,8 +471,7 @@ public class Program {
             filteredPurchases = clonedPurchasesMap.values().stream().filter(datePredicate.and(daysPredicate))
                     .collect(Collectors.toMap(Purchase::getReceiptID, p -> p, (k, v) -> k, HashMap::new));
 
-            function = category -> new Category(category,
-                    purchaseCategorySumBiFunction.applyAsDouble(filteredPurchases.values().parallelStream(), category));
+            function = c -> new Category(c, doubleBiFunction.applyAsDouble(filteredPurchases.values().stream(), c));
 
             filteredCategories = clonedCategoriesMap.values().stream().map(function)
                     .collect(Collectors.toMap(Category::getId, c -> c, (k, v) -> k, HashMap::new));
@@ -484,8 +483,7 @@ public class Program {
                     .collect(Collectors.toMap(Purchase::getReceiptID, p -> p, (k, v) -> k, HashMap::new));
 
             filteredCategories = clonedCategoriesMap.values().stream().map(c -> {
-                double newTotal = filteredPurchases.values().stream().mapToDouble(p -> p.getCategories().get(c.getId()).getAmount()).sum();
-                c.setTotalAmount(newTotal);
+                c.setTotalAmount(doubleBiFunction.applyAsDouble(filteredPurchases.values().stream(), c));
                 return c;
             }).collect(Collectors.toMap(Category::getId, c -> c, (k, v) -> k, HashMap::new));
 
@@ -511,7 +509,7 @@ public class Program {
         }
 
         if (filterProceed) {
-            filteredCards = filteredPurchases.values().parallelStream().filter(p -> !p.getCardType().equals(CardType.Cash.name))
+            filteredCards = filteredPurchases.values().stream().filter(p -> !p.getCardType().equals(CardType.Cash.name))
                     .map(p -> clonedCardsMap.getOrDefault(p.getCardID(), null)).filter(Objects::nonNull)
                     .collect(Collectors.toMap(Card::getID, c -> c, (k,v) -> k, HashMap::new));
 

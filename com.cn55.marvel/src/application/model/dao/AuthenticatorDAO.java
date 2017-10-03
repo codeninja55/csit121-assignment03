@@ -52,7 +52,7 @@ public class AuthenticatorDAO {
                                                                 StandardOpenOption.CREATE,
                                                                 StandardOpenOption.WRITE);
 
-                users.entrySet().parallelStream().forEach((entry) -> {
+                users.entrySet().forEach((entry) -> {
                     try {
                         writer.append(entry.getKey()).append(":").append(entry.getValue());
                         writer.newLine();

@@ -7,6 +7,7 @@ import application.model.dao.DataStoreDAO;
 import application.model.purchase.Purchase;
 
 import java.util.HashMap;
+import java.util.function.Function;
 
 /* SINGLETON DESIGN PATTERN */
 /* BUSINESS LOGIC LAYER */
@@ -93,8 +94,8 @@ public class Shop {
 
     private void convertPurchase(String cardID) {
         // Converts a purchase from a card purchase to a cash purchase when the card has been deleted
-        dataStore.getOrigPurchasesMap().values().parallelStream().filter(p -> p.getCardID() != null)
-                .filter(p -> p.getCardID().equals(cardID)).forEach(p -> {
+        dataStore.getOrigPurchasesMap().values().stream().filter(p -> p.getCardID() != null).filter(p -> p.getCardID().equals(cardID))
+                .forEach(p -> {
                     p.setCardID(null);
                     p.setCardType(CardType.Cash.name);
         });
@@ -102,8 +103,7 @@ public class Shop {
 
     private void updatePurchaseAddCategory(Category category) {
         // Adds the categories to each purchase when purchase created
-        dataStore.getOrigPurchasesMap().values().parallelStream()
-                .forEach(p -> p.getCategories().put(category.getId(), category));
+        dataStore.getOrigPurchasesMap().values().forEach(p -> p.getCategories().put(category.getId(), category));
     }
 
     /*============================== ACCESSORS ==============================*/
