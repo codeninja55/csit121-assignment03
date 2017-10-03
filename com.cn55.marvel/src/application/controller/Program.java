@@ -441,8 +441,8 @@ public class Program {
         final Predicate<Purchase> daysPredicate = p -> (p.getPurchaseTime().getDayOfWeek().getValue() == e.getDaysOption());
         // Using a chained predicates to always make sure the filter is between and equals to 2 dates
         final Predicate<Purchase> dateFromPredicate = p -> (p.getPurchaseTime().toLocalDate().isAfter(e.getDateFromOption()));
-        final Predicate<Purchase> dateToPredicate = p -> (p.getPurchaseTime().toLocalDate().isBefore(e.getDateToOption()));
         final Predicate<Purchase> dateEqualsFromPredicate = p -> (p.getPurchaseTime().toLocalDate().isEqual(e.getDateFromOption()));
+        final Predicate<Purchase> dateToPredicate = p -> (p.getPurchaseTime().toLocalDate().isBefore(e.getDateToOption()));
         final Predicate<Purchase> dateEqualsToPredicate = p -> (p.getPurchaseTime().toLocalDate().isEqual(e.getDateToOption()));
         final Predicate<Purchase> datePredicate = (dateEqualsFromPredicate.or(dateFromPredicate)).and(dateEqualsToPredicate.or(dateToPredicate));
 

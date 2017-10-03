@@ -52,9 +52,9 @@ public class AuthenticatorDAO {
                                                                 StandardOpenOption.CREATE,
                                                                 StandardOpenOption.WRITE);
 
-                users.entrySet().forEach((entry) -> {
+                users.forEach((key, value) -> {
                     try {
-                        writer.append(entry.getKey()).append(":").append(entry.getValue());
+                        writer.append(key).append(":").append(value);
                         writer.newLine();
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -123,9 +123,7 @@ public class AuthenticatorDAO {
             }
 
             generatedPassword = hash.toString();
-        } catch (NoSuchAlgorithmException e) {
-            System.out.println("NoSuchAlgorithmException: " + e.getCause());
-        }
+        } catch (NoSuchAlgorithmException e) { System.out.println("NoSuchAlgorithmException: " + e.getCause()); }
         return generatedPassword;
     }
 

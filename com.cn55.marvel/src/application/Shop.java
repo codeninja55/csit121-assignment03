@@ -7,7 +7,6 @@ import application.model.dao.DataStoreDAO;
 import application.model.purchase.Purchase;
 
 import java.util.HashMap;
-import java.util.function.Function;
 
 /* SINGLETON DESIGN PATTERN */
 /* BUSINESS LOGIC LAYER */
