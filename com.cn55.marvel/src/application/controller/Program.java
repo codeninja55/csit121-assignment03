@@ -68,6 +68,8 @@ public class Program {
                 summaryViewPane.getFilterForm().setVisible(false);
         });
 
+        // These methods set up lambda anonymous functions that handles gui components.
+        // Each method can be a single call of method callbacks or multiple calls.
         setupMainFrameHandlers();
         createCardHandler();
         searchCardsHandler();
@@ -404,7 +406,7 @@ public class Program {
                 .forEach(c -> c.setVisible(false));
     }
 
-    /*============================== ACCESSORS ==============================*/
+    /*============================== PRINTING METHOD ==============================*/
     private String printCard(String cardID, String title) {
         String cText = db.getCard(cardID).toString();
         String pText = db.getOrigPurchasesMap().values().stream().filter(p -> p.getCardID() != null && p.getCardID().equals(cardID))
@@ -417,7 +419,6 @@ public class Program {
         SummaryAnalyticsPane analyticsPane = summaryViewPane.getAnalyticsPane();
         boolean filterProceed = false;
 
-        // TODO - Ask Mark about this
         // Clone each data structure so the filtering doesn't change other parts of the program.
         final HashMap<String, Card> clonedCardsMap = db.getOrigCardsMap().entrySet().parallelStream().map(c -> c.getValue().clone(c.getValue()))
                 .collect(Collectors.toMap(Card::getID, c -> c.clone(c), (k, v) -> k, HashMap::new));
@@ -428,6 +429,7 @@ public class Program {
         final HashMap<Integer, Category> clonedCategoriesMap = db.getOrigCategoriesMap().entrySet().parallelStream()
                 .map(c -> new Category(c.getValue())).collect(Collectors.toMap(Category::getId, c -> c, (k, v) -> k, HashMap::new));
 
+        // Filtered result maps that are passed to the View components
         final HashMap<Integer, Purchase> filteredPurchases;
         final HashMap<Integer, Category> filteredCategories;
         final HashMap<String, Card> filteredCards;
@@ -514,6 +516,7 @@ public class Program {
         summaryViewPane.repaint();
     }
 
+    /*============================== EXIT METHOD ==============================*/
     private void exitApplication() {
         String[] options = {"Save and Exit", "Exit without Save", "Cancel Exit"};
         int response = JOptionPane.showOptionDialog(null,
