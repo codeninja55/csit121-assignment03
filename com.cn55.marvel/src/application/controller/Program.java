@@ -23,8 +23,11 @@ import java.awt.event.ItemEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.*;
+import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.function.ToDoubleBiFunction;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @SuppressWarnings("SimplifyStreamApiCallChains")
 public class Program {
@@ -443,57 +446,62 @@ public class Program {
         final Predicate<Purchase> dateEqualsToPredicate = p -> (p.getPurchaseTime().toLocalDate().isEqual(e.getDateToOption()));
         final Predicate<Purchase> datePredicate = (dateEqualsFromPredicate.or(dateFromPredicate)).and(dateEqualsToPredicate.or(dateToPredicate));
 
+        // Create a DoubleBiFunction that returns the total purchase amount for one category
+        ToDoubleBiFunction<Stream<Purchase>, Category> purchaseCategorySumBiFunction = (purchaseStream, category) -> purchaseStream
+                .mapToDouble(p -> p.getCategories().get(category.getId()).getAmount()).sum();
+
+        Function<Category, Category> function;
+
         if (e.getDaysOption() != 0 && e.getHoursOption() < 24) {
             /* Filter by date, day and hour */
-            filteredCategories = clonedCategoriesMap.values().stream().map(c -> {
-                double newTotal = clonedPurchasesMap.values().parallelStream().filter(datePredicate)
-                        .filter(daysPredicate.and(hoursPredicate))
-                        .mapToDouble(p -> p.getCategories().get(c.getId()).getAmount()).sum();
-                c.setTotalAmount(newTotal);
-                return c;
-            }).collect(Collectors.toMap(Category::getId, c -> c, (k, v) -> k, HashMap::new));
-
-            filteredPurchases = clonedPurchasesMap.values().stream().filter(datePredicate).filter(daysPredicate.and(hoursPredicate))
+            // Filter the clonedPurchasesMap based on the predicates
+            filteredPurchases = clonedPurchasesMap.values().parallelStream().filter(datePredicate.and((daysPredicate.and(hoursPredicate))))
                     .collect(Collectors.toMap(Purchase::getReceiptID, p -> p, (k, v) -> k, HashMap::new));
+
+            // Use the purchaseCategorySumBiFunction to make a new category with a new Total Amount
+            function = category -> new Category(category, purchaseCategorySumBiFunction.applyAsDouble(filteredPurchases.values().parallelStream(), category));
+
+            // Get the filtered categories result based on the filtering done previously
+            filteredCategories = clonedCategoriesMap.values().stream().map(function)
+                    .collect(Collectors.toMap(Category::getId, c -> c, (k, v) -> k, HashMap::new));
 
             filterProceed = true;
         } else if (e.getDaysOption() != 0 && e.getHoursOption() == 24) {
             /* Filter by day and date */
-            filteredCategories = clonedCategoriesMap.values().stream().map(c -> {
-                double newTotal = clonedPurchasesMap.values().parallelStream().filter(datePredicate).filter(daysPredicate)
-                        .mapToDouble(p -> p.getCategories().get(c.getId()).getAmount()).sum();
-                c.setTotalAmount(newTotal);
-                return c;
-            }).collect(Collectors.toMap(Category::getId, c -> c, (k, v) -> k, HashMap::new));
-
-            filteredPurchases = clonedPurchasesMap.values().stream().filter(datePredicate).filter(daysPredicate)
+            filteredPurchases = clonedPurchasesMap.values().stream().filter(datePredicate.and(daysPredicate))
                     .collect(Collectors.toMap(Purchase::getReceiptID, p -> p, (k, v) -> k, HashMap::new));
+
+            function = category -> new Category(category,
+                    purchaseCategorySumBiFunction.applyAsDouble(filteredPurchases.values().parallelStream(), category));
+
+            filteredCategories = clonedCategoriesMap.values().stream().map(function)
+                    .collect(Collectors.toMap(Category::getId, c -> c, (k, v) -> k, HashMap::new));
 
             filterProceed = true;
         } else if (e.getDaysOption() == 0 && e.getHoursOption() < 24) {
             /* Filter by hour */
+            filteredPurchases = clonedPurchasesMap.values().stream().filter(datePredicate.and(hoursPredicate))
+                    .collect(Collectors.toMap(Purchase::getReceiptID, p -> p, (k, v) -> k, HashMap::new));
+
             filteredCategories = clonedCategoriesMap.values().stream().map(c -> {
-                double newTotal = clonedPurchasesMap.values().parallelStream().filter(datePredicate).filter(hoursPredicate)
+                double newTotal = clonedPurchasesMap.values().stream().filter(datePredicate).filter(hoursPredicate)
                         .mapToDouble(p -> p.getCategories().get(c.getId()).getAmount()).sum();
                 c.setTotalAmount(newTotal);
                 return c;
             }).collect(Collectors.toMap(Category::getId, c -> c, (k, v) -> k, HashMap::new));
-
-            filteredPurchases = clonedPurchasesMap.values().stream().filter(datePredicate).filter(hoursPredicate)
-                    .collect(Collectors.toMap(Purchase::getReceiptID, p -> p, (k, v) -> k, HashMap::new));
 
             filterProceed = true;
         } else if (e.getDaysOption() == 0 && e.getHoursOption() == 24) {
             /* Filter by dates only */
+            filteredPurchases = clonedPurchasesMap.values().stream().parallel().filter(datePredicate)
+                    .collect(Collectors.toMap(Purchase::getReceiptID, p -> p, (k, v) -> k, HashMap::new));
+
             filteredCategories = clonedCategoriesMap.values().stream().map(c -> {
-                double newTotal = clonedPurchasesMap.values().parallelStream().filter(datePredicate)
+                double newTotal = filteredPurchases.values().stream().filter(datePredicate)
                         .mapToDouble(p -> p.getCategories().get(c.getId()).getAmount()).sum();
                 c.setTotalAmount(newTotal);
                 return c;
             }).collect(Collectors.toMap(Category::getId, c -> c, (k, v) -> k, HashMap::new));
-
-            filteredPurchases = clonedPurchasesMap.values().stream().filter(datePredicate)
-                    .collect(Collectors.toMap(Purchase::getReceiptID, p -> p, (k, v) -> k, HashMap::new));
 
             filterProceed = true;
         } else {
@@ -505,9 +513,9 @@ public class Program {
         }
 
         if (filterProceed) {
-            filteredCards = filteredPurchases.values().stream().filter(p -> !p.getCardType().equals(CardType.Cash.name))
-                    .map(p -> clonedCardsMap.getOrDefault(p.getCardID(), null))
-                    .filter(Objects::nonNull).collect(Collectors.toMap(Card::getID, c -> c, (k,v) -> k, HashMap::new));
+            filteredCards = filteredPurchases.values().parallelStream().filter(p -> !p.getCardType().equals(CardType.Cash.name))
+                    .map(p -> clonedCardsMap.getOrDefault(p.getCardID(), null)).filter(Objects::nonNull)
+                    .collect(Collectors.toMap(Card::getID, c -> c, (k,v) -> k, HashMap::new));
 
             summaryViewPane.filterTables(new ArrayList<>(filteredPurchases.values()), new ArrayList<>(filteredCards.values()));
             analyticsPane.filterUpdate(filteredCategories, filteredPurchases, filteredCards);
